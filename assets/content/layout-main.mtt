@@ -30,7 +30,7 @@
 
 <div class="row">
 	<div class="col-4 logo"><img src="img/logo.png" /></div>
-	<nav class="col-8">
+	<nav class="col-8 top-nav">
 		<div class="button ::if isPage("index.html")::disabled::end::"><a href="./">About</a></div>
 		<div class="button ::if isPage("features.html")::disabled::end::"><a href="features.html">Features</a></div>
 		<div class="button ::if isPage("releases.html")::disabled::end::"><a href="releases.html">Releases</a></div>

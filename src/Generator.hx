@@ -223,7 +223,7 @@ class Generator {
 			addPage(page, category.folder);
 		}
 		
-		var documentationLandingPage = new Page("layout-page-sidebar.mtt",	"documentation.mtt", 'documentation/index.html')
+		var documentationLandingPage = new Page("layout-page-sidebar.mtt",	"documentation/index.mtt", 'documentation/index.html')
 										.setTitle('Online handbook')
 										.setDescription("Learn about Heaps.io")
 										.hidden();
@@ -299,7 +299,7 @@ class Generator {
 	private function addDocumentationPages(documentationPath:String, level:Int = 0) {
 		for (file in FileSystem.readDirectory(contentPath + documentationPath)) {
 			var outputPathReplace = 'documentation/';
-			if (file == "index.md") continue; // skip this index page, its used for landingspages of series
+			if (file.startsWith("index.")) continue; // skip this index page, its used for landingspages of series
 			if (!FileSystem.isDirectory(contentPath + documentationPath + file)) {
 				var pageOutputPath = documentationPath.replace(documentationFolder, outputPathReplace);
 				pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
