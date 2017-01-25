@@ -1,0 +1,91 @@
+
+<header class="hero-unit">
+	<div class="container">
+		
+	</div>
+</header>
+
+<section class="dark-section">
+	<div class="container">
+		<h2>Cross platform graphics for high performance games</h2>
+		<p class="lead">
+			Heaps.io is a cross platform graphics engine designed for high performance games.
+			It is designed to leverage modern GPUs that are commonly available on both desktop and mobile devices.
+			The framework currently supports HTML5 WebGL, native Mobile (iOS and Android), Flash Stage3D and Desktop with OpenGL.
+		</p>
+	</div>
+</section>
+
+
+<section class="">
+	<div class="container">
+		<h2>Games made with Heaps.io</h2>
+		
+		<h3><a href="http://evoland2.com">Evoland</a> <span class="tag tag-h2d">h2d</span> <span class="tag tag-h3d">h3d</span></h3>
+		
+		<div class="screenshots row">
+			<img src="img/evoland2/01.jpg" class="screenshot col-6" />
+			<img src="img/evoland2/02.jpg" class="screenshot col-6" />
+		</div>
+		<div class="screenshots row">
+			<img src="img/evoland2/03.jpg" class="screenshot col-6" />
+			<img src="img/evoland2/04.jpg" class="screenshot col-6" />
+		</div> 
+		
+		<hr/>
+		
+		<h3><a href="http://northgard.net">Dead cells</a> <span class="tag tag-h2d">h2d</span></h3>
+		
+		<div class="screenshots row">
+			<img src="img/deadcells/04.jpg" class="screenshot col-6" />
+			<img src="img/deadcells/01.gif" class="screenshot col-6" />
+		</div>
+		<div class="screenshots row">
+			<img src="img/deadcells/03.gif" class="screenshot col-6" />
+			<img src="img/deadcells/02.jpg" class="screenshot col-6" />
+		</div>
+		<hr/>
+		<h3><a href="http://northgard.net">Northgard</a>  <span class="tag tag-h3d">h3d</span></h3>
+		
+		<div class="screenshots row">
+			<img src="img/northgard/01.gif" class="screenshot col-4" />
+			<img src="img/northgard/02.gif" class="screenshot col-4" />
+			<img src="img/northgard/03.gif" class="screenshot col-4" />
+		</div>
+		<div class="screenshots row">
+			<img src="img/northgard/03.jpg" class="screenshot col-6" />
+			<img src="img/northgard/04.jpg" class="screenshot col-6" />
+		</div>
+	</div>
+	<br/>
+</section>
+
+<section class="light">
+	<div class="container">
+		<div class="row">
+			<div class="col-4">
+				<h3>Installation</h3>
+				To use Heaps.io, you need to install:
+				<ul>
+					<li><a href="https://haxe.org">Haxe</a> the code language compiler</li>
+					<li><a href="http://hashlink.haxe.org/">HashLink</a> For native builds (optional)</li>
+				</ul>
+			</div>
+			<div class="col-4">
+				<h3>Learn</h3>
+				<ul>
+					<li>See <a href="samples/">Heaps.io online examples</a></li>
+					<li>See <a href="documentation/">Heaps.io online handbook</a></li>
+					<li>See <a href="api/">API documentation</a></li>
+				</ul>
+				
+			</div>
+			<div class="col-4">
+				<h3>Open Source</h3>
+				<p>Heaps.io is being developed on GitHub. Feel free to contribute, test the latest build and don't forget to star us on Github!</p>
+				<p><a href="::githubRepository::"><i class="fa fa-github"></i> Heaps.io on Github</a></p>
+			</div>
+		</div>
+	</div>
+</section>
+

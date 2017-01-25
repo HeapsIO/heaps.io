@@ -1,0 +1,16 @@
+
+<h2>Archive</h2>
+<table class="table">
+<tr><th>URL / Release notes</th><th>Version</th><th>Release date</th></tr>
+::foreach release releases::
+  <tr>
+    ::if release != currentRelease::
+    <td><a href="haxedevelop-::release.version::.html">HaxeDevelop ::release.version::</a> </td>
+    ::else::
+    <td><a href="download.html"><strong>HaxeDevelop ::release.version::</strong></a> (current)</td>
+    ::end::
+    <td>::release.version::</td>
+    <td>::release.date::</td>
+  </tr>
+::end::
+</table>

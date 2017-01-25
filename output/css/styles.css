@@ -1,0 +1,188 @@
+body {
+	font-family: "Open Sans", sans-serif;
+	font-weight: 400;
+	font-size: 17px;
+	line-height: 24px;
+	color: #1e1e1e;
+	padding:0;
+	margin:0;
+}
+
+a, a:hover {
+	color: #245795;
+}
+
+h2 {
+	font-size:200%;
+	line-height:150%;
+	margin:1em 0;
+	font-weight:bold;
+	padding:15px 0;
+	color:#3a3a3a;
+}
+
+h3 {
+	font-size:200%;
+	line-height:150%;
+	margin:0.5em 0;
+	font-weight:normal;
+	text-transform:uppercase;
+}
+
+h3 a {
+	color:#3a3a3a;
+	padding:10px;
+	background:#edc31c;
+}
+
+h3 a:hover {
+	color:#3a3a3a;
+	background:#F3D867;
+}
+
+h3 a:hover:before {
+	content: "» ";
+}
+
+* {
+	box-sizing: border-box;
+}
+
+hr {
+	border:0;
+	background:transparent;
+	outline:none;
+	border-bottom:4px solid #ddd;
+}
+
+.row:before,
+.row:after {
+	content: "";
+	display: table;
+	height:0;
+	clear: both;
+} 
+
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+	float: left;
+}
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+.container {
+	position:relative;
+	width:75%;
+	min-width:640px;
+	max-width:1100px;
+	margin:0 auto;
+}
+
+
+@media (max-width: 640px) {
+	.container {
+		width:100%;
+		min-width:100%;
+		max-width:100%;
+		padding-left:10px;
+		padding-right:10px;
+	}
+	
+	.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+		float: none;
+		width: 100%;
+	}
+}
+
+section.light {
+	background:#EFEFED;
+}
+section.light a {
+	color:#000;
+}
+
+article .content {
+	padding-left: 30px;
+}
+
+nav { 
+	margin-top:15px;
+}
+
+nav .button  a {
+	background:#f0f0f0;
+	padding:10px 20px;
+	margin:2px;
+	border-radius:1px;
+	box-shadow:0 0 2px rgba(0,0,0,.1);
+	float:left;
+	font-size:21px;
+	font-weight:bold;
+	color:#3a3a3a;
+	background:#edc31c;
+}
+nav .button.disabled a {
+	background:#ccc;
+}
+
+.lead {
+	font-style:italic;
+	font-size:150%;
+	line-height:150%;
+	margin-left:20px;
+	padding-left:20px;
+	border-left:4px solid #ddd;
+	
+}
+
+.hero-unit {
+	background: url(../img/header.jpg) no-repeat top center;
+	background-size:cover;
+	min-height: 300px;
+}
+
+.logo {
+	text-align:center;
+}
+.logo img {
+	padding:10px;
+	width:100%;
+	max-width: 400px;
+	vertical-align:top;
+}
+
+nav li, nav ul {
+	padding:0;
+	margin:0;
+	list-style:none;
+}
+nav li {
+	padding:5px;
+	background:#eee;
+	margin-bottom:1px;
+}
+
+
+.screenshot {
+	padding:5px;
+}
+
+.tag {
+	border-radius:30px;
+	display:inline-block;
+	color:#fff;
+	font-size:60%;
+	padding:5px 10px;
+}
+.tag-h2d { background-color:#47AF38 }
+.tag-h3d { background-color:#3652B1 }
+.tag-other { background-color:#495847 }

@@ -1,0 +1,33 @@
+::use 'layout-main.mtt'::
+
+ <div class="row container">
+	<nav class="col-4" ::cond currentPage.customData.tag==null::>
+		<ul class="unstyled" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+		::foreach category sitemap::
+			<li ::cond !category.isSerie::><a href="::category.outputPath::" ::attr class if(category==currentCategory) "active"::>::category.title::</a>
+				<ul class="unstyled" >
+				::foreach page category.pages::
+					<li ::cond page.visible:: ::attr class if(page==currentPage) "active":: itemprop="itemListElement" itemscope="itemscope" itemtype="http://schema.org/ListItem"><a href="::page.outputPath::" itemprop="item"><span itemprop="name">::page.title::</span></a>
+						<ol itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList" ::cond page.category.isSerie && page.category==currentPage.category::>
+							::foreach page page.category.pages::
+								<li ::cond page.visible && !page.isSerieHome():: ::attr class if(page==currentPage) "active":: itemprop="itemListElement" itemscope="itemscope" itemtype="http://schema.org/ListItem"><a href="::page.outputPath::" itemprop="item"><span itemprop="name">::page.title::</span></a></li>
+							::end::
+						</ol>
+					</li>
+				::end::
+				</ul>
+			</li>
+			<br/>
+			::end::
+		</ul>
+	</nav>
+
+	<article class="col-8">
+		<div class="content">
+			<h1>::currentPage.title::</h1>
+			::raw pageContent::
+		</div>
+	</article>
+	 
+</div>
+::end::

@@ -1,0 +1,7 @@
+
+
+::foreach category sitemap::
+	<ul>
+		<li><a href="::category.outputPath::">::category.title::</a></li>
+	</ul>
+::end::

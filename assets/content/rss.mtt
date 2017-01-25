@@ -1,0 +1,25 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+<channel>
+	<title>HaxeDevelop.org</title>
+	<link>http://www.haxedevelop.org</link>
+	<description>HaxeDevelop is a custom distibution of FlashDevelop for Haxe developers.</description>
+	<managingEditor>contact@haxe.org</managingEditor>
+	<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+	<language>en</language>
+	<lastBuildDate>::currentDate::</lastBuildDate>
+	<atom:link href="http://www.haxedevelop.org/rss.xml" rel="self" type="application/rss+xml" />
+
+	::foreach blog currentPage.customData.blogs::
+		<item>
+		<title>::blog.title::</title>
+		<link>http://haxedevelop.org/::blog.outputPath::</link>
+		<guid isPermaLink="true">http://haxedevelop.org/::blog.outputPath::</guid>
+		<description>::blog.pageContent.split("</h1>").pop()::</description>
+		<comments>http://haxedevelop.org/::blog.outputPath::#disqus_thread</comments>
+		<pubDate>::blog.customData.fullDate::</pubDate>
+		</item>
+	::end::
+
+</channel>
+</rss>

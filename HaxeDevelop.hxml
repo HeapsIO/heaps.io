@@ -1,0 +1,7 @@
+-lib markdown
+-lib hxtemplo
+-lib hxparse
+-cp src
+-neko Generator.n
+-main Main
+-dce no

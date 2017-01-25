@@ -1,0 +1,26 @@
+{
+  "releases": [
+    { 
+      "version": "5.2", 
+      "date": "19-09-2016",
+      "links": {
+        "installer": "https://github.com/HaxeFoundation/haxedevelop.org/releases/download/v5.2/HaxeDevelop-5.2.exe",
+        "standalone": "https://github.com/HaxeFoundation/haxedevelop.org/releases/download/v5.2/HaxeDevelop-5.2.zip"
+      }
+    },{ 
+      "version": "5.1.1", 
+      "date": "14-03-2016",
+      "links": {
+        "installer": "https://github.com/HaxeFoundation/haxedevelop.org/releases/download/v5.1.1/HaxeDevelop-5.1.1.exe",
+        "standalone": "https://github.com/HaxeFoundation/haxedevelop.org/releases/download/v5.1.1/HaxeDevelop-5.1.1.zip"
+      }
+    },{ 
+      "version": "5.1", 
+      "date": "24-02-2016",
+      "links": {
+        "installer": "https://github.com/HaxeFoundation/haxedevelop.org/releases/download/v5.1.0/HaxeDevelop-5.1.0.exe",
+        "standalone": "https://github.com/HaxeFoundation/haxedevelop.org/releases/download/v5.1.0/HaxeDevelop-5.1.0.zip"
+      }
+    }
+  ]
+}
