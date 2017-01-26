@@ -133,6 +133,7 @@ class Generator {
 				tags: tags,
 				pageContent: null,
 				DateTools: DateTools,
+				repositoryUrl:repositoryUrl,
 				isPage: function(x) return x == page.outputPath,
 				isCategory: if (category!=null) category.isCategory else function(_) return false,
 				convertDate:function(date:Date) {
@@ -216,7 +217,7 @@ class Generator {
 									new Page("layout-page-sidebar.mtt",	"table-of-content-serie.mtt", 'documentation/${category.id}/index.html')
 								 else 
 									new Page("layout-page-sidebar.mtt",	"table-of-content-category.mtt", 'documentation/${category.id}/index.html')
-										.setTitle('${category.title} documentation - Online handbook ')
+										.setTitle('${category.title} documentation')
 										.hidden();
 										
 			category.content = parseMarkdownContent(page, category.folder + "index.md");
@@ -252,7 +253,7 @@ class Generator {
 		for (tag in tags.keys()) {
 			var tagTitle = getTagTitle(tag);
 			addPage(new Page("layout-page-toc.mtt",	"tags.mtt", 'tag/$tag.html')
-												.setTitle('Haxe $tagTitle articles overview')
+												.setTitle('Heaps $tagTitle articles overview')
 												.setCustomData({tag:tag, pages: tags.get(tag)})
 												.setDescription('Overview of Haxe snippets and tutorials tagged with $tagTitle.')
 												.hidden(), "tags");
@@ -262,22 +263,18 @@ class Generator {
 	private function addGeneralPages() {
 		var homePage = new Page("layout-page-main.mtt", "index.mtt", "index.html")
 													.hidden()
-													.setTitle("Easy to read Haxe coding examples")
-													.setDescription('The Haxe Code Cookbook is a central place with Haxe coding snippets and tutorials.');
+													.setTitle("Heaps - Haxe Game Engine")
+													.setDescription('Cross platform graphics for high performance games.');
 		
 		var featuresPage = new Page("layout-page.mtt", "features.html", "features.html")
 													.hidden()
-													.setTitle("Easy to read Haxe coding examples")
-													.setDescription('The Haxe Code Cookbook is a central place with Haxe coding snippets and tutorials.');
-		var releasesPage = new Page("layout-page.mtt", "releases.mtt", "releases.html")
-													.hidden()
-													.setTitle("Easy to read Haxe coding examples")
-													.setDescription('The Haxe Code Cookbook is a central place with Haxe coding snippets and tutorials.')
-													.setCustomData({releases:[]/*Releases.get()*/});
+													.setTitle("Features - fast game enine")
+													.setDescription('Heaps.io delivers fast iterations, real development power and multi-platform compilation with native access and minimal overhead. The toolkit is versatile, open-source and completely free.');
 		
 		var errorPage = new Page("layout-page-main.mtt", "404.mtt", "404.html")
 													.hidden()
 													.setTitle("Page not found");
+													
 		var sitemapPage = new Page("sitemap.mtt", null, "sitemap.xml")
 													.hidden()
 													.setTitle("Sitemap");
@@ -289,7 +286,6 @@ class Generator {
 		addPage(rssPage, "/rss");*/
 		addPage(homePage, "/home");
 		addPage(featuresPage, "/features");
-		addPage(releasesPage, "/releases");
 		addPage(errorPage, "/404");
 		//addPage(sitemapPage, "/sitemap");
 		

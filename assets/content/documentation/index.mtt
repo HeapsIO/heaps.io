@@ -1,7 +1,51 @@
+<h2>Installation</h2>
 
+In order to get started with Heaps you'll need to do the following:
 
-::foreach category sitemap::
-	<ul>
-		<li><a href="::category.outputPath::">::category.title::</a></li>
+<ul>
+<li>Install Haxe 3.4+, available on https://haxe.org</li>
+<li>Install Heaps by running `haxelib git heaps` for the stable version.</li>
+<li>Install bleeding edge version of Heaps by running <code>haxelib git heaps https://github.com/ncannasse/heaps.git</code></li>
+<li>Setup your IDE in order to build Haxe content, as documented <a href="https://haxe.org/documentation/introduction/editors-and-ides.html">here</a></li>
+</ul>
+
+<h2>Example application</h2>
+
+You should then be ready to run your first example:
+<pre><code>
+class Main extends hxd.App {
+	var bmp:h2d.Bitmap;
+	
+	override function init() {
+		var tile = h2d.Tile.fromColor(0xFF0000, 100, 100);
+		bmp = new h2d.Bitmap(tile, s2d);
+		bmp.x = s2d.width * 0.5;
+		bmp.y = s2d.height * 0.5;
+	}
+	
+	override function update(dt:Float) {
+		bmp.rotation += 0.1;
+	}
+	
+	static function main() {
+		new Main();
+	}
+}
+</code></pre>
+
+To ensure the program compiles include the Heaps library by adding <code>-lib heaps</code> to your compilation parameters.
+
+<ul>
+<li>If you compile for Javascript: 
+	<ul> 
+	<li>You will also have to create an index.html that includes your .js haxe output.</li>
+	<li>Also put a <code>&lt;canvas id="webgl"&gt;&lt;/canvas&gt;</code> in body of the HTML-file.</li>
+	<li>If not in debug mode (<code>-debug</code> compiler flag) add <code>-dce no</code> flag to prevent execution failure.  </li>
 	</ul>
-::end::
+</li>
+<li>If you compile for Flash, make sure to specify the Flash version to be at least 11.8 (with `-swf-version 11.8`) which is required for Heaps.</li>
+</ul>
+	
+You should now be able to compile and display the example. It should show you a rotating red square.
+
+Several examples for both 2D and 3D are available in the heaps samples.

@@ -1,3 +1,0 @@
-5.2.0
-https://github.com/HaxeFoundation/haxedevelop.org/releases/download/v5.2/HaxeDevelop-5.2.exe
-http://www.haxedevelop.org/download.html

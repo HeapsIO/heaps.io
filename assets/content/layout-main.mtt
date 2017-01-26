@@ -33,11 +33,10 @@
 	<nav class="col-8 top-nav">
 		<div class="button ::if isPage("index.html")::disabled::end::"><a href="./">About</a></div>
 		<div class="button ::if isPage("features.html")::disabled::end::"><a href="features.html">Features</a></div>
-		<div class="button ::if isPage("releases.html")::disabled::end::"><a href="releases.html">Releases</a></div>
 		<div class="button ::if isCategory("samples")::disabled::end::"><a href="samples/">Samples</a></div>
 		<div class="button ::if isCategory("documentation")::disabled::end::"><a href="documentation/">Online handbook</a></div>
 		<div class="button"><a href="api/">API</a></div>
-		<div class="button"><a href="::githubRepository::">Source</a></div>
+		<div class="button"><a href="::repositoryUrl::">Source</a></div>
 	</nav>
 </div>
 <main>
@@ -47,10 +46,20 @@
 <footer>
 	<div class="container">
 		<div class="lead">
-			<p>Heaps.io is a opensource game engine build by <a href="https://twitter.com/ncannasse" rel="external">Nicolas Canasse</a>, creator of <a href="https://haxe.org">Haxe</a></p>
+			<p>
+				Heaps.io is a opensource game engine build by <a href="https://twitter.com/ncannasse" rel="external">Nicolas Canasse</a><br/>
+				Original creator of the Haxe compiler and designer of the <a href="https://haxe.org">Haxe</a> language.
+			</p>
+			<!-- Place this tag where you want the button to render. -->
+			<p>Follow Heaps.io on Github: <br/>
+				<a class="github-button" href="https://github.com/ncannasse/heaps/issues" data-icon="octicon-issue-opened" data-style="mega" data-count-api="/repos/ncannasse/heaps#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue ncannasse/heaps on GitHub">Issue</a> &nbsp; 
+				<a class="github-button" href="https://github.com/ncannasse/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/ncannasse/heaps/stargazers" data-count-api="/repos/ncannasse/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ncannasse/heaps on GitHub">Star</a>
+			</p>
 		</div>
 	</div>
 </footer>
 
+
+<script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>

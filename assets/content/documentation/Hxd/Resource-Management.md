@@ -1,3 +1,5 @@
+# Resource management
+
 Heaps provides a complete asset/resource management framework that can be customized with your own asset packaging system.
 
 ## Getting Started

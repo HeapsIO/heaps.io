@@ -1,3 +1,5 @@
+# FBX Models
+
 FBX Models can be exported from various 3D editors and loaded into Heaps.
 
 Heaps uses its own internal 3D format called HMD which is faster to load and process. By default, the Heaps resource manager will automatically convert any FBX it loads into the corresponding HMD and cache the result. See [this section](https://github.com/ncannasse/heaps/wiki/Resource-Management).
