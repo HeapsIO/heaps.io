@@ -1,1 +1,1 @@
-HXD takes care of various cross platform tasks, such as sound and resource management.
+HXD takes care of various cross platform services, such as events, sound and resource management etc.

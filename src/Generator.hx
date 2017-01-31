@@ -134,7 +134,7 @@ class Generator {
 				pageContent: null,
 				DateTools: DateTools,
 				repositoryUrl:repositoryUrl,
-				isPage: function(x) return x == page.outputPath,
+				isPage: function(p:String) return p.endsWith(page.outputPath.toString()),
 				isCategory: if (category!=null) category.isCategory else function(_) return false,
 				convertDate:function(date:Date) {
 					// American date format is retarded: "Wed, 02 Oct 2002 13:00:00 GMT"
@@ -214,9 +214,9 @@ class Generator {
 		for (category in sitemap) {
 			category.isSerie = isSerie(category);
 			var page = if (category.isSerie) 
-									new Page("layout-page-sidebar.mtt",	"table-of-content-serie.mtt", 'documentation/${category.id}/index.html')
+									new Page("layout-page-documentation.mtt",	"table-of-content-serie.mtt", 'documentation/${category.id}/index.html')
 								 else 
-									new Page("layout-page-sidebar.mtt",	"table-of-content-category.mtt", 'documentation/${category.id}/index.html')
+									new Page("layout-page-documentation.mtt",	"table-of-content-category.mtt", 'documentation/${category.id}/index.html')
 										.setTitle('${category.title} documentation')
 										.hidden();
 										
@@ -224,7 +224,7 @@ class Generator {
 			addPage(page, category.folder);
 		}
 		
-		var documentationLandingPage = new Page("layout-page-sidebar.mtt",	"documentation/index.mtt", 'documentation/index.html')
+		var documentationLandingPage = new Page("layout-page-documentation.mtt",	"documentation/index.mtt", 'documentation/index.html')
 										.setTitle('Online handbook')
 										.setDescription("Learn about Heaps.io")
 										.hidden();
@@ -299,7 +299,7 @@ class Generator {
 			if (!FileSystem.isDirectory(contentPath + documentationPath + file)) {
 				var pageOutputPath = documentationPath.replace(documentationFolder, outputPathReplace);
 				pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
-				var page = new Page("layout-page-sidebar.mtt",	documentationPath + file, pageOutputPath);
+				var page = new Page("layout-page-documentation.mtt",	documentationPath + file, pageOutputPath);
 				page.level = level;
 				page.pageContent = parseMarkdownContent(page, documentationPath + file);
 				addPage(page, documentationPath);

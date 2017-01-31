@@ -25,20 +25,11 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="::currentPage.absoluteUrl::" />
 	<meta property="og:image" content="::basePath::/img/share.jpg" />
+	
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/>
 </head>
 <body>
 
-<div class="row">
-	<div class="col-4 logo"><img src="img/logo.png" /></div>
-	<nav class="col-8 top-nav">
-		<div class="button ::if isPage("index.html")::disabled::end::"><a href="./">About</a></div>
-		<div class="button ::if isPage("features.html")::disabled::end::"><a href="features.html">Features</a></div>
-		<div class="button ::if isCategory("samples")::disabled::end::"><a href="samples/">Samples</a></div>
-		<div class="button ::if isCategory("documentation")::disabled::end::"><a href="documentation/">Online handbook</a></div>
-		<div class="button"><a href="api/">API</a></div>
-		<div class="button"><a href="::repositoryUrl::">Source</a></div>
-	</nav>
-</div>
 <main>
 ::raw __content__::
 </main>
@@ -52,8 +43,8 @@
 			</p>
 			<!-- Place this tag where you want the button to render. -->
 			<p>Follow Heaps.io on Github: <br/>
-				<a class="github-button" href="https://github.com/ncannasse/heaps/issues" data-icon="octicon-issue-opened" data-style="mega" data-count-api="/repos/ncannasse/heaps#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue ncannasse/heaps on GitHub">Issue</a> &nbsp; 
-				<a class="github-button" href="https://github.com/ncannasse/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/ncannasse/heaps/stargazers" data-count-api="/repos/ncannasse/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ncannasse/heaps on GitHub">Star</a>
+				<a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-style="mega" data-count-api="/repos/HeapsIO/heaps#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp; 
+				<a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a>
 			</p>
 		</div>
 	</div>

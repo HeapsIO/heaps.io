@@ -1,11 +1,16 @@
 ::use 'layout-main.mtt'::
 
-<section class="dark">
- <div class="container">
-		<h1 ::cond currentPage.isSerieHome()::>::currentPage.title::</h1>
-		<h1 ::cond !currentPage.isSerieHome()::>::currentCategory.title:: <small>//</small> ::currentPage.title::</h1>
-</div>
-</section>
+<header class="header-documentation">
+	<nav class="top-nav">
+		<a href="./" class="button ::if isPage("index.html")::disabled::end::">About</a>
+		<a href="features.html"  class="button ::if isPage("features.html")::disabled::end::">Features</a>
+		<a href="samples/" class="button ::if isCategory("samples")::disabled::end::">Samples</a>
+		<a href="documentation/" class="button ::if isCategory("documentation")::disabled::end::">Online handbook</a>
+		<a href="api/" class="button">API</a>
+		<a href="::repositoryUrl::" class="button">Source</a>
+	</nav>
+	<div class="logo"><a href="./"><img src="img/logo.svg" /></a></div>
+</header>
 
 <br/>
 
@@ -33,6 +38,10 @@
 
 	<article class="col-8">
 		<div class="content">
+			
+			<h1 ::cond currentPage.isSerieHome()::>::currentPage.title::</h1>
+			<h1 ::cond !currentPage.isSerieHome()::>::currentPage.title:: <small>::currentCategory.title:: </small></h1>
+			
 			::raw pageContent::
 		</div>
 	</article>

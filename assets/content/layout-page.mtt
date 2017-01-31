@@ -1,3 +1,16 @@
 ::use 'layout-main.mtt'::
+
+<header class="header-page">
+		<nav class="top-nav">
+			<a href="./" class="button ::if isPage("index.html")::disabled::end::">About</a>
+			<a href="features.html"  class="button ::if isPage("features.html")::disabled::end::">Features</a>
+			<a href="samples/" class="button ::if isCategory("samples")::disabled::end::">Samples</a>
+			<a href="documentation/" class="button ::if isCategory("documentation")::disabled::end::">Online handbook</a>
+			<a href="api/" class="button">API</a>
+			<a href="::repositoryUrl::" class="button">Source</a>
+		</nav>
+		<div class="logo"><a href="./"><img src="img/logo.svg" /></a></div>
+</header>
+
   ::raw pageContent::
 ::end::
