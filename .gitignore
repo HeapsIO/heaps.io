@@ -1,6 +1,12 @@
 # Project generated files #
 ######################
 output
+assets/includes/api
+
+*.hxproj
+*.swf
+*.xml
+assets/includes/samples/*/*.hxml
 
 # OS generated files #
 ######################

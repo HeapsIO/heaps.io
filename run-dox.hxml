@@ -1,0 +1,1 @@
+-cmd haxelib run dox -i . -o assets/includes/api -in h2d -in h3d -in hxd -in hxs -theme dox_theme/heaps.io

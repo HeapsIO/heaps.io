@@ -1,0 +1,15 @@
+
+
+<section>
+	<div class="container">
+				
+		<nav class="top-nav small" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+			::foreach page currentPage.customData.samples::
+				<a href="::page.outputPath::" class="button ::if (page==currentPage)::disabled::end::">::page.title::</a>
+			::end::
+		</nav>
+
+		
+	</div>
+</section>
+

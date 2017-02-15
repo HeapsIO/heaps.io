@@ -8,7 +8,6 @@ import markdown.AST.ElementNode;
 import sys.FileSystem;
 import sys.io.File;
 import templo.Template;
-import util.Releases;
 
 using StringTools;
 
@@ -22,6 +21,7 @@ class Generator {
 	public var repositoryBranch = "";
 	public var basePath = "";
 	public var titlePostFix = "";
+	public var samplesFolder = "samples/";
 	public var documentationFolder = "documentation/";
 	public var assetsFolderName = "assets";
 	
@@ -53,6 +53,7 @@ class Generator {
 		
 		// add overview page for each category
 		addCategoryPages(sitemap);
+		addSamplesPages(samplesFolder);
 		
 		// assign page.category
 		for (page in _pages) page.category = getCategory(sitemap, page);
@@ -117,6 +118,7 @@ class Generator {
 			return if (a > b) -1 else if (a < b) 1 else 0;
 		});
 		
+		function isPage(page:Page, p:String):Bool return p.endsWith(page.outputPath.toString());
 		
 		for(page in _pages) {
 			// set the data for the page
@@ -134,7 +136,7 @@ class Generator {
 				pageContent: null,
 				DateTools: DateTools,
 				repositoryUrl:repositoryUrl,
-				isPage: function(p:String) return p.endsWith(page.outputPath.toString()),
+				isPage: isPage.bind(page),
 				isCategory: if (category!=null) category.isCategory else function(_) return false,
 				convertDate:function(date:Date) {
 					// American date format is retarded: "Wed, 02 Oct 2002 13:00:00 GMT"
@@ -314,6 +316,42 @@ class Generator {
 			}
 		}
 	}
+	
+	private function addSamplesPages(samplesPath:String) {
+		var prev:Page = null;
+		var samples:Array<Page> = [];
+		for (file in FileSystem.readDirectory(contentPath + samplesPath)) {
+			var outputPathReplace = 'samples/';
+			if (!file.endsWith(".hx")) continue; // skip this index page, its used for landingspages of series
+			
+			var sampleName = file.split(".hx").shift();
+			
+			var pageOutputPath = samplesPath.replace(documentationFolder, outputPathReplace);
+			pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
+			var page = new Page("layout-page-samples.mtt",	samplesPath + file, pageOutputPath)
+				.setTitle(sampleName)
+				.setDescription('Heaps $sampleName example with source and live demo')
+				.setCustomData({
+					source:getContent(contentPath + samplesPath + file, null).replace("\t", "  ").replace("<", "&lt;").replace(">","&gt;"),
+					file: samplesPath + sampleName.substr(0,1).toLowerCase() + sampleName.substr(1),
+					prev: prev,
+					samples: samples,
+				});
+				
+			if (prev != null) prev.customData.next = page;
+			
+			addPage(page, 'samples');
+			samples.push(page);
+			prev = page;
+		}
+		
+		var page = new Page("layout-page.mtt",	"samples.mtt", "samples/index.html")
+			.setTitle("Examples overviews")
+			.setDescription('Heaps examples overview with source and live demo')
+			.setCustomData({samples:samples})
+			.hidden();
+		addPage(page, 'samples');
+	}
 
 	private function getSortedTags(a:StringMap<Array<Page>>) {
 		var keys = [for(key in a.keys()) {tag:key, total:a.get(key).length}];
@@ -473,7 +511,7 @@ class Generator {
 				page.tags = link != null ? [for (a in link.title.split(",")) a.toLowerCase().trim()] : null;
 			}
 			
-			// parse ast			
+			// parse ast
 			var blocks = document.parseLines(lines);
 			// pick first header, use it as title for the page
 			var titleBlock = null;

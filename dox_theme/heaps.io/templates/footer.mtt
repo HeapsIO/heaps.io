@@ -1,0 +1,19 @@
+
+<footer>
+	<div class="container">
+		<div class="lead">
+			<p>
+				Heaps.io is a opensource game engine build by <a href="https://twitter.com/ncannasse" rel="external">Nicolas Cannasse</a><br/>
+				Original creator of the Haxe compiler and designer of the <a href="https://haxe.org">Haxe</a> language.
+			</p>
+			<!-- Place this tag where you want the button to render. -->
+			<p>Follow Heaps.io on Github: <br/>
+				<a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-style="mega" data-count-api="/repos/HeapsIO/heaps#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp; 
+				<a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a>
+			</p>
+		</div>
+	</div>
+</footer>
+
+
+<script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>

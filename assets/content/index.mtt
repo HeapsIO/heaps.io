@@ -1,4 +1,4 @@
-
+<div class="homepage">
 <section>
 	<div class="container">
 		<h1>Cross platform graphics<br/>for high performance games</h1>
@@ -17,11 +17,19 @@
 				<h3>Installation</h3>
 				<p>To use Heaps.io, you need to install <a href="https://haxe.org">Haxe</a> 3.4+</p>
 				<div class="cmd"><code>haxelib git heaps</code></div>
+				
+				<p>In addition to use Heaps.io with HashLink, you need to install: </p>
+				<ul>
+					<li><a href="https://github.com/HaxeFoundation/hashlink/releases">HashLink</a> Virtual Machine</li>
+					<li><a href="https://www.libsdl.org/download-2.0.php">SDL</a> (place dll in HL directory) Low level access to input and graphics via OpenGL and Direct3D. </li>
+					<li><a href="https://www.openal.org/downloads/">OpenAL 32</a>  Cross Platform Audio</li>
+					<li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=48145">VisualStudio 2015 x86 Redistributable</a></li>
+				</ul>
 			</div>
 			<div class="col-2">&nbsp;</div>
 			<div class="col-5">
 				<h3>Open Source</h3>
-				<p>Heaps.io is and always will be free and open Source, with a large and supportive community pushing its growth and evolution.
+				<p>Heaps.io is free and open Source, with a large and supportive community pushing its growth and evolution.
 				Feel free to contribute, test the latest build and don't forget to star us on Github!</p>
 				
 				<p><a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p>
@@ -33,45 +41,76 @@
 
 <section class="">
 	<div class="container">
-		<h2>Games made with Heaps.io</h2>
-		Hundreds of games and experiences are being made with Heaps.io by leading game studios around the world.
-		<hr/>
-		<h3><a href="http://evoland2.com" class="button">Evoland</a> <span class="tag tag-h2d">h2d</span> <span class="tag tag-h3d">h3d</span></h3>
+		<h2>2D and 3D accelerated graphics</h2>
 		
 		<div class="screenshots row">
-			<img src="img/evoland2/01.jpg" class="screenshot col-6" />
-			<img src="img/evoland2/02.jpg" class="screenshot col-6" />
-		</div>
-		<div class="screenshots row">
-			<img src="img/evoland2/03.jpg" class="screenshot col-6" />
-			<img src="img/evoland2/04.jpg" class="screenshot col-6" />
-		</div> 
-		
-		<hr/>
-		
-		<h3><a href="http://northgard.net" class="button">Dead cells</a> <span class="tag tag-h2d">h2d</span></h3>
-		
-		<div class="screenshots row">
-			<img src="img/deadcells/04.jpg" class="screenshot col-6" />
-			<img src="img/deadcells/01.gif" class="screenshot col-6" />
-		</div>
-		<div class="screenshots row">
-			<img src="img/deadcells/03.gif" class="screenshot col-6" />
-			<img src="img/deadcells/02.jpg" class="screenshot col-6" />
-		</div>
-		<hr/>
-		<h3><a href="http://northgard.net" class="button">Northgard</a>  <span class="tag tag-h3d">h3d</span></h3>
-		
-		<div class="screenshots row">
-			<img src="img/northgard/01.gif" class="screenshot col-4" />
 			<img src="img/northgard/02.gif" class="screenshot col-4" />
+			<img src="img/northgard/01.gif" class="screenshot col-4" />
 			<img src="img/northgard/03.gif" class="screenshot col-4" />
 		</div>
 		<div class="screenshots row">
-			<img src="img/northgard/03.jpg" class="screenshot col-6" />
+			<img src="img/evoland2/03.jpg" class="screenshot col-6" />
+			<img src="img/deadcells/03.gif" class="screenshot col-6" />
+		</div>
+		<div class="screenshots row">
+			<img src="img/deadcells/01.gif" class="screenshot col-6" />
 			<img src="img/northgard/04.jpg" class="screenshot col-6" />
 		</div>
 	</div>
 	<br/>
 </section>
 
+<section class="light">
+	<div class="container">
+		<h3>A friendly API with several purposes</h3>
+		
+		The Heaps.io API is comprised of several toolkits, namely:
+		<ul>
+			<li><a href="documentation/h2d.html">h2d</a> used for 2D display (for 2D games and user interfaces)</li>
+			<li><a href="documentation/h3d.html">h3d</a> used for rendering 3D models</li>
+			<li><a href="documentation/hxd.html">hxd</a> contains cross platform classes and a complete resource loading and management framework</li>
+			<li><a href="documentation/hxsl.html">hxsl</a> is the Heaps Shader Language implementation</li>
+		</ul>
+	</div>
+</section>
+
+<section class="medium">
+	<div class="container row">
+		<div class="col-4">
+			<div class="box box-raised">
+				<h3>Why use Heaps?</h3>
+				<ul>
+				<li>2D and 3D game engine</li>
+				<li>Desktop / HTML5 / Flash cross platform output</li>
+				<li>Fast compile-and-run cycle</li>
+				<li>GPU accelerated (both 2D and 3D)</li>
+				<li>Cross platform GPU Shader system</li>
+				<li>Mouse / Keyboard / GamePad support</li>
+				<li>Supports many file formats: PNG,JPG,FBX,OGG,etc.</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="box box-raised">
+				<h3>Publish anywhere</h3>
+				<p><em>With Haxe, you can easily build cross-platform tools targeting all the mainstream platforms natively.</em></p>
+				<h5>Web - HTML5/WebGL</h5>
+				<p>The exellent JavaScript target is used to get the most out of WebGL.</p>
+				
+				<h5>Native apps</h5>
+				<p>Real native builds; Windows, OSx, Linux</p>
+				
+				<h5>Ready to go mobile</h5>
+				<p>iOS, Android.<br/>Use Lime, HashLink or Adobe Air to compile to a mobile app.</p>
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="box box-raised">
+				<h3>Proven technology</h3>
+				<p>Heaps is used by several (indi) game studios with successful game titles. Unbeatable performance, intuitive API, globally used and battle­tested. </p>
+			</div>
+		</div>
+	</div>
+</section>
+
+</div>

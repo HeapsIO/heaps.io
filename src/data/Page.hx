@@ -14,7 +14,7 @@ class Page {
   public var templatePath:Path;
   public var contentPath:Path;
   public var outputPath:Path;
-  public var customData:Dynamic;
+  public var customData:Dynamic = {};
   public var tags:Array<String>;
   public var absoluteUrl:String;
   public var editUrl:String;
