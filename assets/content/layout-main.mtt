@@ -7,24 +7,22 @@
 	<title>::title::</title>
 	
 	<base href="::currentPage.baseHref::" />
-	<!--link href="::basePath::/rss.xml" rel="alternate" type="application/atom+xml" title="RSS Feed heaps.org" /-->
 
 	<!-- general css -->
 	<link href="css/styles.css" rel="stylesheet" type="text/css" />
-	<link href="::basePath::/favicon.ico" rel="icon" />
 	<link rel="canonical" href="::currentPage.absoluteUrl::" ::cond currentPage.absoluteUrl != null:: />
 	
 	<meta name="description" content="::currentPage.description::" ::cond currentPage.description != null:: />
 
 	<!-- Twitter Card data -->
-	<meta name="twitter:creator" content="@haxe_org"/>
+	<meta name="twitter:creator" content="@ncanasse"/>
 
 	<!-- Open Graph data -->
 	<meta property="og:title" content="::title::" />
 	<meta property="og:description" content="::currentPage.description::" ::cond currentPage.description != null:: />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="::currentPage.absoluteUrl::" />
-	<meta property="og:image" content="::basePath::/img/share.jpg" />
+	<meta property="og:image" content="::basePath::/img/share.png" />
 	
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/>
 </head>

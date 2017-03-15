@@ -280,16 +280,9 @@ class Generator {
 		var sitemapPage = new Page("sitemap.mtt", null, "sitemap.xml")
 													.hidden()
 													.setTitle("Sitemap");
-		/*
-		var rssPage = new Page("rss.mtt", null, "rss.xml")
-													.hidden()
-													.setTitle("RSS");
-		
-		addPage(rssPage, "/rss");*/
 		addPage(homePage, "/home");
 		addPage(featuresPage, "/features");
 		addPage(errorPage, "/404");
-		//addPage(sitemapPage, "/sitemap");
 		
 		errorPage.baseHref = "/";
 	}

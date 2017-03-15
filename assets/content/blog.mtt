@@ -1,9 +1,0 @@
-::foreach blog currentPage.customData.blogs::
-  <article class="blog-article" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
-    <h2><a href="::blog.outputPath::" itemprop="url"><span itemprop="name">::blog.title::</span></a> <small itemprop="datePublished">::blog.customData.date::</small></h2>
-    <div itemprop="blogPost">::raw blog.pageContent.split("</h1>").pop()::</div>
-    <p style="display:none"><span itemprop="author">HaxeDevelop team</span><span itemprop="publisher">HaxeDevelop.org</span></p>
-    <hr/>
-    <p><strong><a href="http://haxedevelop.org/::blog.outputPath::#disqus_thread">Comments</a></strong></p>
-  </article>
-::end::
