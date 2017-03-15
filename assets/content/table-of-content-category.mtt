@@ -1,12 +1,10 @@
 ::raw currentCategory.content::
 
-<hr/>
-
 <ul class="page-list unstyled">
 ::foreach page currentCategory.pages::
 	<li class="page-list-item" itemscope="itemscope" itemtype="https://schema.org/Thing" ::cond page.visible ::>
-		<h5><a href="::page.outputPath::" class="list-group-item" itemprop="url"><span itemprop="name">::page.title::</span></a></h5>
-		<p><em>::page.description::&#8229;</em></p>
+		<h3><a href="::page.outputPath::" class="list-group-item" itemprop="url"><span itemprop="name">::page.title::</span></a></h3>
+		<p><em>::page.description::</em></p>
 	</li>
 ::end::
 </ul>

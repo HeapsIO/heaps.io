@@ -222,11 +222,11 @@ class Generator {
 										.setTitle('${category.title} documentation')
 										.hidden();
 										
-			category.content = parseMarkdownContent(page, category.folder + "index.md");
+			category.content = parseMarkdownContent(page, contentPath + category.folder + "index.md");
 			addPage(page, category.folder);
 		}
 		
-		var documentationLandingPage = new Page("layout-page-documentation.mtt",	"documentation/index.mtt", 'documentation/index.html')
+		var documentationLandingPage = new Page("layout-page-documentation.mtt",  documentationFolder + "index.md", 'documentation/index.html')
 										.setTitle('Online handbook')
 										.setDescription("Learn about Heaps.io")
 										.hidden();
@@ -303,7 +303,7 @@ class Generator {
 				pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
 				var page = new Page("layout-page-documentation.mtt",	documentationPath + file, pageOutputPath);
 				page.level = level;
-				page.pageContent = parseMarkdownContent(page, documentationPath + file);
+				page.pageContent = parseMarkdownContent(page, contentPath + documentationPath + file);
 				addPage(page, documentationPath);
 			} else {
 				if (file == assetsFolderName) {
@@ -345,7 +345,7 @@ class Generator {
 			prev = page;
 		}
 		
-		var page = new Page("layout-page.mtt",	"samples.mtt", "samples/index.html")
+		var page = new Page("layout-page.mtt", "samples.mtt", "samples/index.html")
 			.setTitle("Examples overviews")
 			.setDescription('Heaps examples overview with source and live demo')
 			.setCustomData({samples:samples})
@@ -492,7 +492,7 @@ class Generator {
 	
 	public function parseMarkdownContent(page:Page, file:String):String {
 		var document = new Markdown.Document();
-		var markdown = File.getContent(contentPath + file);
+		var markdown = File.getContent(file);
 		markdown = replaceHaxeOrgLinks(markdown);
 		markdown = replaceYoutubeTags(markdown);
 		markdown = replaceTryHaxeTags(markdown);

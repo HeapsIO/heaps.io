@@ -10,25 +10,23 @@
 	</nav>
 	
 	<div class="logo "><a href="./"><img src="img/logo.svg" /></a></div>
-	
-	
 </header>
 
 
-<nav class="top-nav small" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+<nav class="top-nav small">
 	::foreach category sitemap::
 		<a href="::category.outputPath::" class="button ::if (category==currentCategory)::disabled::end::">::category.title::</a>
 	::end::
 </nav>
 	 
- <div class="row container" ::cond currentCategory!=null::>
-	<nav class="col-4 sidebar">
-		<ul class="unstyled" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
+ <div class="row container">
+	<nav class="col-4 sidebar" ::cond currentCategory!=null::>
+		<ul class="unstyled">
 			::foreach page currentCategory.pages::
-				<li ::cond page.visible:: ::attr class if(page==currentPage) "active":: itemprop="itemListElement" itemscope="itemscope" itemtype="http://schema.org/ListItem"><a href="::page.outputPath::" itemprop="item"><span itemprop="name">::page.title::</span></a>
-					<ol itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList" ::cond page.category.isSerie && page.category==currentPage.category::>
+				<li ::cond page.visible:: ::attr class if(page==currentPage) "active"::><a href="::page.outputPath::" itemprop="item"><span itemprop="name">::page.title::</span></a>
+					<ol ::cond page.category.isSerie && page.category==currentPage.category::>
 						::foreach page page.category.pages::
-							<li ::cond page.visible && !page.isSerieHome():: ::attr class if(page==currentPage) "active":: itemprop="itemListElement" itemscope="itemscope" itemtype="http://schema.org/ListItem"><a href="::page.outputPath::" itemprop="item"><span itemprop="name">::page.title::</span></a></li>
+							<li ::cond page.visible && !page.isSerieHome():: ::attr class if(page==currentPage) "active"::><a href="::page.outputPath::" itemprop="item"><span itemprop="name">::page.title::</span></a></li>
 						::end::
 					</ol>
 				</li>
@@ -36,11 +34,11 @@
 		</ul>
 	</nav>
 
-	<article class="col-8 documentation">
+	<article class="::if currentCategory!=null::col-8::else::col-12::end:: documentation">
 		<div class="content">
 			
 			<h1 ::cond currentPage.isSerieHome()::>::currentPage.title::</h1>
-			<h1 ::cond !currentPage.isSerieHome()::>::currentPage.title:: <small>::currentCategory.title:: </small></h1>
+			<h1 ::cond !currentPage.isSerieHome()::>::currentPage.title:: <span>::currentCategory.title:: </span></h1>
 			
 			::raw pageContent::
 		</div>

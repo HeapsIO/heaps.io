@@ -44,7 +44,7 @@
   <!-- Executed before build -->
   <preBuildCommand>cmd /c haxe $(OutputFile)</preBuildCommand>
   <!-- Executed after build -->
-  <postBuildCommand alwaysRun="False">neko generator.n</postBuildCommand>
+  <postBuildCommand alwaysRun="False">neko Generator.n</postBuildCommand>
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="True" />

@@ -1,4 +1,4 @@
-Heap's 2D API (H2D) defines a collection of classes for 2D graphics. The following sections covers its usage.
+<p class="lead">Heap's 2D API (H2D) defines a collection of classes for 2D graphics. The following sections covers its usage.</p>
 
 Before discussing H2D in-depth, let's introduce a few concepts that we will use throughout the documentation:
 

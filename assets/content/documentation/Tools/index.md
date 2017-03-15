@@ -1,1 +1,1 @@
-Heaps can be extended by several tools
+<p class="lead">Heaps can be extended by several tools</p>

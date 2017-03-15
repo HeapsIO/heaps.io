@@ -7,7 +7,7 @@ body {
 	font-family: "Roboto","Helvetica","Arial",sans-serif;
 	font-weight: 400;
 	font-size: 17px;
-	line-height: 1.3;
+	line-height: 1.5;
 	color: #222;
 }
 
@@ -19,10 +19,22 @@ a, a:hover {
 	color: #245795;
 }
 
+.homepage h1, .homepage h2, .homepage h3, .sample h1, .sample h2, .documentation h1, .documentation h2{
+	text-transform:uppercase;
+}
+
 h1 {
 	font-size:56px;
-	text-transform:uppercase;
 	color:#333;
+}
+.sample h1, .documentation h1 {
+	font-size:42px;
+	color:#03245b;
+}
+
+.sample h1 span, .documentation h1 span {
+	color:#569a7b;
+	font-weight:normal;
 }
 
 h2 {
@@ -30,15 +42,16 @@ h2 {
 	margin:1em 0;
 	font-weight:bold;
 	padding:15px 0;
+	color:#569a7b;
+}
+.homepage h2 {
 	color:#03245b;
-	text-transform:uppercase;
 }
 
 h3 {
 	font-size:36px;
 	margin:0.5em 0;
 	font-weight:normal;
-	text-transform:uppercase;
 	color:#03245b;
 }
 
@@ -61,7 +74,6 @@ h4 {
 	font-size:32px;
 	margin:0.5em 0;
 	font-weight:normal;
-	text-transform:uppercase;
 }
 
 .homepage h4 a {
@@ -86,10 +98,6 @@ h5 {
 
 .documentation {
 	margin-bottom:2em;
-}
-
-.documentation h1 {
-	font-size: 32px;
 }
 
 .documentation h2 {
@@ -214,7 +222,7 @@ nav.top-nav li {
 	margin-bottom:1px;
 }
 
-nav.top-nav .button {
+nav.top-nav a.button {
 	background:#f0f0f0;
 	padding:10px 20px;
 	margin:2px;
@@ -224,6 +232,7 @@ nav.top-nav .button {
 	color:#3a3a3a;
 	background:#FE9F44;
 	display:inline-block;
+	text-decoration:underline;
 }
 
 nav.top-nav .button.disabled, nav.top-nav.small .button.disabled {
@@ -346,6 +355,20 @@ footer a {
 }
 
 .button {
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.sample-button {
+	display:block;
+	width:270px;
+	padding:30px;
+	margin-right:20px;
+	margin-bottom:20px;
+	float:left;
+	color:#000;
+	font-size: 21px;
+    font-weight: bold;
+	text-decoration:underline;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 
