@@ -110,6 +110,17 @@
 				<p>Heaps is used by several (indi) game studios with successful game titles. Unbeatable performance, intuitive API, globally used and battle­tested. </p>
 			</div>
 		</div>
+		<script>::raw '
+		window.onload=function(){
+		 var boxes = document.querySelectorAll(".box-raised");
+		 var maxHeight = 0;
+		 for(var i=0;i<boxes.length;i++) {
+			maxHeight = Math.max(maxHeight, boxes[i].offsetHeight);
+		 }
+		 for(var i=0;i<boxes.length;i++) {
+			boxes[i].style.height = maxHeight + "px";
+		 }
+		}'::</script>
 	</div>
 </section>
 
