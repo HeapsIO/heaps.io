@@ -7,6 +7,7 @@ assets/includes/api
 *.swf
 *.xml
 assets/includes/samples/*/*.hxml
+.haxelib/*/
 
 # OS generated files #
 ######################

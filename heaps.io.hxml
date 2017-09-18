@@ -1,6 +1,6 @@
--lib markdown
--lib hxtemplo
--lib hxparse
+-lib markdown:1.0.0
+-lib hxtemplo:3.0.0
+-lib heaps:1.0.0
 -cp src
 -neko Generator.n
 -main Main
