@@ -293,7 +293,7 @@ class Generator {
 			prev = page;
 		}
 		
-		var page = new Page("layout-page-samples.mtt", "samples.mtt", "samples/index.html")
+		var page = new Page("layout-page.mtt", "samples.mtt", "samples/index.html")
 			.setTitle("Examples overviews")
 			.setDescription('Heaps examples overview with source and live demo')
 			.setCustomData({samples:samples})
