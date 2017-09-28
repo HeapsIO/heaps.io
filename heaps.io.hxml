@@ -1,7 +1,13 @@
 -lib markdown:1.0.0
--lib hxtemplo:3.0.0
--lib heaps:1.0.0
+-lib hxtemplo:3.2.0
+-lib heaps:git:https://github.com/HeapsIO/heaps.git#1.0.0
 -cp src
--neko Generator.n
+--interp
 -main Main
--dce no
+-dce full
+-D eval-stack
+
+
+ --macro keep("DateTools")
+ --macro keep("haxe.ds.StringMap")
+ --macro keep("haxe.ds.IntMap")
