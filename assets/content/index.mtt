@@ -5,8 +5,15 @@
 		<p class="lead">
 			Heaps.io is a mature cross platform graphics engine designed for high performance games. 
 			It is designed to leverage modern GPUs that are commonly available on both desktop and mobile devices. 
-			The framework supports HTML5 WebGL, native Mobile (iOS and Android), Flash Stage3D and Desktop with OpenGL. 
 		</p>
+		<center>
+			<img src="img/logo/html5.svg" height="50" /> &nbsp; 
+			<img src="img/logo/opengl.svg" height="50" /> &nbsp; 
+			<img src="img/logo/directx.svg" height="50" /> &nbsp; 
+			<img src="img/logo/nintendo-switch.svg" height="50" /> &nbsp; 
+			<img src="img/logo/playstation4.svg" height="35" /> &nbsp; 
+			<img src="img/logo/xbox.svg" height="35" /> 
+		</center>
 	</div>
 </section>
 
@@ -18,7 +25,7 @@
 				<p>To use Heaps.io, you need to install <a href="https://haxe.org">Haxe</a> 3.4+</p>
 				<div class="cmd"><code>haxelib git heaps</code></div>
 				
-				<p>In addition to use Heaps.io with HashLink, you need to install: </p>
+				<p>In addition to use Heaps.io with <a href="http://hashlink.haxe.org">HashLink</a>, you need to install: </p>
 				<ul>
 					<li><a href="https://github.com/HaxeFoundation/hashlink/releases">HashLink</a> Virtual Machine</li>
 					<li><a href="https://www.libsdl.org/download-2.0.php">SDL</a> (place dll in HL directory) Low level access to input and graphics via OpenGL and Direct3D. </li>
@@ -75,7 +82,7 @@
 </section>
 
 <section class="medium">
-	<div class="container row">
+	<div class="container row" style="display: flex;">
 		<div class="col-4">
 			<div class="box box-raised">
 				<h3>Why use Heaps?</h3>
@@ -111,8 +118,11 @@
 			</div>
 		</div>
 		<script>::raw '
-		window.onload=function(){
+		window.onresize=window.onload=function(){
 		 var boxes = document.querySelectorAll(".box-raised");
+		 for(var i=0;i<boxes.length;i++) {
+			boxes[i].style.height = null;
+		 }
 		 var maxHeight = 0;
 		 for(var i=0;i<boxes.length;i++) {
 			maxHeight = Math.max(maxHeight, boxes[i].offsetHeight);

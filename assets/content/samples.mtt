@@ -1,15 +1,3 @@
-
-
-<section>
-	<div class="container sample">
-		<h1>Heaps <span>examples</span></h1>
-		
-		<nav class="top-nav small" itemscope="itemscope" itemtype="http://schema.org/BreadcrumbList">
-			::foreach page currentPage.customData.samples::
-				<a href="::page.outputPath::" class="sample-button">::page.title::</a>
-			::end::
-			<br clear="both"/>
-		</nav>
-	</div>
-</section>
-
+<script>
+location.href = "::currentPage.customData.samples[0].outputPath::";
+</script>
