@@ -249,8 +249,8 @@ section.light h3 {
 .top-nav a.button {
   background: #f0f0f0;
   padding: 10px 20px;
-  margin: 4px;
-  border-radius: 4px;
+  margin: 3px;
+  border-radius: 3px;
   font-size: 21px;
   font-weight: bold;
   color: rgba(255, 255, 255, 0.65);
