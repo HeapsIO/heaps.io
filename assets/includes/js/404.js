@@ -15,7 +15,7 @@
   var html = "";
   if(searchResults.length==0) {
     // nothing found, redirect to home
-    window.location.href = "//code.haxe.org/"; 
+    window.location.href = "//heaps.io/"; 
   } else if(searchResults.length ==1 ){
     // one thing found, redirect to it
     window.location.href = searchResults[0].url;
