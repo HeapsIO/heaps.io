@@ -177,8 +177,8 @@ class Generator {
 	
 	private function addCategoryPages(sitemap:Array<Category>) {
 		for (category in sitemap) {
-			var page =  new Page("layout-page-documentation.mtt",	"table-of-content-category.mtt", 'documentation/${category.id}/index.html')
-							.setTitle('${category.title} documentation')
+			var page =  new Page("layout-page-documentation.mtt", "table-of-content-category.mtt", 'documentation/${category.id}/index.html')
+							.setTitle('${category.title}')
 							.hidden();
 			
 			category.content = parseMarkdownContent(page, contentPath + category.folder + "index.md");

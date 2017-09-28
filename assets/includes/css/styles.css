@@ -295,6 +295,9 @@ section.light h3 {
   border-left: 4px solid #265669;
   padding-bottom: 5px;
 }
+.sidebar ul li .current {
+  font-weight: bold;
+}
 .lead {
   font-style: italic;
   font-size: 150%;
