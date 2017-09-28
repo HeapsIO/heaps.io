@@ -68,42 +68,6 @@ class Generator {
 		});
 		
 		
-		// find serie pages
-		var seriePages = [for (p in _pages) if (p != null && p.visible && p.isSerieHome()) p];
-	 
-		for (page in seriePages) {
-			// add dates to table-of-content (to be used on homepage)
-			page.dates = page.category.pages[0].dates;
-			
-			// find+assign parent category
-			var ids = page.category.folder.replace(documentationFolder, "").split("/");
-			var parentId = ids.shift();
-			parentId = parentId.toLowerCase().replace(" ", "-");
-			page.category.parent = getCategoryById(sitemap, parentId);
-		}
-		
-		// Add serie pages as if they are normal pages in the category
-		for (category in sitemap) {
-			if (!category.isSerie) {
-				for (page in seriePages) {
-					if (page.category.id.indexOf(category.id) == 0) {
-						category.pages.push(page);
-					}
-				}
-			}
-		}
-		
-		// assign prev/next pages (for series)
-		for (page in _pages) {
-			if (page.visible && page.category != null && page.category.isSerie) {
-				var index = page.category.pages.indexOf(page);
-				page.prev = page.category.pages[index - 1];
-				if (page.prev != null && (!page.prev.visible || page.prev.isSerieHome())) page.prev = null;
-				page.next = page.category.pages[index + 1];
-				if (page.next != null && (!page.next.visible || page.next.isSerieHome())) page.next = null;
-			}
-		}
-		
 		var tags:StringMap<Array<Page>> = collectTags();
 		// add tags to the home page (used for meta keywords)
 		_pages[0].tags = [for (tag in tags.keys()) tag];
@@ -111,7 +75,7 @@ class Generator {
 
 		// sort pages by date; get most recent pages
 		var latestCreatedPages = [for (p in _pages) {
-			if (p != null && p.category != null && p.visible && p.dates != null && p.dates.created != null && (!p.category.isSerie || p.isSerieHome())) p;
+			if (p != null && p.category != null && p.visible && p.dates != null && p.dates.created != null) p;
 		}];
 		latestCreatedPages.sort(function(a, b) {
 			var a = a.dates.created.getTime(), b = b.dates.created.getTime();
@@ -149,7 +113,6 @@ class Generator {
 				getSortedTags: getSortedTags.bind(tags),
 				getTagTitle:getTagTitle,
 				latestCreatedPages: function(amount) return [for (i in 0...min(amount, latestCreatedPages.length)) latestCreatedPages[i]],
-				seriePages: function(amount) return [for (i in 0...min(amount, seriePages.length)) seriePages[i]],
 			}
 			if (page.contentPath != null) 
 			{
@@ -214,14 +177,10 @@ class Generator {
 	
 	private function addCategoryPages(sitemap:Array<Category>) {
 		for (category in sitemap) {
-			category.isSerie = isSerie(category);
-			var page = if (category.isSerie) 
-									new Page("layout-page-documentation.mtt",	"table-of-content-serie.mtt", 'documentation/${category.id}/index.html')
-								 else 
-									new Page("layout-page-documentation.mtt",	"table-of-content-category.mtt", 'documentation/${category.id}/index.html')
-										.setTitle('${category.title} documentation')
-										.hidden();
-										
+			var page =  new Page("layout-page-documentation.mtt",	"table-of-content-category.mtt", 'documentation/${category.id}/index.html')
+							.setTitle('${category.title} documentation')
+							.hidden();
+			
 			category.content = parseMarkdownContent(page, contentPath + category.folder + "index.md");
 			addPage(page, category.folder);
 		}
@@ -247,10 +206,6 @@ class Generator {
 		}
 	}
 	
-	static inline function isSerie(category:Category) {
-		return category.pages[0].level == 2;
-	}
-	
 	private function addTagPages(tags:StringMap<Array<Page>>) {
 		for (tag in tags.keys()) {
 			var tagTitle = getTagTitle(tag);
@@ -268,9 +223,9 @@ class Generator {
 													.setTitle("Heaps - Haxe Game Engine")
 													.setDescription('Cross platform graphics for high performance games.');
 		
-		var featuresPage = new Page("layout-page.mtt", "features.html", "features.html")
+		var aboutPage = new Page("layout-page.mtt", "about.mtt", "about.html")
 													.hidden()
-													.setTitle("Features - fast game enine")
+													.setTitle("About - Haxe game enine")
 													.setDescription('Heaps.io delivers fast iterations, real development power and multi-platform compilation with native access and minimal overhead. The toolkit is versatile, open-source and completely free.');
 		
 		var errorPage = new Page("layout-page-main.mtt", "404.mtt", "404.html")
@@ -281,7 +236,7 @@ class Generator {
 													.hidden()
 													.setTitle("Sitemap");
 		addPage(homePage, "/home");
-		addPage(featuresPage, "/features");
+		addPage(aboutPage, "/about");
 		addPage(errorPage, "/404");
 		
 		errorPage.baseHref = "/";
@@ -290,7 +245,7 @@ class Generator {
 	private function addDocumentationPages(documentationPath:String, level:Int = 0) {
 		for (file in FileSystem.readDirectory(contentPath + documentationPath)) {
 			var outputPathReplace = 'documentation/';
-			if (file.startsWith("index.")) continue; // skip this index page, its used for landingspages of series
+			if (file.startsWith("index.")) continue; // skip this index page, its used for landingspages 
 			if (!FileSystem.isDirectory(contentPath + documentationPath + file)) {
 				var pageOutputPath = documentationPath.replace(documentationFolder, outputPathReplace);
 				pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
@@ -321,7 +276,7 @@ class Generator {
 			
 			var pageOutputPath = samplesPath.replace(documentationFolder, outputPathReplace);
 			pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
-			var page = new Page("layout-page-samples.mtt",	samplesPath + file, pageOutputPath)
+			var page = new Page("layout-page-samples.mtt", samplesPath + file, pageOutputPath)
 				.setTitle(sampleName)
 				.setDescription('Heaps $sampleName example with source and live demo')
 				.setCustomData({
@@ -338,7 +293,7 @@ class Generator {
 			prev = page;
 		}
 		
-		var page = new Page("layout-page.mtt", "samples.mtt", "samples/index.html")
+		var page = new Page("layout-page-samples.mtt", "samples.mtt", "samples/index.html")
 			.setTitle("Examples overviews")
 			.setDescription('Heaps examples overview with source and live demo')
 			.setCustomData({samples:samples})
@@ -363,9 +318,8 @@ class Generator {
 			var structure = key.split("/");
 			structure.pop();
 			if (key.indexOf(documentationFolder) == 0) {
-				var isSerie = _folders.get(key)[0].level == 2;
 				var id = structure.pop();
-				var categoryId = isSerie ? structure.pop() + "/" + id : id;
+				var categoryId = id;
 				categoryId = categoryId.toLowerCase().replace(" ", "-");
 				var category = new Category(categoryId, id.replace("-", " "), key, _folders.get(key));
 				category.absoluteUrl = basePath + category.outputPath;

@@ -13,7 +13,6 @@ class Category {
   public var id:String;
   public var folder:String;
   public var pages:Array<Page>;
-  public var isSerie:Bool;
 
   public var content:String;
   
@@ -26,7 +25,7 @@ class Category {
   }
   
   public function getPageCount():Int {
-    return [for (page in pages) if (page.visible && !page.isSerieHome()) page].length;
+    return [for (page in pages) if (page.visible) page].length;
   }
   
   public function isCategory(name:String):Bool return folder.startsWith(name);

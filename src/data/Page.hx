@@ -62,8 +62,4 @@ class Page {
     visible = false;
     return this;
   }
-
-  public function isSerieHome():Bool {
-    return outputPath.toString().indexOf("index.html") != -1;
-  }
 }
