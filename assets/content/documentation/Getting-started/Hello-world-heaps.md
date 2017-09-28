@@ -1,6 +1,6 @@
 # Example application
 
-You should then be ready to run your first example:
+After installation you should be ready to run your first example:
 
 ```haxe
 class Main extends hxd.App {
@@ -28,7 +28,7 @@ To ensure the program compiles include the Heaps library by adding `-lib heaps` 
 #### If you compile for Javascript: 
 
  * You will also have to create an index.html that includes your .js haxe output.
- * Also put a `&lt;canvas id="webgl"&gt;&lt;/canvas&gt;` in body of the HTML-file.
+ * Also put a `<canvas id="webgl"></canvas>` in body of the HTML-file.
  * If not in debug mode (`-debug` compiler flag) add `-dce no` flag to prevent execution failure.
 
 #### If you compile for Flash

@@ -23,7 +23,7 @@
 			<div class="col-5">
 				<h3>Installation</h3>
 				<p>To use Heaps.io, you need to install <a href="https://haxe.org">Haxe</a> 3.4+</p>
-				<div class="cmd"><code>haxelib git heaps</code></div>
+				<div class="cmd"><code>haxelib install heaps</code></div>
 				
 			</div>
 			<div class="col-2">&nbsp;</div>
@@ -79,14 +79,16 @@
 		<div class="col-4">
 			<div class="box box-raised">
 				<h3>Why use Heaps?</h3>
+				
 				<ul>
-				<li>2D and 3D game engine</li>
-				<li>Desktop / HTML5 / Flash cross platform output</li>
-				<li>Fast compile-and-run cycle</li>
-				<li>GPU accelerated (both 2D and 3D)</li>
-				<li>Cross platform GPU Shader system</li>
-				<li>Mouse / Keyboard / GamePad support</li>
-				<li>Supports many file formats: PNG,JPG,FBX,OGG,etc.</li>
+					<li>2D and 3D game engine</li>
+					<li>Cross platform compilation using Haxe technology</li>
+					<li>Easy to get started, still entirely customizable for high end graphics</li>
+					<li>Fast compile-and-run cycle</li>
+					<li>GPU accelerated (both 2D and 3D)</li>
+					<li>Cross platform GPU Shader system</li>
+					<li>Mouse / Keyboard / GamePad support</li>
+					<li>Supports many file formats: PNG,JPG,FBX,OGG,etc.</li>
 				</ul>
 			</div>
 		</div>
@@ -94,20 +96,24 @@
 			<div class="box box-raised">
 				<h3>Publish anywhere</h3>
 				<p><em>With Haxe, you can easily build cross-platform tools targeting all the mainstream platforms natively.</em></p>
-				<h5>Web - HTML5/WebGL</h5>
-				<p>The exellent JavaScript target is used to get the most out of WebGL.</p>
 				
-				<h5>Native apps</h5>
+				<h5>Desktop</h5>
 				<p>Real native builds; Windows, OSx, Linux</p>
 				
-				<h5>Ready to go mobile</h5>
+				<h5>Consoles</h5>
+				<p>Playstation 4, Nintendo switch, XBox</p>
+				
+				<h5>Mobile</h5>
 				<p>iOS, Android.<br/>Use Lime, HashLink or Adobe Air to compile to a mobile app.</p>
+				
+				<h5>Web</h5>
+				<p>The exellent JavaScript target is used to get the most out of HTML5/WebGL.</p>
 			</div>
 		</div>
 		<div class="col-4">
 			<div class="box box-raised">
 				<h3>Proven technology</h3>
-				<p>Heaps is used by several (indi) game studios with successful game titles. Unbeatable performance, intuitive API, globally used and battle­tested. </p>
+				<p>Heaps is used by several (indie) game studios with successful game titles. Unbeatable performance, intuitive API, globally used and battle­tested. </p>
 			</div>
 		</div>
 		<script>::raw '
