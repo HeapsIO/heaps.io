@@ -20,9 +20,11 @@
 
 <section>
 	<div class="container">
-		<h1>About Heaps</h1>
-		<p class="lead">Heaps.io delivers fast iterations, real development power and multi-platform compilation with native access and minimal overhead.
-		The toolkit is flexible, open-source and free. It allows custom rendering pipelines for the graphics you need. Heaps.io is used in many Ludum Dare games but also by big game studios.
+		<h1>Showcase</h1>
+		
+		<h2>Dead-cells by Motion-Twin</h2>
+		<h2>Evoland by Shiro</h2>
+		<h2>Nortghard by Shiro</h2>
 		</p>
 	</div>
 </section>
