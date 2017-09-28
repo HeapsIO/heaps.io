@@ -1,4 +1,4 @@
-# H2d Sprites
+# Sprites
 
 The following properties and methods can be accessed on any Sprite:
 

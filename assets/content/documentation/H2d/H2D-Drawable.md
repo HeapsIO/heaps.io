@@ -1,4 +1,4 @@
-# H2d Drawable
+# Drawable
 
 H2D classes that can display something on screen usually extend the [`h2d.Drawable`](https://github.com/ncannasse/heaps/blob/master/h2d/Drawable.hx) class.
 

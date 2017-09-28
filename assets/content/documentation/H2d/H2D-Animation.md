@@ -1,4 +1,4 @@
-# H2d Animation
+# Animation
 
 Creating an animated sprite in H2D is relative easy.
 

@@ -1,3 +1,3 @@
-# H2d Layers
+# Layers
 
 Using layers starts here.
