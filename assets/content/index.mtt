@@ -25,13 +25,6 @@
 				<p>To use Heaps.io, you need to install <a href="https://haxe.org">Haxe</a> 3.4+</p>
 				<div class="cmd"><code>haxelib git heaps</code></div>
 				
-				<p>In addition to use Heaps.io with <a href="http://hashlink.haxe.org">HashLink</a>, you need to install: </p>
-				<ul>
-					<li><a href="https://github.com/HaxeFoundation/hashlink/releases">HashLink</a> Virtual Machine</li>
-					<li><a href="https://www.libsdl.org/download-2.0.php">SDL</a> (place dll in HL directory) Low level access to input and graphics via OpenGL and Direct3D. </li>
-					<li><a href="https://www.openal.org/downloads/">OpenAL 32</a>  Cross Platform Audio</li>
-					<li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=48145">VisualStudio 2015 x86 Redistributable</a></li>
-				</ul>
 			</div>
 			<div class="col-2">&nbsp;</div>
 			<div class="col-5">
