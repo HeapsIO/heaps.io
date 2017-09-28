@@ -226,14 +226,15 @@ section {
 	a.button {
 		background:#f0f0f0;
 		padding:10px 20px;
-		margin:2px;
-		border-radius:1px;
+		margin: 4px;
+		border-radius: 4px;
 		font-size:21px;
 		font-weight:bold;
-		color:#3a3a3a;
-		background:#FE9F44;
+		color: rgba(255,255,255,.65);
+		background: rgba(98, 98, 98, 0.5);
 		display:inline-block;
 		text-decoration:underline;
+		mix-blend-mode: color-dodge;
 	}
 	
 	.button.disabled, &.small .button.disabled {
@@ -241,6 +242,7 @@ section {
 		color:#fff;
 		box-shadow:none;
 		text-decoration:none;
+		mix-blend-mode: hard-light;
 	}
 
 	&.top-nav-small {
