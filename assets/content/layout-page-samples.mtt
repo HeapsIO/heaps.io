@@ -18,17 +18,19 @@
 <div class="container sample">
 	<h1>Example <span>::currentPage.title::</span></h1>
 	
-	<nav class="row top-nav small">
-		<div class="col-1 align-center"><a href="::currentPage.customData.prev.outputPath::" class="button" ::cond currentPage.customData.prev !=null:: title="::currentPage.customData.prev.title::">&laquo;</a> &nbsp;</div>
-		<div class="col-10 align-center">
-			<select onchange="location.href=this.options[this.selectedIndex].value">
-			::foreach sample currentPage.customData.samples::
-				<option value="::sample.outputPath::" ::attr selected if(sample == currentPage) true::>::sample.title::</option>
-			::end::
-			</select>
-		</div>
-		<div class="col-1 align-center">&nbsp; <a href="::currentPage.customData.next.outputPath::" class="button" ::cond currentPage.customData.next !=null:: title="::currentPage.customData.next.title::">&raquo; </a></div>
-	</nav>
+	<table class="table top-nav top-nav-small">
+		<tr>
+			<td class="align-center"><a href="::currentPage.customData.prev.outputPath::" class="button" ::cond currentPage.customData.prev !=null:: title="::currentPage.customData.prev.title::">&laquo;</a> &nbsp;</td>
+			<td class="align-center">
+				<select onchange="location.href=this.options[this.selectedIndex].value">
+				::foreach sample currentPage.customData.samples::
+					<option value="::sample.outputPath::" ::attr selected if(sample == currentPage) true::>::sample.title::</option>
+				::end::
+				</select>
+			</td>
+			<td class="align-center">&nbsp; <a href="::currentPage.customData.next.outputPath::" class="button" ::cond currentPage.customData.next !=null:: title="::currentPage.customData.next.title::">&raquo; </a></td>
+		</tr>
+	</table>
 	<div class="row">
 		<div class="col-6">
 			<pre style="margin-top:0"><code class="prettyprint haxe">::raw currentPage.customData.source::</code></pre>
