@@ -14,4 +14,4 @@ In addition to use Heaps.io with [HashLink](http://hashlink.haxe.org) (also know
  * [HashLink](https://github.com/HaxeFoundation/hashlink/releases) Virtual Machine
  * [SDL](https://www.libsdl.org/download-2.0.php) (place dll in HL directory) Low level access to input and graphics via OpenGL and Direct3D. 
  * [OpenAL 32](https://www.openal.org/downloads/) Cross Platform Audio
- * [VisualStudio 2015 x86 Redistributable](https://www.microsoft.com/en-us/download/details.aspx?id=48145) if you are on windows.
+ * [VisualStudio 2015 x86 Redistributable](https://www.microsoft.com/en-us/download/details.aspx?id=48145) if you are on Windows.
