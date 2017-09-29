@@ -225,13 +225,9 @@ section {
 
 	a.button {
 		background:#f0f0f0;
-		padding:10px 20px;
 		margin: 3px;
-		border-radius: 3px;
-		font-size:21px;
 		color: rgba(255,255,255,.65);
 		background: rgba(98, 98, 98, 0.5);
-		display:inline-block;
 		mix-blend-mode: color-dodge;
 		
 		&:hover {
@@ -256,7 +252,8 @@ section {
 		
 		.button {
 			padding:8px 15px;
-			background:#fff;
+			background:#FDFDFD;
+			color:#111;
 		}
 	}
 }
@@ -383,6 +380,15 @@ footer {
 
 .button {
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+	padding:10px 20px;
+	border-radius: 3px;
+	font-size:21px;
+	text-decoration:none;
+	display:inline-block;
+	
+	&:hover:not(.disabled) {
+		text-decoration:underline;
+	}
 }
 
 .sample-button {

@@ -49,12 +49,12 @@ section.light h3{color:#8ad0b6;text-shadow:0 0 8px rgba(0,0,0,0.45);}
 .top-nav{padding:15px;text-align:center;}
 .top-nav li,.top-nav ul{padding:0;margin:0;list-style:none;}
 .top-nav li{padding:5px;background:#eee;margin-bottom:1px;}
-.top-nav a.button{background:#f0f0f0;padding:10px 20px;margin:3px;border-radius:3px;font-size:21px;color:rgba(255,255,255,0.65);background:rgba(98,98,98,0.5);display:inline-block;mix-blend-mode:color-dodge;}
+.top-nav a.button{background:#f0f0f0;margin:3px;color:rgba(255,255,255,0.65);background:rgba(98,98,98,0.5);mix-blend-mode:color-dodge;}
 .top-nav a.button:hover{text-decoration:underline;}
 .top-nav .button.disabled,.top-nav.small .button.disabled{background:rgba(0,0,0,0.2);color:#fff;box-shadow:none;text-decoration:none;mix-blend-mode:hard-light;}
 .top-nav.top-nav-small{width:100%;}
 .top-nav.top-nav-small td:first-child,.top-nav.top-nav-small td:last-child{width:60px;}
-.top-nav.top-nav-small .button{padding:8px 15px;background:#fff;}
+.top-nav.top-nav-small .button{padding:8px 15px;background:#FDFDFD;color:#111;}
 .sidebar ul{margin-bottom:4em;margin-top:2.5em;}
 .sidebar ul ul{margin-top:0.5em;margin-bottom:0.5em;padding-left:0.5em;}
 .sidebar ul li{padding-left:10px;border-left:4px solid #eee;padding-bottom:5px;}
@@ -79,7 +79,8 @@ footer a{text-decoration:none;color:#333;}
 footer a:hover{color:#000;}
 footer .lead{border-color:#222;}
 .button-download{position:fixed;display:block;right:0;bottom:0;margin-right:40px;margin-bottom:40px;z-index:900;}
-.button{box-shadow:0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12);}
+.button{box-shadow:0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12);padding:10px 20px;border-radius:3px;font-size:21px;text-decoration:none;display:inline-block;}
+.button:hover:not(.disabled){text-decoration:underline;}
 .sample-button{display:block;width:270px;padding:30px;margin-right:20px;margin-bottom:20px;float:left;color:#000;font-size:21px;font-weight:bold;text-decoration:underline;box-shadow:0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12);}
 .box{padding:30px;margin:15px;box-shadow:0 3px 4px 0 rgba(0,0,0,0.14),0 3px 3px -2px rgba(0,0,0,0.2),0 1px 8px 0 rgba(0,0,0,0.12);}
 @media (min-width:640px){.boxes{display:flex;}
