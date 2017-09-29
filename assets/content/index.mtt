@@ -29,7 +29,7 @@
 			<div class="col-2">&nbsp;</div>
 			<div class="col-5">
 				<h3>Open Source</h3>
-				<p>Heaps.io is free and open Source, with a large and supportive community pushing its growth and evolution.
+				<p>Heaps.io is free and open Source, with a large and supportive community pushing its growth and evolution. 
 				Feel free to contribute, test the latest build and don't forget to star us on Github!</p>
 				
 				<p><a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p>
@@ -75,7 +75,7 @@
 </section>
 
 <section class="medium">
-	<div class="container row" style="display: flex;">
+	<div class="container row boxes">
 		<div class="col-4">
 			<div class="box box-raised">
 				<h3>Why use Heaps?</h3>
@@ -98,37 +98,40 @@
 				<p><em>With Haxe, you can easily build cross-platform tools targeting all the mainstream platforms natively.</em></p>
 				
 				<h5>Desktop</h5>
-				<p>Real native builds; Windows, OSx, Linux</p>
+				<p>Real native builds; Windows, OSX, Linux.</p>
 				
 				<h5>Consoles</h5>
-				<p>Playstation 4, Nintendo switch, XBox</p>
+				<p>Playstation 4, Nintendo Switch, XBox.</p>
 				
 				<h5>Mobile</h5>
-				<p>iOS, Android.<br/>Use Lime, HashLink or Adobe Air to compile to a mobile app.</p>
+				<p>iOS, Android.<br/>Using fast natively compiled code.</p>
 				
 				<h5>Web</h5>
-				<p>The exellent JavaScript target is used to get the most out of HTML5/WebGL.</p>
+				<p>The excellent JavaScript target is used to get the most out of HTML5/WebGL.</p>
 			</div>
 		</div>
 		<div class="col-4">
 			<div class="box box-raised">
 				<h3>Proven technology</h3>
 				<p>Heaps is used by several (indie) game studios with successful game titles. Unbeatable performance, intuitive API, globally used and battle­tested. </p>
+				<p><a href="about.html" class="button">Learn more</a></p>
 			</div>
 		</div>
 		<script>::raw '
-		window.onresize=window.onload=function(){
-		 var boxes = document.querySelectorAll(".box-raised");
-		 for(var i=0;i<boxes.length;i++) {
-			boxes[i].style.height = null;
-		 }
-		 var maxHeight = 0;
-		 for(var i=0;i<boxes.length;i++) {
-			maxHeight = Math.max(maxHeight, boxes[i].offsetHeight);
-		 }
-		 for(var i=0;i<boxes.length;i++) {
-			boxes[i].style.height = maxHeight + "px";
-		 }
+		window.onresize = window.onload = function() {
+			if (!window.matchMedia || window.matchMedia("(min-width: 640px)").matches) {
+				 var boxes = document.querySelectorAll(".box-raised");
+				 for(var i=0;i<boxes.length;i++) {
+					boxes[i].style.height = null;
+				 }
+				 var maxHeight = 0;
+				 for(var i=0;i<boxes.length;i++) {
+					maxHeight = Math.max(maxHeight, boxes[i].offsetHeight);
+				 }
+				 for(var i=0;i<boxes.length;i++) {
+					boxes[i].style.height = maxHeight + "px";
+				 }
+			}
 		}'::</script>
 	</div>
 </section>
