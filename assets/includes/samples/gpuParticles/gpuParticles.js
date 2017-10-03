@@ -7,267 +7,12 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var EReg = function(r,opt) {
-	this.r = new RegExp(r,opt.split("u").join(""));
-};
-$hxClasses["EReg"] = EReg;
-EReg.__name__ = ["EReg"];
-EReg.prototype = {
-	__class__: EReg
-};
-var HxOverrides = function() { };
-$hxClasses["HxOverrides"] = HxOverrides;
-HxOverrides.__name__ = ["HxOverrides"];
-HxOverrides.strDate = function(s) {
-	var _g = s.length;
-	switch(_g) {
-	case 8:
-		var k = s.split(":");
-		var d = new Date();
-		d["setTime"](0);
-		d["setUTCHours"](k[0]);
-		d["setUTCMinutes"](k[1]);
-		d["setUTCSeconds"](k[2]);
-		return d;
-	case 10:
-		var k1 = s.split("-");
-		return new Date(k1[0],k1[1] - 1,k1[2],0,0,0);
-	case 19:
-		var k2 = s.split(" ");
-		var y = k2[0].split("-");
-		var t = k2[1].split(":");
-		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
-	default:
-		throw new js__$Boot_HaxeError("Invalid date format : " + s);
-	}
-};
-HxOverrides.cca = function(s,index) {
-	var x = s.charCodeAt(index);
-	if(x != x) {
-		return undefined;
-	}
-	return x;
-};
-HxOverrides.substr = function(s,pos,len) {
-	if(len == null) {
-		len = s.length;
-	} else if(len < 0) {
-		if(pos == 0) {
-			len = s.length + len;
-		} else {
-			return "";
-		}
-	}
-	return s.substr(pos,len);
-};
-HxOverrides.remove = function(a,obj) {
-	var i = a.indexOf(obj);
-	if(i == -1) {
-		return false;
-	}
-	a.splice(i,1);
-	return true;
-};
-HxOverrides.iter = function(a) {
-	return { cur : 0, arr : a, hasNext : function() {
-		return this.cur < this.arr.length;
-	}, next : function() {
-		return this.arr[this.cur++];
-	}};
-};
-var Lambda = function() { };
-$hxClasses["Lambda"] = Lambda;
-Lambda.__name__ = ["Lambda"];
-Lambda.array = function(it) {
-	var a = [];
-	var i = $iterator(it)();
-	while(i.hasNext()) {
-		var i1 = i.next();
-		a.push(i1);
-	}
-	return a;
-};
-Lambda.indexOf = function(it,v) {
-	var i = 0;
-	var v2 = $iterator(it)();
-	while(v2.hasNext()) {
-		var v21 = v2.next();
-		if(v == v21) {
-			return i;
-		}
-		++i;
-	}
-	return -1;
-};
-var List = function() {
-	this.length = 0;
-};
-$hxClasses["List"] = List;
-List.__name__ = ["List"];
-List.prototype = {
-	add: function(item) {
-		var x = new _$List_ListNode(item,null);
-		if(this.h == null) {
-			this.h = x;
-		} else {
-			this.q.next = x;
-		}
-		this.q = x;
-		this.length++;
-	}
-	,push: function(item) {
-		var x = new _$List_ListNode(item,this.h);
-		this.h = x;
-		if(this.q == null) {
-			this.q = x;
-		}
-		this.length++;
-	}
-	,remove: function(v) {
-		var prev = null;
-		var l = this.h;
-		while(l != null) {
-			if(l.item == v) {
-				if(prev == null) {
-					this.h = l.next;
-				} else {
-					prev.next = l.next;
-				}
-				if(this.q == l) {
-					this.q = prev;
-				}
-				this.length--;
-				return true;
-			}
-			prev = l;
-			l = l.next;
-		}
-		return false;
-	}
-	,iterator: function() {
-		return new _$List_ListIterator(this.h);
-	}
-	,__class__: List
-};
-var _$List_ListNode = function(item,next) {
-	this.item = item;
-	this.next = next;
-};
-$hxClasses["_List.ListNode"] = _$List_ListNode;
-_$List_ListNode.__name__ = ["_List","ListNode"];
-_$List_ListNode.prototype = {
-	__class__: _$List_ListNode
-};
-var _$List_ListIterator = function(head) {
-	this.head = head;
-};
-$hxClasses["_List.ListIterator"] = _$List_ListIterator;
-_$List_ListIterator.__name__ = ["_List","ListIterator"];
-_$List_ListIterator.prototype = {
-	hasNext: function() {
-		return this.head != null;
-	}
-	,next: function() {
-		var val = this.head.item;
-		this.head = this.head.next;
-		return val;
-	}
-	,__class__: _$List_ListIterator
-};
-Math.__name__ = ["Math"];
-var Reflect = function() { };
-$hxClasses["Reflect"] = Reflect;
-Reflect.__name__ = ["Reflect"];
-Reflect.field = function(o,field) {
-	try {
-		return o[field];
-	} catch( e ) {
-		return null;
-	}
-};
-Reflect.fields = function(o) {
-	var a = [];
-	if(o != null) {
-		var hasOwnProperty = Object.prototype.hasOwnProperty;
-		for( var f in o ) {
-		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
-			a.push(f);
-		}
-		}
-	}
-	return a;
-};
-Reflect.isFunction = function(f) {
-	if(typeof(f) == "function") {
-		return !(f.__name__ || f.__ename__);
-	} else {
-		return false;
-	}
-};
-Reflect.compare = function(a,b) {
-	if(a == b) {
-		return 0;
-	} else if(a > b) {
-		return 1;
-	} else {
-		return -1;
-	}
-};
-Reflect.compareMethods = function(f1,f2) {
-	if(f1 == f2) {
-		return true;
-	}
-	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
-		return false;
-	}
-	if(f1.scope == f2.scope && f1.method == f2.method) {
-		return f1.method != null;
-	} else {
-		return false;
-	}
-};
-Reflect.isEnumValue = function(v) {
-	if(v != null) {
-		return v.__enum__ != null;
-	} else {
-		return false;
-	}
-};
-Reflect.deleteField = function(o,field) {
-	if(!Object.prototype.hasOwnProperty.call(o,field)) {
-		return false;
-	}
-	delete(o[field]);
-	return true;
-};
-var Std = function() { };
-$hxClasses["Std"] = Std;
-Std.__name__ = ["Std"];
-Std.string = function(s) {
-	return js_Boot.__string_rec(s,"");
-};
-Std.parseInt = function(x) {
-	var v = parseInt(x,10);
-	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) {
-		v = parseInt(x);
-	}
-	if(isNaN(v)) {
-		return null;
-	}
-	return v;
-};
-Std.random = function(x) {
-	if(x <= 0) {
-		return 0;
-	} else {
-		return Math.floor(Math.random() * x);
-	}
-};
 var h3d_IDrawable = function() { };
 $hxClasses["h3d.IDrawable"] = h3d_IDrawable;
 h3d_IDrawable.__name__ = ["h3d","IDrawable"];
 h3d_IDrawable.prototype = {
-	__class__: h3d_IDrawable
+	render: null
+	,__class__: h3d_IDrawable
 };
 var hxd_App = function() {
 	var _gthis = this;
@@ -289,7 +34,12 @@ $hxClasses["hxd.App"] = hxd_App;
 hxd_App.__name__ = ["hxd","App"];
 hxd_App.__interfaces__ = [h3d_IDrawable];
 hxd_App.prototype = {
-	get_wantedFPS: function() {
+	engine: null
+	,s3d: null
+	,s2d: null
+	,sevents: null
+	,isDisposed: null
+	,get_wantedFPS: function() {
 		return hxd_Timer.wantedFPS;
 	}
 	,set_wantedFPS: function(fps) {
@@ -396,92 +146,525 @@ hxd_App.prototype = {
 	}
 	,__class__: hxd_App
 };
-var Stencil = function() {
-	this.time = 0.;
+var SampleApp = function() {
 	hxd_App.call(this);
 };
-$hxClasses["Stencil"] = Stencil;
-Stencil.__name__ = ["Stencil"];
-Stencil.main = function() {
-	hxd_Res.set_loader(new hxd_res_Loader(new hxd_fs_EmbedFileSystem(haxe_Unserializer.run("oy13:normalmap.pngty10:hxlogo.pngty14:customFont.fntty14:customFont.pngty16:trueTypeFont.ttftg"))));
-	new Stencil();
-};
-Stencil.__super__ = hxd_App;
-Stencil.prototype = $extend(hxd_App.prototype,{
-	init: function() {
-		this.root = new h3d_scene_Object(this.s3d);
-		var prim = new h3d_prim_Cube();
-		prim.translate(-0.5,-0.5,0.0);
-		prim.unindex();
-		prim.addNormals();
-		prim.addUVs();
-		var tex = hxd_Res.get_loader().loadImage("hxlogo.png").toTexture();
-		var obj = new h3d_scene_Mesh(prim,new h3d_mat_Material(tex),this.root);
-		obj.material.passes.enableLights = true;
-		var obj1 = new h3d_scene_Mesh(prim,new h3d_mat_Material(tex),this.root);
-		obj1.scaleZ = -1;
-		var f = 1;
-		var b = true;
-		if(b) {
-			obj1.flags |= f;
-		} else {
-			obj1.flags &= ~f;
+$hxClasses["SampleApp"] = SampleApp;
+SampleApp.__name__ = ["SampleApp"];
+SampleApp.__super__ = hxd_App;
+SampleApp.prototype = $extend(hxd_App.prototype,{
+	fui: null
+	,init: function() {
+		this.fui = new h2d_Flow(this.s2d);
+		this.fui.set_isVertical(true);
+		this.fui.set_verticalSpacing(5);
+		this.fui.set_padding(10);
+	}
+	,mainLoop: function() {
+		if(hxd_Key.isDown(17) && hxd_Key.isPressed(83)) {
+			var bytes = new h3d_impl_SceneSerializer().saveSCN(this.s3d,false);
+			hxd_File.saveBytes("scene.scn",bytes);
 		}
-		var _this = obj1.material.mshader.color__;
-		_this.x = 0.33333333333333331;
-		_this.y = 0.78431372549019607;
-		_this.z = 1.;
-		_this.w = 0.;
-		var p = obj1.material.passes;
-		var s = new h3d_mat_Stencil();
-		p.set_culling(h3d_mat_Face.Front);
-		p.enableLights = true;
-		s.setFunc(h3d_mat_Face.Both,h3d_mat_Compare.Equal,1,255);
-		s.setMask(h3d_mat_Face.Both,0);
-		p.stencil = s;
-		var prim1 = new h3d_prim_Cube(2,2,0.0001);
-		prim1.addNormals();
-		prim1.translate(-1,-1,0);
-		var obj2 = new h3d_scene_Mesh(prim1,null,this.root);
-		var _this1 = obj2.material.mshader.color__;
-		_this1.x = 0.;
-		_this1.y = 0.50196078431372548;
-		_this1.z = 0.75294117647058822;
-		_this1.w = 0.;
-		var p1 = obj2.material.passes;
-		var s1 = new h3d_mat_Stencil();
-		p1.set_depthWrite(false);
-		p1.stencil = new h3d_mat_Stencil();
-		s1.setFunc(h3d_mat_Face.Both,h3d_mat_Compare.Always,1,255);
-		s1.setOp(h3d_mat_Face.Both,h3d_mat_StencilOp.Keep,h3d_mat_StencilOp.Keep,h3d_mat_StencilOp.Replace);
-		s1.setMask(h3d_mat_Face.Both,255);
-		p1.stencil = s1;
-		var light = new h3d_scene_DirLight(new h3d_Vector(-0.5,-0.5,-0.5),this.s3d);
-		light.set_enableSpecular(true);
-		var _this2 = this.s3d.lightSystem.ambientLight;
-		_this2.x = 0.3;
-		_this2.y = 0.3;
-		_this2.z = 0.3;
-		_this2.w = 1.;
-		var _this3 = this.s3d.camera.pos;
-		_this3.x = 5;
-		_this3.y = 5;
-		_this3.z = 5;
-		_this3.w = 1.;
+		hxd_App.prototype.mainLoop.call(this);
+	}
+	,getFont: function() {
+		return hxd_res_DefaultFont.get();
+	}
+	,addButton: function(label,onClick) {
+		var f = new h2d_Flow(this.fui);
+		f.set_padding(5);
+		f.set_paddingBottom(7);
+		var tmp = h2d_Tile.fromColor(4210752);
+		f.set_backgroundTile(tmp);
+		var tf = new h2d_Text(this.getFont(),f);
+		tf.set_text(label);
+		f.set_enableInteractive(true);
+		f.interactive.set_cursor(hxd_Cursor.Button);
+		f.interactive.onClick = function(_) {
+			onClick();
+		};
+		f.interactive.onOver = function(_1) {
+			var tmp1 = h2d_Tile.fromColor(6316128);
+			f.set_backgroundTile(tmp1);
+		};
+		f.interactive.onOut = function(_2) {
+			var tmp2 = h2d_Tile.fromColor(4210752);
+			f.set_backgroundTile(tmp2);
+		};
+		return f;
+	}
+	,addSlider: function(label,get,set,min,max) {
+		if(max == null) {
+			max = 1.;
+		}
+		if(min == null) {
+			min = 0.;
+		}
+		var f = new h2d_Flow(this.fui);
+		f.set_horizontalSpacing(5);
+		var tf = new h2d_Text(this.getFont(),f);
+		tf.set_text(label);
+		tf.set_maxWidth(70);
+		tf.set_textAlign(h2d_Align.Right);
+		var sli = new h2d_Slider(100,10,f);
+		sli.set_minValue(min);
+		sli.set_maxValue(max);
+		var tmp = get();
+		sli.set_value(tmp);
+		var tf1 = new h2d_TextInput(this.getFont(),f);
+		var tmp1 = "" + hxd_Math.fmt(sli.value);
+		tf1.set_text(tmp1);
+		sli.onChange = function() {
+			set(sli.value);
+			var tmp2 = "" + hxd_Math.fmt(sli.value);
+			tf1.set_text(tmp2);
+			f.set_needReflow(true);
+		};
+		tf1.onChange = function() {
+			var v = parseFloat(tf1.text);
+			if(isNaN(v)) {
+				return;
+			}
+			sli.set_value(v);
+			set(v);
+		};
+		return sli;
+	}
+	,addCheck: function(label,get,set) {
+		var f = new h2d_Flow(this.fui);
+		f.set_horizontalSpacing(5);
+		var tf = new h2d_Text(this.getFont(),f);
+		tf.set_text(label);
+		tf.set_maxWidth(70);
+		tf.set_textAlign(h2d_Align.Right);
+		var size = 10;
+		var b = new h2d_Graphics(f);
+		var redraw = function() {
+			b.clear();
+			b.beginFill(8421504);
+			b.drawRect(0,0,size,size);
+			b.beginFill(0);
+			b.drawRect(1,1,size - 2,size - 2);
+			if(get()) {
+				b.beginFill(12632256);
+				b.drawRect(2,2,size - 4,size - 4);
+			}
+		};
+		var i = new h2d_Interactive(size,size,b);
+		i.onClick = function(_) {
+			set(!get());
+			redraw();
+		};
+		redraw();
+		return i;
+	}
+	,addText: function(text) {
+		if(text == null) {
+			text = "";
+		}
+		var tf = new h2d_Text(this.getFont(),this.fui);
+		tf.set_text(text);
+		return tf;
+	}
+	,__class__: SampleApp
+});
+var GpuParticles = function() {
+	this.time = 0.;
+	this.moving = false;
+	SampleApp.call(this);
+};
+$hxClasses["GpuParticles"] = GpuParticles;
+GpuParticles.__name__ = ["GpuParticles"];
+GpuParticles.main = function() {
+	new GpuParticles();
+};
+GpuParticles.__super__ = SampleApp;
+GpuParticles.prototype = $extend(SampleApp.prototype,{
+	parts: null
+	,group: null
+	,box: null
+	,tf: null
+	,moving: null
+	,time: null
+	,init: function() {
+		var _gthis = this;
+		SampleApp.prototype.init.call(this);
+		this.parts = new h3d_parts_GpuParticles(this.s3d);
+		var g = new h3d_parts_GpuPartGroup(this.parts);
+		g.needRebuild = true;
+		g.emitMode = h3d_parts_GpuEmitMode.Cone;
+		g.needRebuild = true;
+		g.emitAngle = 0.5;
+		g.needRebuild = true;
+		g.emitDist = 0;
+		g.fadeIn = 0.8;
+		g.fadeOut = 0.8;
+		g.fadePower = 10;
+		g.needRebuild = true;
+		g.gravity = 1;
+		g.needRebuild = true;
+		g.size = 0.1;
+		g.needRebuild = true;
+		g.sizeRand = 0.5;
+		g.needRebuild = true;
+		g.rotSpeed = 10;
+		g.needRebuild = true;
+		g.speed = 2;
+		g.needRebuild = true;
+		g.speedRand = 0.5;
+		g.needRebuild = true;
+		g.life = 2;
+		g.needRebuild = true;
+		g.lifeRand = 0.5;
+		if(10000 > g.nparts) {
+			g.needRebuild = true;
+		}
+		g.nparts = 10000;
+		this.addSlider("Amount",function() {
+			return _gthis.parts.amount;
+		},function(v) {
+			_gthis.parts.amount = v;
+		});
+		this.addSlider("Speed",function() {
+			return g.speed;
+		},function(v1) {
+			g.needRebuild = true;
+			g.speed = v1;
+		},0,10);
+		this.addSlider("Gravity",function() {
+			return g.gravity;
+		},function(v2) {
+			g.needRebuild = true;
+			g.gravity = v2;
+		},0,5);
+		this.addCheck("Sort",function() {
+			return g.sortMode == h3d_parts_GpuSortMode.Dynamic;
+		},function(v3) {
+			g.needRebuild = true;
+			g.sortMode = v3 ? h3d_parts_GpuSortMode.Dynamic : h3d_parts_GpuSortMode.None;
+		});
+		this.addCheck("Loop",function() {
+			return g.emitLoop;
+		},function(v4) {
+			g.needRebuild = true;
+			g.emitLoop = v4;
+			if(!v4) {
+				_gthis.parts.currentTime = 0;
+			}
+		});
+		this.addCheck("Move",function() {
+			return _gthis.moving;
+		},function(v5) {
+			_gthis.moving = v5;
+		});
+		this.parts.onEnd = function() {
+			_gthis.engine.backgroundColor = -16777088;
+			_gthis.parts.currentTime = 0;
+		};
+		this.parts.addGroup(g);
+		this.group = g;
+		new h3d_scene_CameraController(20,this.s3d);
+		this.box = new h3d_scene_Box(-2143272880,this.parts.bounds,null,this.parts);
+		this.tf = this.addText();
 	}
 	,update: function(dt) {
-		this.time += 0.01 * dt;
-		this.root.setRotateAxis(0,0,1.0,this.time);
+		if(this.moving) {
+			this.time += dt * 0.01;
+			var _this = this.parts;
+			var v = Math.cos(this.time) * 5;
+			_this.x = v;
+			var f = 1;
+			var b = true;
+			if(b) {
+				_this.flags |= f;
+			} else {
+				_this.flags &= ~f;
+			}
+			var _this1 = this.parts;
+			var v1 = Math.sin(this.time) * 5;
+			_this1.y = v1;
+			var f1 = 1;
+			var b1 = true;
+			if(b1) {
+				_this1.flags |= f1;
+			} else {
+				_this1.flags &= ~f1;
+			}
+		}
+		if((this.engine.backgroundColor & 16777215) > 0) {
+			this.engine.backgroundColor -= 8;
+		}
+		var cur = this.group.currentParts;
+		this.tf.set_text("cur=" + (cur * 100 / this.group.nparts | 0) + "%");
+		if(this.parts.uploadedCount > 0) {
+			var _g = this.tf;
+			_g.set_text(_g.text + (" U=" + this.parts.uploadedCount));
+		}
 	}
-	,__class__: Stencil
+	,__class__: GpuParticles
 });
+var HxOverrides = function() { };
+$hxClasses["HxOverrides"] = HxOverrides;
+HxOverrides.__name__ = ["HxOverrides"];
+HxOverrides.strDate = function(s) {
+	var _g = s.length;
+	switch(_g) {
+	case 8:
+		var k = s.split(":");
+		var d = new Date();
+		d["setTime"](0);
+		d["setUTCHours"](k[0]);
+		d["setUTCMinutes"](k[1]);
+		d["setUTCSeconds"](k[2]);
+		return d;
+	case 10:
+		var k1 = s.split("-");
+		return new Date(k1[0],k1[1] - 1,k1[2],0,0,0);
+	case 19:
+		var k2 = s.split(" ");
+		var y = k2[0].split("-");
+		var t = k2[1].split(":");
+		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
+	default:
+		throw new js__$Boot_HaxeError("Invalid date format : " + s);
+	}
+};
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) {
+		return undefined;
+	}
+	return x;
+};
+HxOverrides.substr = function(s,pos,len) {
+	if(len == null) {
+		len = s.length;
+	} else if(len < 0) {
+		if(pos == 0) {
+			len = s.length + len;
+		} else {
+			return "";
+		}
+	}
+	return s.substr(pos,len);
+};
+HxOverrides.remove = function(a,obj) {
+	var i = a.indexOf(obj);
+	if(i == -1) {
+		return false;
+	}
+	a.splice(i,1);
+	return true;
+};
+HxOverrides.iter = function(a) {
+	return { cur : 0, arr : a, hasNext : function() {
+		return this.cur < this.arr.length;
+	}, next : function() {
+		return this.arr[this.cur++];
+	}};
+};
+var Lambda = function() { };
+$hxClasses["Lambda"] = Lambda;
+Lambda.__name__ = ["Lambda"];
+Lambda.array = function(it) {
+	var a = [];
+	var i = $iterator(it)();
+	while(i.hasNext()) {
+		var i1 = i.next();
+		a.push(i1);
+	}
+	return a;
+};
+Lambda.indexOf = function(it,v) {
+	var i = 0;
+	var v2 = $iterator(it)();
+	while(v2.hasNext()) {
+		var v21 = v2.next();
+		if(v == v21) {
+			return i;
+		}
+		++i;
+	}
+	return -1;
+};
+var List = function() {
+	this.length = 0;
+};
+$hxClasses["List"] = List;
+List.__name__ = ["List"];
+List.prototype = {
+	h: null
+	,q: null
+	,length: null
+	,add: function(item) {
+		var x = new _$List_ListNode(item,null);
+		if(this.h == null) {
+			this.h = x;
+		} else {
+			this.q.next = x;
+		}
+		this.q = x;
+		this.length++;
+	}
+	,push: function(item) {
+		var x = new _$List_ListNode(item,this.h);
+		this.h = x;
+		if(this.q == null) {
+			this.q = x;
+		}
+		this.length++;
+	}
+	,remove: function(v) {
+		var prev = null;
+		var l = this.h;
+		while(l != null) {
+			if(l.item == v) {
+				if(prev == null) {
+					this.h = l.next;
+				} else {
+					prev.next = l.next;
+				}
+				if(this.q == l) {
+					this.q = prev;
+				}
+				this.length--;
+				return true;
+			}
+			prev = l;
+			l = l.next;
+		}
+		return false;
+	}
+	,iterator: function() {
+		return new _$List_ListIterator(this.h);
+	}
+	,__class__: List
+};
+var _$List_ListNode = function(item,next) {
+	this.item = item;
+	this.next = next;
+};
+$hxClasses["_List.ListNode"] = _$List_ListNode;
+_$List_ListNode.__name__ = ["_List","ListNode"];
+_$List_ListNode.prototype = {
+	item: null
+	,next: null
+	,__class__: _$List_ListNode
+};
+var _$List_ListIterator = function(head) {
+	this.head = head;
+};
+$hxClasses["_List.ListIterator"] = _$List_ListIterator;
+_$List_ListIterator.__name__ = ["_List","ListIterator"];
+_$List_ListIterator.prototype = {
+	head: null
+	,hasNext: function() {
+		return this.head != null;
+	}
+	,next: function() {
+		var val = this.head.item;
+		this.head = this.head.next;
+		return val;
+	}
+	,__class__: _$List_ListIterator
+};
+Math.__name__ = ["Math"];
+var Reflect = function() { };
+$hxClasses["Reflect"] = Reflect;
+Reflect.__name__ = ["Reflect"];
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		return null;
+	}
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
+			a.push(f);
+		}
+		}
+	}
+	return a;
+};
+Reflect.isFunction = function(f) {
+	if(typeof(f) == "function") {
+		return !(f.__name__ || f.__ename__);
+	} else {
+		return false;
+	}
+};
+Reflect.compare = function(a,b) {
+	if(a == b) {
+		return 0;
+	} else if(a > b) {
+		return 1;
+	} else {
+		return -1;
+	}
+};
+Reflect.compareMethods = function(f1,f2) {
+	if(f1 == f2) {
+		return true;
+	}
+	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
+		return false;
+	}
+	if(f1.scope == f2.scope && f1.method == f2.method) {
+		return f1.method != null;
+	} else {
+		return false;
+	}
+};
+Reflect.isEnumValue = function(v) {
+	if(v != null) {
+		return v.__enum__ != null;
+	} else {
+		return false;
+	}
+};
+Reflect.deleteField = function(o,field) {
+	if(!Object.prototype.hasOwnProperty.call(o,field)) {
+		return false;
+	}
+	delete(o[field]);
+	return true;
+};
+var Std = function() { };
+$hxClasses["Std"] = Std;
+Std.__name__ = ["Std"];
+Std.string = function(s) {
+	return js_Boot.__string_rec(s,"");
+};
+Std.parseInt = function(x) {
+	var v = parseInt(x,10);
+	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) {
+		v = parseInt(x);
+	}
+	if(isNaN(v)) {
+		return null;
+	}
+	return v;
+};
+Std.random = function(x) {
+	if(x <= 0) {
+		return 0;
+	} else {
+		return Math.floor(Math.random() * x);
+	}
+};
 var StringBuf = function() {
 	this.b = "";
 };
 $hxClasses["StringBuf"] = StringBuf;
 StringBuf.__name__ = ["StringBuf"];
 StringBuf.prototype = {
-	__class__: StringBuf
+	b: null
+	,__class__: StringBuf
 };
 var StringTools = function() { };
 $hxClasses["StringTools"] = StringTools;
@@ -614,6 +797,13 @@ Type.createEnumIndex = function(e,index,params) {
 	}
 	return Type.createEnum(e,c,params);
 };
+Type.getInstanceFields = function(c) {
+	var a = [];
+	for(var i in c.prototype) a.push(i);
+	HxOverrides.remove(a,"__class__");
+	HxOverrides.remove(a,"__properties__");
+	return a;
+};
 Type["typeof"] = function(v) {
 	var _g = typeof(v);
 	switch(_g) {
@@ -737,7 +927,13 @@ Xml.createDocument = function() {
 	return new Xml(Xml.Document);
 };
 Xml.prototype = {
-	get: function(att) {
+	nodeType: null
+	,nodeName: null
+	,nodeValue: null
+	,parent: null
+	,children: null
+	,attributeMap: null
+	,get: function(att) {
 		if(this.nodeType != Xml.Element) {
 			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
 		}
@@ -899,7 +1095,8 @@ var format_gif_Reader = function(i) {
 $hxClasses["format.gif.Reader"] = format_gif_Reader;
 format_gif_Reader.__name__ = ["format","gif","Reader"];
 format_gif_Reader.prototype = {
-	read: function() {
+	i: null
+	,read: function() {
 		var _g = 0;
 		var _g1 = [71,73,70];
 		while(_g < _g1.length) {
@@ -2034,7 +2231,16 @@ var format_mp3_Reader = function(i) {
 $hxClasses["format.mp3.Reader"] = format_mp3_Reader;
 format_mp3_Reader.__name__ = ["format","mp3","Reader"];
 format_mp3_Reader.prototype = {
-	skipID3v2: function() {
+	i: null
+	,bits: null
+	,version: null
+	,samples: null
+	,sampleSize: null
+	,any_read: null
+	,id3v2_data: null
+	,id3v2_version: null
+	,id3v2_flags: null
+	,skipID3v2: function() {
 		this.id3v2_version = this.i.readUInt16();
 		this.id3v2_flags = this.i.readByte();
 		var size = this.i.readByte() & 127;
@@ -2210,7 +2416,9 @@ var format_png_Reader = function(i) {
 $hxClasses["format.png.Reader"] = format_png_Reader;
 format_png_Reader.__name__ = ["format","png","Reader"];
 format_png_Reader.prototype = {
-	read: function() {
+	i: null
+	,checkCRC: null
+	,read: function() {
 		var _g = 0;
 		var _g1 = [137,80,78,71,13,10,26,10];
 		while(_g < _g1.length) {
@@ -3372,7 +3580,8 @@ var format_png_Writer = function(o) {
 $hxClasses["format.png.Writer"] = format_png_Writer;
 format_png_Writer.__name__ = ["format","png","Writer"];
 format_png_Writer.prototype = {
-	write: function(png) {
+	o: null
+	,write: function(png) {
 		var _g = 0;
 		var _g1 = [137,80,78,71,13,10,26,10];
 		while(_g < _g1.length) {
@@ -3456,7 +3665,10 @@ var format_tools_BitsInput = function(i) {
 $hxClasses["format.tools.BitsInput"] = format_tools_BitsInput;
 format_tools_BitsInput.__name__ = ["format","tools","BitsInput"];
 format_tools_BitsInput.prototype = {
-	readBits: function(n) {
+	i: null
+	,nbits: null
+	,bits: null
+	,readBits: function(n) {
 		if(this.nbits >= n) {
 			var c = this.nbits - n;
 			var k = this.bits >>> c & (1 << n) - 1;
@@ -3519,7 +3731,9 @@ var format_wav_Reader = function(i) {
 $hxClasses["format.wav.Reader"] = format_wav_Reader;
 format_wav_Reader.__name__ = ["format","wav","Reader"];
 format_wav_Reader.prototype = {
-	readInt: function() {
+	i: null
+	,version: null
+	,readInt: function() {
 		return this.i.readInt32();
 	}
 	,read: function() {
@@ -3611,7 +3825,28 @@ var h2d_Sprite = function(parent) {
 $hxClasses["h2d.Sprite"] = h2d_Sprite;
 h2d_Sprite.__name__ = ["h2d","Sprite"];
 h2d_Sprite.prototype = {
-	getBounds: function(relativeTo,out) {
+	children: null
+	,parentContainer: null
+	,parent: null
+	,x: null
+	,y: null
+	,scaleX: null
+	,scaleY: null
+	,rotation: null
+	,visible: null
+	,name: null
+	,alpha: null
+	,filter: null
+	,matA: null
+	,matB: null
+	,matC: null
+	,matD: null
+	,absX: null
+	,absY: null
+	,posChanged: null
+	,allocated: null
+	,lastFrame: null
+	,getBounds: function(relativeTo,out) {
 		if(out == null) {
 			out = new h2d_col_Bounds();
 		} else {
@@ -4665,7 +4900,13 @@ $hxClasses["h2d.Drawable"] = h2d_Drawable;
 h2d_Drawable.__name__ = ["h2d","Drawable"];
 h2d_Drawable.__super__ = h2d_Sprite;
 h2d_Drawable.prototype = $extend(h2d_Sprite.prototype,{
-	set_tileWrap: function(b) {
+	color: null
+	,blendMode: null
+	,smooth: null
+	,tileWrap: null
+	,colorKey: null
+	,shaders: null
+	,set_tileWrap: function(b) {
 		return this.tileWrap = b;
 	}
 	,get_colorAdd: function() {
@@ -4830,7 +5071,8 @@ $hxClasses["h2d.Bitmap"] = h2d_Bitmap;
 h2d_Bitmap.__name__ = ["h2d","Bitmap"];
 h2d_Bitmap.__super__ = h2d_Drawable;
 h2d_Bitmap.prototype = $extend(h2d_Drawable.prototype,{
-	set_tileWrap: function(b) {
+	tile: null
+	,set_tileWrap: function(b) {
 		if(b && this.tile != null && (this.tile.innerTex.flags & 1 << h3d_mat_TextureFlags.IsNPOT[1]) != 0) {
 			throw new js__$Boot_HaxeError("Cannot set tileWrap on a non power-of-two texture");
 		}
@@ -4903,7 +5145,23 @@ var h2d_FlowProperties = function(elt) {
 $hxClasses["h2d.FlowProperties"] = h2d_FlowProperties;
 h2d_FlowProperties.__name__ = ["h2d","FlowProperties"];
 h2d_FlowProperties.prototype = {
-	align: function(vertical,horizontal) {
+	elt: null
+	,paddingLeft: null
+	,paddingTop: null
+	,paddingRight: null
+	,paddingBottom: null
+	,isAbsolute: null
+	,horizontalAlign: null
+	,verticalAlign: null
+	,offsetX: null
+	,offsetY: null
+	,minWidth: null
+	,minHeight: null
+	,calculatedWidth: null
+	,calculatedHeight: null
+	,isBreak: null
+	,constraint: null
+	,align: function(vertical,horizontal) {
 		this.verticalAlign = vertical;
 		this.horizontalAlign = horizontal;
 	}
@@ -4940,7 +5198,11 @@ h2d_col_Bounds.fromPoints = function(min,max) {
 	return b;
 };
 h2d_col_Bounds.prototype = {
-	toIBounds: function(scale) {
+	xMin: null
+	,yMin: null
+	,xMax: null
+	,yMax: null
+	,toIBounds: function(scale) {
 		if(scale == null) {
 			scale = 1.;
 		}
@@ -5281,7 +5543,41 @@ $hxClasses["h2d.Flow"] = h2d_Flow;
 h2d_Flow.__name__ = ["h2d","Flow"];
 h2d_Flow.__super__ = h2d_Sprite;
 h2d_Flow.prototype = $extend(h2d_Sprite.prototype,{
-	getProperties: function(e) {
+	needReflow: null
+	,horizontalAlign: null
+	,verticalAlign: null
+	,minWidth: null
+	,minHeight: null
+	,maxWidth: null
+	,maxHeight: null
+	,lineHeight: null
+	,colWidth: null
+	,overflow: null
+	,paddingLeft: null
+	,paddingRight: null
+	,paddingTop: null
+	,paddingBottom: null
+	,horizontalSpacing: null
+	,verticalSpacing: null
+	,enableInteractive: null
+	,interactive: null
+	,backgroundTile: null
+	,borderWidth: null
+	,borderHeight: null
+	,isVertical: null
+	,isInline: null
+	,debug: null
+	,multiline: null
+	,background: null
+	,debugGraphics: null
+	,properties: null
+	,calculatedWidth: null
+	,calculatedHeight: null
+	,constraintWidth: null
+	,constraintHeight: null
+	,realMaxWidth: null
+	,realMaxHeight: null
+	,getProperties: function(e) {
 		this.set_needReflow(true);
 		return this.properties[this.getChildIndex(e)];
 	}
@@ -6120,7 +6416,10 @@ var h2d_Kerning = function(c,o) {
 $hxClasses["h2d.Kerning"] = h2d_Kerning;
 h2d_Kerning.__name__ = ["h2d","Kerning"];
 h2d_Kerning.prototype = {
-	__class__: h2d_Kerning
+	prevChar: null
+	,offset: null
+	,next: null
+	,__class__: h2d_Kerning
 };
 var h2d_FontChar = function(t,w) {
 	this.t = t;
@@ -6129,7 +6428,10 @@ var h2d_FontChar = function(t,w) {
 $hxClasses["h2d.FontChar"] = h2d_FontChar;
 h2d_FontChar.__name__ = ["h2d","FontChar"];
 h2d_FontChar.prototype = {
-	addKerning: function(prevChar,offset) {
+	t: null
+	,width: null
+	,kerning: null
+	,addKerning: function(prevChar,offset) {
 		var k = new h2d_Kerning(prevChar,offset);
 		k.next = this.kerning;
 		this.kerning = k;
@@ -6161,7 +6463,15 @@ var h2d_Font = function(name,size) {
 $hxClasses["h2d.Font"] = h2d_Font;
 h2d_Font.__name__ = ["h2d","Font"];
 h2d_Font.prototype = {
-	getChar: function(code) {
+	name: null
+	,size: null
+	,baseLine: null
+	,lineHeight: null
+	,tile: null
+	,charset: null
+	,glyphs: null
+	,defaultChar: null
+	,getChar: function(code) {
 		var c = this.glyphs.h[code];
 		if(c == null) {
 			c = this.charset.resolveChar(code,this.glyphs);
@@ -6223,13 +6533,25 @@ var h2d__$Graphics_GPoint = function(x,y,r,g,b,a) {
 $hxClasses["h2d._Graphics.GPoint"] = h2d__$Graphics_GPoint;
 h2d__$Graphics_GPoint.__name__ = ["h2d","_Graphics","GPoint"];
 h2d__$Graphics_GPoint.prototype = {
-	__class__: h2d__$Graphics_GPoint
+	x: null
+	,y: null
+	,r: null
+	,g: null
+	,b: null
+	,a: null
+	,__class__: h2d__$Graphics_GPoint
 };
 var hxbit_Serializable = function() { };
 $hxClasses["hxbit.Serializable"] = hxbit_Serializable;
 hxbit_Serializable.__name__ = ["hxbit","Serializable"];
 hxbit_Serializable.prototype = {
-	__class__: hxbit_Serializable
+	__uid: null
+	,getCLID: null
+	,serialize: null
+	,unserializeInit: null
+	,unserialize: null
+	,getSerializeSchema: null
+	,__class__: hxbit_Serializable
 };
 var hxbit_Serializer = function() {
 	this.usedClasses = [];
@@ -6336,7 +6658,17 @@ hxbit_Serializer.isClassFinal = function(index) {
 	return hxbit_Serializer.CLIDS[index] == 0;
 };
 hxbit_Serializer.prototype = {
-	set_remapIds: function(b) {
+	refs: null
+	,remapObjs: null
+	,newObjects: null
+	,out: null
+	,input: null
+	,inPos: null
+	,usedClasses: null
+	,convert: null
+	,mapIndexes: null
+	,knownStructs: null
+	,set_remapIds: function(b) {
 		this.remapObjs = b ? new haxe_ds_ObjectMap() : null;
 		return b;
 	}
@@ -7818,7 +8150,9 @@ $hxClasses["h3d.prim.Primitive"] = h3d_prim_Primitive;
 h3d_prim_Primitive.__name__ = ["h3d","prim","Primitive"];
 h3d_prim_Primitive.__interfaces__ = [hxbit_Serializable];
 h3d_prim_Primitive.prototype = {
-	triCount: function() {
+	buffer: null
+	,indexes: null
+	,triCount: function() {
 		if(this.indexes != null) {
 			return this.indexes.count / 3 | 0;
 		} else if(this.buffer == null) {
@@ -7877,6 +8211,7 @@ h3d_prim_Primitive.prototype = {
 	,customUnserialize: function(ctx) {
 		throw new js__$Boot_HaxeError("customUnserialize not implemented on " + this.toString());
 	}
+	,__uid: null
 	,getCLID: function() {
 		return h3d_prim_Primitive.__clid;
 	}
@@ -7903,7 +8238,10 @@ $hxClasses["h2d._Graphics.GraphicsContent"] = h2d__$Graphics_GraphicsContent;
 h2d__$Graphics_GraphicsContent.__name__ = ["h2d","_Graphics","GraphicsContent"];
 h2d__$Graphics_GraphicsContent.__super__ = h3d_prim_Primitive;
 h2d__$Graphics_GraphicsContent.prototype = $extend(h3d_prim_Primitive.prototype,{
-	addIndex: function(i) {
+	tmp: null
+	,index: null
+	,buffers: null
+	,addIndex: function(i) {
 		this.index.push(i);
 	}
 	,add: function(x,y,u,v,r,g,b,a) {
@@ -8096,7 +8434,32 @@ $hxClasses["h2d.Graphics"] = h2d_Graphics;
 h2d_Graphics.__name__ = ["h2d","Graphics"];
 h2d_Graphics.__super__ = h2d_Drawable;
 h2d_Graphics.prototype = $extend(h2d_Drawable.prototype,{
-	onRemove: function() {
+	content: null
+	,tmpPoints: null
+	,pindex: null
+	,curR: null
+	,curG: null
+	,curB: null
+	,curA: null
+	,lineSize: null
+	,lineR: null
+	,lineG: null
+	,lineB: null
+	,lineA: null
+	,doFill: null
+	,xMin: null
+	,yMin: null
+	,xMax: null
+	,yMax: null
+	,ma: null
+	,mb: null
+	,mc: null
+	,md: null
+	,mx: null
+	,my: null
+	,tile: null
+	,bevel: null
+	,onRemove: function() {
 		h2d_Drawable.prototype.onRemove.call(this);
 		this.clear();
 	}
@@ -9338,7 +9701,9 @@ var hxd_Interactive = function() { };
 $hxClasses["hxd.Interactive"] = hxd_Interactive;
 hxd_Interactive.__name__ = ["hxd","Interactive"];
 hxd_Interactive.prototype = {
-	__class__: hxd_Interactive
+	handleEvent: null
+	,getInteractiveScene: null
+	,__class__: hxd_Interactive
 };
 var h2d_Interactive = function(width,height,parent) {
 	this.mouseDownButton = -1;
@@ -9354,7 +9719,18 @@ h2d_Interactive.__name__ = ["h2d","Interactive"];
 h2d_Interactive.__interfaces__ = [hxd_Interactive];
 h2d_Interactive.__super__ = h2d_Drawable;
 h2d_Interactive.prototype = $extend(h2d_Drawable.prototype,{
-	onAdd: function() {
+	width: null
+	,height: null
+	,cursor: null
+	,isEllipse: null
+	,cancelEvents: null
+	,propagateEvents: null
+	,backgroundColor: null
+	,enableRightButton: null
+	,scene: null
+	,mouseDownButton: null
+	,parentMask: null
+	,onAdd: function() {
 		this.scene = this.getScene();
 		if(this.scene != null) {
 			this.scene.addEventTarget(this);
@@ -9612,7 +9988,9 @@ $hxClasses["h2d.Layers"] = h2d_Layers;
 h2d_Layers.__name__ = ["h2d","Layers"];
 h2d_Layers.__super__ = h2d_Sprite;
 h2d_Layers.prototype = $extend(h2d_Sprite.prototype,{
-	addChild: function(s) {
+	layersIndexes: null
+	,layerCount: null
+	,addChild: function(s) {
 		this.addChildAt(s,0);
 	}
 	,add: function(s,layer) {
@@ -9761,7 +10139,10 @@ $hxClasses["h2d.Mask"] = h2d_Mask;
 h2d_Mask.__name__ = ["h2d","Mask"];
 h2d_Mask.__super__ = h2d_Sprite;
 h2d_Mask.prototype = $extend(h2d_Sprite.prototype,{
-	onParentChanged: function() {
+	width: null
+	,height: null
+	,parentMask: null
+	,onParentChanged: function() {
 		h2d_Sprite.prototype.onParentChanged.call(this);
 		this.updateMask();
 	}
@@ -9836,7 +10217,11 @@ var h3d_impl_RenderContext = function() {
 $hxClasses["h3d.impl.RenderContext"] = h3d_impl_RenderContext;
 h3d_impl_RenderContext.__name__ = ["h3d","impl","RenderContext"];
 h3d_impl_RenderContext.prototype = {
-	__class__: h3d_impl_RenderContext
+	engine: null
+	,time: null
+	,elapsedTime: null
+	,frame: null
+	,__class__: h3d_impl_RenderContext
 };
 var h2d_RenderContext = function(scene) {
 	this.tmpBounds = new h2d_col_Bounds();
@@ -9861,7 +10246,43 @@ $hxClasses["h2d.RenderContext"] = h2d_RenderContext;
 h2d_RenderContext.__name__ = ["h2d","RenderContext"];
 h2d_RenderContext.__super__ = h3d_impl_RenderContext;
 h2d_RenderContext.prototype = $extend(h3d_impl_RenderContext.prototype,{
-	dispose: function() {
+	globalAlpha: null
+	,buffer: null
+	,bufPos: null
+	,textures: null
+	,scene: null
+	,defaultSmooth: null
+	,killAlpha: null
+	,front2back: null
+	,onBeginDraw: null
+	,onEnterFilter: null
+	,onLeaveFilter: null
+	,tmpBounds: null
+	,texture: null
+	,baseShader: null
+	,manager: null
+	,compiledShader: null
+	,buffers: null
+	,fixedBuffer: null
+	,pass: null
+	,currentShaders: null
+	,baseShaderList: null
+	,currentObj: null
+	,stride: null
+	,targetsStack: null
+	,hasUVPos: null
+	,filterStack: null
+	,inFilter: null
+	,curX: null
+	,curY: null
+	,curWidth: null
+	,curHeight: null
+	,hasRenderZone: null
+	,renderX: null
+	,renderY: null
+	,renderW: null
+	,renderH: null
+	,dispose: function() {
 		this.textures.dispose();
 		if(this.fixedBuffer != null) {
 			this.fixedBuffer.dispose();
@@ -10376,7 +10797,12 @@ $hxClasses["h2d.TileGroup"] = h2d_TileGroup;
 h2d_TileGroup.__name__ = ["h2d","TileGroup"];
 h2d_TileGroup.__super__ = h2d_Drawable;
 h2d_TileGroup.prototype = $extend(h2d_Drawable.prototype,{
-	getBoundsRec: function(relativeTo,out,forSize) {
+	content: null
+	,curColor: null
+	,tile: null
+	,rangeMin: null
+	,rangeMax: null
+	,getBoundsRec: function(relativeTo,out,forSize) {
 		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
 		this.addBounds(relativeTo,out,this.content.xMin,this.content.yMin,this.content.xMax - this.content.xMin,this.content.yMax - this.content.yMin);
 	}
@@ -10448,7 +10874,12 @@ $hxClasses["h2d.ScaleGrid"] = h2d_ScaleGrid;
 h2d_ScaleGrid.__name__ = ["h2d","ScaleGrid"];
 h2d_ScaleGrid.__super__ = h2d_TileGroup;
 h2d_ScaleGrid.prototype = $extend(h2d_TileGroup.prototype,{
-	set_tileBorders: function(b) {
+	borderWidth: null
+	,borderHeight: null
+	,width: null
+	,height: null
+	,tileBorders: null
+	,set_tileBorders: function(b) {
 		this.tileBorders = b;
 		this.clear();
 		return b;
@@ -10597,7 +11028,12 @@ var hxd_InteractiveScene = function() { };
 $hxClasses["hxd.InteractiveScene"] = hxd_InteractiveScene;
 hxd_InteractiveScene.__name__ = ["hxd","InteractiveScene"];
 hxd_InteractiveScene.prototype = {
-	__class__: hxd_InteractiveScene
+	setEvents: null
+	,handleEvent: null
+	,dispatchEvent: null
+	,dispatchListeners: null
+	,isInteractiveVisible: null
+	,__class__: hxd_InteractiveScene
 };
 var h2d_Scene = function() {
 	h2d_Layers.call(this,null);
@@ -10615,7 +11051,17 @@ h2d_Scene.__name__ = ["h2d","Scene"];
 h2d_Scene.__interfaces__ = [hxd_InteractiveScene,h3d_IDrawable];
 h2d_Scene.__super__ = h2d_Layers;
 h2d_Scene.prototype = $extend(h2d_Layers.prototype,{
-	get_defaultSmooth: function() {
+	width: null
+	,height: null
+	,mouseX: null
+	,mouseY: null
+	,fixedSize: null
+	,interactive: null
+	,eventListeners: null
+	,ctx: null
+	,stage: null
+	,events: null
+	,get_defaultSmooth: function() {
 		return this.ctx.defaultSmooth;
 	}
 	,set_defaultSmooth: function(v) {
@@ -11011,6 +11457,981 @@ h2d_Scene.prototype = $extend(h2d_Layers.prototype,{
 	}
 	,__class__: h2d_Scene
 });
+var h2d_Slider = function(width,height,parent) {
+	if(height == null) {
+		height = 10;
+	}
+	if(width == null) {
+		width = 50;
+	}
+	this.value = 0;
+	this.maxValue = 1;
+	this.minValue = 0;
+	h2d_Interactive.call(this,width,height,parent);
+	this.tile = h2d_Tile.fromColor(8421504,width,4);
+	this.tile.dy = height - 4 >> 1;
+	this.cursorTile = h2d_Tile.fromColor(13421772,5,height);
+	this.cursorTile.dx = -2;
+};
+$hxClasses["h2d.Slider"] = h2d_Slider;
+h2d_Slider.__name__ = ["h2d","Slider"];
+h2d_Slider.__super__ = h2d_Interactive;
+h2d_Slider.prototype = $extend(h2d_Interactive.prototype,{
+	tile: null
+	,cursorTile: null
+	,minValue: null
+	,maxValue: null
+	,value: null
+	,set_minValue: function(v) {
+		if(this.value < v) {
+			this.set_value(v);
+		}
+		return this.minValue = v;
+	}
+	,set_maxValue: function(v) {
+		if(this.value > v) {
+			this.set_value(v);
+		}
+		return this.maxValue = v;
+	}
+	,set_value: function(v) {
+		if(v < this.minValue) {
+			v = this.minValue;
+		}
+		if(v > this.maxValue) {
+			v = this.maxValue;
+		}
+		return this.value = v;
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Interactive.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		if(forSize) {
+			this.addBounds(relativeTo,out,0,0,this.width,this.height);
+		}
+		if(this.tile != null) {
+			this.addBounds(relativeTo,out,this.tile.dx,this.tile.dy,this.tile.width,this.tile.height);
+		}
+	}
+	,draw: function(ctx) {
+		h2d_Interactive.prototype.draw.call(this,ctx);
+		if(this.tile.width != (this.width | 0)) {
+			this.tile.setSize(this.width | 0,this.tile.height);
+		}
+		this.emitTile(ctx,this.tile);
+		var px = Math.round((this.value - this.minValue) * (this.width - this.cursorTile.width) / (this.maxValue - this.minValue)) - this.cursorTile.dx;
+		this.cursorTile.dx += px;
+		this.emitTile(ctx,this.cursorTile);
+		this.cursorTile.dx -= px;
+	}
+	,handleEvent: function(e) {
+		var _gthis = this;
+		h2d_Interactive.prototype.handleEvent.call(this,e);
+		if(e.cancel) {
+			return;
+		}
+		var _g = e.kind;
+		if(_g[1] == 0) {
+			this.set_value(e.relX / this.width * (this.maxValue - this.minValue) + this.minValue);
+			this.onChange();
+			var scene = this.scene;
+			this.startDrag(function(e1) {
+				if(_gthis.scene != scene || e1.kind == hxd_EventKind.ERelease) {
+					scene.stopDrag();
+					return;
+				}
+				_gthis.set_value(e1.relX / _gthis.width * (_gthis.maxValue - _gthis.minValue) + _gthis.minValue);
+				_gthis.onChange();
+			});
+		}
+	}
+	,onChange: function() {
+	}
+	,__class__: h2d_Slider
+});
+var h2d_Align = $hxClasses["h2d.Align"] = { __ename__ : true, __constructs__ : ["Left","Right","Center"] };
+h2d_Align.Left = ["Left",0];
+h2d_Align.Left.toString = $estr;
+h2d_Align.Left.__enum__ = h2d_Align;
+h2d_Align.Right = ["Right",1];
+h2d_Align.Right.toString = $estr;
+h2d_Align.Right.__enum__ = h2d_Align;
+h2d_Align.Center = ["Center",2];
+h2d_Align.Center.toString = $estr;
+h2d_Align.Center.__enum__ = h2d_Align;
+h2d_Align.__empty_constructs__ = [h2d_Align.Left,h2d_Align.Right,h2d_Align.Center];
+var h2d_Text = function(font,parent) {
+	this.realMaxWidth = -1;
+	this.constraintWidth = -1;
+	h2d_Drawable.call(this,parent);
+	this.set_font(font);
+	this.set_textAlign(h2d_Align.Left);
+	this.set_letterSpacing(1);
+	this.set_lineSpacing(0);
+	this.set_text("");
+	this.set_textColor(16777215);
+};
+$hxClasses["h2d.Text"] = h2d_Text;
+h2d_Text.__name__ = ["h2d","Text"];
+h2d_Text.__super__ = h2d_Drawable;
+h2d_Text.prototype = $extend(h2d_Drawable.prototype,{
+	font: null
+	,text: null
+	,textColor: null
+	,maxWidth: null
+	,dropShadow: null
+	,textWidth: null
+	,textHeight: null
+	,textAlign: null
+	,letterSpacing: null
+	,lineSpacing: null
+	,glyphs: null
+	,calcDone: null
+	,calcYMin: null
+	,calcWidth: null
+	,calcHeight: null
+	,calcSizeHeight: null
+	,constraintWidth: null
+	,realMaxWidth: null
+	,set_font: function(font) {
+		if(this.font == font) {
+			return font;
+		}
+		this.font = font;
+		if(this.glyphs != null) {
+			var _this = this.glyphs;
+			if(_this != null && _this.parent != null) {
+				_this.parent.removeChild(_this);
+			}
+		}
+		this.glyphs = new h2d_TileGroup(font == null ? null : font.tile,this);
+		this.glyphs.set_visible(false);
+		this.rebuild();
+		return font;
+	}
+	,set_textAlign: function(a) {
+		if(this.textAlign == a) {
+			return a;
+		}
+		this.textAlign = a;
+		this.rebuild();
+		return a;
+	}
+	,set_letterSpacing: function(s) {
+		if(this.letterSpacing == s) {
+			return s;
+		}
+		this.letterSpacing = s;
+		this.rebuild();
+		return s;
+	}
+	,set_lineSpacing: function(s) {
+		if(this.lineSpacing == s) {
+			return s;
+		}
+		this.lineSpacing = s;
+		this.rebuild();
+		return s;
+	}
+	,constraintSize: function(width,height) {
+		this.constraintWidth = width;
+		this.updateConstraint();
+	}
+	,onAdd: function() {
+		h2d_Drawable.prototype.onAdd.call(this);
+		this.rebuild();
+	}
+	,draw: function(ctx) {
+		if(this.glyphs == null) {
+			this.emitTile(ctx,h2d_Tile.fromColor(16711935,16,16));
+			return;
+		}
+		if(this.dropShadow != null) {
+			var oldX = this.absX;
+			var oldY = this.absY;
+			this.absX += this.dropShadow.dx * this.matA + this.dropShadow.dy * this.matC;
+			this.absY += this.dropShadow.dx * this.matB + this.dropShadow.dy * this.matD;
+			var oldR = this.color.x;
+			var oldG = this.color.y;
+			var oldB = this.color.z;
+			var oldA = this.color.w;
+			var _this = this.color;
+			var c = this.dropShadow.color;
+			_this.x = (c >> 16 & 255) / 255;
+			_this.y = (c >> 8 & 255) / 255;
+			_this.z = (c & 255) / 255;
+			_this.w = (c >>> 24) / 255;
+			this.color.w = this.dropShadow.alpha * oldA;
+			this.glyphs.drawWith(ctx,this);
+			this.absX = oldX;
+			this.absY = oldY;
+			var _this1 = this.color;
+			_this1.x = oldR;
+			_this1.y = oldG;
+			_this1.z = oldB;
+			_this1.w = oldA;
+		}
+		this.glyphs.drawWith(ctx,this);
+	}
+	,set_text: function(t) {
+		var t1 = t == null ? "null" : t;
+		if(t1 == this.text) {
+			return t1;
+		}
+		this.text = t1;
+		this.rebuild();
+		return t1;
+	}
+	,rebuild: function() {
+		this.calcDone = false;
+		if(this.allocated && this.text != null && this.font != null) {
+			this.initGlyphs(this.text);
+		}
+		if(this.parentContainer != null) {
+			this.parentContainer.contentChanged(this);
+		}
+	}
+	,calcTextWidth: function(text) {
+		if(this.calcDone) {
+			var ow = this.calcWidth;
+			var oh = this.calcHeight;
+			var osh = this.calcSizeHeight;
+			var oy = this.calcYMin;
+			this.initGlyphs(text,false);
+			var w = this.calcWidth;
+			this.calcWidth = ow;
+			this.calcHeight = oh;
+			this.calcSizeHeight = osh;
+			this.calcYMin = oy;
+			return w;
+		} else {
+			this.initGlyphs(text,false);
+			this.calcDone = false;
+			return this.calcWidth;
+		}
+	}
+	,splitText: function(text,leftMargin,afterData) {
+		if(afterData == null) {
+			afterData = 0;
+		}
+		if(leftMargin == null) {
+			leftMargin = 0;
+		}
+		if(this.realMaxWidth < 0) {
+			return text;
+		}
+		var lines = [];
+		var rest = text;
+		var restPos = 0;
+		var x = leftMargin;
+		var prevChar = -1;
+		var _g1 = 0;
+		var _g = text.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var cc = HxOverrides.cca(text,i);
+			var _this = this.font;
+			var c = _this.glyphs.h[cc];
+			if(c == null) {
+				c = _this.charset.resolveChar(cc,_this.glyphs);
+				if(c == null) {
+					c = _this.defaultChar;
+				}
+			}
+			var e = c;
+			var newline = cc == 10;
+			var esize = e.width + e.getKerningOffset(prevChar);
+			if(this.font.charset.isBreakChar(cc)) {
+				if(lines.length == 0 && leftMargin > 0 && x > this.realMaxWidth) {
+					lines.push("");
+					x -= leftMargin;
+				}
+				var size = x + esize + this.letterSpacing;
+				var k = i + 1;
+				var max = text.length;
+				var prevChar1 = prevChar;
+				var breakFound = false;
+				while(size <= this.realMaxWidth && k < max) {
+					var cc1 = HxOverrides.cca(text,k++);
+					if(this.font.charset.isSpace(cc1) || cc1 == 10) {
+						breakFound = true;
+						break;
+					}
+					var _this1 = this.font;
+					var c1 = _this1.glyphs.h[cc1];
+					if(c1 == null) {
+						c1 = _this1.charset.resolveChar(cc1,_this1.glyphs);
+						if(c1 == null) {
+							c1 = _this1.defaultChar;
+						}
+					}
+					var e1 = c1;
+					size += e1.width + this.letterSpacing + e1.getKerningOffset(prevChar1);
+					prevChar1 = cc1;
+					if(this.font.charset.isBreakChar(cc1)) {
+						break;
+					}
+				}
+				if(size > this.realMaxWidth || !breakFound && size + afterData > this.realMaxWidth) {
+					newline = true;
+					if(this.font.charset.isSpace(cc)) {
+						lines.push(HxOverrides.substr(text,restPos,i - restPos));
+						e = null;
+					} else {
+						lines.push(HxOverrides.substr(text,restPos,i + 1 - restPos));
+					}
+					restPos = i + 1;
+				}
+			}
+			if(e != null) {
+				x += esize + this.letterSpacing;
+			}
+			if(newline) {
+				x = 0;
+				prevChar = -1;
+			} else {
+				prevChar = cc;
+			}
+		}
+		if(restPos < text.length) {
+			if(lines.length == 0 && leftMargin > 0 && x + afterData - this.letterSpacing > this.realMaxWidth) {
+				lines.push("");
+			}
+			lines.push(HxOverrides.substr(text,restPos,text.length - restPos));
+		}
+		return lines.join("\n");
+	}
+	,initGlyphs: function(text,rebuild,handleAlign,lines) {
+		if(handleAlign == null) {
+			handleAlign = true;
+		}
+		if(rebuild == null) {
+			rebuild = true;
+		}
+		if(rebuild) {
+			this.glyphs.clear();
+		}
+		var x = 0;
+		var y = 0;
+		var xMax = 0;
+		var prevChar = -1;
+		var align = handleAlign ? this.textAlign : h2d_Align.Left;
+		switch(align[1]) {
+		case 1:case 2:
+			lines = [];
+			this.initGlyphs(text,false,false,lines);
+			var max = this.realMaxWidth < 0 ? 0 : this.realMaxWidth | 0;
+			var k = align == h2d_Align.Center ? 1 : 0;
+			var _g1 = 0;
+			var _g = lines.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				lines[i] = max - lines[i] >> k;
+			}
+			x = lines.shift();
+			break;
+		default:
+		}
+		var dl = this.font.lineHeight + this.lineSpacing;
+		var calcLines = !rebuild && lines != null;
+		var yMin = 0;
+		var t = this.splitText(text);
+		var _g11 = 0;
+		var _g2 = t.length;
+		while(_g11 < _g2) {
+			var i1 = _g11++;
+			var cc = HxOverrides.cca(t,i1);
+			var _this = this.font;
+			var c = _this.glyphs.h[cc];
+			if(c == null) {
+				c = _this.charset.resolveChar(cc,_this.glyphs);
+				if(c == null) {
+					c = _this.defaultChar;
+				}
+			}
+			var e = c;
+			var offs = e.getKerningOffset(prevChar);
+			var esize = e.width + offs;
+			if(e != null) {
+				if(rebuild) {
+					var _this1 = this.glyphs;
+					_this1.content.add(x + offs,y,_this1.curColor.x,_this1.curColor.y,_this1.curColor.z,_this1.curColor.w,e.t);
+				}
+				if(y == 0 && e.t.dy < yMin) {
+					yMin = e.t.dy;
+				}
+				x += esize + this.letterSpacing;
+			}
+			if(cc == 10) {
+				if(x > xMax) {
+					xMax = x;
+				}
+				if(calcLines) {
+					lines.push(x);
+				}
+				if(rebuild) {
+					switch(align[1]) {
+					case 0:
+						x = 0;
+						break;
+					case 1:case 2:
+						x = lines.shift();
+						break;
+					}
+				} else {
+					x = 0;
+				}
+				y += dl;
+				prevChar = -1;
+			} else {
+				prevChar = cc;
+			}
+		}
+		if(calcLines) {
+			lines.push(x);
+		}
+		this.calcYMin = yMin;
+		this.calcWidth = x > xMax ? x : xMax;
+		this.calcHeight = y > 0 && x == 0 ? y - this.lineSpacing : y + this.font.lineHeight;
+		this.calcSizeHeight = y > 0 && x == 0 ? y + (this.font.baseLine - dl) : y + this.font.baseLine;
+		this.calcDone = true;
+	}
+	,updateSize: function() {
+		if(!this.calcDone) {
+			this.initGlyphs(this.text,false);
+		}
+	}
+	,get_textHeight: function() {
+		if(!this.calcDone) {
+			this.initGlyphs(this.text,false);
+		}
+		return this.calcHeight;
+	}
+	,get_textWidth: function() {
+		if(!this.calcDone) {
+			this.initGlyphs(this.text,false);
+		}
+		return this.calcWidth;
+	}
+	,set_maxWidth: function(w) {
+		if(this.maxWidth == w) {
+			return w;
+		}
+		this.maxWidth = w;
+		this.updateConstraint();
+		return w;
+	}
+	,updateConstraint: function() {
+		var old = this.realMaxWidth;
+		if(this.maxWidth == null) {
+			this.realMaxWidth = this.constraintWidth;
+		} else if(this.constraintWidth < 0) {
+			this.realMaxWidth = this.maxWidth;
+		} else {
+			var a = this.maxWidth;
+			var b = this.constraintWidth;
+			this.realMaxWidth = a > b ? b : a;
+		}
+		if(this.realMaxWidth != old) {
+			this.rebuild();
+		}
+	}
+	,set_textColor: function(c) {
+		if(this.textColor == c) {
+			return c;
+		}
+		this.textColor = c;
+		var a = this.color.w;
+		var _this = this.color;
+		_this.x = (c >> 16 & 255) / 255;
+		_this.y = (c >> 8 & 255) / 255;
+		_this.z = (c & 255) / 255;
+		_this.w = (c >>> 24) / 255;
+		this.color.w = a;
+		return c;
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		if(!this.calcDone) {
+			this.initGlyphs(this.text,false);
+		}
+		var x;
+		var y;
+		var w;
+		var h;
+		if(forSize) {
+			x = 0;
+			y = 0;
+			w = this.realMaxWidth >= 0 && this.textAlign != h2d_Align.Left && this.realMaxWidth > this.calcWidth ? this.realMaxWidth : this.calcWidth == 0 ? 1 : this.calcWidth;
+			h = this.calcSizeHeight;
+		} else {
+			x = 0;
+			y = this.calcYMin;
+			w = this.calcWidth;
+			h = this.calcHeight - this.calcYMin;
+		}
+		this.addBounds(relativeTo,out,x,y,w,h);
+	}
+	,__class__: h2d_Text
+});
+var h2d_TextInput = function(font,parent) {
+	this.maxHistorySize = 100;
+	this.lastClick = 0.;
+	this.lastChange = 0.;
+	this.redo = [];
+	this.undo = [];
+	this.scrollX = 0;
+	this.cursorScroll = 0;
+	this.cursorBlink = 0.;
+	this.canEdit = true;
+	this.cursorBlinkTime = 0.5;
+	this.cursorIndex = -1;
+	var _gthis = this;
+	h2d_Text.call(this,font,parent);
+	this.interactive = new h2d_Interactive(0,0);
+	this.interactive.set_cursor(hxd_Cursor.TextInput);
+	this.interactive.onPush = function(e) {
+		_gthis.onPush(e);
+		if(!e.cancel && e.button == 0) {
+			if(!_gthis.interactive.hasFocus()) {
+				e.kind = hxd_EventKind.EFocus;
+				_gthis.onFocus(e);
+				e.kind = hxd_EventKind.EPush;
+				if(e.cancel) {
+					return;
+				}
+				_gthis.interactive.focus();
+			}
+			_gthis.cursorBlink = 0;
+			var startIndex = _gthis.textPos(e.relX,e.relY);
+			_gthis.cursorIndex = startIndex;
+			_gthis.selectionRange = null;
+			var pt = new h2d_col_Point();
+			var scene = _gthis.getScene();
+			scene.startDrag(function(e1) {
+				pt.x = e1.relX;
+				pt.y = e1.relY;
+				_gthis.globalToLocal(pt);
+				var index = _gthis.textPos(pt.x,pt.y);
+				if(index == startIndex) {
+					_gthis.selectionRange = null;
+				} else if(index < startIndex) {
+					_gthis.selectionRange = { start : index, length : startIndex - index};
+				} else {
+					_gthis.selectionRange = { start : startIndex, length : index - startIndex};
+				}
+				_gthis.selectionSize = 0;
+				_gthis.cursorIndex = index;
+				if(e1.kind == hxd_EventKind.ERelease || _gthis.getScene() != scene) {
+					scene.stopDrag();
+				}
+			});
+		}
+	};
+	this.interactive.onKeyDown = function(e2) {
+		_gthis.onKeyDown(e2);
+		_gthis.handleKey(e2);
+	};
+	this.interactive.onTextInput = function(e3) {
+		_gthis.onTextInput(e3);
+		_gthis.handleKey(e3);
+	};
+	this.interactive.onFocusLost = function(e4) {
+		_gthis.cursorIndex = -1;
+		_gthis.selectionRange = null;
+		_gthis.onFocusLost(e4);
+	};
+	this.interactive.onClick = function(e5) {
+		_gthis.onClick(e5);
+		if(e5.cancel) {
+			return;
+		}
+		var t = new Date().getTime() / 1000;
+		if(t - _gthis.lastClick < 0.3 && _gthis.text.length != 0) {
+			_gthis.selectionRange = { start : 0, length : _gthis.text.length};
+			_gthis.selectionSize = 0;
+			_gthis.cursorIndex = _gthis.text.length;
+		}
+		_gthis.lastClick = t;
+	};
+	this.interactive.onKeyUp = function(e6) {
+		_gthis.onKeyUp(e6);
+	};
+	this.interactive.onRelease = function(e7) {
+		_gthis.onRelease(e7);
+	};
+	this.interactive.onFocus = function(e8) {
+		_gthis.onFocus(e8);
+	};
+	this.interactive.onKeyUp = function(e9) {
+		_gthis.onKeyUp(e9);
+	};
+	this.interactive.onMove = function(e10) {
+		_gthis.onMove(e10);
+	};
+	this.interactive.onOver = function(e11) {
+		_gthis.onOver(e11);
+	};
+	this.interactive.onOut = function(e12) {
+		_gthis.onOut(e12);
+	};
+	this.interactive.set_cursor(hxd_Cursor.TextInput);
+	this.addChildAt(this.interactive,0);
+};
+$hxClasses["h2d.TextInput"] = h2d_TextInput;
+h2d_TextInput.__name__ = ["h2d","TextInput"];
+h2d_TextInput.__super__ = h2d_Text;
+h2d_TextInput.prototype = $extend(h2d_Text.prototype,{
+	cursorIndex: null
+	,cursorTile: null
+	,selectionTile: null
+	,cursorBlinkTime: null
+	,inputWidth: null
+	,selectionRange: null
+	,canEdit: null
+	,interactive: null
+	,cursorText: null
+	,cursorX: null
+	,cursorXIndex: null
+	,cursorBlink: null
+	,cursorScroll: null
+	,scrollX: null
+	,selectionPos: null
+	,selectionSize: null
+	,undo: null
+	,redo: null
+	,lastChange: null
+	,lastClick: null
+	,maxHistorySize: null
+	,constraintSize: function(width,height) {
+	}
+	,handleKey: function(e) {
+		if(e.cancel || this.cursorIndex < 0) {
+			return;
+		}
+		var oldIndex = this.cursorIndex;
+		var oldText = this.text;
+		var _g = e.keyCode;
+		switch(_g) {
+		case 8:
+			if(this.selectionRange != null) {
+				if(!this.canEdit) {
+					return;
+				}
+				this.beforeChange();
+				this.cutSelection();
+				this.onChange();
+			} else if(this.cursorIndex > 0 && this.canEdit) {
+				this.beforeChange();
+				this.cursorIndex--;
+				this.set_text(HxOverrides.substr(this.text,0,this.cursorIndex) + HxOverrides.substr(this.text,this.cursorIndex + 1,null));
+				this.onChange();
+			}
+			break;
+		case 13:case 108:
+			this.cursorIndex = -1;
+			this.interactive.blur();
+			return;
+		case 35:
+			this.cursorIndex = this.text.length;
+			break;
+		case 36:
+			this.cursorIndex = 0;
+			break;
+		case 37:
+			if(this.cursorIndex > 0) {
+				this.cursorIndex--;
+			}
+			break;
+		case 39:
+			if(this.cursorIndex < this.text.length) {
+				this.cursorIndex++;
+			}
+			break;
+		case 46:
+			if(this.selectionRange != null) {
+				if(!this.canEdit) {
+					return;
+				}
+				this.beforeChange();
+				this.cutSelection();
+				this.onChange();
+			} else if(this.cursorIndex < this.text.length && this.canEdit) {
+				this.beforeChange();
+				this.set_text(HxOverrides.substr(this.text,0,this.cursorIndex) + HxOverrides.substr(this.text,this.cursorIndex + 1,null));
+				this.onChange();
+			}
+			break;
+		case 89:
+			if(hxd_Key.isDown(17)) {
+				if(this.redo.length > 0 && this.canEdit) {
+					this.undo.push(this.curHistoryState());
+					this.setState(this.redo.pop());
+				}
+				return;
+			} else {
+				if(e.kind == hxd_EventKind.EKeyDown) {
+					return;
+				}
+				if(e.charCode != 0 && this.canEdit) {
+					if(!this.font.hasChar(e.charCode)) {
+						return;
+					}
+					this.beforeChange();
+					if(this.selectionRange != null) {
+						this.cutSelection();
+					}
+					this.set_text(HxOverrides.substr(this.text,0,this.cursorIndex) + String.fromCharCode(e.charCode) + HxOverrides.substr(this.text,this.cursorIndex,null));
+					this.cursorIndex++;
+					this.onChange();
+				}
+			}
+			break;
+		case 90:
+			if(hxd_Key.isDown(17)) {
+				if(this.undo.length > 0 && this.canEdit) {
+					this.redo.push(this.curHistoryState());
+					this.setState(this.undo.pop());
+				}
+				return;
+			} else {
+				if(e.kind == hxd_EventKind.EKeyDown) {
+					return;
+				}
+				if(e.charCode != 0 && this.canEdit) {
+					if(!this.font.hasChar(e.charCode)) {
+						return;
+					}
+					this.beforeChange();
+					if(this.selectionRange != null) {
+						this.cutSelection();
+					}
+					this.set_text(HxOverrides.substr(this.text,0,this.cursorIndex) + String.fromCharCode(e.charCode) + HxOverrides.substr(this.text,this.cursorIndex,null));
+					this.cursorIndex++;
+					this.onChange();
+				}
+			}
+			break;
+		default:
+			if(e.kind == hxd_EventKind.EKeyDown) {
+				return;
+			}
+			if(e.charCode != 0 && this.canEdit) {
+				if(!this.font.hasChar(e.charCode)) {
+					return;
+				}
+				this.beforeChange();
+				if(this.selectionRange != null) {
+					this.cutSelection();
+				}
+				this.set_text(HxOverrides.substr(this.text,0,this.cursorIndex) + String.fromCharCode(e.charCode) + HxOverrides.substr(this.text,this.cursorIndex,null));
+				this.cursorIndex++;
+				this.onChange();
+			}
+		}
+		this.cursorBlink = 0.;
+		if(hxd_Key.isDown(16) && this.text == oldText) {
+			if(this.cursorIndex == oldIndex) {
+				return;
+			}
+			if(this.selectionRange == null) {
+				this.selectionRange = oldIndex < this.cursorIndex ? { start : oldIndex, length : this.cursorIndex - oldIndex} : { start : this.cursorIndex, length : oldIndex - this.cursorIndex};
+			} else if(oldIndex == this.selectionRange.start) {
+				this.selectionRange.length += oldIndex - this.cursorIndex;
+				this.selectionRange.start = this.cursorIndex;
+			} else {
+				this.selectionRange.length += this.cursorIndex - oldIndex;
+			}
+			if(this.selectionRange.length == 0) {
+				this.selectionRange = null;
+			} else if(this.selectionRange.length < 0) {
+				this.selectionRange.start += this.selectionRange.length;
+				this.selectionRange.length = -this.selectionRange.length;
+			}
+			this.selectionSize = 0;
+		} else {
+			this.selectionRange = null;
+		}
+	}
+	,cutSelection: function() {
+		if(this.selectionRange == null) {
+			return false;
+		}
+		this.cursorIndex = this.selectionRange.start;
+		var end = this.cursorIndex + this.selectionRange.length;
+		this.set_text(HxOverrides.substr(this.text,0,this.cursorIndex) + HxOverrides.substr(this.text,end,null));
+		this.selectionRange = null;
+		return true;
+	}
+	,setState: function(h) {
+		this.set_text(h.t);
+		this.cursorIndex = h.c;
+		this.selectionRange = h.sel;
+		if(this.selectionRange != null) {
+			this.cursorIndex = this.selectionRange.start + this.selectionRange.length;
+		}
+	}
+	,curHistoryState: function() {
+		return { t : this.text, c : this.cursorIndex, sel : this.selectionRange == null ? null : { start : this.selectionRange.start, length : this.selectionRange.length}};
+	}
+	,beforeChange: function() {
+		var t = new Date().getTime() / 1000;
+		if(t - this.lastChange < 1) {
+			this.lastChange = t;
+			return;
+		}
+		this.lastChange = t;
+		this.undo.push(this.curHistoryState());
+		this.redo = [];
+		while(this.undo.length > this.maxHistorySize) this.undo.shift();
+	}
+	,getSelectedText: function() {
+		if(this.selectionRange == null) {
+			return null;
+		} else {
+			return HxOverrides.substr(this.text,this.selectionRange.start,this.selectionRange.length);
+		}
+	}
+	,set_text: function(t) {
+		h2d_Text.prototype.set_text.call(this,t);
+		if(this.cursorIndex > t.length) {
+			this.cursorIndex = t.length;
+		}
+		return t;
+	}
+	,set_font: function(f) {
+		h2d_Text.prototype.set_font.call(this,f);
+		this.cursorTile = h2d_Tile.fromColor(16777215,1,this.font.size);
+		this.cursorTile.dy = 2;
+		this.selectionTile = h2d_Tile.fromColor(3381759,0,this.font.lineHeight);
+		return f;
+	}
+	,initGlyphs: function(text,rebuild,handleAlign,lines) {
+		if(handleAlign == null) {
+			handleAlign = true;
+		}
+		if(rebuild == null) {
+			rebuild = true;
+		}
+		h2d_Text.prototype.initGlyphs.call(this,text,rebuild,handleAlign,lines);
+		if(rebuild) {
+			this.calcWidth += this.cursorTile.width;
+			if(this.inputWidth != null && this.calcWidth > this.inputWidth) {
+				this.calcWidth = this.inputWidth;
+			}
+		}
+	}
+	,textPos: function(x,y) {
+		x += this.scrollX;
+		var pos = 0;
+		while(pos < this.text.length) {
+			if(this.calcTextWidth(HxOverrides.substr(this.text,0,pos + 1)) > x) {
+				break;
+			}
+			++pos;
+		}
+		return pos;
+	}
+	,sync: function(ctx) {
+		var tmp = this.inputWidth != null ? this.inputWidth : this.maxWidth != null ? Math.ceil(this.maxWidth) : this.get_textWidth();
+		this.interactive.width = tmp;
+		this.interactive.height = this.font.lineHeight;
+		h2d_Text.prototype.sync.call(this,ctx);
+	}
+	,draw: function(ctx) {
+		if(this.inputWidth != null) {
+			var h = this.localToGlobal(new h2d_col_Point(this.inputWidth,this.font.lineHeight));
+			ctx.setRenderZone(this.absX,this.absY,h.x - this.absX,h.y - this.absY);
+		}
+		if(this.cursorIndex >= 0 && (this.text != this.cursorText || this.cursorIndex != this.cursorXIndex)) {
+			if(this.cursorIndex > this.text.length) {
+				this.cursorIndex = this.text.length;
+			}
+			this.cursorText = this.text;
+			this.cursorXIndex = this.cursorIndex;
+			this.cursorX = this.calcTextWidth(HxOverrides.substr(this.text,0,this.cursorIndex));
+			if(this.inputWidth != null && this.cursorX - this.scrollX >= this.inputWidth) {
+				this.scrollX = this.cursorX - this.inputWidth + 1;
+			} else if(this.cursorX < this.scrollX) {
+				this.scrollX = this.cursorX;
+			}
+		}
+		this.absX -= this.scrollX * this.matA;
+		this.absY -= this.scrollX * this.matC;
+		if(this.selectionRange != null) {
+			if(this.selectionSize == 0) {
+				this.selectionPos = this.calcTextWidth(HxOverrides.substr(this.text,0,this.selectionRange.start));
+				this.selectionSize = this.calcTextWidth(HxOverrides.substr(this.text,this.selectionRange.start,this.selectionRange.length));
+				if(this.selectionRange.start + this.selectionRange.length == this.text.length) {
+					this.selectionSize += this.cursorTile.width;
+				}
+			}
+			this.selectionTile.dx += this.selectionPos;
+			this.selectionTile.width += this.selectionSize;
+			this.emitTile(ctx,this.selectionTile);
+			this.selectionTile.dx -= this.selectionPos;
+			this.selectionTile.width -= this.selectionSize;
+		}
+		h2d_Text.prototype.draw.call(this,ctx);
+		this.absX += this.scrollX * this.matA;
+		this.absY += this.scrollX * this.matC;
+		if(this.cursorIndex >= 0) {
+			this.cursorBlink += ctx.elapsedTime;
+			if(this.cursorBlink % (this.cursorBlinkTime * 2) < this.cursorBlinkTime) {
+				this.cursorTile.dx += this.cursorX - this.scrollX;
+				this.emitTile(ctx,this.cursorTile);
+				this.cursorTile.dx -= this.cursorX - this.scrollX;
+			}
+		}
+		if(this.inputWidth != null) {
+			ctx.hasRenderZone = false;
+			ctx.engine.setRenderZone();
+		}
+	}
+	,focus: function() {
+		this.interactive.focus();
+	}
+	,hasFocus: function() {
+		return this.interactive.hasFocus();
+	}
+	,onOut: function(e) {
+	}
+	,onOver: function(e) {
+	}
+	,onMove: function(e) {
+	}
+	,onClick: function(e) {
+	}
+	,onPush: function(e) {
+	}
+	,onRelease: function(e) {
+	}
+	,onKeyDown: function(e) {
+	}
+	,onKeyUp: function(e) {
+	}
+	,onTextInput: function(e) {
+	}
+	,onFocus: function(e) {
+	}
+	,onFocusLost: function(e) {
+	}
+	,onChange: function() {
+	}
+	,drawRec: function(ctx) {
+		var old = this.interactive.visible;
+		this.interactive.set_visible(false);
+		this.interactive.draw(ctx);
+		h2d_Text.prototype.drawRec.call(this,ctx);
+		this.interactive.set_visible(true);
+	}
+	,get_backgroundColor: function() {
+		return this.interactive.backgroundColor;
+	}
+	,set_backgroundColor: function(v) {
+		return this.interactive.backgroundColor = v;
+	}
+	,__class__: h2d_TextInput
+});
 var h2d_Tile = function(tex,x,y,w,h,dx,dy) {
 	if(dy == null) {
 		dy = 0;
@@ -11143,7 +12564,18 @@ h2d_Tile.isEmpty = function(b,px,py,width,height,bg) {
 	}
 };
 h2d_Tile.prototype = {
-	getTexture: function() {
+	innerTex: null
+	,u: null
+	,v: null
+	,u2: null
+	,v2: null
+	,dx: null
+	,dy: null
+	,x: null
+	,y: null
+	,width: null
+	,height: null
+	,getTexture: function() {
 		return this.innerTex;
 	}
 	,isDisposed: function() {
@@ -11347,7 +12779,12 @@ $hxClasses["h2d._TileGroup.TileLayerContent"] = h2d__$TileGroup_TileLayerContent
 h2d__$TileGroup_TileLayerContent.__name__ = ["h2d","_TileGroup","TileLayerContent"];
 h2d__$TileGroup_TileLayerContent.__super__ = h3d_prim_Primitive;
 h2d__$TileGroup_TileLayerContent.prototype = $extend(h3d_prim_Primitive.prototype,{
-	clear: function() {
+	tmp: null
+	,xMin: null
+	,yMin: null
+	,xMax: null
+	,yMax: null
+	,clear: function() {
 		var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
 		this.tmp = this1;
 		if(this.buffer != null) {
@@ -13295,7 +14732,11 @@ h2d_col_IBounds.fromPoints = function(min,max) {
 	return b;
 };
 h2d_col_IBounds.prototype = {
-	toBounds: function(scale) {
+	xMin: null
+	,yMin: null
+	,xMax: null
+	,yMax: null
+	,toBounds: function(scale) {
 		if(scale == null) {
 			scale = 1.;
 		}
@@ -13539,7 +14980,9 @@ var h2d_col_IPoint = function(x,y) {
 $hxClasses["h2d.col.IPoint"] = h2d_col_IPoint;
 h2d_col_IPoint.__name__ = ["h2d","col","IPoint"];
 h2d_col_IPoint.prototype = {
-	toPoint: function(scale) {
+	x: null
+	,y: null
+	,toPoint: function(scale) {
 		if(scale == null) {
 			scale = 1.;
 		}
@@ -13593,7 +15036,13 @@ var h2d_col_Matrix = function() {
 $hxClasses["h2d.col.Matrix"] = h2d_col_Matrix;
 h2d_col_Matrix.__name__ = ["h2d","col","Matrix"];
 h2d_col_Matrix.prototype = {
-	identity: function() {
+	a: null
+	,b: null
+	,c: null
+	,d: null
+	,x: null
+	,y: null
+	,identity: function() {
 		this.a = 1;
 		this.b = 0;
 		this.c = 0;
@@ -13679,7 +15128,9 @@ var h2d_col_Point = function(x,y) {
 $hxClasses["h2d.col.Point"] = h2d_col_Point;
 h2d_col_Point.__name__ = ["h2d","col","Point"];
 h2d_col_Point.prototype = {
-	toIPoint: function(scale) {
+	x: null
+	,y: null
+	,toIPoint: function(scale) {
 		if(scale == null) {
 			scale = 1.;
 		}
@@ -13758,7 +15209,10 @@ var h2d_filter_Filter = function() {
 $hxClasses["h2d.filter.Filter"] = h2d_filter_Filter;
 h2d_filter_Filter.__name__ = ["h2d","filter","Filter"];
 h2d_filter_Filter.prototype = {
-	sync: function(ctx,s) {
+	autoBounds: null
+	,boundsExtend: null
+	,smooth: null
+	,sync: function(ctx,s) {
 	}
 	,bind: function(s) {
 	}
@@ -13827,7 +15281,13 @@ h3d_Buffer.ofSubFloats = function(v,stride,vertices,flags,allocPos) {
 	return b;
 };
 h3d_Buffer.prototype = {
-	isDisposed: function() {
+	id: null
+	,buffer: null
+	,position: null
+	,vertices: null
+	,next: null
+	,flags: null
+	,isDisposed: function() {
 		if(this.buffer != null) {
 			return this.buffer.vbuf == null;
 		} else {
@@ -13917,7 +15377,11 @@ var h3d_BufferOffset = function(buffer,offset) {
 $hxClasses["h3d.BufferOffset"] = h3d_BufferOffset;
 h3d_BufferOffset.__name__ = ["h3d","BufferOffset"];
 h3d_BufferOffset.prototype = {
-	dispose: function() {
+	id: null
+	,buffer: null
+	,offset: null
+	,next: null
+	,dispose: function() {
 		if(this.buffer != null) {
 			this.buffer.dispose();
 			this.buffer = null;
@@ -13964,7 +15428,26 @@ var h3d_Camera = function(fovY,zoom,screenRatio,zNear,zFar,rightHanded) {
 $hxClasses["h3d.Camera"] = h3d_Camera;
 h3d_Camera.__name__ = ["h3d","Camera"];
 h3d_Camera.prototype = {
-	setFovX: function(fovX,withRatio) {
+	zoom: null
+	,screenRatio: null
+	,fovY: null
+	,zNear: null
+	,zFar: null
+	,orthoBounds: null
+	,rightHanded: null
+	,mproj: null
+	,mcam: null
+	,m: null
+	,pos: null
+	,up: null
+	,target: null
+	,viewX: null
+	,viewY: null
+	,follow: null
+	,minv: null
+	,miview: null
+	,needInv: null
+	,setFovX: function(fovX,withRatio) {
 		var degToRad = Math.PI / 180;
 		this.fovY = 2 * Math.atan(Math.tan(fovX * 0.5 * degToRad) / withRatio) / degToRad;
 	}
@@ -14265,7 +15748,9 @@ var h3d__$Engine_TargetTmp = function(t,n) {
 $hxClasses["h3d._Engine.TargetTmp"] = h3d__$Engine_TargetTmp;
 h3d__$Engine_TargetTmp.__name__ = ["h3d","_Engine","TargetTmp"];
 h3d__$Engine_TargetTmp.prototype = {
-	__class__: h3d__$Engine_TargetTmp
+	t: null
+	,next: null
+	,__class__: h3d__$Engine_TargetTmp
 };
 var h3d_Engine = function(hardware,aa) {
 	if(aa == null) {
@@ -14296,7 +15781,32 @@ h3d_Engine.getCurrent = function() {
 	return h3d_Engine.CURRENT;
 };
 h3d_Engine.prototype = {
-	setDriver: function(d) {
+	driver: null
+	,mem: null
+	,hardware: null
+	,width: null
+	,height: null
+	,debug: null
+	,drawTriangles: null
+	,drawCalls: null
+	,shaderSwitches: null
+	,backgroundColor: null
+	,autoResize: null
+	,fullScreen: null
+	,frameCount: null
+	,realFps: null
+	,lastTime: null
+	,antiAlias: null
+	,tmpVector: null
+	,stage: null
+	,targetTmp: null
+	,targetStack: null
+	,currentTarget: null
+	,needFlushTarget: null
+	,nullTexture: null
+	,textureColorCache: null
+	,resCache: null
+	,setDriver: function(d) {
 		this.driver = d;
 		if(this.mem != null) {
 			this.mem.driver = d;
@@ -14674,7 +16184,10 @@ h3d_Indexes.alloc = function(i,startPos,length) {
 	return idx;
 };
 h3d_Indexes.prototype = {
-	isDisposed: function() {
+	mem: null
+	,ibuf: null
+	,count: null
+	,isDisposed: function() {
 		return this.ibuf == null;
 	}
 	,upload: function(indexes,pos,count,bufferPos) {
@@ -14805,7 +16318,23 @@ h3d_Matrix.lookAtX = function(dir,up,m) {
 	return m;
 };
 h3d_Matrix.prototype = {
-	get_tx: function() {
+	_11: null
+	,_12: null
+	,_13: null
+	,_14: null
+	,_21: null
+	,_22: null
+	,_23: null
+	,_24: null
+	,_31: null
+	,_32: null
+	,_33: null
+	,_34: null
+	,_41: null
+	,_42: null
+	,_43: null
+	,_44: null
+	,get_tx: function() {
 		return this._41;
 	}
 	,get_ty: function() {
@@ -15746,7 +17275,11 @@ var h3d_Quat = function(x,y,z,w) {
 $hxClasses["h3d.Quat"] = h3d_Quat;
 h3d_Quat.__name__ = ["h3d","Quat"];
 h3d_Quat.prototype = {
-	set: function(x,y,z,w) {
+	x: null
+	,y: null
+	,z: null
+	,w: null
+	,set: function(x,y,z,w) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -16061,7 +17594,11 @@ h3d_Vector.fromColor = function(c,scale) {
 	return new h3d_Vector((c >> 16 & 255) * s,(c >> 8 & 255) * s,(c & 255) * s,(c >>> 24) * s);
 };
 h3d_Vector.prototype = {
-	distance: function(v) {
+	x: null
+	,y: null
+	,z: null
+	,w: null
+	,distance: function(v) {
 		var dx = v.x - this.x;
 		var dy = v.y - this.y;
 		var dz = v.z - this.z;
@@ -16304,7 +17841,11 @@ var h3d_anim_AnimatedObject = function(name) {
 $hxClasses["h3d.anim.AnimatedObject"] = h3d_anim_AnimatedObject;
 h3d_anim_AnimatedObject.__name__ = ["h3d","anim","AnimatedObject"];
 h3d_anim_AnimatedObject.prototype = {
-	clone: function() {
+	objectName: null
+	,targetObject: null
+	,targetSkin: null
+	,targetJoint: null
+	,clone: function() {
 		return new h3d_anim_AnimatedObject(this.objectName);
 	}
 	,__class__: h3d_anim_AnimatedObject
@@ -16323,7 +17864,21 @@ var h3d_anim_Animation = function(name,frameCount,sampling) {
 $hxClasses["h3d.anim.Animation"] = h3d_anim_Animation;
 h3d_anim_Animation.__name__ = ["h3d","anim","Animation"];
 h3d_anim_Animation.prototype = {
-	getDuration: function() {
+	name: null
+	,frameCount: null
+	,sampling: null
+	,frame: null
+	,speed: null
+	,onAnimEnd: null
+	,onEvent: null
+	,pause: null
+	,loop: null
+	,isInstance: null
+	,objects: null
+	,isSync: null
+	,events: null
+	,lastEvent: null
+	,getDuration: function() {
 		return this.frameCount / (this.sampling * this.speed);
 	}
 	,getIFrame: function() {
@@ -16534,7 +18089,17 @@ var h3d_anim_LinearFrame = function() {
 $hxClasses["h3d.anim.LinearFrame"] = h3d_anim_LinearFrame;
 h3d_anim_LinearFrame.__name__ = ["h3d","anim","LinearFrame"];
 h3d_anim_LinearFrame.prototype = {
-	toMatrix: function() {
+	tx: null
+	,ty: null
+	,tz: null
+	,qx: null
+	,qy: null
+	,qz: null
+	,qw: null
+	,sx: null
+	,sy: null
+	,sz: null
+	,toMatrix: function() {
 		var m = new h3d_Matrix();
 		new h3d_Quat(this.qx,this.qy,this.qz,this.qw).saveToMatrix(m);
 		m.prependScale(this.sx,this.sy,this.sz);
@@ -16550,7 +18115,16 @@ $hxClasses["h3d.anim.LinearObject"] = h3d_anim_LinearObject;
 h3d_anim_LinearObject.__name__ = ["h3d","anim","LinearObject"];
 h3d_anim_LinearObject.__super__ = h3d_anim_AnimatedObject;
 h3d_anim_LinearObject.prototype = $extend(h3d_anim_AnimatedObject.prototype,{
-	clone: function() {
+	hasRotation: null
+	,hasScale: null
+	,frames: null
+	,alphas: null
+	,uvs: null
+	,propName: null
+	,propValues: null
+	,matrix: null
+	,propCurrentValue: null
+	,clone: function() {
 		var o = new h3d_anim_LinearObject(this.objectName);
 		o.hasRotation = this.hasRotation;
 		o.hasScale = this.hasScale;
@@ -16571,7 +18145,8 @@ $hxClasses["h3d.anim.LinearAnimation"] = h3d_anim_LinearAnimation;
 h3d_anim_LinearAnimation.__name__ = ["h3d","anim","LinearAnimation"];
 h3d_anim_LinearAnimation.__super__ = h3d_anim_Animation;
 h3d_anim_LinearAnimation.prototype = $extend(h3d_anim_Animation.prototype,{
-	addCurve: function(objName,frames,hasRot,hasScale) {
+	syncFrame: null
+	,addCurve: function(objName,frames,hasRot,hasScale) {
 		var f = new h3d_anim_LinearObject(objName);
 		f.frames = frames;
 		f.hasRotation = hasRot;
@@ -16867,14 +18442,27 @@ var h3d_anim_Joint = function() {
 $hxClasses["h3d.anim.Joint"] = h3d_anim_Joint;
 h3d_anim_Joint.__name__ = ["h3d","anim","Joint"];
 h3d_anim_Joint.prototype = {
-	__class__: h3d_anim_Joint
+	index: null
+	,name: null
+	,bindIndex: null
+	,splitIndex: null
+	,defMat: null
+	,transPos: null
+	,parent: null
+	,subs: null
+	,retargetAnim: null
+	,__class__: h3d_anim_Joint
 };
 var h3d_anim__$Skin_Permut = function() {
 };
 $hxClasses["h3d.anim._Skin.Permut"] = h3d_anim__$Skin_Permut;
 h3d_anim__$Skin_Permut.__name__ = ["h3d","anim","_Skin","Permut"];
 h3d_anim__$Skin_Permut.prototype = {
-	__class__: h3d_anim__$Skin_Permut
+	joints: null
+	,triangles: null
+	,material: null
+	,indexedJoints: null
+	,__class__: h3d_anim__$Skin_Permut
 };
 var h3d_anim__$Skin_Influence = function(j,w) {
 	this.j = j;
@@ -16883,7 +18471,9 @@ var h3d_anim__$Skin_Influence = function(j,w) {
 $hxClasses["h3d.anim._Skin.Influence"] = h3d_anim__$Skin_Influence;
 h3d_anim__$Skin_Influence.__name__ = ["h3d","anim","_Skin","Influence"];
 h3d_anim__$Skin_Influence.prototype = {
-	__class__: h3d_anim__$Skin_Influence
+	j: null
+	,w: null
+	,__class__: h3d_anim__$Skin_Influence
 };
 var h3d_anim_Skin = function(name,vertexCount,bonesPerVertex) {
 	this.name = name;
@@ -16900,7 +18490,20 @@ var h3d_anim_Skin = function(name,vertexCount,bonesPerVertex) {
 $hxClasses["h3d.anim.Skin"] = h3d_anim_Skin;
 h3d_anim_Skin.__name__ = ["h3d","anim","Skin"];
 h3d_anim_Skin.prototype = {
-	setJoints: function(joints,roots) {
+	name: null
+	,vertexCount: null
+	,bonesPerVertex: null
+	,vertexJoints: null
+	,vertexWeights: null
+	,rootJoints: null
+	,namedJoints: null
+	,allJoints: null
+	,boundJoints: null
+	,primitive: null
+	,splitJoints: null
+	,triangleGroups: null
+	,envelop: null
+	,setJoints: function(joints,roots) {
 		this.rootJoints = roots;
 		this.allJoints = joints;
 		this.namedJoints = new haxe_ds_StringMap();
@@ -17281,14 +18884,19 @@ var hxbit_StructSerializable = function() { };
 $hxClasses["hxbit.StructSerializable"] = hxbit_StructSerializable;
 hxbit_StructSerializable.__name__ = ["hxbit","StructSerializable"];
 hxbit_StructSerializable.prototype = {
-	__class__: hxbit_StructSerializable
+	customSerialize: null
+	,customUnserialize: null
+	,__class__: hxbit_StructSerializable
 };
 var h3d_col_Collider = function() { };
 $hxClasses["h3d.col.Collider"] = h3d_col_Collider;
 h3d_col_Collider.__name__ = ["h3d","col","Collider"];
 h3d_col_Collider.__interfaces__ = [hxbit_StructSerializable];
 h3d_col_Collider.prototype = {
-	__class__: h3d_col_Collider
+	rayIntersection: null
+	,contains: null
+	,inFrustum: null
+	,__class__: h3d_col_Collider
 };
 var h3d_col_Bounds = function() {
 	this.xMin = 1e20;
@@ -17322,7 +18930,13 @@ h3d_col_Bounds.fromValues = function(x,y,z,dx,dy,dz) {
 	return b;
 };
 h3d_col_Bounds.prototype = {
-	inFrustum: function(mvp) {
+	xMin: null
+	,xMax: null
+	,yMin: null
+	,yMax: null
+	,zMin: null
+	,zMax: null
+	,inFrustum: function(mvp) {
 		var p_nx = mvp._14 + mvp._11;
 		var p_ny = mvp._24 + mvp._21;
 		var p_nz = mvp._34 + mvp._31;
@@ -18291,7 +19905,9 @@ $hxClasses["h3d.col.OptimizedCollider"] = h3d_col_OptimizedCollider;
 h3d_col_OptimizedCollider.__name__ = ["h3d","col","OptimizedCollider"];
 h3d_col_OptimizedCollider.__interfaces__ = [h3d_col_Collider,hxbit_Serializable];
 h3d_col_OptimizedCollider.prototype = {
-	rayIntersection: function(r,bestMatch) {
+	a: null
+	,b: null
+	,rayIntersection: function(r,bestMatch) {
 		if(this.a.rayIntersection(r,bestMatch) < 0) {
 			return -1;
 		}
@@ -18315,6 +19931,7 @@ h3d_col_OptimizedCollider.prototype = {
 	}
 	,customUnserialize: function(ctx) {
 	}
+	,__uid: null
 	,getCLID: function() {
 		return h3d_col_OptimizedCollider.__clid;
 	}
@@ -18348,7 +19965,8 @@ $hxClasses["h3d.col.GroupCollider"] = h3d_col_GroupCollider;
 h3d_col_GroupCollider.__name__ = ["h3d","col","GroupCollider"];
 h3d_col_GroupCollider.__interfaces__ = [h3d_col_Collider];
 h3d_col_GroupCollider.prototype = {
-	rayIntersection: function(r,bestMatch) {
+	colliders: null
+	,rayIntersection: function(r,bestMatch) {
 		var best = -1.;
 		var _g = 0;
 		var _g1 = this.colliders;
@@ -18441,7 +20059,10 @@ var h3d_col_FPoint = function(x,y,z) {
 $hxClasses["h3d.col.FPoint"] = h3d_col_FPoint;
 h3d_col_FPoint.__name__ = ["h3d","col","FPoint"];
 h3d_col_FPoint.prototype = {
-	sub: function(p) {
+	x: null
+	,y: null
+	,z: null
+	,sub: function(p) {
 		return new h3d_col_FPoint(this.x - p.x,this.y - p.y,this.z - p.z);
 	}
 	,add: function(p) {
@@ -18506,7 +20127,14 @@ var h3d_col_Frustum = function(mvp) {
 $hxClasses["h3d.col.Frustum"] = h3d_col_Frustum;
 h3d_col_Frustum.__name__ = ["h3d","col","Frustum"];
 h3d_col_Frustum.prototype = {
-	transform: function(m) {
+	pleft: null
+	,pright: null
+	,ptop: null
+	,pbottom: null
+	,pnear: null
+	,pfar: null
+	,checkNearFar: null
+	,transform: function(m) {
 		var m2 = new h3d_Matrix();
 		m2.initInverse(m);
 		m2.transpose();
@@ -18947,7 +20575,10 @@ $hxClasses["h3d.col.ObjectCollider"] = h3d_col_ObjectCollider;
 h3d_col_ObjectCollider.__name__ = ["h3d","col","ObjectCollider"];
 h3d_col_ObjectCollider.__interfaces__ = [hxbit_Serializable,h3d_col_Collider];
 h3d_col_ObjectCollider.prototype = {
-	rayIntersection: function(r,bestMatch) {
+	obj: null
+	,collider: null
+	,tmpRay: null
+	,rayIntersection: function(r,bestMatch) {
 		var _this = this.tmpRay;
 		_this.px = r.px;
 		_this.py = r.py;
@@ -19040,6 +20671,7 @@ h3d_col_ObjectCollider.prototype = {
 	}
 	,customUnserialize: function(ctx) {
 	}
+	,__uid: null
 	,getCLID: function() {
 		return h3d_col_ObjectCollider.__clid;
 	}
@@ -19118,7 +20750,11 @@ h3d_col_Plane.frustumFar = function(mvp) {
 	return new h3d_col_Plane(mvp._14 - mvp._13,mvp._24 - mvp._23,mvp._34 - mvp._33,mvp._43 - mvp._44);
 };
 h3d_col_Plane.prototype = {
-	getNormal: function() {
+	nx: null
+	,ny: null
+	,nz: null
+	,d: null
+	,getNormal: function() {
 		return new h3d_col_Point(this.nx,this.ny,this.nz);
 	}
 	,getNormalDistance: function() {
@@ -19229,7 +20865,10 @@ var h3d_col_Point = function(x,y,z) {
 $hxClasses["h3d.col.Point"] = h3d_col_Point;
 h3d_col_Point.__name__ = ["h3d","col","Point"];
 h3d_col_Point.prototype = {
-	scale: function(v) {
+	x: null
+	,y: null
+	,z: null
+	,scale: function(v) {
 		this.x *= v;
 		this.y *= v;
 		this.z *= v;
@@ -19380,7 +21019,25 @@ $hxClasses["h3d.col.TriPlane"] = h3d_col_TriPlane;
 h3d_col_TriPlane.__name__ = ["h3d","col","TriPlane"];
 h3d_col_TriPlane.__interfaces__ = [h3d_col_Collider];
 h3d_col_TriPlane.prototype = {
-	init: function(p0,p1,p2) {
+	next: null
+	,p0x: null
+	,p0y: null
+	,p0z: null
+	,d1x: null
+	,d1y: null
+	,d1z: null
+	,d2x: null
+	,d2y: null
+	,d2z: null
+	,dot00: null
+	,dot01: null
+	,dot11: null
+	,invDenom: null
+	,nx: null
+	,ny: null
+	,nz: null
+	,d: null
+	,init: function(p0,p1,p2) {
 		this.p0x = p0.x;
 		this.p0y = p0.y;
 		this.p0z = p0.z;
@@ -19480,7 +21137,8 @@ $hxClasses["h3d.col.Polygon"] = h3d_col_Polygon;
 h3d_col_Polygon.__name__ = ["h3d","col","Polygon"];
 h3d_col_Polygon.__interfaces__ = [h3d_col_Collider];
 h3d_col_Polygon.prototype = {
-	addBuffers: function(vertexes,indexes,stride) {
+	triPlanes: null
+	,addBuffers: function(vertexes,indexes,stride) {
 		if(stride == null) {
 			stride = 3;
 		}
@@ -19603,7 +21261,12 @@ $hxClasses["h3d.col.PolygonBuffer"] = h3d_col_PolygonBuffer;
 h3d_col_PolygonBuffer.__name__ = ["h3d","col","PolygonBuffer"];
 h3d_col_PolygonBuffer.__interfaces__ = [h3d_col_Collider];
 h3d_col_PolygonBuffer.prototype = {
-	setData: function(buffer,indexes,startIndex,triCount) {
+	buffer: null
+	,indexes: null
+	,startIndex: null
+	,triCount: null
+	,source: null
+	,setData: function(buffer,indexes,startIndex,triCount) {
 		if(triCount == null) {
 			triCount = -1;
 		}
@@ -19832,7 +21495,13 @@ h3d_col_Ray.fromValues = function(x,y,z,dx,dy,dz) {
 	return r;
 };
 h3d_col_Ray.prototype = {
-	clone: function() {
+	px: null
+	,py: null
+	,pz: null
+	,lx: null
+	,ly: null
+	,lz: null
+	,clone: function() {
 		var r = new h3d_col_Ray();
 		r.px = this.px;
 		r.py = this.py;
@@ -20015,7 +21684,11 @@ $hxClasses["h3d.col.SkinCollider"] = h3d_col_SkinCollider;
 h3d_col_SkinCollider.__name__ = ["h3d","col","SkinCollider"];
 h3d_col_SkinCollider.__interfaces__ = [h3d_col_Collider,hxbit_Serializable];
 h3d_col_SkinCollider.prototype = {
-	contains: function(p) {
+	obj: null
+	,col: null
+	,transform: null
+	,lastFrame: null
+	,contains: function(p) {
 		this.applyTransform();
 		return this.transform.contains(p);
 	}
@@ -20087,6 +21760,7 @@ h3d_col_SkinCollider.prototype = {
 		haxe_ds__$Vector_Vector_$Impl_$.blit(this1,0,r,0,this1.length);
 		tmp.setData(r,this.col.indexes,this.col.startIndex,this.col.triCount);
 	}
+	,__uid: null
 	,getCLID: function() {
 		return h3d_col_SkinCollider.__clid;
 	}
@@ -20135,7 +21809,11 @@ $hxClasses["h3d.col.Sphere"] = h3d_col_Sphere;
 h3d_col_Sphere.__name__ = ["h3d","col","Sphere"];
 h3d_col_Sphere.__interfaces__ = [h3d_col_Collider];
 h3d_col_Sphere.prototype = {
-	getCenter: function() {
+	x: null
+	,y: null
+	,z: null
+	,r: null
+	,getCenter: function() {
 		return new h3d_col_Point(this.x,this.y,this.z);
 	}
 	,contains: function(p) {
@@ -20295,7 +21973,8 @@ var h3d_impl_Driver = function() { };
 $hxClasses["h3d.impl.Driver"] = h3d_impl_Driver;
 h3d_impl_Driver.__name__ = ["h3d","impl","Driver"];
 h3d_impl_Driver.prototype = {
-	hasFeature: function(f) {
+	logEnable: null
+	,hasFeature: function(f) {
 		return false;
 	}
 	,isSupportedFormat: function(fmt) {
@@ -20433,21 +22112,38 @@ var h3d_impl__$GlDriver_CompiledShader = function(s,vertex,shader) {
 $hxClasses["h3d.impl._GlDriver.CompiledShader"] = h3d_impl__$GlDriver_CompiledShader;
 h3d_impl__$GlDriver_CompiledShader.__name__ = ["h3d","impl","_GlDriver","CompiledShader"];
 h3d_impl__$GlDriver_CompiledShader.prototype = {
-	__class__: h3d_impl__$GlDriver_CompiledShader
+	s: null
+	,vertex: null
+	,globals: null
+	,params: null
+	,textures: null
+	,cubeTextures: null
+	,shader: null
+	,__class__: h3d_impl__$GlDriver_CompiledShader
 };
 var h3d_impl__$GlDriver_CompiledAttribute = function() {
 };
 $hxClasses["h3d.impl._GlDriver.CompiledAttribute"] = h3d_impl__$GlDriver_CompiledAttribute;
 h3d_impl__$GlDriver_CompiledAttribute.__name__ = ["h3d","impl","_GlDriver","CompiledAttribute"];
 h3d_impl__$GlDriver_CompiledAttribute.prototype = {
-	__class__: h3d_impl__$GlDriver_CompiledAttribute
+	index: null
+	,type: null
+	,size: null
+	,offset: null
+	,__class__: h3d_impl__$GlDriver_CompiledAttribute
 };
 var h3d_impl__$GlDriver_CompiledProgram = function() {
 };
 $hxClasses["h3d.impl._GlDriver.CompiledProgram"] = h3d_impl__$GlDriver_CompiledProgram;
 h3d_impl__$GlDriver_CompiledProgram.__name__ = ["h3d","impl","_GlDriver","CompiledProgram"];
 h3d_impl__$GlDriver_CompiledProgram.prototype = {
-	__class__: h3d_impl__$GlDriver_CompiledProgram
+	p: null
+	,vertex: null
+	,fragment: null
+	,stride: null
+	,attribNames: null
+	,attribs: null
+	,__class__: h3d_impl__$GlDriver_CompiledProgram
 };
 var h3d_impl_GlDriver = function(antiAlias) {
 	if(antiAlias == null) {
@@ -20476,7 +22172,31 @@ h3d_impl_GlDriver.bytesToUint8Array = function(b) {
 };
 h3d_impl_GlDriver.__super__ = h3d_impl_Driver;
 h3d_impl_GlDriver.prototype = $extend(h3d_impl_Driver.prototype,{
-	logImpl: function(str) {
+	canvas: null
+	,mrtExt: null
+	,gl: null
+	,commonFB: null
+	,curAttribs: null
+	,curShader: null
+	,curBuffer: null
+	,curIndexBuffer: null
+	,curMatBits: null
+	,curStOpBits: null
+	,curStFrBits: null
+	,curStBrBits: null
+	,curStEnabled: null
+	,defStencil: null
+	,programs: null
+	,frame: null
+	,bufferWidth: null
+	,bufferHeight: null
+	,curTarget: null
+	,numTargets: null
+	,debug: null
+	,boundTextures: null
+	,shaderVersion: null
+	,firstShader: null
+	,logImpl: function(str) {
 		console.log(str);
 	}
 	,setDebug: function(d) {
@@ -20963,6 +22683,7 @@ h3d_impl_GlDriver.prototype = $extend(h3d_impl_Driver.prototype,{
 			b.b = null;
 		}
 	}
+	,defaultDepth: null
 	,getDefaultDepthBuffer: function() {
 		if(this.defaultDepth != null) {
 			return this.defaultDepth;
@@ -21332,7 +23053,10 @@ var h3d_impl__$ManagedBuffer_FreeCell = function(pos,count,next) {
 $hxClasses["h3d.impl._ManagedBuffer.FreeCell"] = h3d_impl__$ManagedBuffer_FreeCell;
 h3d_impl__$ManagedBuffer_FreeCell.__name__ = ["h3d","impl","_ManagedBuffer","FreeCell"];
 h3d_impl__$ManagedBuffer_FreeCell.prototype = {
-	__class__: h3d_impl__$ManagedBuffer_FreeCell
+	pos: null
+	,count: null
+	,next: null
+	,__class__: h3d_impl__$ManagedBuffer_FreeCell
 };
 var h3d_impl_ManagedBuffer = function(stride,size,flags) {
 	var this1 = 0;
@@ -21354,7 +23078,14 @@ var h3d_impl_ManagedBuffer = function(stride,size,flags) {
 $hxClasses["h3d.impl.ManagedBuffer"] = h3d_impl_ManagedBuffer;
 h3d_impl_ManagedBuffer.__name__ = ["h3d","impl","ManagedBuffer"];
 h3d_impl_ManagedBuffer.prototype = {
-	uploadVertexBuffer: function(start,vertices,buf,bufPos) {
+	mem: null
+	,stride: null
+	,size: null
+	,flags: null
+	,vbuf: null
+	,freeList: null
+	,next: null
+	,uploadVertexBuffer: function(start,vertices,buf,bufPos) {
 		if(bufPos == null) {
 			bufPos = 0;
 		}
@@ -21483,7 +23214,16 @@ var h3d_impl_MemoryManager = function(driver) {
 $hxClasses["h3d.impl.MemoryManager"] = h3d_impl_MemoryManager;
 h3d_impl_MemoryManager.__name__ = ["h3d","impl","MemoryManager"];
 h3d_impl_MemoryManager.prototype = {
-	init: function() {
+	driver: null
+	,buffers: null
+	,indexes: null
+	,textures: null
+	,triIndexes: null
+	,quadIndexes: null
+	,usedMemory: null
+	,texMemory: null
+	,bufferCount: null
+	,init: function() {
 		this.indexes = [];
 		this.textures = [];
 		this.buffers = [];
@@ -21807,7 +23547,15 @@ $hxClasses["h3d.impl.SceneSerializer"] = h3d_impl_SceneSerializer;
 h3d_impl_SceneSerializer.__name__ = ["h3d","impl","SceneSerializer"];
 h3d_impl_SceneSerializer.__super__ = hxbit_Serializer;
 h3d_impl_SceneSerializer.prototype = $extend(hxbit_Serializer.prototype,{
-	addTexture: function(t) {
+	materialRef: null
+	,version: null
+	,resPath: null
+	,shaderVarIndex: null
+	,shaderUID: null
+	,shaderIndexes: null
+	,cachedShaders: null
+	,cachedTextures: null
+	,addTexture: function(t) {
 		if(t == null) {
 			this.out.addByte(0);
 			return true;
@@ -22569,7 +24317,12 @@ var h3d_impl_TextureCache = function() {
 $hxClasses["h3d.impl.TextureCache"] = h3d_impl_TextureCache;
 h3d_impl_TextureCache.__name__ = ["h3d","impl","TextureCache"];
 h3d_impl_TextureCache.prototype = {
-	get: function(index) {
+	cache: null
+	,position: null
+	,frame: null
+	,defaultDepthBuffer: null
+	,defaultFormat: null
+	,get: function(index) {
 		if(index == null) {
 			index = 0;
 		}
@@ -22635,7 +24388,9 @@ $hxClasses["h3d.mat.BaseMaterial"] = h3d_mat_BaseMaterial;
 h3d_mat_BaseMaterial.__name__ = ["h3d","mat","BaseMaterial"];
 h3d_mat_BaseMaterial.__interfaces__ = [hxbit_Serializable];
 h3d_mat_BaseMaterial.prototype = {
-	addPass: function(p) {
+	passes: null
+	,name: null
+	,addPass: function(p) {
 		var prev = null;
 		var cur = this.passes;
 		while(cur != null) {
@@ -22710,6 +24465,7 @@ h3d_mat_BaseMaterial.prototype = {
 		m.name = this.name;
 		return m;
 	}
+	,__uid: null
 	,getCLID: function() {
 		return h3d_mat_BaseMaterial.__clid;
 	}
@@ -22978,7 +24734,10 @@ h3d_mat_DepthBuffer.getDefault = function() {
 	return h3d_Engine.CURRENT.driver.getDefaultDepthBuffer();
 };
 h3d_mat_DepthBuffer.prototype = {
-	dispose: function() {
+	b: null
+	,width: null
+	,height: null
+	,dispose: function() {
 		if(this.b != null) {
 			h3d_Engine.CURRENT.driver.disposeDepthBuffer(this);
 			this.b = null;
@@ -22999,7 +24758,15 @@ $hxClasses["h3d.mat.Material"] = h3d_mat_Material;
 h3d_mat_Material.__name__ = ["h3d","mat","Material"];
 h3d_mat_Material.__super__ = h3d_mat_BaseMaterial;
 h3d_mat_Material.prototype = $extend(h3d_mat_BaseMaterial.prototype,{
-	get_specularPower: function() {
+	mshader: null
+	,props: null
+	,model: null
+	,castShadows: null
+	,receiveShadows: null
+	,textureShader: null
+	,specularShader: null
+	,blendMode: null
+	,get_specularPower: function() {
 		return this.mshader.specularPower__;
 	}
 	,set_specularPower: function(v) {
@@ -23210,7 +24977,9 @@ var h3d_mat_MaterialDatabase = function(file) {
 $hxClasses["h3d.mat.MaterialDatabase"] = h3d_mat_MaterialDatabase;
 h3d_mat_MaterialDatabase.__name__ = ["h3d","mat","MaterialDatabase"];
 h3d_mat_MaterialDatabase.prototype = {
-	getPath: function(material,setup) {
+	file: null
+	,db: null
+	,getPath: function(material,setup) {
 		var path = material.model == null ? [] : material.model.entry.get_path().split("/");
 		path.pop();
 		path.push(material.name);
@@ -23295,7 +25064,9 @@ var h3d_mat_MaterialSetup = function(name) {
 $hxClasses["h3d.mat.MaterialSetup"] = h3d_mat_MaterialSetup;
 h3d_mat_MaterialSetup.__name__ = ["h3d","mat","MaterialSetup"];
 h3d_mat_MaterialSetup.prototype = {
-	createRenderer: function() {
+	name: null
+	,database: null
+	,createRenderer: function() {
 		return new h3d_scene_Renderer();
 	}
 	,createLightSystem: function() {
@@ -23431,7 +25202,27 @@ h3d_mat_Pass.getColorMask = function(v) {
 	return v >> 26 & 15;
 };
 h3d_mat_Pass.prototype = {
-	load: function(p) {
+	name: null
+	,passId: null
+	,bits: null
+	,parentPass: null
+	,parentShaders: null
+	,shaders: null
+	,nextPass: null
+	,enableLights: null
+	,dynamicParameters: null
+	,culling: null
+	,depthWrite: null
+	,depthTest: null
+	,blendSrc: null
+	,blendDst: null
+	,blendAlphaSrc: null
+	,blendAlphaDst: null
+	,blendOp: null
+	,blendAlphaOp: null
+	,colorMask: null
+	,stencil: null
+	,load: function(p) {
 		this.name = p.name;
 		this.passId = p.passId;
 		this.bits = p.bits;
@@ -23660,6 +25451,7 @@ h3d_mat_Pass.prototype = {
 		this.setPassName(this.name);
 		this.loadBits(this.bits);
 	}
+	,__uid: null
 	,getCLID: function() {
 		return h3d_mat_Pass.__clid;
 	}
@@ -23854,7 +25646,24 @@ h3d_mat_Stencil.getBackWriteMask = function(v) {
 	return v >> 16 & 255;
 };
 h3d_mat_Stencil.prototype = {
-	setOp: function(face,stfail,dpfail,dppass) {
+	frontRefBits: null
+	,backRefBits: null
+	,opBits: null
+	,frontTest: null
+	,frontSTfail: null
+	,frontDPfail: null
+	,frontDPpass: null
+	,frontRef: null
+	,frontReadMask: null
+	,frontWriteMask: null
+	,backTest: null
+	,backSTfail: null
+	,backDPfail: null
+	,backDPpass: null
+	,backRef: null
+	,backReadMask: null
+	,backWriteMask: null
+	,setOp: function(face,stfail,dpfail,dppass) {
 		if(face == null) {
 			face = h3d_mat_Face.Both;
 		}
@@ -23951,6 +25760,7 @@ h3d_mat_Stencil.prototype = {
 		this.loadBackRefBits(this.backRefBits);
 		this.loadOpBits(this.opBits);
 	}
+	,__uid: null
 	,getCLID: function() {
 		return h3d_mat_Stencil.__clid;
 	}
@@ -24244,7 +26054,23 @@ h3d_mat_Texture.allocNoise = function(t,size) {
 	b.pixel = null;
 };
 h3d_mat_Texture.prototype = {
-	alloc: function() {
+	t: null
+	,mem: null
+	,id: null
+	,name: null
+	,width: null
+	,height: null
+	,flags: null
+	,format: null
+	,lastFrame: null
+	,bits: null
+	,waitLoads: null
+	,mipMap: null
+	,filter: null
+	,wrap: null
+	,realloc: null
+	,depthBuffer: null
+	,alloc: function() {
 		if(this.t == null) {
 			this.mem.allocTexture(this);
 		}
@@ -24426,7 +26252,10 @@ $hxClasses["h3d.mat.TextureChannels"] = h3d_mat_TextureChannels;
 h3d_mat_TextureChannels.__name__ = ["h3d","mat","TextureChannels"];
 h3d_mat_TextureChannels.__super__ = h3d_mat_Texture;
 h3d_mat_TextureChannels.prototype = $extend(h3d_mat_Texture.prototype,{
-	restore: function() {
+	pixels: null
+	,channels: null
+	,allowAsync: null
+	,restore: function() {
 		this.uploadPixels(this.pixels);
 	}
 	,reset: function() {
@@ -24489,4514 +26318,697 @@ h3d_mat_TextureChannels.prototype = $extend(h3d_mat_Texture.prototype,{
 	}
 	,__class__: h3d_mat_TextureChannels
 });
-var h3d_pass_Base = function() {
-	this.forceProcessing = false;
-	this.priority = 0;
+var h3d_parts_GpuSortMode = $hxClasses["h3d.parts.GpuSortMode"] = { __ename__ : true, __constructs__ : ["None","Dynamic"] };
+h3d_parts_GpuSortMode.None = ["None",0];
+h3d_parts_GpuSortMode.None.toString = $estr;
+h3d_parts_GpuSortMode.None.__enum__ = h3d_parts_GpuSortMode;
+h3d_parts_GpuSortMode.Dynamic = ["Dynamic",1];
+h3d_parts_GpuSortMode.Dynamic.toString = $estr;
+h3d_parts_GpuSortMode.Dynamic.__enum__ = h3d_parts_GpuSortMode;
+h3d_parts_GpuSortMode.__empty_constructs__ = [h3d_parts_GpuSortMode.None,h3d_parts_GpuSortMode.Dynamic];
+var h3d_parts_GpuEmitMode = $hxClasses["h3d.parts.GpuEmitMode"] = { __ename__ : true, __constructs__ : ["Point","Cone","VolumeBounds","ParentBounds","CameraBounds"] };
+h3d_parts_GpuEmitMode.Point = ["Point",0];
+h3d_parts_GpuEmitMode.Point.toString = $estr;
+h3d_parts_GpuEmitMode.Point.__enum__ = h3d_parts_GpuEmitMode;
+h3d_parts_GpuEmitMode.Cone = ["Cone",1];
+h3d_parts_GpuEmitMode.Cone.toString = $estr;
+h3d_parts_GpuEmitMode.Cone.__enum__ = h3d_parts_GpuEmitMode;
+h3d_parts_GpuEmitMode.VolumeBounds = ["VolumeBounds",2];
+h3d_parts_GpuEmitMode.VolumeBounds.toString = $estr;
+h3d_parts_GpuEmitMode.VolumeBounds.__enum__ = h3d_parts_GpuEmitMode;
+h3d_parts_GpuEmitMode.ParentBounds = ["ParentBounds",3];
+h3d_parts_GpuEmitMode.ParentBounds.toString = $estr;
+h3d_parts_GpuEmitMode.ParentBounds.__enum__ = h3d_parts_GpuEmitMode;
+h3d_parts_GpuEmitMode.CameraBounds = ["CameraBounds",4];
+h3d_parts_GpuEmitMode.CameraBounds.toString = $estr;
+h3d_parts_GpuEmitMode.CameraBounds.__enum__ = h3d_parts_GpuEmitMode;
+h3d_parts_GpuEmitMode.__empty_constructs__ = [h3d_parts_GpuEmitMode.Point,h3d_parts_GpuEmitMode.Cone,h3d_parts_GpuEmitMode.VolumeBounds,h3d_parts_GpuEmitMode.ParentBounds,h3d_parts_GpuEmitMode.CameraBounds];
+var h3d_parts__$GpuParticles_GpuPart = function() {
 };
-$hxClasses["h3d.pass.Base"] = h3d_pass_Base;
-h3d_pass_Base.__name__ = ["h3d","pass","Base"];
-h3d_pass_Base.prototype = {
-	getTexture: function(index) {
-		if(index == null) {
-			index = 0;
-		}
-		return null;
+$hxClasses["h3d.parts._GpuParticles.GpuPart"] = h3d_parts__$GpuParticles_GpuPart;
+h3d_parts__$GpuParticles_GpuPart.__name__ = ["h3d","parts","_GpuParticles","GpuPart"];
+h3d_parts__$GpuParticles_GpuPart.prototype = {
+	index: null
+	,x: null
+	,y: null
+	,z: null
+	,w: null
+	,sx: null
+	,sy: null
+	,sz: null
+	,vx: null
+	,vy: null
+	,vz: null
+	,time: null
+	,life: null
+	,initX: null
+	,initY: null
+	,deltaX: null
+	,deltaY: null
+	,next: null
+	,updatePos: function(time,gravity) {
+		var t = (time + this.time) % this.life;
+		this.x = this.sx + this.vx * t;
+		this.y = this.sy + this.vy * t;
+		this.z = this.sz + (this.vz - gravity * t) * t;
 	}
-	,setTexture: function(t,index) {
-		if(index == null) {
-			index = 0;
-		}
-		throw new js__$Boot_HaxeError("Not implemented");
-	}
-	,compileShader: function(p) {
-		throw new js__$Boot_HaxeError("Not implemented for this pass");
-	}
-	,setContext: function(ctx) {
-		this.ctx = ctx;
-	}
-	,dispose: function() {
-	}
-	,draw: function(passes) {
-		return passes;
-	}
-	,__class__: h3d_pass_Base
+	,__class__: h3d_parts__$GpuParticles_GpuPart
 };
-var h3d_pass_ScreenFx = function(shader) {
-	this.shader = shader;
-	this.shaders = new hxsl_ShaderList(shader);
-	this.manager = new h3d_pass_ShaderManager();
-	this.pass = new h3d_mat_Pass(Std.string(this),new hxsl_ShaderList(shader));
-	this.pass.set_culling(h3d_mat_Face.None);
-	this.pass.depth(false,h3d_mat_Compare.Always);
-	this.plan = h3d_prim_Plan2D.get();
-	this.engine = h3d_Engine.CURRENT;
+var h3d_parts_GpuPartGroup = function(parent) {
+	this.colorGradient = null;
+	this.texture = null;
+	this.animationRepeat = 1;
+	this.frameDivisionY = 1;
+	this.frameDivisionX = 1;
+	this.frameCount = 0;
+	this.fadePower = 1;
+	this.fadeOut = 0.8;
+	this.fadeIn = 0.2;
+	this.rotSpeedRand = 0;
+	this.rotSpeed = 0;
+	this.rotInit = 0;
+	this.gravity = 0;
+	this.speedIncr = 0;
+	this.speedRand = 0;
+	this.speed = 1;
+	this.lifeRand = 0;
+	this.life = 1;
+	this.sizeRand = 0;
+	this.sizeIncr = 0;
+	this.size = 1;
+	this.transform3D = false;
+	this.clipBounds = false;
+	this.emitDelay = 0;
+	this.emitSync = 0;
+	this.emitAngle = 1.5;
+	this.emitDist = 1.;
+	this.emitStartDist = 0.;
+	this.emitMode = h3d_parts_GpuEmitMode.Point;
+	this.emitLoop = true;
+	this.nparts = 100;
+	this.sortMode = h3d_parts_GpuSortMode.None;
+	this.material = { };
+	this.enable = true;
+	this.amount = 1.;
+	this.maxTime = -1.;
+	this.currentParts = 0;
+	this.partIndex = 0;
+	this.pshader = new h3d_shader_GpuParticle();
+	this.needRebuild = true;
+	this.parent = parent;
 };
-$hxClasses["h3d.pass.ScreenFx"] = h3d_pass_ScreenFx;
-h3d_pass_ScreenFx.__name__ = ["h3d","pass","ScreenFx"];
-h3d_pass_ScreenFx.prototype = {
-	setGlobals: function(ctx) {
-		var _g = 0;
-		var _g1 = ctx.sharedGlobals;
-		while(_g < _g1.length) {
-			var g = _g1[_g];
-			++_g;
-			this.manager.globals.map.h[g.gid] = g.value;
+$hxClasses["h3d.parts.GpuPartGroup"] = h3d_parts_GpuPartGroup;
+h3d_parts_GpuPartGroup.__name__ = ["h3d","parts","GpuPartGroup"];
+h3d_parts_GpuPartGroup.getFields = function(inst) {
+	if(h3d_parts_GpuPartGroup.FIELDS != null) {
+		return h3d_parts_GpuPartGroup.FIELDS;
+	}
+	h3d_parts_GpuPartGroup.FIELDS = Type.getInstanceFields(h3d_parts_GpuPartGroup);
+	var _g = 0;
+	var _g1 = ["parent","sortMode","emitMode","needRebuild","pshader","partIndex","particles","texture","colorGradient","amount","currentParts","ebounds","maxTime"];
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		HxOverrides.remove(h3d_parts_GpuPartGroup.FIELDS,f);
+	}
+	var _g2 = 0;
+	var _g11 = h3d_parts_GpuPartGroup.FIELDS.slice();
+	while(_g2 < _g11.length) {
+		var f1 = _g11[_g2];
+		++_g2;
+		if(Reflect.isFunction(Reflect.field(inst,f1))) {
+			HxOverrides.remove(h3d_parts_GpuPartGroup.FIELDS,f1);
 		}
 	}
-	,render: function() {
-		var rts = this.manager.compileShaders(this.shaders);
-		this.engine.selectMaterial(this.pass);
-		this.engine.selectShader(rts);
-		if(this.buffers == null) {
-			this.buffers = new h3d_shader_Buffers(rts);
-		} else {
-			var _this = this.buffers;
-			_this.vertex.grow(rts.vertex);
-			_this.fragment.grow(rts.fragment);
-		}
-		this.manager.fillGlobals(this.buffers,rts);
-		this.manager.fillParams(this.buffers,rts,this.shaders);
-		this.engine.uploadShaderBuffers(this.buffers,0);
-		this.engine.uploadShaderBuffers(this.buffers,1);
-		this.engine.uploadShaderBuffers(this.buffers,2);
-		this.plan.render(this.engine);
-	}
-	,dispose: function() {
-	}
-	,__class__: h3d_pass_ScreenFx
+	h3d_parts_GpuPartGroup.FIELDS.sort(Reflect.compare);
+	return h3d_parts_GpuPartGroup.FIELDS;
 };
-var h3d_pass_Blur = function(quality,passes,sigma) {
-	if(sigma == null) {
-		sigma = 1.;
+h3d_parts_GpuPartGroup.prototype = {
+	parent: null
+	,needRebuild: null
+	,pshader: null
+	,partIndex: null
+	,currentParts: null
+	,particles: null
+	,ebounds: null
+	,maxTime: null
+	,amount: null
+	,name: null
+	,enable: null
+	,material: null
+	,sortMode: null
+	,nparts: null
+	,emitLoop: null
+	,emitMode: null
+	,emitStartDist: null
+	,emitDist: null
+	,emitAngle: null
+	,emitSync: null
+	,emitDelay: null
+	,clipBounds: null
+	,transform3D: null
+	,size: null
+	,sizeIncr: null
+	,sizeRand: null
+	,life: null
+	,lifeRand: null
+	,speed: null
+	,speedRand: null
+	,speedIncr: null
+	,gravity: null
+	,rotInit: null
+	,rotSpeed: null
+	,rotSpeedRand: null
+	,fadeIn: null
+	,fadeOut: null
+	,fadePower: null
+	,frameCount: null
+	,frameDivisionX: null
+	,frameDivisionY: null
+	,animationRepeat: null
+	,texture: null
+	,colorGradient: null
+	,set_sortMode: function(v) {
+		this.needRebuild = true;
+		return this.sortMode = v;
 	}
-	if(passes == null) {
-		passes = 1;
+	,set_size: function(v) {
+		this.needRebuild = true;
+		return this.size = v;
 	}
-	if(quality == null) {
-		quality = 1;
+	,set_sizeRand: function(v) {
+		this.needRebuild = true;
+		return this.sizeRand = v;
 	}
-	h3d_pass_ScreenFx.call(this,new h3d_shader_Blur());
-	this.set_quality(quality);
-	this.passes = passes;
-	this.set_sigma(sigma);
-};
-$hxClasses["h3d.pass.Blur"] = h3d_pass_Blur;
-h3d_pass_Blur.__name__ = ["h3d","pass","Blur"];
-h3d_pass_Blur.__super__ = h3d_pass_ScreenFx;
-h3d_pass_Blur.prototype = $extend(h3d_pass_ScreenFx.prototype,{
-	set_quality: function(q) {
-		this.values = null;
-		return this.quality = q;
+	,set_sizeIncr: function(v) {
+		this.needRebuild = true;
+		return this.sizeIncr = v;
 	}
-	,set_sigma: function(s) {
-		this.values = null;
-		return this.sigma = s;
+	,set_speed: function(v) {
+		this.needRebuild = true;
+		return this.speed = v;
 	}
-	,set_depthBlur: function(d) {
-		this.depthBlur = d;
-		if(d == null) {
-			var _this = this.shader;
-			_this.constModified = true;
-			_this.isDepthDependant__ = false;
-			this.shader.depthTexture__ = null;
-			this.shader.normalTexture__ = null;
-		} else {
-			var _this1 = this.shader;
-			_this1.constModified = true;
-			_this1.isDepthDependant__ = true;
-			this.shader.depthTexture__ = d.depths;
-			this.shader.normalTexture__ = d.normals;
-		}
-		return d;
+	,set_speedIncr: function(v) {
+		this.needRebuild = true;
+		return this.speedIncr = v;
 	}
-	,gauss: function(x,s) {
-		if(s <= 0) {
-			if(x == 0) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
-		var sq = s * s;
-		var p = Math.pow(2.718281828459,-(x * x) / (2 * sq));
-		return p / Math.sqrt(2 * Math.PI * sq);
+	,set_gravity: function(v) {
+		this.needRebuild = true;
+		return this.gravity = v;
 	}
-	,calcValues: function() {
-		this.values = [];
-		var tot = 0.;
-		var _g1 = 0;
-		var _g = this.quality + 1;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var g = this.gauss(i,this.sigma);
-			this.values[i] = g;
-			tot += g;
-			if(i > 0) {
-				tot += g;
-			}
-		}
-		var _g11 = 0;
-		var _g2 = this.quality + 1;
-		while(_g11 < _g2) {
-			var i1 = _g11++;
-			this.values[i1] /= tot;
-		}
+	,set_speedRand: function(v) {
+		this.needRebuild = true;
+		return this.speedRand = v;
 	}
-	,apply: function(src,tmp,output,isDepth) {
-		if(isDepth == null) {
-			isDepth = false;
+	,set_life: function(v) {
+		this.needRebuild = true;
+		return this.life = v;
+	}
+	,set_lifeRand: function(v) {
+		this.needRebuild = true;
+		return this.lifeRand = v;
+	}
+	,set_nparts: function(n) {
+		if(n > this.nparts) {
+			this.needRebuild = true;
 		}
-		if((this.quality <= 0 || this.passes <= 0 || this.sigma <= 0) && this.shader.fixedColor__ == null) {
-			return;
-		}
-		if(output == null) {
-			output = src;
-		}
-		var alloc = tmp == null;
-		if(alloc) {
-			tmp = new h3d_mat_Texture(src.width,src.height,[h3d_mat_TextureFlags.Target]);
-		}
-		if(this.values == null) {
-			this.calcValues();
-		}
-		var _this = this.shader;
-		_this.constModified = true;
-		_this.Quality__ = this.quality + 1;
-		this.shader.values__ = this.values;
-		var _this1 = this.shader;
+		return this.nparts = n;
+	}
+	,set_emitLoop: function(v) {
+		this.needRebuild = true;
+		return this.emitLoop = v;
+	}
+	,set_emitMode: function(v) {
+		this.needRebuild = true;
+		return this.emitMode = v;
+	}
+	,set_emitStartDist: function(v) {
+		this.needRebuild = true;
+		return this.emitStartDist = v;
+	}
+	,set_emitDist: function(v) {
+		this.needRebuild = true;
+		return this.emitDist = v;
+	}
+	,set_emitAngle: function(v) {
+		this.needRebuild = true;
+		return this.emitAngle = v;
+	}
+	,set_emitSync: function(v) {
+		this.needRebuild = true;
+		return this.emitSync = v;
+	}
+	,set_emitDelay: function(v) {
+		this.needRebuild = true;
+		return this.emitDelay = v;
+	}
+	,set_rotInit: function(v) {
+		this.needRebuild = true;
+		return this.rotInit = v;
+	}
+	,set_rotSpeed: function(v) {
+		this.needRebuild = true;
+		return this.rotSpeed = v;
+	}
+	,set_rotSpeedRand: function(v) {
+		this.needRebuild = true;
+		return this.rotSpeedRand = v;
+	}
+	,syncParams: function() {
+		this.pshader.speedIncr__ = this.speedIncr;
+		this.pshader.fadeIn__ = this.fadeIn;
+		this.pshader.fadeOut__ = this.fadeOut;
+		this.pshader.fadePower__ = this.fadePower;
+		this.pshader.gravity__ = this.gravity;
+		this.pshader.loopCounter__ = this.emitLoop ? 1 : 10000000;
+		this.pshader.color__ = this.colorGradient == null ? h3d_mat_Texture.fromColor(16777215) : this.colorGradient;
+		this.pshader.texture__ = this.texture == null ? h3d_mat_Texture.fromColor(16777215) : this.texture;
+		var frameCount = this.frameCount == 0 ? this.frameDivisionX * this.frameDivisionY : this.frameCount;
+		this.pshader.animationRepeat__ = this.animationRepeat == 0 ? 0 : this.animationRepeat * frameCount - 1;
+		this.pshader.animationFixedFrame__ = this.animationRepeat == 0 ? frameCount : 0;
+		this.pshader.totalFrames__ = frameCount;
+		var _this = this.pshader.frameDivision__;
+		_this.x = this.frameDivisionX;
+		_this.y = 1 / this.frameDivisionX;
+		_this.z = 1 / this.frameDivisionY;
+		_this.w = 1.;
+		var _this1 = this.pshader;
 		_this1.constModified = true;
-		_this1.isDepth__ = isDepth;
-		if(this.depthBlur != null) {
-			this.shader.cameraInverseViewProj__ = this.depthBlur.camera.getInverseViewProj();
+		_this1.clipBounds__ = this.emitMode == h3d_parts_GpuEmitMode.CameraBounds || this.clipBounds;
+		var _this2 = this.pshader;
+		_this2.constModified = true;
+		_this2.transform3D__ = this.transform3D;
+		this.pshader.maxTime__ = this.maxTime < 0 ? 1e10 : this.maxTime;
+	}
+	,getMaterialProps: function() {
+		var name = h3d_mat_MaterialSetup.current.name;
+		var p = Reflect.field(this.material,name);
+		if(p == null) {
+			p = h3d_mat_MaterialSetup.current.getDefaults("particles3D");
+			this.material[name] = p;
 		}
-		var outDepth = output.depthBuffer;
-		var tmpDepth = tmp.depthBuffer;
-		output.depthBuffer = null;
-		tmp.depthBuffer = null;
-		var _g1 = 0;
-		var _g = this.passes;
-		while(_g1 < _g) {
-			var i = _g1++;
-			this.shader.texture__ = src;
-			var _this2 = this.shader.pixel__;
-			_this2.x = 1 / src.width;
-			_this2.y = 0;
-			_this2.z = 0.;
-			_this2.w = 1.;
-			this.engine.pushTarget(tmp);
-			this.render();
-			this.engine.popTarget();
-			this.shader.texture__ = tmp;
-			var _this3 = this.shader.pixel__;
-			_this3.x = 0;
-			_this3.y = 1 / tmp.height;
-			_this3.z = 0.;
-			_this3.w = 1.;
-			this.engine.pushTarget(output);
-			this.render();
-			this.engine.popTarget();
-		}
-		output.depthBuffer = outDepth;
-		tmp.depthBuffer = tmpDepth;
-		if(alloc) {
-			tmp.dispose();
-		}
+		return p;
 	}
-	,__class__: h3d_pass_Blur
-});
-var hxsl_Shader = function() {
-	this.priority = 0;
-	this.initialize();
-};
-$hxClasses["hxsl.Shader"] = hxsl_Shader;
-hxsl_Shader.__name__ = ["hxsl","Shader"];
-hxsl_Shader.prototype = {
-	initialize: function() {
-		this.constModified = true;
-		if(this.shader != null) {
-			return;
-		}
-		var cl = js_Boot.getClass(this);
-		this.shader = cl._SHADER;
-		if(this.shader == null) {
-			var curClass = cl;
-			while(curClass != null && curClass.SRC == null) curClass = Type.getSuperClass(curClass);
-			if(curClass == null) {
-				throw new js__$Boot_HaxeError(Type.getClassName(cl) + " has no shader source");
-			}
-			this.shader = curClass._SHADER;
-			if(this.shader == null) {
-				this.shader = new hxsl_SharedShader(curClass.SRC);
-				curClass._SHADER = this.shader;
-			}
-		}
-	}
-	,getParamValue: function(index) {
-		throw new js__$Boot_HaxeError("assert");
-	}
-	,getParamFloatValue: function(index) {
-		throw new js__$Boot_HaxeError("assert");
-	}
-	,updateConstants: function(globals) {
-		throw new js__$Boot_HaxeError("assert");
-	}
-	,updateConstantsFinal: function(globals) {
-		var c = this.shader.consts;
-		while(c != null) {
-			if(c.globalId == 0) {
-				c = c.next;
-				continue;
-			}
-			var v = globals.map.h[c.globalId];
-			var _g = c.v.type;
-			switch(_g[1]) {
-			case 1:
-				var v1 = v;
-				if(v1 >>> c.bits != 0) {
-					throw new js__$Boot_HaxeError("Constant " + c.v.name + " is outside range (" + v1 + " > " + ((1 << c.bits) - 1) + ")");
-				}
-				this.constBits |= v1 << c.pos;
-				break;
-			case 2:
-				var v2 = v;
-				if(v2) {
-					this.constBits |= 1 << c.pos;
-				}
-				break;
-			case 15:
-				var count = _g[2];
-				if(v == null) {
-					c = c.next;
-					continue;
-				}
-				var v3 = v;
-				var sel = v3.channel;
-				if(v3.texture == null) {
-					sel = hxsl_Channel.Unknown;
-				} else if(sel == null || sel == hxsl_Channel.Unknown) {
-					switch(count) {
-					case 1:
-						if(v3.texture.format == h3d_mat_Texture.nativeFormat) {
-							sel = hxsl_Channel.PackedFloat;
-						} else {
-							throw new js__$Boot_HaxeError("Constant " + c.v.name + " does not define channel select value");
-						}
-						break;
-					case 3:
-						if(v3.texture.format == h3d_mat_Texture.nativeFormat) {
-							sel = hxsl_Channel.PackedNormal;
-						} else {
-							throw new js__$Boot_HaxeError("Constant " + c.v.name + " does not define channel select value");
-						}
-						break;
-					default:
-						throw new js__$Boot_HaxeError("Constant " + c.v.name + " does not define channel select value");
-					}
-				}
-				this.constBits |= (globals.allocChannelID(v3.texture) << 3 | sel[1]) << c.pos;
-				break;
-			default:
-				throw new js__$Boot_HaxeError("assert");
-			}
-			c = c.next;
-		}
-		var _this = this.shader;
-		var constBits = this.constBits;
-		var i = _this.instanceCache.h[constBits];
-		this.instance = i == null ? _this.makeInstance(constBits) : i;
-	}
-	,clone: function() {
-		return this;
-	}
-	,toString: function() {
-		return Type.getClassName(js_Boot.getClass(this));
-	}
-	,__class__: hxsl_Shader
-};
-var h3d_pass__$Border_BorderShader = function() {
-	this.color__ = new h3d_Vector();
-	hxsl_Shader.call(this);
-};
-$hxClasses["h3d.pass._Border.BorderShader"] = h3d_pass__$Border_BorderShader;
-h3d_pass__$Border_BorderShader.__name__ = ["h3d","pass","_Border","BorderShader"];
-h3d_pass__$Border_BorderShader.__super__ = hxsl_Shader;
-h3d_pass__$Border_BorderShader.prototype = $extend(hxsl_Shader.prototype,{
-	get_color: function() {
-		return this.color__;
-	}
-	,set_color: function(_v) {
-		return this.color__ = _v;
-	}
-	,updateConstants: function(globals) {
-		this.constBits = 0;
-		this.updateConstantsFinal(globals);
-	}
-	,getParamValue: function(index) {
-		if(index == 0) {
-			return this.color__;
-		}
-		return null;
-	}
-	,getParamFloatValue: function(index) {
-		return 0.;
-	}
-	,clone: function() {
-		var s = Object.create(h3d_pass__$Border_BorderShader.prototype);
-		s.shader = this.shader;
-		s.color__ = this.color__;
-		return s;
-	}
-	,__class__: h3d_pass__$Border_BorderShader
-});
-var h3d_pass_Border = function(width,height,size) {
-	if(size == null) {
-		size = 1;
-	}
-	h3d_pass_ScreenFx.call(this,new h3d_pass__$Border_BorderShader());
-	var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
-	var bbuf = this1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize = bbuf.array.length << 1;
-		if(newSize < 128) {
-			newSize = 128;
-		}
-		var newArray = new Float32Array(newSize);
-		newArray.set(bbuf.array);
-		bbuf.array = newArray;
-	}
-	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize1 = bbuf.array.length << 1;
-		if(newSize1 < 128) {
-			newSize1 = 128;
-		}
-		var newArray1 = new Float32Array(newSize1);
-		newArray1.set(bbuf.array);
-		bbuf.array = newArray1;
-	}
-	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize2 = bbuf.array.length << 1;
-		if(newSize2 < 128) {
-			newSize2 = 128;
-		}
-		var newArray2 = new Float32Array(newSize2);
-		newArray2.set(bbuf.array);
-		bbuf.array = newArray2;
-	}
-	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize3 = bbuf.array.length << 1;
-		if(newSize3 < 128) {
-			newSize3 = 128;
-		}
-		var newArray3 = new Float32Array(newSize3);
-		newArray3.set(bbuf.array);
-		bbuf.array = newArray3;
-	}
-	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize4 = bbuf.array.length << 1;
-		if(newSize4 < 128) {
-			newSize4 = 128;
-		}
-		var newArray4 = new Float32Array(newSize4);
-		newArray4.set(bbuf.array);
-		bbuf.array = newArray4;
-	}
-	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize5 = bbuf.array.length << 1;
-		if(newSize5 < 128) {
-			newSize5 = 128;
-		}
-		var newArray5 = new Float32Array(newSize5);
-		newArray5.set(bbuf.array);
-		bbuf.array = newArray5;
-	}
-	bbuf.array[bbuf.pos++] = 1 - size / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize6 = bbuf.array.length << 1;
-		if(newSize6 < 128) {
-			newSize6 = 128;
-		}
-		var newArray6 = new Float32Array(newSize6);
-		newArray6.set(bbuf.array);
-		bbuf.array = newArray6;
-	}
-	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize7 = bbuf.array.length << 1;
-		if(newSize7 < 128) {
-			newSize7 = 128;
-		}
-		var newArray7 = new Float32Array(newSize7);
-		newArray7.set(bbuf.array);
-		bbuf.array = newArray7;
-	}
-	bbuf.array[bbuf.pos++] = 1 - size / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize8 = bbuf.array.length << 1;
-		if(newSize8 < 128) {
-			newSize8 = 128;
-		}
-		var newArray8 = new Float32Array(newSize8);
-		newArray8.set(bbuf.array);
-		bbuf.array = newArray8;
-	}
-	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize9 = bbuf.array.length << 1;
-		if(newSize9 < 128) {
-			newSize9 = 128;
-		}
-		var newArray9 = new Float32Array(newSize9);
-		newArray9.set(bbuf.array);
-		bbuf.array = newArray9;
-	}
-	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize10 = bbuf.array.length << 1;
-		if(newSize10 < 128) {
-			newSize10 = 128;
-		}
-		var newArray10 = new Float32Array(newSize10);
-		newArray10.set(bbuf.array);
-		bbuf.array = newArray10;
-	}
-	bbuf.array[bbuf.pos++] = size / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize11 = bbuf.array.length << 1;
-		if(newSize11 < 128) {
-			newSize11 = 128;
-		}
-		var newArray11 = new Float32Array(newSize11);
-		newArray11.set(bbuf.array);
-		bbuf.array = newArray11;
-	}
-	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize12 = bbuf.array.length << 1;
-		if(newSize12 < 128) {
-			newSize12 = 128;
-		}
-		var newArray12 = new Float32Array(newSize12);
-		newArray12.set(bbuf.array);
-		bbuf.array = newArray12;
-	}
-	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize13 = bbuf.array.length << 1;
-		if(newSize13 < 128) {
-			newSize13 = 128;
-		}
-		var newArray13 = new Float32Array(newSize13);
-		newArray13.set(bbuf.array);
-		bbuf.array = newArray13;
-	}
-	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize14 = bbuf.array.length << 1;
-		if(newSize14 < 128) {
-			newSize14 = 128;
-		}
-		var newArray14 = new Float32Array(newSize14);
-		newArray14.set(bbuf.array);
-		bbuf.array = newArray14;
-	}
-	bbuf.array[bbuf.pos++] = size / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize15 = bbuf.array.length << 1;
-		if(newSize15 < 128) {
-			newSize15 = 128;
-		}
-		var newArray15 = new Float32Array(newSize15);
-		newArray15.set(bbuf.array);
-		bbuf.array = newArray15;
-	}
-	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize16 = bbuf.array.length << 1;
-		if(newSize16 < 128) {
-			newSize16 = 128;
-		}
-		var newArray16 = new Float32Array(newSize16);
-		newArray16.set(bbuf.array);
-		bbuf.array = newArray16;
-	}
-	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize17 = bbuf.array.length << 1;
-		if(newSize17 < 128) {
-			newSize17 = 128;
-		}
-		var newArray17 = new Float32Array(newSize17);
-		newArray17.set(bbuf.array);
-		bbuf.array = newArray17;
-	}
-	bbuf.array[bbuf.pos++] = 1 - (height - size) / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize18 = bbuf.array.length << 1;
-		if(newSize18 < 128) {
-			newSize18 = 128;
-		}
-		var newArray18 = new Float32Array(newSize18);
-		newArray18.set(bbuf.array);
-		bbuf.array = newArray18;
-	}
-	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize19 = bbuf.array.length << 1;
-		if(newSize19 < 128) {
-			newSize19 = 128;
-		}
-		var newArray19 = new Float32Array(newSize19);
-		newArray19.set(bbuf.array);
-		bbuf.array = newArray19;
-	}
-	bbuf.array[bbuf.pos++] = 1 - (height - size) / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize20 = bbuf.array.length << 1;
-		if(newSize20 < 128) {
-			newSize20 = 128;
-		}
-		var newArray20 = new Float32Array(newSize20);
-		newArray20.set(bbuf.array);
-		bbuf.array = newArray20;
-	}
-	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize21 = bbuf.array.length << 1;
-		if(newSize21 < 128) {
-			newSize21 = 128;
-		}
-		var newArray21 = new Float32Array(newSize21);
-		newArray21.set(bbuf.array);
-		bbuf.array = newArray21;
-	}
-	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize22 = bbuf.array.length << 1;
-		if(newSize22 < 128) {
-			newSize22 = 128;
-		}
-		var newArray22 = new Float32Array(newSize22);
-		newArray22.set(bbuf.array);
-		bbuf.array = newArray22;
-	}
-	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize23 = bbuf.array.length << 1;
-		if(newSize23 < 128) {
-			newSize23 = 128;
-		}
-		var newArray23 = new Float32Array(newSize23);
-		newArray23.set(bbuf.array);
-		bbuf.array = newArray23;
-	}
-	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize24 = bbuf.array.length << 1;
-		if(newSize24 < 128) {
-			newSize24 = 128;
-		}
-		var newArray24 = new Float32Array(newSize24);
-		newArray24.set(bbuf.array);
-		bbuf.array = newArray24;
-	}
-	bbuf.array[bbuf.pos++] = (width - size) / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize25 = bbuf.array.length << 1;
-		if(newSize25 < 128) {
-			newSize25 = 128;
-		}
-		var newArray25 = new Float32Array(newSize25);
-		newArray25.set(bbuf.array);
-		bbuf.array = newArray25;
-	}
-	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize26 = bbuf.array.length << 1;
-		if(newSize26 < 128) {
-			newSize26 = 128;
-		}
-		var newArray26 = new Float32Array(newSize26);
-		newArray26.set(bbuf.array);
-		bbuf.array = newArray26;
-	}
-	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize27 = bbuf.array.length << 1;
-		if(newSize27 < 128) {
-			newSize27 = 128;
-		}
-		var newArray27 = new Float32Array(newSize27);
-		newArray27.set(bbuf.array);
-		bbuf.array = newArray27;
-	}
-	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize28 = bbuf.array.length << 1;
-		if(newSize28 < 128) {
-			newSize28 = 128;
-		}
-		var newArray28 = new Float32Array(newSize28);
-		newArray28.set(bbuf.array);
-		bbuf.array = newArray28;
-	}
-	bbuf.array[bbuf.pos++] = (width - size) / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize29 = bbuf.array.length << 1;
-		if(newSize29 < 128) {
-			newSize29 = 128;
-		}
-		var newArray29 = new Float32Array(newSize29);
-		newArray29.set(bbuf.array);
-		bbuf.array = newArray29;
-	}
-	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize30 = bbuf.array.length << 1;
-		if(newSize30 < 128) {
-			newSize30 = 128;
-		}
-		var newArray30 = new Float32Array(newSize30);
-		newArray30.set(bbuf.array);
-		bbuf.array = newArray30;
-	}
-	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
-	if(bbuf.pos == bbuf.array.length) {
-		var newSize31 = bbuf.array.length << 1;
-		if(newSize31 < 128) {
-			newSize31 = 128;
-		}
-		var newArray31 = new Float32Array(newSize31);
-		newArray31.set(bbuf.array);
-		bbuf.array = newArray31;
-	}
-	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
-	this.plan = new h3d_prim_RawPrimitive({ vbuf : bbuf, stride : 2, quads : true},true);
-	var _this = this.shader.color__;
-	_this.x = 1;
-	_this.y = 1;
-	_this.z = 1;
-	_this.w = 1;
-};
-$hxClasses["h3d.pass.Border"] = h3d_pass_Border;
-h3d_pass_Border.__name__ = ["h3d","pass","Border"];
-h3d_pass_Border.__super__ = h3d_pass_ScreenFx;
-h3d_pass_Border.prototype = $extend(h3d_pass_ScreenFx.prototype,{
-	__class__: h3d_pass_Border
-});
-var h3d_shader_ScreenShader = function() {
-	hxsl_Shader.call(this);
-};
-$hxClasses["h3d.shader.ScreenShader"] = h3d_shader_ScreenShader;
-h3d_shader_ScreenShader.__name__ = ["h3d","shader","ScreenShader"];
-h3d_shader_ScreenShader.__super__ = hxsl_Shader;
-h3d_shader_ScreenShader.prototype = $extend(hxsl_Shader.prototype,{
-	updateConstants: function(globals) {
-		this.constBits = 0;
-		this.updateConstantsFinal(globals);
-	}
-	,getParamValue: function(index) {
-		return null;
-	}
-	,getParamFloatValue: function(index) {
-		return 0.;
-	}
-	,__class__: h3d_shader_ScreenShader
-});
-var h3d_pass__$Copy_CopyShader = function() {
-	h3d_shader_ScreenShader.call(this);
-};
-$hxClasses["h3d.pass._Copy.CopyShader"] = h3d_pass__$Copy_CopyShader;
-h3d_pass__$Copy_CopyShader.__name__ = ["h3d","pass","_Copy","CopyShader"];
-h3d_pass__$Copy_CopyShader.__super__ = h3d_shader_ScreenShader;
-h3d_pass__$Copy_CopyShader.prototype = $extend(h3d_shader_ScreenShader.prototype,{
-	get_texture: function() {
-		return this.texture__;
-	}
-	,set_texture: function(_v) {
-		return this.texture__ = _v;
-	}
-	,updateConstants: function(globals) {
-		this.constBits = 0;
-		this.updateConstantsFinal(globals);
-	}
-	,getParamValue: function(index) {
-		if(index == 0) {
-			return this.texture__;
-		}
-		return null;
-	}
-	,getParamFloatValue: function(index) {
-		return 0.;
-	}
-	,clone: function() {
-		var s = Object.create(h3d_pass__$Copy_CopyShader.prototype);
-		s.shader = this.shader;
-		s.texture__ = this.texture__;
-		return s;
-	}
-	,__class__: h3d_pass__$Copy_CopyShader
-});
-var h3d_pass_Copy = function() {
-	h3d_pass_ScreenFx.call(this,new h3d_pass__$Copy_CopyShader());
-};
-$hxClasses["h3d.pass.Copy"] = h3d_pass_Copy;
-h3d_pass_Copy.__name__ = ["h3d","pass","Copy"];
-h3d_pass_Copy.run = function(from,to,blend,pass) {
-	if(to != null && from != null && (blend == null || blend == h2d_BlendMode.None) && pass == null && h3d_Engine.CURRENT.driver.copyTexture(from,to)) {
-		return;
-	}
-	if(h3d_pass_Copy.inst == null) {
-		h3d_pass_Copy.inst = new h3d_pass_Copy();
-	}
-	h3d_pass_Copy.inst.apply(from,to,blend,pass);
-	return;
-};
-h3d_pass_Copy.__super__ = h3d_pass_ScreenFx;
-h3d_pass_Copy.prototype = $extend(h3d_pass_ScreenFx.prototype,{
-	apply: function(from,to,blend,customPass) {
-		this.engine.pushTarget(to);
-		this.shader.texture__ = from;
-		if(customPass != null) {
-			var old = this.pass;
-			this.pass = customPass;
-			if(blend != null) {
-				this.pass.setBlendMode(blend);
-			}
-			var h = this.shaders;
-			while(h.next != null) h = h.next;
-			h.next = this.pass.shaders;
-			this.render();
-			this.pass = old;
-			h.next = null;
-		} else {
-			this.pass.setBlendMode(blend == null ? h2d_BlendMode.None : blend);
-			this.render();
-		}
-		this.shader.texture__ = null;
-		this.engine.popTarget();
-	}
-	,__class__: h3d_pass_Copy
-});
-var h3d_pass_Default = function() {
-	this.sortPasses = true;
-	this.textureCount = 1;
-	this.shaderCount = 1;
-	h3d_pass_Base.call(this);
-	this.manager = new h3d_pass_ShaderManager(this.getOutputs());
-	this.tcache = new h3d_impl_TextureCache();
-	this.shaderIdMap = [];
-	this.textureIdMap = [];
-	this.initGlobals();
-};
-$hxClasses["h3d.pass.Default"] = h3d_pass_Default;
-h3d_pass_Default.__name__ = ["h3d","pass","Default"];
-h3d_pass_Default.__super__ = h3d_pass_Base;
-h3d_pass_Default.prototype = $extend(h3d_pass_Base.prototype,{
-	get_globals: function() {
-		return this.manager.globals;
-	}
-	,get_logEnable: function() {
-		return false;
-	}
-	,getTexture: function(index) {
-		if(index == null) {
-			index = 0;
-		}
-		return this.tcache.cache[index];
-	}
-	,setTexture: function(t,index) {
-		if(index == null) {
-			index = 0;
-		}
-		this.tcache.set(t,index);
-	}
-	,dispose: function() {
-		h3d_pass_Base.prototype.dispose.call(this);
-		this.tcache.dispose();
-	}
-	,getOutputs: function() {
-		return [hxsl_Output.Value("output.color")];
-	}
-	,compileShader: function(p) {
-		var o = new h3d_pass_Object();
-		o.pass = p;
-		this.setupShaders(o);
-		return this.manager.compileShaders(o.shaders);
-	}
-	,processShaders: function(p,shaders) {
-		var p1 = this.ctx.extraShaders;
-		while(p1 != null) {
-			shaders = this.ctx.allocShaderList(p1.s,shaders);
-			p1 = p1.next;
-		}
-		return shaders;
-	}
-	,setupShaders: function(passes) {
-		var p = passes;
-		var lightInit = false;
-		while(p != null) {
-			var shaders = p.pass.getShadersRec();
-			shaders = this.processShaders(p,shaders);
-			if(p.pass.enableLights && this.ctx.lightSystem != null) {
-				if(!lightInit) {
-					this.ctx.lightSystem.initGlobals(this.manager.globals);
-					lightInit = true;
-				}
-				shaders = this.ctx.lightSystem.computeLight(p.obj,shaders);
-			}
-			p.shader = this.manager.compileShaders(shaders);
-			p.shaders = shaders;
-			var t = p.shader.fragment.textures2D;
-			if(t == null) {
-				p.texture = 0;
-			} else {
-				var t1;
-				if(t.perObjectGlobal != null) {
-					var v = this.manager.globals.map.h[t.perObjectGlobal.gid];
-					if(v == null) {
-						throw new js__$Boot_HaxeError("Missing global value " + t.perObjectGlobal.path);
-					}
-					var _g = t.type;
-					t1 = _g[1] == 15 ? v.texture : v;
-				} else {
-					var si = shaders;
-					var n = t.instance;
-					while(--n > 0) si = si.next;
-					var v1 = si.s.getParamValue(t.index);
-					if(v1 == null && false) {
-						throw new js__$Boot_HaxeError("Missing param value " + Std.string(si.s) + "." + t.name);
-					}
-					t1 = v1;
-				}
-				p.texture = t1 == null ? 0 : t1.id;
-			}
-			p = p.next;
-		}
-	}
-	,uploadParams: function() {
-		this.manager.fillParams(this.cachedBuffer,this.ctx.drawPass.shader,this.ctx.drawPass.shaders);
-		this.ctx.engine.uploadShaderBuffers(this.cachedBuffer,1);
-		this.ctx.engine.uploadShaderBuffers(this.cachedBuffer,2);
-	}
-	,log: function(str) {
-	}
-	,drawObject: function(p) {
-		this.ctx.drawPass = p;
-		this.ctx.engine.selectMaterial(p.pass);
-		p.obj.draw(this.ctx);
-	}
-	,draw: function(passes) {
-		var _gthis = this;
+	,save: function() {
+		var o = { sortMode : this.sortMode[1], emitMode : this.emitMode[1], texture : this.texture == null ? null : this.texture.name, colorGradient : this.colorGradient == null ? null : this.colorGradient.name};
 		var _g = 0;
-		var _g1 = this.ctx.sharedGlobals;
+		var _g1 = h3d_parts_GpuPartGroup.getFields(this);
 		while(_g < _g1.length) {
-			var g = _g1[_g];
+			var f = _g1[_g];
 			++_g;
-			this.manager.globals.map.h[g.gid] = g.value;
+			o[f] = Reflect.field(this,f);
 		}
-		this.setGlobals();
-		this.setupShaders(passes);
-		var p = passes;
-		var shaderStart = this.shaderCount;
-		var textureStart = this.textureCount;
-		while(p != null) {
-			if(this.shaderIdMap[p.shader.id] < shaderStart) {
-				this.shaderIdMap[p.shader.id] = this.shaderCount++;
-			}
-			if(this.textureIdMap[p.texture] < textureStart) {
-				this.textureIdMap[p.texture] = this.textureCount++;
-			}
-			p = p.next;
+		return o;
+	}
+	,loadTexture: function(path) {
+		if(path == null) {
+			return null;
 		}
-		if(this.sortPasses) {
-			var list = passes;
-			if(list == null) {
-				passes = null;
-			} else {
-				var insize = 1;
-				var nmerges;
-				var psize = 0;
-				var qsize = 0;
-				var p1;
-				var q;
-				var e;
-				var tail;
-				while(true) {
-					p1 = list;
-					list = null;
-					tail = null;
-					nmerges = 0;
-					while(p1 != null) {
-						++nmerges;
-						q = p1;
-						psize = 0;
-						var _g11 = 0;
-						var _g2 = insize;
-						while(_g11 < _g2) {
-							var i = _g11++;
-							++psize;
-							q = q.next;
-							if(q == null) {
-								break;
-							}
-						}
-						qsize = insize;
-						while(psize > 0 || qsize > 0 && q != null) {
-							if(psize == 0) {
-								e = q;
-								q = q.next;
-								--qsize;
-							} else {
-								var passes1;
-								if(!(qsize == 0 || q == null)) {
-									var d = _gthis.shaderIdMap[p1.shader.id] - _gthis.shaderIdMap[q.shader.id];
-									passes1 = (d != 0 ? d : _gthis.textureIdMap[p1.texture] - _gthis.textureIdMap[q.texture]) <= 0;
-								} else {
-									passes1 = true;
-								}
-								if(passes1) {
-									e = p1;
-									p1 = p1.next;
-									--psize;
-								} else {
-									e = q;
-									q = q.next;
-									--qsize;
-								}
-							}
-							if(tail != null) {
-								tail.next = e;
-							} else {
-								list = e;
-							}
-							tail = e;
-						}
-						p1 = q;
-					}
-					tail.next = null;
-					if(nmerges <= 1) {
-						break;
-					}
-					insize *= 2;
+		return this.parent.loadTexture(path);
+	}
+	,load: function(version,o) {
+		var _g = 0;
+		var _g1 = h3d_parts_GpuPartGroup.getFields(this);
+		while(_g < _g1.length) {
+			var f = _g1[_g];
+			++_g;
+			if(Object.prototype.hasOwnProperty.call(o,f)) {
+				this[f] = Reflect.field(o,f);
+			}
+		}
+		var v = Type.createEnumIndex(h3d_parts_GpuSortMode,o.sortMode,null);
+		this.needRebuild = true;
+		this.sortMode = v;
+		var v1 = Type.createEnumIndex(h3d_parts_GpuEmitMode,o.emitMode,null);
+		this.needRebuild = true;
+		this.emitMode = v1;
+		this.texture = this.loadTexture(o.texture);
+		this.colorGradient = this.loadTexture(o.colorGradient);
+		if(isNaN(this.emitStartDist)) {
+			this.needRebuild = true;
+			this.emitStartDist = 0;
+		}
+		if(version == 1) {
+			this.fadeOut = 1 - this.fadeOut;
+			this.material = { };
+		}
+		if(this.parent != null) {
+			var index = this.parent.groups.indexOf(this);
+			if(index >= 0) {
+				var mat = this.parent.materials[index];
+				mat.name = this.name;
+				mat.set_props(this.getMaterialProps());
+			}
+		}
+	}
+	,updateBounds: function(bounds) {
+		var life = this.life * (1 + this.lifeRand);
+		var a = 1 - this.speedRand;
+		var speedMin = this.speed * (a < 0. ? 0. : a);
+		var speed = this.speed * (1 + this.speedRand);
+		var _g = this.emitMode;
+		switch(_g[1]) {
+		case 0:case 1:
+			var start = this.emitStartDist + this.emitDist;
+			var d = speed * (1 + this.speedIncr * life) * life + start;
+			var zmin = this.emitStartDist + speed * speed / (4 * (this.gravity - speed * this.speedIncr));
+			if(!(zmin < d)) {
+				zmin = d;
+			}
+			var zmax = speedMin * (1 + this.speedIncr * life) * life + start - this.gravity * life * life;
+			if(this.emitMode == h3d_parts_GpuEmitMode.Cone) {
+				var phi = this.emitAngle;
+				d *= Math.sin(phi);
+			}
+			var z = this.emitStartDist;
+			if(0 < bounds.xMin) {
+				bounds.xMin = 0;
+			}
+			if(0 > bounds.xMax) {
+				bounds.xMax = 0;
+			}
+			if(0 < bounds.yMin) {
+				bounds.yMin = 0;
+			}
+			if(0 > bounds.yMax) {
+				bounds.yMax = 0;
+			}
+			if(z < bounds.zMin) {
+				bounds.zMin = z;
+			}
+			if(z > bounds.zMax) {
+				bounds.zMax = z;
+			}
+			var x = -d;
+			var y = -d;
+			if(x < bounds.xMin) {
+				bounds.xMin = x;
+			}
+			if(x > bounds.xMax) {
+				bounds.xMax = x;
+			}
+			if(y < bounds.yMin) {
+				bounds.yMin = y;
+			}
+			if(y > bounds.yMax) {
+				bounds.yMax = y;
+			}
+			if(zmin < bounds.zMin) {
+				bounds.zMin = zmin;
+			}
+			if(zmin > bounds.zMax) {
+				bounds.zMax = zmin;
+			}
+			if(d < bounds.xMin) {
+				bounds.xMin = d;
+			}
+			if(d > bounds.xMax) {
+				bounds.xMax = d;
+			}
+			if(d < bounds.yMin) {
+				bounds.yMin = d;
+			}
+			if(d > bounds.yMax) {
+				bounds.yMax = d;
+			}
+			if(zmax < bounds.zMin) {
+				bounds.zMin = zmax;
+			}
+			if(zmax > bounds.zMax) {
+				bounds.zMax = zmax;
+			}
+			if(this.emitMode == h3d_parts_GpuEmitMode.Point) {
+				var z1 = -zmax;
+				if(d < bounds.xMin) {
+					bounds.xMin = d;
 				}
-				passes = list;
-			}
-		}
-		this.ctx.uploadParams = $bind(this,this.uploadParams);
-		var p2 = passes;
-		var buf = this.cachedBuffer;
-		var prevShader = null;
-		var drawTri = 0;
-		var drawCalls = 0;
-		var shaderSwitches = 0;
-		if(this.ctx.engine.driver.logEnable) {
-			drawTri = this.ctx.engine.drawTriangles;
-			drawCalls = this.ctx.engine.drawCalls;
-			shaderSwitches = this.ctx.engine.shaderSwitches;
-		}
-		while(p2 != null) {
-			var v = p2.obj.absPos;
-			this.manager.globals.map.h[this.globalModelView_id] = v;
-			if(p2.shader.globals.h.hasOwnProperty(this.globalModelViewInverse_id)) {
-				var v1 = p2.obj.getInvPos();
-				this.manager.globals.map.h[this.globalModelViewInverse_id] = v1;
-			}
-			if(prevShader != p2.shader) {
-				prevShader = p2.shader;
-				this.ctx.engine.selectShader(p2.shader);
-				if(buf == null) {
-					buf = this.cachedBuffer = new h3d_shader_Buffers(p2.shader);
-				} else {
-					var s = p2.shader;
-					buf.vertex.grow(s.vertex);
-					buf.fragment.grow(s.fragment);
+				if(d > bounds.xMax) {
+					bounds.xMax = d;
 				}
-				this.manager.fillGlobals(buf,p2.shader);
-				this.ctx.engine.uploadShaderBuffers(buf,0);
-			}
-			if(!p2.pass.dynamicParameters) {
-				this.manager.fillParams(buf,p2.shader,p2.shaders);
-				this.ctx.engine.uploadShaderBuffers(buf,1);
-				this.ctx.engine.uploadShaderBuffers(buf,2);
-			}
-			this.drawObject(p2);
-			p2 = p2.next;
-		}
-		var _this = this.ctx;
-		_this.cachedPos = 0;
-		_this.drawPass = null;
-		return passes;
-	}
-	,get_cameraView: function() {
-		return this.manager.globals.map.h[this.cameraView_id];
-	}
-	,set_cameraView: function(v) {
-		this.manager.globals.map.h[this.cameraView_id] = v;
-		return v;
-	}
-	,get_cameraNear: function() {
-		return this.manager.globals.map.h[this.cameraNear_id];
-	}
-	,set_cameraNear: function(v) {
-		this.manager.globals.map.h[this.cameraNear_id] = v;
-		return v;
-	}
-	,get_cameraFar: function() {
-		return this.manager.globals.map.h[this.cameraFar_id];
-	}
-	,set_cameraFar: function(v) {
-		this.manager.globals.map.h[this.cameraFar_id] = v;
-		return v;
-	}
-	,get_cameraProj: function() {
-		return this.manager.globals.map.h[this.cameraProj_id];
-	}
-	,set_cameraProj: function(v) {
-		this.manager.globals.map.h[this.cameraProj_id] = v;
-		return v;
-	}
-	,get_cameraPos: function() {
-		return this.manager.globals.map.h[this.cameraPos_id];
-	}
-	,set_cameraPos: function(v) {
-		this.manager.globals.map.h[this.cameraPos_id] = v;
-		return v;
-	}
-	,get_cameraProjDiag: function() {
-		return this.manager.globals.map.h[this.cameraProjDiag_id];
-	}
-	,set_cameraProjDiag: function(v) {
-		this.manager.globals.map.h[this.cameraProjDiag_id] = v;
-		return v;
-	}
-	,get_cameraViewProj: function() {
-		return this.manager.globals.map.h[this.cameraViewProj_id];
-	}
-	,set_cameraViewProj: function(v) {
-		this.manager.globals.map.h[this.cameraViewProj_id] = v;
-		return v;
-	}
-	,get_cameraInverseViewProj: function() {
-		return this.manager.globals.map.h[this.cameraInverseViewProj_id];
-	}
-	,set_cameraInverseViewProj: function(v) {
-		this.manager.globals.map.h[this.cameraInverseViewProj_id] = v;
-		return v;
-	}
-	,get_globalTime: function() {
-		return this.manager.globals.map.h[this.globalTime_id];
-	}
-	,set_globalTime: function(v) {
-		this.manager.globals.map.h[this.globalTime_id] = v;
-		return v;
-	}
-	,get_pixelSize: function() {
-		return this.manager.globals.map.h[this.pixelSize_id];
-	}
-	,set_pixelSize: function(v) {
-		this.manager.globals.map.h[this.pixelSize_id] = v;
-		return v;
-	}
-	,get_globalModelView: function() {
-		return this.manager.globals.map.h[this.globalModelView_id];
-	}
-	,set_globalModelView: function(v) {
-		this.manager.globals.map.h[this.globalModelView_id] = v;
-		return v;
-	}
-	,get_globalModelViewInverse: function() {
-		return this.manager.globals.map.h[this.globalModelViewInverse_id];
-	}
-	,set_globalModelViewInverse: function(v) {
-		this.manager.globals.map.h[this.globalModelViewInverse_id] = v;
-		return v;
-	}
-	,initGlobals: function() {
-		var this1 = hxsl_Globals.allocID("camera.view");
-		this.cameraView_id = this1;
-		var this2 = hxsl_Globals.allocID("camera.zNear");
-		this.cameraNear_id = this2;
-		var this3 = hxsl_Globals.allocID("camera.zFar");
-		this.cameraFar_id = this3;
-		var this4 = hxsl_Globals.allocID("camera.proj");
-		this.cameraProj_id = this4;
-		var this5 = hxsl_Globals.allocID("camera.position");
-		this.cameraPos_id = this5;
-		var this6 = hxsl_Globals.allocID("camera.projDiag");
-		this.cameraProjDiag_id = this6;
-		var this7 = hxsl_Globals.allocID("camera.viewProj");
-		this.cameraViewProj_id = this7;
-		var this8 = hxsl_Globals.allocID("camera.inverseViewProj");
-		this.cameraInverseViewProj_id = this8;
-		var this9 = hxsl_Globals.allocID("global.time");
-		this.globalTime_id = this9;
-		var this10 = hxsl_Globals.allocID("global.pixelSize");
-		this.pixelSize_id = this10;
-		var this11 = hxsl_Globals.allocID("global.modelView");
-		this.globalModelView_id = this11;
-		var this12 = hxsl_Globals.allocID("global.modelViewInverse");
-		this.globalModelViewInverse_id = this12;
-	}
-	,setGlobals: function() {
-		var v = this.ctx.camera.mcam;
-		this.manager.globals.map.h[this.cameraView_id] = v;
-		var v1 = this.ctx.camera.zNear;
-		this.manager.globals.map.h[this.cameraNear_id] = v1;
-		var v2 = this.ctx.camera.zFar;
-		this.manager.globals.map.h[this.cameraFar_id] = v2;
-		var v3 = this.ctx.camera.mproj;
-		this.manager.globals.map.h[this.cameraProj_id] = v3;
-		var v4 = this.ctx.camera.pos;
-		this.manager.globals.map.h[this.cameraPos_id] = v4;
-		var v5 = new h3d_Vector(this.ctx.camera.mproj._11,this.ctx.camera.mproj._22,this.ctx.camera.mproj._33,this.ctx.camera.mproj._44);
-		this.manager.globals.map.h[this.cameraProjDiag_id] = v5;
-		var v6 = this.ctx.camera.m;
-		this.manager.globals.map.h[this.cameraViewProj_id] = v6;
-		var v7 = this.ctx.camera.getInverseViewProj();
-		this.manager.globals.map.h[this.cameraInverseViewProj_id] = v7;
-		var v8 = this.ctx.time;
-		this.manager.globals.map.h[this.globalTime_id] = v8;
-		var v9 = new h3d_Vector(2 / this.ctx.engine.width,2 / this.ctx.engine.height);
-		this.manager.globals.map.h[this.pixelSize_id] = v9;
-	}
-	,__class__: h3d_pass_Default
-});
-var h3d_pass_Depth = function() {
-	this.reduceSize = 0;
-	this.enableSky = false;
-	h3d_pass_Default.call(this);
-	this.priority = 10;
-	this.depthMapId = hxsl_Globals.allocID("depthMap");
-};
-$hxClasses["h3d.pass.Depth"] = h3d_pass_Depth;
-h3d_pass_Depth.__name__ = ["h3d","pass","Depth"];
-h3d_pass_Depth.__super__ = h3d_pass_Default;
-h3d_pass_Depth.prototype = $extend(h3d_pass_Default.prototype,{
-	getOutputs: function() {
-		return [hxsl_Output.PackFloat(hxsl_Output.Value("output.depth"))];
-	}
-	,draw: function(passes) {
-		var texture = this.tcache.allocTarget("depthMap",this.ctx,this.ctx.engine.width >> this.reduceSize,this.ctx.engine.height >> this.reduceSize,true);
-		this.ctx.engine.pushTarget(texture);
-		this.ctx.engine.clear(this.enableSky ? 0 : 16711680,1);
-		passes = h3d_pass_Default.prototype.draw.call(this,passes);
-		this.ctx.engine.popTarget();
-		this.ctx.setGlobalID(this.depthMapId,{ texture : texture});
-		return passes;
-	}
-	,__class__: h3d_pass_Depth
-});
-var h3d_pass__$HardwarePick_FixedColor = function() {
-	this.viewport__ = new h3d_Vector();
-	this.colorID__ = new h3d_Vector();
-	hxsl_Shader.call(this);
-};
-$hxClasses["h3d.pass._HardwarePick.FixedColor"] = h3d_pass__$HardwarePick_FixedColor;
-h3d_pass__$HardwarePick_FixedColor.__name__ = ["h3d","pass","_HardwarePick","FixedColor"];
-h3d_pass__$HardwarePick_FixedColor.__super__ = hxsl_Shader;
-h3d_pass__$HardwarePick_FixedColor.prototype = $extend(hxsl_Shader.prototype,{
-	get_colorID: function() {
-		return this.colorID__;
-	}
-	,set_colorID: function(_v) {
-		return this.colorID__ = _v;
-	}
-	,get_viewport: function() {
-		return this.viewport__;
-	}
-	,set_viewport: function(_v) {
-		return this.viewport__ = _v;
-	}
-	,updateConstants: function(globals) {
-		this.constBits = 0;
-		this.updateConstantsFinal(globals);
-	}
-	,getParamValue: function(index) {
-		switch(index) {
-		case 0:
-			return this.colorID__;
-		case 1:
-			return this.viewport__;
-		default:
-		}
-		return null;
-	}
-	,getParamFloatValue: function(index) {
-		return 0.;
-	}
-	,clone: function() {
-		var s = Object.create(h3d_pass__$HardwarePick_FixedColor.prototype);
-		s.shader = this.shader;
-		s.colorID__ = this.colorID__;
-		s.viewport__ = this.viewport__;
-		return s;
-	}
-	,__class__: h3d_pass__$HardwarePick_FixedColor
-});
-var h3d_pass_HardwarePick = function() {
-	this.pickedIndex = -1;
-	this.fixedColor = new h3d_pass__$HardwarePick_FixedColor();
-	h3d_pass_Default.call(this);
-	this.material = new h3d_mat_Pass("");
-	var _this = this.material;
-	var src = h3d_mat_Blend.One;
-	var dst = h3d_mat_Blend.Zero;
-	_this.set_blendSrc(src);
-	_this.set_blendAlphaSrc(src);
-	_this.set_blendDst(dst);
-	_this.set_blendAlphaDst(dst);
-	this.texOut = new h3d_mat_Texture(3,3,[h3d_mat_TextureFlags.Target]);
-	this.texOut.depthBuffer = new h3d_mat_DepthBuffer(3,3);
-};
-$hxClasses["h3d.pass.HardwarePick"] = h3d_pass_HardwarePick;
-h3d_pass_HardwarePick.__name__ = ["h3d","pass","HardwarePick"];
-h3d_pass_HardwarePick.__super__ = h3d_pass_Default;
-h3d_pass_HardwarePick.prototype = $extend(h3d_pass_Default.prototype,{
-	dispose: function() {
-		h3d_pass_Default.prototype.dispose.call(this);
-		this.texOut.dispose();
-		this.texOut.depthBuffer.dispose();
-	}
-	,getOutputs: function() {
-		return [hxsl_Output.Value("output.colorID")];
-	}
-	,drawObject: function(p) {
-		h3d_pass_Default.prototype.drawObject.call(this,p);
-		var _this = this.fixedColor.colorID__;
-		var c = -16777216 | ++this.colorID;
-		_this.x = (c >> 16 & 255) / 255;
-		_this.y = (c >> 8 & 255) / 255;
-		_this.z = (c & 255) / 255;
-		_this.w = (c >>> 24) / 255;
-	}
-	,nextID: function() {
-		var _this = this.fixedColor.colorID__;
-		var c = -16777216 | ++this.colorID;
-		_this.x = (c >> 16 & 255) / 255;
-		_this.y = (c >> 8 & 255) / 255;
-		_this.z = (c & 255) / 255;
-		_this.w = (c >>> 24) / 255;
-	}
-	,draw: function(passes) {
-		var cur = passes;
-		while(cur != null) {
-			var mask = 1073741760;
-			cur.pass.bits &= ~mask;
-			cur.pass.bits |= this.material.bits & mask;
-			cur = cur.next;
-		}
-		this.colorID = 0;
-		var _this = this.fixedColor.colorID__;
-		var c = -16777216 | ++this.colorID;
-		_this.x = (c >> 16 & 255) / 255;
-		_this.y = (c >> 8 & 255) / 255;
-		_this.z = (c & 255) / 255;
-		_this.w = (c >>> 24) / 255;
-		var _this1 = this.fixedColor.viewport__;
-		_this1.x = -(this.pickX * 2 / this.ctx.engine.width - 1);
-		_this1.y = this.pickY * 2 / this.ctx.engine.height - 1;
-		_this1.z = this.ctx.engine.width / this.texOut.width;
-		_this1.w = this.ctx.engine.height / this.texOut.height;
-		this.ctx.engine.pushTarget(this.texOut);
-		this.ctx.engine.clear(-16777216,1);
-		this.ctx.extraShaders = this.ctx.allocShaderList(this.fixedColor);
-		var passes1 = h3d_pass_Default.prototype.draw.call(this,passes);
-		this.ctx.extraShaders = null;
-		this.ctx.engine.popTarget();
-		var cur1 = passes1;
-		while(cur1 != null) {
-			cur1.pass.set_blendSrc(cur1.pass.blendSrc);
-			cur1.pass.set_blendDst(cur1.pass.blendDst);
-			cur1.pass.set_blendOp(cur1.pass.blendOp);
-			cur1.pass.set_blendAlphaSrc(cur1.pass.blendAlphaSrc);
-			cur1.pass.set_blendAlphaDst(cur1.pass.blendAlphaDst);
-			cur1.pass.set_blendAlphaOp(cur1.pass.blendAlphaOp);
-			cur1.pass.set_colorMask(cur1.pass.colorMask);
-			cur1 = cur1.next;
-		}
-		this.ctx.engine.clear(null,null,0);
-		var pix = this.texOut.capturePixels();
-		this.pickedIndex = (pix.getPixel(pix.width >> 1,pix.height >> 1) & 16777215) - 1;
-		return passes1;
-	}
-	,__class__: h3d_pass_HardwarePick
-});
-var h3d_pass_LightSystem = function() {
-	this.perPixelLighting = true;
-	this.maxLightsPerObject = 6;
-	this.ambientLight = new h3d_Vector(0.5,0.5,0.5);
-	this.ambientShader = new h3d_shader_AmbientLight();
-	this.set_additiveLighting(true);
-};
-$hxClasses["h3d.pass.LightSystem"] = h3d_pass_LightSystem;
-h3d_pass_LightSystem.__name__ = ["h3d","pass","LightSystem"];
-h3d_pass_LightSystem.prototype = {
-	get_additiveLighting: function() {
-		var value = this.ambientShader;
-		return ((value instanceof h3d_shader_AmbientLight) ? value : null).additive__;
-	}
-	,set_additiveLighting: function(b) {
-		var value = this.ambientShader;
-		var _this = (value instanceof h3d_shader_AmbientLight) ? value : null;
-		_this.constModified = true;
-		return _this.additive__ = b;
-	}
-	,initLights: function(ctx) {
-		this.lightCount = 0;
-		this.ctx = ctx;
-		var l = ctx.lights;
-		var prev = null;
-		var frustum = new h3d_col_Frustum(ctx.camera.m);
-		var s = new h3d_col_Sphere();
-		while(l != null) {
-			s.x = l.absPos._41;
-			s.y = l.absPos._42;
-			s.z = l.absPos._43;
-			s.r = l.cullingDistance;
-			if(!frustum.hasSphere(s)) {
-				if(prev == null) {
-					ctx.lights = l.next;
-				} else {
-					prev.next = l.next;
+				if(d < bounds.yMin) {
+					bounds.yMin = d;
 				}
-				l = l.next;
-				continue;
-			}
-			this.lightCount++;
-			l.objectDistance = 0.;
-			prev = l;
-			l = l.next;
-		}
-		if(this.lightCount <= this.maxLightsPerObject) {
-			var list = ctx.lights;
-			var cmp = $bind(this,this.sortLight);
-			var tmp;
-			if(list == null) {
-				tmp = null;
-			} else {
-				var insize = 1;
-				var nmerges;
-				var psize = 0;
-				var qsize = 0;
-				var p;
-				var q;
-				var e;
-				var tail;
-				while(true) {
-					p = list;
-					list = null;
-					tail = null;
-					nmerges = 0;
-					while(p != null) {
-						++nmerges;
-						q = p;
-						psize = 0;
-						var _g1 = 0;
-						var _g = insize;
-						while(_g1 < _g) {
-							var i = _g1++;
-							++psize;
-							q = q.next;
-							if(q == null) {
-								break;
-							}
-						}
-						qsize = insize;
-						while(psize > 0 || qsize > 0 && q != null) {
-							if(psize == 0) {
-								e = q;
-								q = q.next;
-								--qsize;
-							} else if(qsize == 0 || q == null || cmp(p,q) <= 0) {
-								e = p;
-								p = p.next;
-								--psize;
-							} else {
-								e = q;
-								q = q.next;
-								--qsize;
-							}
-							if(tail != null) {
-								tail.next = e;
-							} else {
-								list = e;
-							}
-							tail = e;
-						}
-						p = q;
-					}
-					tail.next = null;
-					if(nmerges <= 1) {
-						break;
-					}
-					insize *= 2;
+				if(d > bounds.yMax) {
+					bounds.yMax = d;
 				}
-				tmp = list;
-			}
-			ctx.lights = tmp;
-		}
-		if(this.shadowLight == null || this.shadowLight.parent == null) {
-			var l1 = ctx.lights;
-			while(l1 != null) {
-				var dl = (l1 instanceof h3d_scene_DirLight) ? l1 : null;
-				if(dl != null) {
-					this.shadowLight = dl;
-					break;
+				if(z1 < bounds.zMin) {
+					bounds.zMin = z1;
 				}
-				l1 = l1.next;
-			}
-		}
-	}
-	,initGlobals: function(globals) {
-		globals.set("global.ambientLight",this.ambientLight);
-		globals.set("global.perPixelLighting",this.perPixelLighting);
-	}
-	,sortLight: function(l1,l2) {
-		var p = l1.priority - l2.priority;
-		if(p != 0) {
-			return -p;
-		}
-		if(l1.objectDistance < l2.objectDistance) {
-			return -1;
-		} else {
-			return 1;
-		}
-	}
-	,computeLight: function(obj,shaders) {
-		var _gthis = this;
-		if(this.lightCount > this.maxLightsPerObject) {
-			var l = this.ctx.lights;
-			while(l != null) {
-				if((obj.flags & 16) != 0) {
-					var dx = l.absPos._41 - this.ctx.camera.target.x;
-					var dy = l.absPos._42 - this.ctx.camera.target.y;
-					var dz = l.absPos._43 - this.ctx.camera.target.z;
-					l.objectDistance = dx * dx + dy * dy + dz * dz;
-				} else {
-					var dx1 = l.absPos._41 - obj.absPos._41;
-					var dy1 = l.absPos._42 - obj.absPos._42;
-					var dz1 = l.absPos._43 - obj.absPos._43;
-					l.objectDistance = dx1 * dx1 + dy1 * dy1 + dz1 * dz1;
+				if(z1 > bounds.zMax) {
+					bounds.zMax = z1;
 				}
-				l = l.next;
-			}
-			var list = this.ctx.lights;
-			var cmp = $bind(this,this.sortLight);
-			var tmp;
-			if(list == null) {
-				tmp = null;
-			} else {
-				var insize = 1;
-				var nmerges;
-				var psize = 0;
-				var qsize = 0;
-				var p;
-				var q;
-				var e;
-				var tail;
-				while(true) {
-					p = list;
-					list = null;
-					tail = null;
-					nmerges = 0;
-					while(p != null) {
-						++nmerges;
-						q = p;
-						psize = 0;
-						var _g1 = 0;
-						var _g = insize;
-						while(_g1 < _g) {
-							var i = _g1++;
-							++psize;
-							q = q.next;
-							if(q == null) {
-								break;
-							}
-						}
-						qsize = insize;
-						while(psize > 0 || qsize > 0 && q != null) {
-							if(psize == 0) {
-								e = q;
-								q = q.next;
-								--qsize;
-							} else if(qsize == 0 || q == null || cmp(p,q) <= 0) {
-								e = p;
-								p = p.next;
-								--psize;
-							} else {
-								e = q;
-								q = q.next;
-								--qsize;
-							}
-							if(tail != null) {
-								tail.next = e;
-							} else {
-								list = e;
-							}
-							tail = e;
-						}
-						p = q;
-					}
-					tail.next = null;
-					if(nmerges <= 1) {
-						break;
-					}
-					insize *= 2;
+				var z2 = -zmin;
+				if(d < bounds.xMin) {
+					bounds.xMin = d;
 				}
-				tmp = list;
-			}
-			this.ctx.lights = tmp;
-		}
-		shaders = _gthis.ctx.allocShaderList(this.ambientShader,shaders);
-		var l1 = this.ctx.lights;
-		var i1 = 0;
-		while(l1 != null) {
-			if(i1++ == this.maxLightsPerObject) {
-				break;
-			}
-			shaders = _gthis.ctx.allocShaderList(l1.shader,shaders);
-			l1 = l1.next;
-		}
-		return shaders;
-	}
-	,__class__: h3d_pass_LightSystem
-};
-var h3d_pass_Normal = function() {
-	h3d_pass_Default.call(this);
-	this.priority = 10;
-	this.normalMapId = hxsl_Globals.allocID("normalMap");
-};
-$hxClasses["h3d.pass.Normal"] = h3d_pass_Normal;
-h3d_pass_Normal.__name__ = ["h3d","pass","Normal"];
-h3d_pass_Normal.__super__ = h3d_pass_Default;
-h3d_pass_Normal.prototype = $extend(h3d_pass_Default.prototype,{
-	getOutputs: function() {
-		return [hxsl_Output.PackNormal(hxsl_Output.Value("output.normal"))];
-	}
-	,draw: function(passes) {
-		var texture = this.tcache.allocTarget("normalMal",this.ctx,this.ctx.engine.width,this.ctx.engine.height);
-		this.ctx.engine.pushTarget(texture);
-		this.ctx.engine.clear(8421504,1);
-		passes = h3d_pass_Default.prototype.draw.call(this,passes);
-		this.ctx.engine.popTarget();
-		this.ctx.setGlobalID(this.normalMapId,texture);
-		return passes;
-	}
-	,__class__: h3d_pass_Normal
-});
-var h3d_pass_Object = function() {
-	this.texture = 0;
-};
-$hxClasses["h3d.pass.Object"] = h3d_pass_Object;
-h3d_pass_Object.__name__ = ["h3d","pass","Object"];
-h3d_pass_Object.prototype = {
-	__class__: h3d_pass_Object
-};
-var h3d_pass_ShaderManager = function(output) {
-	this.shaderCache = hxsl_Cache.get();
-	this.globals = new hxsl_Globals();
-	this.currentOutput = new hxsl_ShaderList(null);
-	this.setOutput(output);
-};
-$hxClasses["h3d.pass.ShaderManager"] = h3d_pass_ShaderManager;
-h3d_pass_ShaderManager.__name__ = ["h3d","pass","ShaderManager"];
-h3d_pass_ShaderManager.prototype = {
-	setOutput: function(output) {
-		if(output == null) {
-			output = [hxsl_Output.Value("output.color")];
-		}
-		this.currentOutput.s = this.shaderCache.getLinkShader(output);
-	}
-	,fillRec: function(v,type,out,pos) {
-		switch(type[1]) {
-		case 3:
-			out[pos] = v;
-			return 1;
-		case 5:
-			var n = type[2];
-			var v1 = v;
-			out[pos++] = v1.x;
-			out[pos++] = v1.y;
-			switch(n) {
-			case 3:
-				out[pos++] = v1.z;
-				break;
-			case 4:
-				out[pos++] = v1.z;
-				out[pos++] = v1.w;
-				break;
-			}
-			return n;
-		case 6:
-			var m = v;
-			out[pos++] = m._11;
-			out[pos++] = m._21;
-			out[pos++] = m._31;
-			out[pos++] = 0;
-			out[pos++] = m._12;
-			out[pos++] = m._22;
-			out[pos++] = m._32;
-			out[pos++] = 0;
-			out[pos++] = m._13;
-			out[pos++] = m._23;
-			out[pos++] = m._33;
-			out[pos++] = 0;
-			return 12;
-		case 7:
-			var m1 = v;
-			out[pos++] = m1._11;
-			out[pos++] = m1._21;
-			out[pos++] = m1._31;
-			out[pos++] = m1._41;
-			out[pos++] = m1._12;
-			out[pos++] = m1._22;
-			out[pos++] = m1._32;
-			out[pos++] = m1._42;
-			out[pos++] = m1._13;
-			out[pos++] = m1._23;
-			out[pos++] = m1._33;
-			out[pos++] = m1._43;
-			out[pos++] = m1._14;
-			out[pos++] = m1._24;
-			out[pos++] = m1._34;
-			out[pos++] = m1._44;
-			return 16;
-		case 8:
-			var m2 = v;
-			out[pos++] = m2._11;
-			out[pos++] = m2._21;
-			out[pos++] = m2._31;
-			out[pos++] = m2._41;
-			out[pos++] = m2._12;
-			out[pos++] = m2._22;
-			out[pos++] = m2._32;
-			out[pos++] = m2._42;
-			out[pos++] = m2._13;
-			out[pos++] = m2._23;
-			out[pos++] = m2._33;
-			out[pos++] = m2._43;
-			return 12;
-		case 12:
-			var vl = type[2];
-			var tot = 0;
-			var _g = 0;
-			while(_g < vl.length) {
-				var vv = vl[_g];
-				++_g;
-				tot += this.fillRec(Reflect.field(v,vv.name),vv.type,out,pos + tot);
-			}
-			return tot;
-		case 14:
-			switch(type[2][1]) {
-			case 3:
-				if(type[3][1] == 0) {
-					var len = type[3][2];
-					var v2 = v;
-					var size = 0;
-					var count = v2.length < len ? v2.length : len;
-					var _g1 = 0;
-					var _g2 = count;
-					while(_g1 < _g2) {
-						var i = _g1++;
-						out[pos++] = v2[i];
-					}
-					return len;
-				} else {
-					throw new js__$Boot_HaxeError("assert " + Std.string(type));
+				if(d > bounds.xMax) {
+					bounds.xMax = d;
 				}
-				break;
-			case 5:
-				if(type[2][2] == 4) {
-					if(type[2][3][1] == 1) {
-						if(type[3][1] == 0) {
-							var len1 = type[3][2];
-							var v3 = v;
-							var _g11 = 0;
-							var _g3 = len1;
-							while(_g11 < _g3) {
-								var i1 = _g11++;
-								var n1 = v3[i1];
-								if(n1 == null) {
-									break;
-								}
-								out[pos++] = n1.x;
-								out[pos++] = n1.y;
-								out[pos++] = n1.z;
-								out[pos++] = n1.w;
-							}
-							return len1 * 4;
-						} else {
-							throw new js__$Boot_HaxeError("assert " + Std.string(type));
-						}
-					} else if(type[3][1] == 0) {
-						var len2 = type[3][2];
-						var t = type[2];
-						var v4 = v;
-						var size1 = 0;
-						var _g12 = 0;
-						var _g4 = len2;
-						while(_g12 < _g4) {
-							var i2 = _g12++;
-							var n2 = v4[i2];
-							if(n2 == null) {
-								break;
-							}
-							size1 = this.fillRec(n2,t,out,pos);
-							pos += size1;
-						}
-						return len2 * size1;
-					} else {
-						throw new js__$Boot_HaxeError("assert " + Std.string(type));
-					}
-				} else if(type[3][1] == 0) {
-					var len3 = type[3][2];
-					var t1 = type[2];
-					var v5 = v;
-					var size2 = 0;
-					var _g13 = 0;
-					var _g5 = len3;
-					while(_g13 < _g5) {
-						var i3 = _g13++;
-						var n3 = v5[i3];
-						if(n3 == null) {
-							break;
-						}
-						size2 = this.fillRec(n3,t1,out,pos);
-						pos += size2;
-					}
-					return len3 * size2;
-				} else {
-					throw new js__$Boot_HaxeError("assert " + Std.string(type));
+				if(d < bounds.yMin) {
+					bounds.yMin = d;
 				}
-				break;
-			case 8:
-				if(type[3][1] == 0) {
-					var len4 = type[3][2];
-					var v6 = v;
-					var _g14 = 0;
-					var _g6 = len4;
-					while(_g14 < _g6) {
-						var i4 = _g14++;
-						var m3 = v6[i4];
-						if(m3 == null) {
-							break;
-						}
-						out[pos++] = m3._11;
-						out[pos++] = m3._21;
-						out[pos++] = m3._31;
-						out[pos++] = m3._41;
-						out[pos++] = m3._12;
-						out[pos++] = m3._22;
-						out[pos++] = m3._32;
-						out[pos++] = m3._42;
-						out[pos++] = m3._13;
-						out[pos++] = m3._23;
-						out[pos++] = m3._33;
-						out[pos++] = m3._43;
-					}
-					return len4 * 12;
-				} else {
-					throw new js__$Boot_HaxeError("assert " + Std.string(type));
+				if(d > bounds.yMax) {
+					bounds.yMax = d;
 				}
-				break;
-			default:
-				if(type[3][1] == 0) {
-					var len5 = type[3][2];
-					var t2 = type[2];
-					var v7 = v;
-					var size3 = 0;
-					var _g15 = 0;
-					var _g7 = len5;
-					while(_g15 < _g7) {
-						var i5 = _g15++;
-						var n4 = v7[i5];
-						if(n4 == null) {
-							break;
-						}
-						size3 = this.fillRec(n4,t2,out,pos);
-						pos += size3;
-					}
-					return len5 * size3;
-				} else {
-					throw new js__$Boot_HaxeError("assert " + Std.string(type));
+				if(z2 < bounds.zMin) {
+					bounds.zMin = z2;
+				}
+				if(z2 > bounds.zMax) {
+					bounds.zMax = z2;
 				}
 			}
 			break;
-		default:
-			throw new js__$Boot_HaxeError("assert " + Std.string(type));
+		case 2:case 3:case 4:
+			var d1 = speed * (1 + this.speedIncr * life) * life;
+			var max = (1 + this.emitDist) * 0.5;
+			if(max < 0) {
+				max = 0;
+			}
+			var _this = this.ebounds;
+			var c_x = (_this.xMin + _this.xMax) * 0.5;
+			var c_y = (_this.yMin + _this.yMax) * 0.5;
+			var c_z = (_this.zMin + _this.zMax) * 0.5;
+			var _this1 = this.ebounds;
+			var size_x = _this1.xMax - _this1.xMin;
+			var size_y = _this1.yMax - _this1.yMin;
+			var size_z = _this1.zMax - _this1.zMin;
+			var dx = size_x * max + d1;
+			var dy = size_y * max + d1;
+			var dz = size_z * max + d1;
+			var x1 = c_x - dx;
+			var y1 = c_y - dy;
+			var z3 = c_z - dz;
+			if(x1 < bounds.xMin) {
+				bounds.xMin = x1;
+			}
+			if(x1 > bounds.xMax) {
+				bounds.xMax = x1;
+			}
+			if(y1 < bounds.yMin) {
+				bounds.yMin = y1;
+			}
+			if(y1 > bounds.yMax) {
+				bounds.yMax = y1;
+			}
+			if(z3 < bounds.zMin) {
+				bounds.zMin = z3;
+			}
+			if(z3 > bounds.zMax) {
+				bounds.zMax = z3;
+			}
+			var x2 = c_x + dx;
+			var y2 = c_y + dy;
+			var z4 = c_z + dz;
+			if(x2 < bounds.xMin) {
+				bounds.xMin = x2;
+			}
+			if(x2 > bounds.xMax) {
+				bounds.xMax = x2;
+			}
+			if(y2 < bounds.yMin) {
+				bounds.yMin = y2;
+			}
+			if(y2 > bounds.yMax) {
+				bounds.yMax = y2;
+			}
+			if(z4 < bounds.zMin) {
+				bounds.zMin = z4;
+			}
+			if(z4 > bounds.zMax) {
+				bounds.zMax = z4;
+			}
+			break;
 		}
 	}
-	,getParamValue: function(p,shaders,opt) {
-		if(opt == null) {
-			opt = false;
-		}
-		if(p.perObjectGlobal != null) {
-			var v = this.globals.map.h[p.perObjectGlobal.gid];
-			if(v == null) {
-				throw new js__$Boot_HaxeError("Missing global value " + p.perObjectGlobal.path);
+	,emitPart: function(rnd,pt,absPos) {
+		var g = this;
+		rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+		rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+		var size = g.size * (1 + ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0 * g.sizeRand);
+		rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+		rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+		var rot = ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0 * 3.14159265358979323 * g.rotInit;
+		var vsize = g.sizeIncr;
+		rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+		rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+		var vrot = g.rotSpeed * (1 + (((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0 * g.rotSpeedRand);
+		rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+		rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+		var vrot1 = vrot * (((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0 < 0 ? -1 : 1);
+		rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+		rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+		var life = g.life * (1 + ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0 * g.lifeRand);
+		rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+		rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+		var time = -((((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0) * life * (1 - g.emitSync) - g.emitDelay;
+		var p_x = 0.;
+		var p_y = 0.;
+		var p_z = 0.;
+		var v_x = 0.;
+		var v_y = 0.;
+		var v_z = 0.;
+		var _g = g.emitMode;
+		switch(_g[1]) {
+		case 0:
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			v_x = ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0;
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			v_y = ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0;
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			v_z = ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0;
+			var k = v_x * v_x + v_y * v_y + v_z * v_z;
+			k = 1. / Math.sqrt(k);
+			v_x *= k;
+			v_y *= k;
+			v_z *= k;
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			var r = g.emitStartDist + g.emitDist * ((((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0);
+			p_x = v_x * r;
+			p_y = v_y * r;
+			p_z = v_z * r;
+			break;
+		case 1:
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			var theta = (((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0 * 3.14159265358979323 * 2;
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			var phi = g.emitAngle * (((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0);
+			if(g.emitAngle < 0) {
+				phi += 3.14159265358979323;
 			}
-			var _g = p.type;
-			if(_g[1] == 15) {
-				return v.texture;
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			var r1 = g.emitStartDist + g.emitDist * ((((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0);
+			v_x = Math.sin(phi) * Math.cos(theta);
+			v_y = Math.sin(phi) * Math.sin(theta);
+			v_z = Math.cos(phi);
+			p_x = v_x * r1;
+			p_y = v_y * r1;
+			p_z = v_z * r1;
+			break;
+		case 2:case 3:case 4:
+			var max = 1 + g.emitDist;
+			if(max < 0) {
+				max = 0;
 			}
-			return v;
-		}
-		var si = shaders;
-		var n = p.instance;
-		while(--n > 0) si = si.next;
-		var v1 = si.s.getParamValue(p.index);
-		if(v1 == null && !opt) {
-			throw new js__$Boot_HaxeError("Missing param value " + Std.string(si.s) + "." + p.name);
-		}
-		return v1;
-	}
-	,fillGlobals: function(buf,s) {
-		var _gthis = this;
-		var buf1 = buf.vertex;
-		var s1 = s.vertex;
-		var g = s1.globals;
-		while(g != null) {
-			var v = _gthis.globals.map.h[g.gid];
-			if(v == null) {
-				if(g.path == "__consts__") {
-					_gthis.fillRec(s1.consts,g.type,buf1.globals,g.pos);
-					g = g.next;
-					continue;
+			if(g.emitStartDist > 0) {
+				var min = g.emitStartDist * 0.5;
+				if(min > 0.49) {
+					min = 0.49;
 				}
-				throw new js__$Boot_HaxeError("Missing global value " + g.path);
-			}
-			_gthis.fillRec(v,g.type,buf1.globals,g.pos);
-			g = g.next;
-		}
-		var buf2 = buf.fragment;
-		var s2 = s.fragment;
-		var g1 = s2.globals;
-		while(g1 != null) {
-			var v1 = _gthis.globals.map.h[g1.gid];
-			if(v1 == null) {
-				if(g1.path == "__consts__") {
-					_gthis.fillRec(s2.consts,g1.type,buf2.globals,g1.pos);
-					g1 = g1.next;
-					continue;
+				while(true) {
+					rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+					rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+					p_x = (((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0 - 0.5;
+					rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+					rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+					p_y = (((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0 - 0.5;
+					rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+					rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+					p_z = (((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0 - 0.5;
+					if(!(p_x > -min && p_x < min && (p_y > -min && p_y < min) && (p_z > -min && p_z < min))) {
+						break;
+					}
 				}
-				throw new js__$Boot_HaxeError("Missing global value " + g1.path);
-			}
-			_gthis.fillRec(v1,g1.type,buf2.globals,g1.pos);
-			g1 = g1.next;
-		}
-	}
-	,fillParams: function(buf,s,shaders) {
-		var _gthis = this;
-		var buf1 = buf.vertex;
-		var s1 = s.vertex;
-		var p = s1.params;
-		while(p != null) {
-			if(p.type == hxsl_Type.TFloat && p.perObjectGlobal == null) {
-				var si = shaders;
-				var n = p.instance;
-				while(--n > 0) si = si.next;
-				buf1.params[p.pos] = si.s.getParamFloatValue(p.index);
-				p = p.next;
-				continue;
-			}
-			var v;
-			if(p.perObjectGlobal != null) {
-				var v1 = _gthis.globals.map.h[p.perObjectGlobal.gid];
-				if(v1 == null) {
-					throw new js__$Boot_HaxeError("Missing global value " + p.perObjectGlobal.path);
-				}
-				var _g = p.type;
-				v = _g[1] == 15 ? v1.texture : v1;
+				p_x *= max;
+				p_y *= max;
+				p_z *= max;
 			} else {
-				var si1 = shaders;
-				var n1 = p.instance;
-				while(--n1 > 0) si1 = si1.next;
-				var v2 = si1.s.getParamValue(p.index);
-				if(v2 == null) {
-					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si1.s) + "." + p.name);
-				}
-				v = v2;
+				rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+				rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+				p_x = ((((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0 - 0.5) * max;
+				rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+				rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+				p_y = ((((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0 - 0.5) * max;
+				rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+				rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+				p_z = ((((rnd.seed << 16) + rnd.seed2 | 0) & 1073741823) % 10007 / 10007.0 - 0.5) * max;
 			}
-			_gthis.fillRec(v,p.type,buf1.params,p.pos);
-			p = p.next;
+			var _this = this.ebounds;
+			var c_x = (_this.xMin + _this.xMax) * 0.5;
+			var c_y = (_this.yMin + _this.yMax) * 0.5;
+			var c_z = (_this.zMin + _this.zMax) * 0.5;
+			var _this1 = this.ebounds;
+			p_x = p_x * (_this1.xMax - _this1.xMin) + c_x;
+			var _this2 = this.ebounds;
+			p_y = p_y * (_this2.xMax - _this2.xMin) + c_y;
+			var _this3 = this.ebounds;
+			p_z = p_z * (_this3.zMax - _this3.zMin) + c_z;
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			v_x = ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0;
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			v_y = ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0;
+			rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+			rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+			v_z = ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0;
+			var k1 = v_x * v_x + v_y * v_y + v_z * v_z;
+			k1 = 1. / Math.sqrt(k1);
+			v_x *= k1;
+			v_y *= k1;
+			v_z *= k1;
+			break;
 		}
-		var tid = 0;
-		var p1 = s1.textures2D;
-		while(p1 != null) {
-			var t;
-			if(p1.perObjectGlobal != null) {
-				var v3 = _gthis.globals.map.h[p1.perObjectGlobal.gid];
-				if(v3 == null) {
-					throw new js__$Boot_HaxeError("Missing global value " + p1.perObjectGlobal.path);
-				}
-				var _g1 = p1.type;
-				t = _g1[1] == 15 ? v3.texture : v3;
-			} else {
-				var si2 = shaders;
-				var n2 = p1.instance;
-				while(--n2 > 0) si2 = si2.next;
-				var v4 = si2.s.getParamValue(p1.index);
-				if(v4 == null) {
-					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si2.s) + "." + p1.name);
-				}
-				t = v4;
-			}
-			if(t == null) {
-				t = h3d_mat_Texture.fromColor(16711935);
-			}
-			buf1.tex[tid++] = t;
-			p1 = p1.next;
-		}
-		var p2 = s1.texturesCube;
-		while(p2 != null) {
-			var t1;
-			if(p2.perObjectGlobal != null) {
-				var v5 = _gthis.globals.map.h[p2.perObjectGlobal.gid];
-				if(v5 == null) {
-					throw new js__$Boot_HaxeError("Missing global value " + p2.perObjectGlobal.path);
-				}
-				var _g2 = p2.type;
-				t1 = _g2[1] == 15 ? v5.texture : v5;
-			} else {
-				var si3 = shaders;
-				var n3 = p2.instance;
-				while(--n3 > 0) si3 = si3.next;
-				var v6 = si3.s.getParamValue(p2.index);
-				if(v6 == null) {
-					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si3.s) + "." + p2.name);
-				}
-				t1 = v6;
-			}
-			if(t1 == null) {
-				t1 = h3d_mat_Texture.fromColor(16711935);
-			}
-			buf1.tex[tid++] = t1;
-			p2 = p2.next;
-		}
-		var buf2 = buf.fragment;
-		var s2 = s.fragment;
-		var p3 = s2.params;
-		while(p3 != null) {
-			if(p3.type == hxsl_Type.TFloat && p3.perObjectGlobal == null) {
-				var si4 = shaders;
-				var n4 = p3.instance;
-				while(--n4 > 0) si4 = si4.next;
-				buf2.params[p3.pos] = si4.s.getParamFloatValue(p3.index);
-				p3 = p3.next;
-				continue;
-			}
-			var v7;
-			if(p3.perObjectGlobal != null) {
-				var v8 = _gthis.globals.map.h[p3.perObjectGlobal.gid];
-				if(v8 == null) {
-					throw new js__$Boot_HaxeError("Missing global value " + p3.perObjectGlobal.path);
-				}
-				var _g3 = p3.type;
-				v7 = _g3[1] == 15 ? v8.texture : v8;
-			} else {
-				var si5 = shaders;
-				var n5 = p3.instance;
-				while(--n5 > 0) si5 = si5.next;
-				var v9 = si5.s.getParamValue(p3.index);
-				if(v9 == null) {
-					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si5.s) + "." + p3.name);
-				}
-				v7 = v9;
-			}
-			_gthis.fillRec(v7,p3.type,buf2.params,p3.pos);
-			p3 = p3.next;
-		}
-		var tid1 = 0;
-		var p4 = s2.textures2D;
-		while(p4 != null) {
-			var t2;
-			if(p4.perObjectGlobal != null) {
-				var v10 = _gthis.globals.map.h[p4.perObjectGlobal.gid];
-				if(v10 == null) {
-					throw new js__$Boot_HaxeError("Missing global value " + p4.perObjectGlobal.path);
-				}
-				var _g4 = p4.type;
-				t2 = _g4[1] == 15 ? v10.texture : v10;
-			} else {
-				var si6 = shaders;
-				var n6 = p4.instance;
-				while(--n6 > 0) si6 = si6.next;
-				var v11 = si6.s.getParamValue(p4.index);
-				if(v11 == null) {
-					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si6.s) + "." + p4.name);
-				}
-				t2 = v11;
-			}
-			if(t2 == null) {
-				t2 = h3d_mat_Texture.fromColor(16711935);
-			}
-			buf2.tex[tid1++] = t2;
-			p4 = p4.next;
-		}
-		var p5 = s2.texturesCube;
-		while(p5 != null) {
-			var t3;
-			if(p5.perObjectGlobal != null) {
-				var v12 = _gthis.globals.map.h[p5.perObjectGlobal.gid];
-				if(v12 == null) {
-					throw new js__$Boot_HaxeError("Missing global value " + p5.perObjectGlobal.path);
-				}
-				var _g5 = p5.type;
-				t3 = _g5[1] == 15 ? v12.texture : v12;
-			} else {
-				var si7 = shaders;
-				var n7 = p5.instance;
-				while(--n7 > 0) si7 = si7.next;
-				var v13 = si7.s.getParamValue(p5.index);
-				if(v13 == null) {
-					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si7.s) + "." + p5.name);
-				}
-				t3 = v13;
-			}
-			if(t3 == null) {
-				t3 = h3d_mat_Texture.fromColor(16711935);
-			}
-			buf2.tex[tid1++] = t3;
-			p5 = p5.next;
-		}
-	}
-	,compileShaders: function(shaders) {
-		this.globals.maxChannels = 0;
-		var _g_l = shaders;
-		var _g_last = null;
-		while(_g_l != _g_last) {
-			var s = _g_l.s;
-			_g_l = _g_l.next;
-			var s1 = s;
-			s1.updateConstants(this.globals);
-		}
-		this.currentOutput.next = shaders;
-		var s2 = this.shaderCache.link(this.currentOutput);
-		this.currentOutput.next = null;
-		return s2;
-	}
-	,__class__: h3d_pass_ShaderManager
-};
-var h3d_pass_ShadowMap = function(size) {
-	this.bias = 0.01;
-	this.power = 10.0;
-	h3d_pass_Default.call(this);
-	this.set_size(size);
-	this.priority = 9;
-	this.lightCamera = new h3d_Camera();
-	this.lightCamera.orthoBounds = new h3d_col_Bounds();
-	this.shadowMapId = hxsl_Globals.allocID("shadow.map");
-	this.shadowProjId = hxsl_Globals.allocID("shadow.proj");
-	this.shadowColorId = hxsl_Globals.allocID("shadow.color");
-	this.shadowPowerId = hxsl_Globals.allocID("shadow.power");
-	this.shadowBiasId = hxsl_Globals.allocID("shadow.bias");
-	this.color = new h3d_Vector();
-	this.blur = new h3d_pass_Blur(2,3);
-	this.border = new h3d_pass_Border(size,size);
-	this.customDepth = h3d_Engine.CURRENT.driver.hasFeature(h3d_impl_Feature.AllocDepthBuffer);
-	if(!this.customDepth) {
-		this.depth = h3d_mat_DepthBuffer.getDefault();
-	}
-};
-$hxClasses["h3d.pass.ShadowMap"] = h3d_pass_ShadowMap;
-h3d_pass_ShadowMap.__name__ = ["h3d","pass","ShadowMap"];
-h3d_pass_ShadowMap.__super__ = h3d_pass_Default;
-h3d_pass_ShadowMap.prototype = $extend(h3d_pass_Default.prototype,{
-	set_size: function(s) {
-		if(this.border != null && this.size != s) {
-			this.border.dispose();
-			this.border = new h3d_pass_Border(s,s);
-		}
-		return this.size = s;
-	}
-	,dispose: function() {
-		h3d_pass_Default.prototype.dispose.call(this);
-		this.blur.dispose();
-		if(this.border != null) {
-			this.border.dispose();
-		}
-	}
-	,calcShadowBounds: function(camera) {
-		var bounds = camera.orthoBounds;
-		var mtmp = new h3d_Matrix();
-		this.ctx.scene.iterVisibleMeshes(function(m) {
-			if(m.primitive == null || !m.material.castShadows) {
-				return;
-			}
-			var b = m.primitive.getBounds();
-			if(b.xMin > b.xMax) {
-				return;
-			}
-			var tmp = m.getAbsPos();
-			mtmp.multiply3x4(tmp,camera.mcam);
-			var p_x = b.xMin;
-			var p_y = b.yMin;
-			var p_z = b.zMin;
-			var px = p_x * mtmp._11 + p_y * mtmp._21 + p_z * mtmp._31 + mtmp._41;
-			var py = p_x * mtmp._12 + p_y * mtmp._22 + p_z * mtmp._32 + mtmp._42;
-			var pz = p_x * mtmp._13 + p_y * mtmp._23 + p_z * mtmp._33 + mtmp._43;
+		rnd.seed = 36969 * (rnd.seed & 65535) + (rnd.seed >> 16);
+		rnd.seed2 = 18000 * (rnd.seed2 & 65535) + (rnd.seed2 >> 16);
+		var speed = g.speed * (1 + ((rnd.seed << 16) + rnd.seed2 | 0) % 10007 / 10007.0 * g.speedRand);
+		v_x *= speed;
+		v_y *= speed;
+		v_z *= speed;
+		if(absPos != null) {
+			var px = p_x * absPos._11 + p_y * absPos._21 + p_z * absPos._31 + absPos._41;
+			var py = p_x * absPos._12 + p_y * absPos._22 + p_z * absPos._32 + absPos._42;
+			var pz = p_x * absPos._13 + p_y * absPos._23 + p_z * absPos._33 + absPos._43;
 			p_x = px;
 			p_y = py;
 			p_z = pz;
-			if(p_x < bounds.xMin) {
-				bounds.xMin = p_x;
-			}
-			if(p_x > bounds.xMax) {
-				bounds.xMax = p_x;
-			}
-			if(p_y < bounds.yMin) {
-				bounds.yMin = p_y;
-			}
-			if(p_y > bounds.yMax) {
-				bounds.yMax = p_y;
-			}
-			if(p_z < bounds.zMin) {
-				bounds.zMin = p_z;
-			}
-			if(p_z > bounds.zMax) {
-				bounds.zMax = p_z;
-			}
-			var p_x1 = b.xMin;
-			var p_y1 = b.yMin;
-			var p_z1 = b.zMax;
-			var px1 = p_x1 * mtmp._11 + p_y1 * mtmp._21 + p_z1 * mtmp._31 + mtmp._41;
-			var py1 = p_x1 * mtmp._12 + p_y1 * mtmp._22 + p_z1 * mtmp._32 + mtmp._42;
-			var pz1 = p_x1 * mtmp._13 + p_y1 * mtmp._23 + p_z1 * mtmp._33 + mtmp._43;
-			p_x1 = px1;
-			p_y1 = py1;
-			p_z1 = pz1;
-			if(p_x1 < bounds.xMin) {
-				bounds.xMin = p_x1;
-			}
-			if(p_x1 > bounds.xMax) {
-				bounds.xMax = p_x1;
-			}
-			if(p_y1 < bounds.yMin) {
-				bounds.yMin = p_y1;
-			}
-			if(p_y1 > bounds.yMax) {
-				bounds.yMax = p_y1;
-			}
-			if(p_z1 < bounds.zMin) {
-				bounds.zMin = p_z1;
-			}
-			if(p_z1 > bounds.zMax) {
-				bounds.zMax = p_z1;
-			}
-			var p_x2 = b.xMin;
-			var p_y2 = b.yMax;
-			var p_z2 = b.zMin;
-			var px2 = p_x2 * mtmp._11 + p_y2 * mtmp._21 + p_z2 * mtmp._31 + mtmp._41;
-			var py2 = p_x2 * mtmp._12 + p_y2 * mtmp._22 + p_z2 * mtmp._32 + mtmp._42;
-			var pz2 = p_x2 * mtmp._13 + p_y2 * mtmp._23 + p_z2 * mtmp._33 + mtmp._43;
-			p_x2 = px2;
-			p_y2 = py2;
-			p_z2 = pz2;
-			if(p_x2 < bounds.xMin) {
-				bounds.xMin = p_x2;
-			}
-			if(p_x2 > bounds.xMax) {
-				bounds.xMax = p_x2;
-			}
-			if(p_y2 < bounds.yMin) {
-				bounds.yMin = p_y2;
-			}
-			if(p_y2 > bounds.yMax) {
-				bounds.yMax = p_y2;
-			}
-			if(p_z2 < bounds.zMin) {
-				bounds.zMin = p_z2;
-			}
-			if(p_z2 > bounds.zMax) {
-				bounds.zMax = p_z2;
-			}
-			var p_x3 = b.xMin;
-			var p_y3 = b.yMax;
-			var p_z3 = b.zMax;
-			var px3 = p_x3 * mtmp._11 + p_y3 * mtmp._21 + p_z3 * mtmp._31 + mtmp._41;
-			var py3 = p_x3 * mtmp._12 + p_y3 * mtmp._22 + p_z3 * mtmp._32 + mtmp._42;
-			var pz3 = p_x3 * mtmp._13 + p_y3 * mtmp._23 + p_z3 * mtmp._33 + mtmp._43;
-			p_x3 = px3;
-			p_y3 = py3;
-			p_z3 = pz3;
-			if(p_x3 < bounds.xMin) {
-				bounds.xMin = p_x3;
-			}
-			if(p_x3 > bounds.xMax) {
-				bounds.xMax = p_x3;
-			}
-			if(p_y3 < bounds.yMin) {
-				bounds.yMin = p_y3;
-			}
-			if(p_y3 > bounds.yMax) {
-				bounds.yMax = p_y3;
-			}
-			if(p_z3 < bounds.zMin) {
-				bounds.zMin = p_z3;
-			}
-			if(p_z3 > bounds.zMax) {
-				bounds.zMax = p_z3;
-			}
-			var p_x4 = b.xMax;
-			var p_y4 = b.yMin;
-			var p_z4 = b.zMin;
-			var px4 = p_x4 * mtmp._11 + p_y4 * mtmp._21 + p_z4 * mtmp._31 + mtmp._41;
-			var py4 = p_x4 * mtmp._12 + p_y4 * mtmp._22 + p_z4 * mtmp._32 + mtmp._42;
-			var pz4 = p_x4 * mtmp._13 + p_y4 * mtmp._23 + p_z4 * mtmp._33 + mtmp._43;
-			p_x4 = px4;
-			p_y4 = py4;
-			p_z4 = pz4;
-			if(p_x4 < bounds.xMin) {
-				bounds.xMin = p_x4;
-			}
-			if(p_x4 > bounds.xMax) {
-				bounds.xMax = p_x4;
-			}
-			if(p_y4 < bounds.yMin) {
-				bounds.yMin = p_y4;
-			}
-			if(p_y4 > bounds.yMax) {
-				bounds.yMax = p_y4;
-			}
-			if(p_z4 < bounds.zMin) {
-				bounds.zMin = p_z4;
-			}
-			if(p_z4 > bounds.zMax) {
-				bounds.zMax = p_z4;
-			}
-			var p_x5 = b.xMax;
-			var p_y5 = b.yMin;
-			var p_z5 = b.zMax;
-			var px5 = p_x5 * mtmp._11 + p_y5 * mtmp._21 + p_z5 * mtmp._31 + mtmp._41;
-			var py5 = p_x5 * mtmp._12 + p_y5 * mtmp._22 + p_z5 * mtmp._32 + mtmp._42;
-			var pz5 = p_x5 * mtmp._13 + p_y5 * mtmp._23 + p_z5 * mtmp._33 + mtmp._43;
-			p_x5 = px5;
-			p_y5 = py5;
-			p_z5 = pz5;
-			if(p_x5 < bounds.xMin) {
-				bounds.xMin = p_x5;
-			}
-			if(p_x5 > bounds.xMax) {
-				bounds.xMax = p_x5;
-			}
-			if(p_y5 < bounds.yMin) {
-				bounds.yMin = p_y5;
-			}
-			if(p_y5 > bounds.yMax) {
-				bounds.yMax = p_y5;
-			}
-			if(p_z5 < bounds.zMin) {
-				bounds.zMin = p_z5;
-			}
-			if(p_z5 > bounds.zMax) {
-				bounds.zMax = p_z5;
-			}
-			var p_x6 = b.xMax;
-			var p_y6 = b.yMax;
-			var p_z6 = b.zMin;
-			var px6 = p_x6 * mtmp._11 + p_y6 * mtmp._21 + p_z6 * mtmp._31 + mtmp._41;
-			var py6 = p_x6 * mtmp._12 + p_y6 * mtmp._22 + p_z6 * mtmp._32 + mtmp._42;
-			var pz6 = p_x6 * mtmp._13 + p_y6 * mtmp._23 + p_z6 * mtmp._33 + mtmp._43;
-			p_x6 = px6;
-			p_y6 = py6;
-			p_z6 = pz6;
-			if(p_x6 < bounds.xMin) {
-				bounds.xMin = p_x6;
-			}
-			if(p_x6 > bounds.xMax) {
-				bounds.xMax = p_x6;
-			}
-			if(p_y6 < bounds.yMin) {
-				bounds.yMin = p_y6;
-			}
-			if(p_y6 > bounds.yMax) {
-				bounds.yMax = p_y6;
-			}
-			if(p_z6 < bounds.zMin) {
-				bounds.zMin = p_z6;
-			}
-			if(p_z6 > bounds.zMax) {
-				bounds.zMax = p_z6;
-			}
-			var p_x7 = b.xMax;
-			var p_y7 = b.yMax;
-			var p_z7 = b.zMax;
-			var px7 = p_x7 * mtmp._11 + p_y7 * mtmp._21 + p_z7 * mtmp._31 + mtmp._41;
-			var py7 = p_x7 * mtmp._12 + p_y7 * mtmp._22 + p_z7 * mtmp._32 + mtmp._42;
-			var pz7 = p_x7 * mtmp._13 + p_y7 * mtmp._23 + p_z7 * mtmp._33 + mtmp._43;
-			p_x7 = px7;
-			p_y7 = py7;
-			p_z7 = pz7;
-			if(p_x7 < bounds.xMin) {
-				bounds.xMin = p_x7;
-			}
-			if(p_x7 > bounds.xMax) {
-				bounds.xMax = p_x7;
-			}
-			if(p_y7 < bounds.yMin) {
-				bounds.yMin = p_y7;
-			}
-			if(p_y7 > bounds.yMax) {
-				bounds.yMax = p_y7;
-			}
-			if(p_z7 < bounds.zMin) {
-				bounds.zMin = p_z7;
-			}
-			if(p_z7 > bounds.zMax) {
-				bounds.zMax = p_z7;
-			}
-		});
-		var cameraBounds = new h3d_col_Bounds();
-		var _g = 0;
-		var _g1 = this.ctx.camera.getFrustumCorners();
-		while(_g < _g1.length) {
-			var pt = _g1[_g];
-			++_g;
-			var m1 = camera.mcam;
-			var px8 = pt.x * m1._11 + pt.y * m1._21 + pt.z * m1._31 + pt.w * m1._41;
-			var py8 = pt.x * m1._12 + pt.y * m1._22 + pt.z * m1._32 + pt.w * m1._42;
-			var pz8 = pt.x * m1._13 + pt.y * m1._23 + pt.z * m1._33 + pt.w * m1._43;
-			var pw = pt.x * m1._14 + pt.y * m1._24 + pt.z * m1._34 + pt.w * m1._44;
-			pt.x = px8;
-			pt.y = py8;
-			pt.z = pz8;
-			pt.w = pw;
-			var x = pt.x;
-			var y = pt.y;
-			var z = pt.z;
-			if(x < cameraBounds.xMin) {
-				cameraBounds.xMin = x;
-			}
-			if(x > cameraBounds.xMax) {
-				cameraBounds.xMax = x;
-			}
-			if(y < cameraBounds.yMin) {
-				cameraBounds.yMin = y;
-			}
-			if(y > cameraBounds.yMax) {
-				cameraBounds.yMax = y;
-			}
-			if(z < cameraBounds.zMin) {
-				cameraBounds.zMin = z;
-			}
-			if(z > cameraBounds.zMax) {
-				cameraBounds.zMax = z;
-			}
-		}
-		bounds.intersection(bounds,cameraBounds);
-		bounds.scaleCenter(1.01);
-	}
-	,getOutputs: function() {
-		return [hxsl_Output.PackFloat(hxsl_Output.Value("output.depth"))];
-	}
-	,setGlobals: function() {
-		h3d_pass_Default.prototype.setGlobals.call(this);
-		var _this = this.lightCamera.orthoBounds;
-		_this.xMin = 1e20;
-		_this.xMax = -1e20;
-		_this.yMin = 1e20;
-		_this.yMax = -1e20;
-		_this.zMin = 1e20;
-		_this.zMax = -1e20;
-		this.calcShadowBounds(this.lightCamera);
-		this.lightCamera.update();
-		var v = this.lightCamera.m;
-		this.manager.globals.map.h[this.cameraViewProj_id] = v;
-	}
-	,draw: function(passes) {
-		var texture = this.tcache.allocTarget("shadowMap",this.ctx,this.size,this.size,false);
-		if(this.customDepth && (this.depth == null || this.depth.width != this.size || this.depth.height != this.size || this.depth.isDisposed())) {
-			if(this.depth != null) {
-				this.depth.dispose();
-			}
-			this.depth = new h3d_mat_DepthBuffer(this.size,this.size);
-		}
-		texture.depthBuffer = this.depth;
-		var ct = this.ctx.camera.target;
-		var slight = this.ctx.lightSystem.shadowLight;
-		if(slight == null) {
-			var _this = this.lightCamera.target;
-			_this.x = 0;
-			_this.y = 0;
-			_this.z = -1;
-			_this.w = 1.;
-		} else {
-			var _this1 = this.lightCamera.target;
-			_this1.x = slight.direction.x;
-			_this1.y = slight.direction.y;
-			_this1.z = slight.direction.z;
-			_this1.w = 1.;
-			this.lightCamera.target.normalize();
-		}
-		this.lightCamera.target.x += ct.x;
-		this.lightCamera.target.y += ct.y;
-		this.lightCamera.target.z += ct.z;
-		var _this2 = this.lightCamera.pos;
-		_this2.x = ct.x;
-		_this2.y = ct.y;
-		_this2.z = ct.z;
-		_this2.w = ct.w;
-		this.lightCamera.update();
-		this.ctx.engine.pushTarget(texture);
-		this.ctx.engine.clear(16777215,1);
-		passes = h3d_pass_Default.prototype.draw.call(this,passes);
-		if(this.border != null) {
-			this.border.render();
-		}
-		this.ctx.engine.popTarget();
-		if(this.blur.quality > 0 && this.blur.passes > 0) {
-			this.blur.apply(texture,this.tcache.allocTarget("tmpBlur",this.ctx,this.size,this.size,false),null,true);
-		}
-		this.ctx.setGlobalID(this.shadowMapId,{ texture : texture});
-		this.ctx.setGlobalID(this.shadowProjId,this.lightCamera.m);
-		this.ctx.setGlobalID(this.shadowColorId,this.color);
-		this.ctx.setGlobalID(this.shadowPowerId,this.power);
-		this.ctx.setGlobalID(this.shadowBiasId,this.bias);
-		return passes;
-	}
-	,__class__: h3d_pass_ShadowMap
-});
-var h3d_prim_BigPrimitive = function(stride,isRaw,pos) {
-	if(isRaw == null) {
-		isRaw = false;
-	}
-	this.startIndex = 0;
-	this.idxPos = 0;
-	this.bufPos = 0;
-	h3d_prim_Primitive.call(this);
-	this.isRaw = isRaw;
-	this.buffers = [];
-	this.allIndexes = [];
-	this.bounds = new h3d_col_Bounds();
-	this.stride = stride;
-	if(stride < 3) {
-		throw new js__$Boot_HaxeError("Minimum stride = 3");
-	}
-};
-$hxClasses["h3d.prim.BigPrimitive"] = h3d_prim_BigPrimitive;
-h3d_prim_BigPrimitive.__name__ = ["h3d","prim","BigPrimitive"];
-h3d_prim_BigPrimitive.__super__ = h3d_prim_Primitive;
-h3d_prim_BigPrimitive.prototype = $extend(h3d_prim_Primitive.prototype,{
-	begin: function(vcount,icount) {
-		this.startIndex = this.bufPos / this.stride | 0;
-		if(this.startIndex + vcount >= 65535) {
-			if(vcount >= 65535) {
-				throw new js__$Boot_HaxeError("Too many vertices in begin()");
-			}
-			this.flush();
-		}
-		if(this.tmpBuf == null) {
-			this.tmpBuf = h3d_prim_BigPrimitive.PREV_BUFFER;
-			if(this.tmpBuf == null) {
-				var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
-				this.tmpBuf = this1;
-			} else {
-				h3d_prim_BigPrimitive.PREV_BUFFER = null;
-			}
-			var this2 = this.tmpBuf;
-			var _g1 = this2.pos;
-			var _g = 65535 * this.stride;
-			while(_g1 < _g) {
-				var i = _g1++;
-				if(this2.pos == this2.array.length) {
-					var newSize = this2.array.length << 1;
-					if(newSize < 128) {
-						newSize = 128;
-					}
-					var newArray = new Float32Array(newSize);
-					newArray.set(this2.array);
-					this2.array = newArray;
-				}
-				this2.array[this2.pos++] = 0.;
-			}
-		}
-		if(this.tmpIdx == null) {
-			this.tmpIdx = h3d_prim_BigPrimitive.PREV_INDEX;
-			if(this.tmpIdx == null) {
-				var this3 = new Array(0);
-				this.tmpIdx = this3;
-			} else {
-				h3d_prim_BigPrimitive.PREV_INDEX = null;
-			}
-		}
-		if(this.idxPos + icount > this.tmpIdx.length) {
-			var size = this.tmpIdx.length == 0 ? 1024 : this.tmpIdx.length;
-			var req = this.idxPos + icount;
-			while(size < req) size <<= 1;
-			var this4 = this.tmpIdx;
-			while(this4.length < size) this4.push(0);
-		}
-	}
-	,addPoint: function(x,y,z) {
-		this.tmpBuf.array[this.bufPos++] = x;
-		this.tmpBuf.array[this.bufPos++] = y;
-		this.tmpBuf.array[this.bufPos++] = z;
-		var _this = this.bounds;
-		if(x < _this.xMin) {
-			_this.xMin = x;
-		}
-		if(x > _this.xMax) {
-			_this.xMax = x;
-		}
-		if(y < _this.yMin) {
-			_this.yMin = y;
-		}
-		if(y > _this.yMax) {
-			_this.yMax = y;
-		}
-		if(z < _this.zMin) {
-			_this.zMin = z;
-		}
-		if(z > _this.zMax) {
-			_this.zMax = z;
-		}
-	}
-	,addBounds: function(x,y,z) {
-		var _this = this.bounds;
-		if(x < _this.xMin) {
-			_this.xMin = x;
-		}
-		if(x > _this.xMax) {
-			_this.xMax = x;
-		}
-		if(y < _this.yMin) {
-			_this.yMin = y;
-		}
-		if(y > _this.yMax) {
-			_this.yMax = y;
-		}
-		if(z < _this.zMin) {
-			_this.zMin = z;
-		}
-		if(z > _this.zMax) {
-			_this.zMax = z;
-		}
-	}
-	,addVertexValue: function(v) {
-		this.tmpBuf.array[this.bufPos++] = v;
-	}
-	,addIndex: function(i) {
-		this.tmpIdx[this.idxPos++] = i + this.startIndex;
-	}
-	,triCount: function() {
-		var count = 0;
-		var _g = 0;
-		var _g1 = this.allIndexes;
-		while(_g < _g1.length) {
-			var i = _g1[_g];
-			++_g;
-			count += i.count;
-		}
-		count += this.idxPos;
-		return count / 3 | 0;
-	}
-	,vertexCount: function() {
-		var count = 0;
-		var _g = 0;
-		var _g1 = this.buffers;
-		while(_g < _g1.length) {
-			var b = _g1[_g];
-			++_g;
-			count += b.vertices;
-		}
-		count += this.bufPos / this.stride | 0;
-		return count;
-	}
-	,flush: function() {
-		if(this.tmpBuf != null) {
-			if(this.bufPos > 0 && this.idxPos > 0) {
-				this.flushing = true;
-				var b = h3d_Buffer.ofSubFloats(this.tmpBuf,this.stride,this.bufPos / this.stride | 0);
-				if(this.isRaw) {
-					b.flags |= 1 << h3d_BufferFlag.RawFormat[1];
-				}
-				this.buffers.push(b);
-				this.allIndexes.push(h3d_Indexes.alloc(this.tmpIdx,0,this.idxPos));
-				this.flushing = false;
-			}
-			if(h3d_prim_BigPrimitive.PREV_BUFFER == null || h3d_prim_BigPrimitive.PREV_BUFFER.pos < this.tmpBuf.pos) {
-				h3d_prim_BigPrimitive.PREV_BUFFER = this.tmpBuf;
-			}
-			if(h3d_prim_BigPrimitive.PREV_INDEX == null || h3d_prim_BigPrimitive.PREV_INDEX.length < this.tmpIdx.length) {
-				h3d_prim_BigPrimitive.PREV_INDEX = this.tmpIdx;
-			}
-			this.tmpBuf = null;
-			this.tmpIdx = null;
-			this.bufPos = 0;
-			this.idxPos = 0;
-			this.startIndex = 0;
-		}
-	}
-	,render: function(engine) {
-		if(this.tmpBuf != null) {
-			this.flush();
-		}
-		var _g1 = 0;
-		var _g = this.buffers.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			engine.renderIndexed(this.buffers[i],this.allIndexes[i]);
-		}
-	}
-	,getBounds: function() {
-		return this.bounds;
-	}
-	,dispose: function() {
-		this.clear();
-	}
-	,clear: function() {
-		if(this.flushing) {
-			throw new js__$Boot_HaxeError("Cannot clear() BigPrimitive while it's flushing");
-		}
-		var _this = this.bounds;
-		_this.xMin = 1e20;
-		_this.xMax = -1e20;
-		_this.yMin = 1e20;
-		_this.yMax = -1e20;
-		_this.zMin = 1e20;
-		_this.zMax = -1e20;
-		var _g = 0;
-		var _g1 = this.buffers;
-		while(_g < _g1.length) {
-			var b = _g1[_g];
-			++_g;
-			b.dispose();
-		}
-		var _g2 = 0;
-		var _g11 = this.allIndexes;
-		while(_g2 < _g11.length) {
-			var i = _g11[_g2];
-			++_g2;
-			i.dispose();
-		}
-		this.buffers = [];
-		this.allIndexes = [];
-		this.bufPos = 0;
-		this.tmpBuf = null;
-		this.tmpIdx = null;
-	}
-	,add: function(buf,idx,dx,dy,dz,rotation,scale,stride) {
-		if(stride == null) {
-			stride = -1;
-		}
-		if(scale == null) {
-			scale = 1.;
-		}
-		if(rotation == null) {
-			rotation = 0.;
-		}
-		if(dz == null) {
-			dz = 0.;
-		}
-		if(dy == null) {
-			dy = 0.;
-		}
-		if(dx == null) {
-			dx = 0.;
-		}
-		this.addSub(buf,idx,0,0,buf.pos / (stride < 0 ? this.stride : stride) | 0,idx.length / 3 | 0,dx,dy,dz,rotation,scale,stride);
-		return;
-	}
-	,addSub: function(buf,idx,startVert,startTri,nvert,triCount,dx,dy,dz,rotation,scale,stride,deltaU,deltaV,color) {
-		if(color == null) {
-			color = 1.;
-		}
-		if(deltaV == null) {
-			deltaV = 0.;
-		}
-		if(deltaU == null) {
-			deltaU = 0.;
-		}
-		if(stride == null) {
-			stride = -1;
-		}
-		if(scale == null) {
-			scale = 1.;
-		}
-		if(rotation == null) {
-			rotation = 0.;
-		}
-		if(dz == null) {
-			dz = 0.;
-		}
-		if(dy == null) {
-			dy = 0.;
-		}
-		if(dx == null) {
-			dx = 0.;
-		}
-		if(stride < 0) {
-			stride = this.stride;
-		}
-		if(stride < this.stride) {
-			throw new js__$Boot_HaxeError("only stride >= " + this.stride + " allowed");
-		}
-		this.begin(nvert,triCount * 3);
-		var start = this.startIndex;
-		var cr = Math.cos(rotation);
-		var sr = Math.sin(rotation);
-		var pos = this.bufPos;
-		var tmpBuf = this.tmpBuf;
-		var _g1 = 0;
-		var _g = nvert;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var p = (i + startVert) * stride;
-			var x = buf.array[p++];
-			var y = buf.array[p++];
-			var z = buf.array[p++];
-			var tx = (x * cr - y * sr) * scale;
-			var ty = (x * sr + y * cr) * scale;
-			var vx = dx + tx;
-			var vy = dy + ty;
-			var vz = dz + z * scale;
-			tmpBuf.array[pos++] = vx;
-			tmpBuf.array[pos++] = vy;
-			tmpBuf.array[pos++] = vz;
-			var _this = this.bounds;
-			if(vx < _this.xMin) {
-				_this.xMin = vx;
-			}
-			if(vx > _this.xMax) {
-				_this.xMax = vx;
-			}
-			if(vy < _this.yMin) {
-				_this.yMin = vy;
-			}
-			if(vy > _this.yMax) {
-				_this.yMax = vy;
-			}
-			if(vz < _this.zMin) {
-				_this.zMin = vz;
-			}
-			if(vz > _this.zMax) {
-				_this.zMax = vz;
-			}
-			var _g2 = this.stride;
-			switch(_g2) {
-			case 3:
-				continue;
-			case 4:
-				tmpBuf.array[pos++] = buf.array[p++];
-				break;
-			case 5:
-				tmpBuf.array[pos++] = buf.array[p++] + deltaU;
-				tmpBuf.array[pos++] = buf.array[p++] + deltaV;
-				break;
-			case 6:
-				var nx = buf.array[p++];
-				var ny = buf.array[p++];
-				var nz = buf.array[p++];
-				var tnx = nx * cr - ny * sr;
-				var tny = nx * sr + ny * cr;
-				tmpBuf.array[pos++] = tnx;
-				tmpBuf.array[pos++] = tny;
-				tmpBuf.array[pos++] = nz;
-				break;
-			case 7:
-				var nx1 = buf.array[p++];
-				var ny1 = buf.array[p++];
-				var nz1 = buf.array[p++];
-				var tnx1 = nx1 * cr - ny1 * sr;
-				var tny1 = nx1 * sr + ny1 * cr;
-				tmpBuf.array[pos++] = tnx1;
-				tmpBuf.array[pos++] = tny1;
-				tmpBuf.array[pos++] = nz1;
-				tmpBuf.array[pos++] = buf.array[p++] + deltaU;
-				break;
-			case 8:case 9:case 10:
-				var nx2 = buf.array[p++];
-				var ny2 = buf.array[p++];
-				var nz2 = buf.array[p++];
-				var tnx2 = nx2 * cr - ny2 * sr;
-				var tny2 = nx2 * sr + ny2 * cr;
-				tmpBuf.array[pos++] = tnx2;
-				tmpBuf.array[pos++] = tny2;
-				tmpBuf.array[pos++] = nz2;
-				tmpBuf.array[pos++] = buf.array[p++] + deltaU;
-				tmpBuf.array[pos++] = buf.array[p++] + deltaV;
-				var _g3 = 8;
-				var _g21 = this.stride;
-				while(_g3 < _g21) {
-					var i1 = _g3++;
-					tmpBuf.array[pos++] = buf.array[p++];
-				}
-				break;
-			default:
-				var nx3 = buf.array[p++];
-				var ny3 = buf.array[p++];
-				var nz3 = buf.array[p++];
-				var tnx3 = nx3 * cr - ny3 * sr;
-				var tny3 = nx3 * sr + ny3 * cr;
-				tmpBuf.array[pos++] = tnx3;
-				tmpBuf.array[pos++] = tny3;
-				tmpBuf.array[pos++] = nz3;
-				tmpBuf.array[pos++] = buf.array[p++] + deltaU;
-				tmpBuf.array[pos++] = buf.array[p++] + deltaV;
-				tmpBuf.array[pos++] = buf.array[p++] * color;
-				tmpBuf.array[pos++] = buf.array[p++] * color;
-				tmpBuf.array[pos++] = buf.array[p++] * color;
-				var _g31 = 11;
-				var _g22 = this.stride;
-				while(_g31 < _g22) {
-					var i2 = _g31++;
-					tmpBuf.array[pos++] = buf.array[p++];
-				}
-			}
-		}
-		this.bufPos = pos;
-		start -= startVert;
-		var _g11 = 0;
-		var _g4 = triCount * 3;
-		while(_g11 < _g4) {
-			var i3 = _g11++;
-			var tmp = idx[i3 + startTri * 3] + start;
-			this.tmpIdx[this.idxPos++] = tmp;
-		}
-	}
-	,customSerialize: function(ctx) {
-		this.flush();
-		ctx.out.addByte(this.isRaw ? 1 : 0);
-		var v = this.stride;
-		if(v >= 0 && v < 128) {
-			ctx.out.addByte(v);
-		} else {
-			ctx.out.addByte(128);
-			ctx.out.addInt32(v);
-		}
-		ctx.out.addFloat(this.bounds.xMin);
-		ctx.out.addFloat(this.bounds.yMin);
-		ctx.out.addFloat(this.bounds.zMin);
-		ctx.out.addFloat(this.bounds.xMax);
-		ctx.out.addFloat(this.bounds.yMax);
-		ctx.out.addFloat(this.bounds.zMax);
-		var v1 = this.buffers.length;
-		if(v1 >= 0 && v1 < 128) {
-			ctx.out.addByte(v1);
-		} else {
-			ctx.out.addByte(128);
-			ctx.out.addInt32(v1);
-		}
-		var reqSize = 0;
-		var _g = 0;
-		var _g1 = this.allIndexes;
-		while(_g < _g1.length) {
-			var a = _g1[_g];
-			++_g;
-			var sz = a.count << 1;
-			if(reqSize < sz) {
-				reqSize = sz;
-			}
-		}
-		var _g2 = 0;
-		var _g11 = this.buffers;
-		while(_g2 < _g11.length) {
-			var b = _g11[_g2];
-			++_g2;
-			var sz1 = b.vertices * this.stride << 2;
-			if(reqSize < sz1) {
-				reqSize = sz1;
-			}
-		}
-		var tmpBytes = new haxe_io_Bytes(new ArrayBuffer(reqSize));
-		var _g12 = 0;
-		var _g3 = this.buffers.length;
-		while(_g12 < _g3) {
-			var i = _g12++;
-			var idx = this.allIndexes[i];
-			idx.readBytes(tmpBytes,0,idx.count);
-			var v2 = idx.count;
-			if(v2 >= 0 && v2 < 128) {
-				ctx.out.addByte(v2);
-			} else {
-				ctx.out.addByte(128);
-				ctx.out.addInt32(v2);
-			}
-			var len = idx.count << 1;
-			if(tmpBytes == null) {
-				ctx.out.addByte(0);
-			} else {
-				var v3 = len + 1;
-				if(v3 >= 0 && v3 < 128) {
-					ctx.out.addByte(v3);
-				} else {
-					ctx.out.addByte(128);
-					ctx.out.addInt32(v3);
-				}
-				ctx.out.addBytes(tmpBytes,0,len);
-			}
-			var b1 = this.buffers[i];
-			b1.readBytes(tmpBytes,0,b1.vertices);
-			var v4 = b1.vertices;
-			if(v4 >= 0 && v4 < 128) {
-				ctx.out.addByte(v4);
-			} else {
-				ctx.out.addByte(128);
-				ctx.out.addInt32(v4);
-			}
-			var len1 = b1.vertices * this.stride << 2;
-			if(tmpBytes == null) {
-				ctx.out.addByte(0);
-			} else {
-				var v5 = len1 + 1;
-				if(v5 >= 0 && v5 < 128) {
-					ctx.out.addByte(v5);
-				} else {
-					ctx.out.addByte(128);
-					ctx.out.addInt32(v5);
-				}
-				ctx.out.addBytes(tmpBytes,0,len1);
-			}
-		}
-	}
-	,customUnserialize: function(ctx) {
-		this.isRaw = ctx.input.b[ctx.inPos++] != 0;
-		var v = ctx.input.b[ctx.inPos++];
-		if(v == 128) {
-			v = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		this.stride = v;
-		this.bounds = new h3d_col_Bounds();
-		var v1 = ctx.input.getFloat(ctx.inPos);
-		ctx.inPos += 4;
-		this.bounds.xMin = v1;
-		var v2 = ctx.input.getFloat(ctx.inPos);
-		ctx.inPos += 4;
-		this.bounds.yMin = v2;
-		var v3 = ctx.input.getFloat(ctx.inPos);
-		ctx.inPos += 4;
-		this.bounds.zMin = v3;
-		var v4 = ctx.input.getFloat(ctx.inPos);
-		ctx.inPos += 4;
-		this.bounds.xMin = v4;
-		var v5 = ctx.input.getFloat(ctx.inPos);
-		ctx.inPos += 4;
-		this.bounds.yMax = v5;
-		var v6 = ctx.input.getFloat(ctx.inPos);
-		ctx.inPos += 4;
-		this.bounds.zMax = v6;
-		var v7 = ctx.input.b[ctx.inPos++];
-		if(v7 == 128) {
-			v7 = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var count = v7;
-		this.buffers = [];
-		this.allIndexes = [];
-		var _g1 = 0;
-		var _g = count;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var v8 = ctx.input.b[ctx.inPos++];
-			if(v8 == 128) {
-				v8 = ctx.input.getInt32(ctx.inPos);
-				ctx.inPos += 4;
-			}
-			var nidx = v8;
-			var idx = new h3d_Indexes(nidx);
-			var v9 = ctx.input.b[ctx.inPos++];
-			if(v9 == 128) {
-				v9 = ctx.input.getInt32(ctx.inPos);
-				ctx.inPos += 4;
-			}
-			var len = v9;
-			var tmp;
-			if(len == 0) {
-				tmp = null;
-			} else {
-				--len;
-				var s = ctx.input.sub(ctx.inPos,len);
-				ctx.inPos += len;
-				tmp = s;
-			}
-			idx.uploadBytes(tmp,0,nidx);
-			this.allIndexes.push(idx);
-			var v10 = ctx.input.b[ctx.inPos++];
-			if(v10 == 128) {
-				v10 = ctx.input.getInt32(ctx.inPos);
-				ctx.inPos += 4;
-			}
-			var nvert = v10;
-			var buf = new h3d_Buffer(nvert,this.stride);
-			var v11 = ctx.input.b[ctx.inPos++];
-			if(v11 == 128) {
-				v11 = ctx.input.getInt32(ctx.inPos);
-				ctx.inPos += 4;
-			}
-			var len1 = v11;
-			var tmp1;
-			if(len1 == 0) {
-				tmp1 = null;
-			} else {
-				--len1;
-				var s1 = ctx.input.sub(ctx.inPos,len1);
-				ctx.inPos += len1;
-				tmp1 = s1;
-			}
-			buf.uploadBytes(tmp1,0,nvert);
-			this.buffers.push(buf);
-		}
-	}
-	,getCLID: function() {
-		return h3d_prim_BigPrimitive.__clid;
-	}
-	,unserializeInit: function() {
-		h3d_prim_Primitive.prototype.unserializeInit.call(this);
-		this.bufPos = 0;
-		this.idxPos = 0;
-		this.startIndex = 0;
-	}
-	,unserialize: function(__ctx) {
-		h3d_prim_Primitive.prototype.unserialize.call(this,__ctx);
-	}
-	,__class__: h3d_prim_BigPrimitive
-});
-var h3d_prim_Polygon = function(points,idx) {
-	this.translatedZ = 0.;
-	this.translatedY = 0.;
-	this.translatedX = 0.;
-	this.scaled = 1.;
-	h3d_prim_Primitive.call(this);
-	this.points = points;
-	this.idx = idx;
-};
-$hxClasses["h3d.prim.Polygon"] = h3d_prim_Polygon;
-h3d_prim_Polygon.__name__ = ["h3d","prim","Polygon"];
-h3d_prim_Polygon.__super__ = h3d_prim_Primitive;
-h3d_prim_Polygon.prototype = $extend(h3d_prim_Primitive.prototype,{
-	getBounds: function() {
-		var b = new h3d_col_Bounds();
-		var _g = 0;
-		var _g1 = this.points;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			if(p.x < b.xMin) {
-				b.xMin = p.x;
-			}
-			if(p.x > b.xMax) {
-				b.xMax = p.x;
-			}
-			if(p.y < b.yMin) {
-				b.yMin = p.y;
-			}
-			if(p.y > b.yMax) {
-				b.yMax = p.y;
-			}
-			if(p.z < b.zMin) {
-				b.zMin = p.z;
-			}
-			if(p.z > b.zMax) {
-				b.zMax = p.z;
-			}
-		}
-		return b;
-	}
-	,alloc: function(engine) {
-		this.dispose();
-		var size = 3;
-		if(this.normals != null) {
-			size += 3;
-		}
-		if(this.uvs != null) {
-			size += 2;
-		}
-		if(this.colors != null) {
-			size += 3;
-		}
-		var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
-		var buf = this1;
-		var _g1 = 0;
-		var _g = this.points.length;
-		while(_g1 < _g) {
-			var k = _g1++;
-			var p = this.points[k];
-			var v = p.x;
-			if(buf.pos == buf.array.length) {
-				var newSize = buf.array.length << 1;
-				if(newSize < 128) {
-					newSize = 128;
-				}
-				var newArray = new Float32Array(newSize);
-				newArray.set(buf.array);
-				buf.array = newArray;
-			}
-			buf.array[buf.pos++] = v;
-			var v1 = p.y;
-			if(buf.pos == buf.array.length) {
-				var newSize1 = buf.array.length << 1;
-				if(newSize1 < 128) {
-					newSize1 = 128;
-				}
-				var newArray1 = new Float32Array(newSize1);
-				newArray1.set(buf.array);
-				buf.array = newArray1;
-			}
-			buf.array[buf.pos++] = v1;
-			var v2 = p.z;
-			if(buf.pos == buf.array.length) {
-				var newSize2 = buf.array.length << 1;
-				if(newSize2 < 128) {
-					newSize2 = 128;
-				}
-				var newArray2 = new Float32Array(newSize2);
-				newArray2.set(buf.array);
-				buf.array = newArray2;
-			}
-			buf.array[buf.pos++] = v2;
-			if(this.normals != null) {
-				var n = this.normals[k];
-				var v3 = n.x;
-				if(buf.pos == buf.array.length) {
-					var newSize3 = buf.array.length << 1;
-					if(newSize3 < 128) {
-						newSize3 = 128;
-					}
-					var newArray3 = new Float32Array(newSize3);
-					newArray3.set(buf.array);
-					buf.array = newArray3;
-				}
-				buf.array[buf.pos++] = v3;
-				var v4 = n.y;
-				if(buf.pos == buf.array.length) {
-					var newSize4 = buf.array.length << 1;
-					if(newSize4 < 128) {
-						newSize4 = 128;
-					}
-					var newArray4 = new Float32Array(newSize4);
-					newArray4.set(buf.array);
-					buf.array = newArray4;
-				}
-				buf.array[buf.pos++] = v4;
-				var v5 = n.z;
-				if(buf.pos == buf.array.length) {
-					var newSize5 = buf.array.length << 1;
-					if(newSize5 < 128) {
-						newSize5 = 128;
-					}
-					var newArray5 = new Float32Array(newSize5);
-					newArray5.set(buf.array);
-					buf.array = newArray5;
-				}
-				buf.array[buf.pos++] = v5;
-			}
-			if(this.uvs != null) {
-				var t = this.uvs[k];
-				var v6 = t.u;
-				if(buf.pos == buf.array.length) {
-					var newSize6 = buf.array.length << 1;
-					if(newSize6 < 128) {
-						newSize6 = 128;
-					}
-					var newArray6 = new Float32Array(newSize6);
-					newArray6.set(buf.array);
-					buf.array = newArray6;
-				}
-				buf.array[buf.pos++] = v6;
-				var v7 = t.v;
-				if(buf.pos == buf.array.length) {
-					var newSize7 = buf.array.length << 1;
-					if(newSize7 < 128) {
-						newSize7 = 128;
-					}
-					var newArray7 = new Float32Array(newSize7);
-					newArray7.set(buf.array);
-					buf.array = newArray7;
-				}
-				buf.array[buf.pos++] = v7;
-			}
-			if(this.colors != null) {
-				var c = this.colors[k];
-				var v8 = c.x;
-				if(buf.pos == buf.array.length) {
-					var newSize8 = buf.array.length << 1;
-					if(newSize8 < 128) {
-						newSize8 = 128;
-					}
-					var newArray8 = new Float32Array(newSize8);
-					newArray8.set(buf.array);
-					buf.array = newArray8;
-				}
-				buf.array[buf.pos++] = v8;
-				var v9 = c.y;
-				if(buf.pos == buf.array.length) {
-					var newSize9 = buf.array.length << 1;
-					if(newSize9 < 128) {
-						newSize9 = 128;
-					}
-					var newArray9 = new Float32Array(newSize9);
-					newArray9.set(buf.array);
-					buf.array = newArray9;
-				}
-				buf.array[buf.pos++] = v9;
-				var v10 = c.z;
-				if(buf.pos == buf.array.length) {
-					var newSize10 = buf.array.length << 1;
-					if(newSize10 < 128) {
-						newSize10 = 128;
-					}
-					var newArray10 = new Float32Array(newSize10);
-					newArray10.set(buf.array);
-					buf.array = newArray10;
-				}
-				buf.array[buf.pos++] = v10;
-			}
-		}
-		var flags = [];
-		if(this.idx == null) {
-			flags.push(h3d_BufferFlag.Triangles);
-		}
-		if(this.normals == null) {
-			flags.push(h3d_BufferFlag.RawFormat);
-		}
-		this.buffer = h3d_Buffer.ofFloats(buf,size,flags);
-		if(this.idx != null) {
-			this.indexes = h3d_Indexes.alloc(this.idx);
-		}
-	}
-	,unindex: function() {
-		if(this.idx != null && this.points.length != this.idx.length) {
-			var p = [];
-			var _g1 = 0;
-			var _g = this.idx.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				var _this = this.points[this.idx[i]];
-				p.push(new h3d_col_Point(_this.x,_this.y,_this.z));
-			}
-			if(this.normals != null) {
-				var n = [];
-				var _g11 = 0;
-				var _g2 = this.idx.length;
-				while(_g11 < _g2) {
-					var i1 = _g11++;
-					var _this1 = this.normals[this.idx[i1]];
-					n.push(new h3d_col_Point(_this1.x,_this1.y,_this1.z));
-				}
-				this.normals = n;
-			}
-			if(this.colors != null) {
-				var n1 = [];
-				var _g12 = 0;
-				var _g3 = this.idx.length;
-				while(_g12 < _g3) {
-					var i2 = _g12++;
-					var _this2 = this.colors[this.idx[i2]];
-					n1.push(new h3d_col_Point(_this2.x,_this2.y,_this2.z));
-				}
-				this.colors = n1;
-			}
-			if(this.uvs != null) {
-				var t = [];
-				var _g13 = 0;
-				var _g4 = this.idx.length;
-				while(_g13 < _g4) {
-					var i3 = _g13++;
-					t.push(this.uvs[this.idx[i3]].clone());
-				}
-				this.uvs = t;
-			}
-			this.points = p;
-			this.idx = null;
-		}
-	}
-	,translate: function(dx,dy,dz) {
-		this.translatedX += dx;
-		this.translatedY += dy;
-		this.translatedZ += dz;
-		var _g = 0;
-		var _g1 = this.points;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			p.x += dx;
-			p.y += dy;
-			p.z += dz;
-		}
-	}
-	,scale: function(s) {
-		this.scaled *= s;
-		var _g = 0;
-		var _g1 = this.points;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			p.x *= s;
-			p.y *= s;
-			p.z *= s;
-		}
-	}
-	,addNormals: function() {
-		this.normals = [];
-		var _g1 = 0;
-		var _g = this.points.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			this.normals[i] = new h3d_col_Point();
-		}
-		var pos = 0;
-		var _g11 = 0;
-		var _g2 = this.triCount();
-		while(_g11 < _g2) {
-			var i1 = _g11++;
-			var i0;
-			var i11;
-			var i2;
-			if(this.idx == null) {
-				i0 = pos++;
-				i11 = pos++;
-				i2 = pos++;
-			} else {
-				i0 = this.idx[pos++];
-				i11 = this.idx[pos++];
-				i2 = this.idx[pos++];
-			}
-			var p0 = this.points[i0];
-			var p1 = this.points[i11];
-			var p2 = this.points[i2];
-			var _this_x = p1.x - p0.x;
-			var _this_y = p1.y - p0.y;
-			var _this_z = p1.z - p0.z;
-			var p_x = p2.x - p0.x;
-			var p_y = p2.y - p0.y;
-			var p_z = p2.z - p0.z;
-			var n_x = _this_y * p_z - _this_z * p_y;
-			var n_y = _this_z * p_x - _this_x * p_z;
-			var n_z = _this_x * p_y - _this_y * p_x;
-			this.normals[i0].x += n_x;
-			this.normals[i0].y += n_y;
-			this.normals[i0].z += n_z;
-			this.normals[i11].x += n_x;
-			this.normals[i11].y += n_y;
-			this.normals[i11].z += n_z;
-			this.normals[i2].x += n_x;
-			this.normals[i2].y += n_y;
-			this.normals[i2].z += n_z;
-		}
-		var _g3 = 0;
-		var _g12 = this.normals;
-		while(_g3 < _g12.length) {
-			var n = _g12[_g3];
-			++_g3;
-			n.normalize();
-		}
-	}
-	,addUVs: function() {
-		throw new js__$Boot_HaxeError("Not implemented for this polygon");
-	}
-	,uvScale: function(su,sv) {
-		if(this.uvs == null) {
-			throw new js__$Boot_HaxeError("Missing UVs");
-		}
-		var m = new haxe_ds_ObjectMap();
-		var _g = 0;
-		var _g1 = this.uvs;
-		while(_g < _g1.length) {
-			var t = _g1[_g];
-			++_g;
-			if(m.h.__keys__[t.__id__] != null) {
-				continue;
-			}
-			m.set(t,true);
-			t.u *= su;
-			t.v *= sv;
-		}
-	}
-	,triCount: function() {
-		var n = h3d_prim_Primitive.prototype.triCount.call(this);
-		if(n != 0) {
-			return n;
-		}
-		return (this.idx == null ? this.points.length : this.idx.length) / 3 | 0;
-	}
-	,vertexCount: function() {
-		return this.points.length;
-	}
-	,getCollider: function() {
-		var length = this.points.length * 3;
-		var this1 = new Array(length);
-		var vertexes = this1;
-		var length1 = this.idx.length;
-		var this2 = new Array(length1);
-		var indexes = this2;
-		var vid = 0;
-		var _g = 0;
-		var _g1 = this.points;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			vertexes[vid++] = p.x;
-			vertexes[vid++] = p.y;
-			vertexes[vid++] = p.z;
-		}
-		var _g11 = 0;
-		var _g2 = this.idx.length;
-		while(_g11 < _g2) {
-			var i = _g11++;
-			indexes[i] = this.idx[i];
-		}
-		var poly = new h3d_col_Polygon();
-		poly.addBuffers(vertexes,indexes);
-		return poly;
-	}
-	,customSerialize: function(ctx) {
-		var v = this.points.length;
-		if(v >= 0 && v < 128) {
-			ctx.out.addByte(v);
-		} else {
-			ctx.out.addByte(128);
-			ctx.out.addInt32(v);
-		}
-		var _g = 0;
-		var _g1 = this.points;
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			ctx.out.addDouble(p.x);
-			ctx.out.addDouble(p.y);
-			ctx.out.addDouble(p.z);
-		}
-		if(this.normals == null) {
-			ctx.out.addByte(0);
-		} else {
-			var v1 = this.normals.length;
-			if(v1 >= 0 && v1 < 128) {
-				ctx.out.addByte(v1);
-			} else {
-				ctx.out.addByte(128);
-				ctx.out.addInt32(v1);
-			}
-			var _g2 = 0;
-			var _g11 = this.normals;
-			while(_g2 < _g11.length) {
-				var p1 = _g11[_g2];
-				++_g2;
-				ctx.out.addDouble(p1.x);
-				ctx.out.addDouble(p1.y);
-				ctx.out.addDouble(p1.z);
-			}
-		}
-		if(this.uvs == null) {
-			ctx.out.addByte(0);
-		} else {
-			var v2 = this.uvs.length;
-			if(v2 >= 0 && v2 < 128) {
-				ctx.out.addByte(v2);
-			} else {
-				ctx.out.addByte(128);
-				ctx.out.addInt32(v2);
-			}
-			var _g3 = 0;
-			var _g12 = this.uvs;
-			while(_g3 < _g12.length) {
-				var uv = _g12[_g3];
-				++_g3;
-				ctx.out.addDouble(uv.u);
-				ctx.out.addDouble(uv.v);
-			}
-		}
-		if(this.idx == null) {
-			ctx.out.addByte(0);
-		} else {
-			var v3 = this.idx.length;
-			if(v3 >= 0 && v3 < 128) {
-				ctx.out.addByte(v3);
-			} else {
-				ctx.out.addByte(128);
-				ctx.out.addInt32(v3);
-			}
-			var _g4 = 0;
-			var _g13 = this.idx;
-			while(_g4 < _g13.length) {
-				var i = _g13[_g4];
-				++_g4;
-				if(i >= 0 && i < 128) {
-					ctx.out.addByte(i);
-				} else {
-					ctx.out.addByte(128);
-					ctx.out.addInt32(i);
-				}
-			}
-		}
-		if(this.colors == null) {
-			ctx.out.addByte(0);
-		} else {
-			var v4 = this.colors.length;
-			if(v4 >= 0 && v4 < 128) {
-				ctx.out.addByte(v4);
-			} else {
-				ctx.out.addByte(128);
-				ctx.out.addInt32(v4);
-			}
-			var _g5 = 0;
-			var _g14 = this.colors;
-			while(_g5 < _g14.length) {
-				var c = _g14[_g5];
-				++_g5;
-				ctx.out.addDouble(c.x);
-				ctx.out.addDouble(c.y);
-				ctx.out.addDouble(c.z);
-			}
-		}
-	}
-	,customUnserialize: function(ctx) {
-		var _g = [];
-		var _g2 = 0;
-		var v = ctx.input.b[ctx.inPos++];
-		if(v == 128) {
-			v = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var _g1 = v;
-		while(_g2 < _g1) {
-			var i = _g2++;
-			var v1 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			var v2 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			var v3 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			_g.push(new h3d_col_Point(v1,v2,v3));
-		}
-		this.points = _g;
-		var _g11 = [];
-		var _g3 = 0;
-		var v4 = ctx.input.b[ctx.inPos++];
-		if(v4 == 128) {
-			v4 = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var _g21 = v4;
-		while(_g3 < _g21) {
-			var i1 = _g3++;
-			var v5 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			var v6 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			var v7 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			_g11.push(new h3d_col_Point(v5,v6,v7));
-		}
-		this.normals = _g11;
-		var _g22 = [];
-		var _g4 = 0;
-		var v8 = ctx.input.b[ctx.inPos++];
-		if(v8 == 128) {
-			v8 = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var _g31 = v8;
-		while(_g4 < _g31) {
-			var i2 = _g4++;
-			var v9 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			var v10 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			_g22.push(new h3d_prim_UV(v9,v10));
-		}
-		this.uvs = _g22;
-		if(this.normals.length == 0) {
-			this.normals = null;
-		}
-		if(this.uvs.length == 0) {
-			this.uvs = null;
-		}
-		var v11 = ctx.input.b[ctx.inPos++];
-		if(v11 == 128) {
-			v11 = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var nindex = v11;
-		if(nindex > 0) {
-			var this1 = new Array(0);
-			this.idx = this1;
-			var this2 = this.idx;
-			while(this2.length < nindex) this2.push(0);
-			var _g41 = 0;
-			var _g32 = nindex;
-			while(_g41 < _g32) {
-				var i3 = _g41++;
-				var this3 = this.idx;
-				var v12 = ctx.input.b[ctx.inPos++];
-				if(v12 == 128) {
-					v12 = ctx.input.getInt32(ctx.inPos);
-					ctx.inPos += 4;
-				}
-				this3[i3] = v12;
-			}
-		}
-		var _g33 = [];
-		var _g5 = 0;
-		var v13 = ctx.input.b[ctx.inPos++];
-		if(v13 == 128) {
-			v13 = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var _g42 = v13;
-		while(_g5 < _g42) {
-			var i4 = _g5++;
-			var v14 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			var v15 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			var v16 = ctx.input.getDouble(ctx.inPos);
-			ctx.inPos += 8;
-			_g33.push(new h3d_col_Point(v14,v15,v16));
-		}
-		this.colors = _g33;
-		if(this.colors.length == 0) {
-			this.colors = null;
-		}
-	}
-	,getCLID: function() {
-		return h3d_prim_Polygon.__clid;
-	}
-	,serialize: function(__ctx) {
-		h3d_prim_Primitive.prototype.serialize.call(this,__ctx);
-		__ctx.out.addFloat(this.scaled);
-		__ctx.out.addFloat(this.translatedX);
-		__ctx.out.addFloat(this.translatedY);
-		__ctx.out.addFloat(this.translatedZ);
-	}
-	,getSerializeSchema: function() {
-		var schema = h3d_prim_Primitive.prototype.getSerializeSchema.call(this);
-		schema.fieldsNames.push("scaled");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
-		schema.fieldsNames.push("translatedX");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
-		schema.fieldsNames.push("translatedY");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
-		schema.fieldsNames.push("translatedZ");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
-		schema.isFinal = hxbit_Serializer.isClassFinal(h3d_prim_Polygon.__clid);
-		return schema;
-	}
-	,unserializeInit: function() {
-		h3d_prim_Primitive.prototype.unserializeInit.call(this);
-		this.scaled = 1.;
-		this.translatedX = 0.;
-		this.translatedY = 0.;
-		this.translatedZ = 0.;
-	}
-	,unserialize: function(__ctx) {
-		h3d_prim_Primitive.prototype.unserialize.call(this,__ctx);
-		var v = __ctx.input.getFloat(__ctx.inPos);
-		__ctx.inPos += 4;
-		this.scaled = v;
-		var v1 = __ctx.input.getFloat(__ctx.inPos);
-		__ctx.inPos += 4;
-		this.translatedX = v1;
-		var v2 = __ctx.input.getFloat(__ctx.inPos);
-		__ctx.inPos += 4;
-		this.translatedY = v2;
-		var v3 = __ctx.input.getFloat(__ctx.inPos);
-		__ctx.inPos += 4;
-		this.translatedZ = v3;
-	}
-	,__class__: h3d_prim_Polygon
-});
-var h3d_prim_Cube = function(x,y,z) {
-	if(z == null) {
-		z = 1.;
-	}
-	if(y == null) {
-		y = 1.;
-	}
-	if(x == null) {
-		x = 1.;
-	}
-	this.sizeX = x;
-	this.sizeY = y;
-	this.sizeZ = z;
-	var p = [new h3d_col_Point(0,0,0),new h3d_col_Point(x,0,0),new h3d_col_Point(0,y,0),new h3d_col_Point(0,0,z),new h3d_col_Point(x,y,0),new h3d_col_Point(x,0,z),new h3d_col_Point(0,y,z),new h3d_col_Point(x,y,z)];
-	var this1 = new Array(0);
-	var idx = this1;
-	idx.push(0);
-	idx.push(1);
-	idx.push(5);
-	idx.push(0);
-	idx.push(5);
-	idx.push(3);
-	idx.push(1);
-	idx.push(4);
-	idx.push(7);
-	idx.push(1);
-	idx.push(7);
-	idx.push(5);
-	idx.push(3);
-	idx.push(5);
-	idx.push(7);
-	idx.push(3);
-	idx.push(7);
-	idx.push(6);
-	idx.push(0);
-	idx.push(6);
-	idx.push(2);
-	idx.push(0);
-	idx.push(3);
-	idx.push(6);
-	idx.push(2);
-	idx.push(7);
-	idx.push(4);
-	idx.push(2);
-	idx.push(6);
-	idx.push(7);
-	idx.push(0);
-	idx.push(4);
-	idx.push(1);
-	idx.push(0);
-	idx.push(2);
-	idx.push(4);
-	h3d_prim_Polygon.call(this,p,idx);
-};
-$hxClasses["h3d.prim.Cube"] = h3d_prim_Cube;
-h3d_prim_Cube.__name__ = ["h3d","prim","Cube"];
-h3d_prim_Cube.__super__ = h3d_prim_Polygon;
-h3d_prim_Cube.prototype = $extend(h3d_prim_Polygon.prototype,{
-	addUVs: function() {
-		this.unindex();
-		var z = new h3d_prim_UV(0,1);
-		var x = new h3d_prim_UV(1,1);
-		var y = new h3d_prim_UV(0,0);
-		var o = new h3d_prim_UV(1,0);
-		this.uvs = [x,z,y,x,y,o,x,z,y,x,y,o,x,z,y,x,y,o,z,o,x,z,y,o,z,o,x,z,y,o,z,o,x,z,y,o];
-	}
-	,getCollider: function() {
-		var x = this.translatedX;
-		var y = this.translatedY;
-		var z = this.translatedZ;
-		var dx = this.sizeX * this.scaled;
-		var dy = this.sizeY * this.scaled;
-		var dz = this.sizeZ * this.scaled;
-		var b = new h3d_col_Bounds();
-		b.xMin = x;
-		b.yMin = y;
-		b.zMin = z;
-		b.xMax = x + dx;
-		b.yMax = y + dy;
-		b.zMax = z + dz;
-		return b;
-	}
-	,getCLID: function() {
-		return h3d_prim_Cube.__clid;
-	}
-	,serialize: function(__ctx) {
-		h3d_prim_Polygon.prototype.serialize.call(this,__ctx);
-		__ctx.out.addFloat(this.sizeX);
-		__ctx.out.addFloat(this.sizeY);
-		__ctx.out.addFloat(this.sizeZ);
-	}
-	,getSerializeSchema: function() {
-		var schema = h3d_prim_Polygon.prototype.getSerializeSchema.call(this);
-		schema.fieldsNames.push("sizeX");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
-		schema.fieldsNames.push("sizeY");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
-		schema.fieldsNames.push("sizeZ");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
-		schema.isFinal = hxbit_Serializer.isClassFinal(h3d_prim_Cube.__clid);
-		return schema;
-	}
-	,unserialize: function(__ctx) {
-		h3d_prim_Polygon.prototype.unserialize.call(this,__ctx);
-		var v = __ctx.input.getFloat(__ctx.inPos);
-		__ctx.inPos += 4;
-		this.sizeX = v;
-		var v1 = __ctx.input.getFloat(__ctx.inPos);
-		__ctx.inPos += 4;
-		this.sizeY = v1;
-		var v2 = __ctx.input.getFloat(__ctx.inPos);
-		__ctx.inPos += 4;
-		this.sizeZ = v2;
-	}
-	,__class__: h3d_prim_Cube
-});
-var h3d_prim_MeshPrimitive = function() {
-	h3d_prim_Primitive.call(this);
-};
-$hxClasses["h3d.prim.MeshPrimitive"] = h3d_prim_MeshPrimitive;
-h3d_prim_MeshPrimitive.__name__ = ["h3d","prim","MeshPrimitive"];
-h3d_prim_MeshPrimitive.__super__ = h3d_prim_Primitive;
-h3d_prim_MeshPrimitive.prototype = $extend(h3d_prim_Primitive.prototype,{
-	allocBuffer: function(engine,name) {
-		return null;
-	}
-	,hasBuffer: function(name) {
-		if(this.bufferCache == null) {
-			return false;
-		}
-		var this1 = this.bufferCache;
-		var key = hxsl_Globals.allocID(name);
-		return this1.h.hasOwnProperty(key);
-	}
-	,addBuffer: function(name,buf,offset) {
-		if(offset == null) {
-			offset = 0;
-		}
-		if(this.bufferCache == null) {
-			this.bufferCache = new haxe_ds_IntMap();
-		}
-		var id = hxsl_Globals.allocID(name);
-		var old = this.bufferCache.h[id];
-		if(old != null) {
-			old.dispose();
-		}
-		var this1 = this.bufferCache;
-		var value = new h3d_BufferOffset(buf,offset);
-		this1.h[id] = value;
-	}
-	,dispose: function() {
-		h3d_prim_Primitive.prototype.dispose.call(this);
-		if(this.bufferCache != null) {
-			var b = this.bufferCache.iterator();
-			while(b.hasNext()) {
-				var b1 = b.next();
-				b1.dispose();
-			}
-		}
-		this.bufferCache = null;
-		this.prevNames = null;
-	}
-	,getBuffers: function(engine) {
-		if(this.bufferCache == null) {
-			this.bufferCache = new haxe_ds_IntMap();
-		}
-		var names = engine.driver.getShaderInputNames();
-		if(names == this.prevNames) {
-			return this.prevBuffers;
-		}
-		var buffers = null;
-		var prev = null;
-		var _g = 0;
-		while(_g < names.length) {
-			var name = names[_g];
-			++_g;
-			var id = hxsl_Globals.allocID(name);
-			var b = this.bufferCache.h[id];
-			if(b == null) {
-				b = this.allocBuffer(engine,name);
-				if(b == null) {
-					throw new js__$Boot_HaxeError("Buffer " + name + " is not available");
-				}
-				this.bufferCache.h[id] = b;
-			}
-			b.next = null;
-			if(prev == null) {
-				prev = b;
-				buffers = prev;
-			} else {
-				prev.next = b;
-				prev = b;
-			}
-		}
-		this.prevNames = names;
-		return this.prevBuffers = buffers;
-	}
-	,render: function(engine) {
-		if(this.indexes == null || this.indexes.isDisposed()) {
-			this.alloc(engine);
-		}
-		engine.renderMultiBuffers(this.getBuffers(engine),this.indexes);
-	}
-	,getCLID: function() {
-		return h3d_prim_MeshPrimitive.__clid;
-	}
-	,__class__: h3d_prim_MeshPrimitive
-});
-var h3d_prim_HMDModel = function(data,dataPos,lib) {
-	this.bufferAliases = new haxe_ds_StringMap();
-	h3d_prim_MeshPrimitive.call(this);
-	this.data = data;
-	this.dataPosition = dataPos;
-	this.lib = lib;
-};
-$hxClasses["h3d.prim.HMDModel"] = h3d_prim_HMDModel;
-h3d_prim_HMDModel.__name__ = ["h3d","prim","HMDModel"];
-h3d_prim_HMDModel.__super__ = h3d_prim_MeshPrimitive;
-h3d_prim_HMDModel.prototype = $extend(h3d_prim_MeshPrimitive.prototype,{
-	triCount: function() {
-		return this.data.get_indexCount() / 3 | 0;
-	}
-	,vertexCount: function() {
-		return this.data.vertexCount;
-	}
-	,getBounds: function() {
-		return this.data.bounds;
-	}
-	,selectMaterial: function(i) {
-		this.curMaterial = i;
-	}
-	,getDataBuffers: function(fmt,defaults,material) {
-		return this.lib.getBuffers(this.data,fmt,defaults,material);
-	}
-	,loadSkin: function(skin) {
-		this.lib.loadSkin(this.data,skin);
-	}
-	,addAlias: function(name,realName,offset) {
-		if(offset == null) {
-			offset = 0;
-		}
-		var _this = this.bufferAliases;
-		var value = { realName : realName, offset : offset};
-		if(__map_reserved[name] != null) {
-			_this.setReserved(name,value);
-		} else {
-			_this.h[name] = value;
-		}
-	}
-	,alloc: function(engine) {
-		this.dispose();
-		this.buffer = new h3d_Buffer(this.data.vertexCount,this.data.vertexStride);
-		var entry = this.lib.entry;
-		entry.open();
-		entry.skip(this.dataPosition + this.data.vertexPosition);
-		var size = this.data.vertexCount * this.data.vertexStride * 4;
-		var bytes = hxd_impl_Tmp.getBytes(size);
-		entry.read(bytes,0,size);
-		this.buffer.uploadBytes(bytes,0,this.data.vertexCount);
-		hxd_impl_Tmp.saveBytes(bytes);
-		this.indexCount = 0;
-		this.indexesTriPos = [];
-		var _g = 0;
-		var _g1 = this.data.indexCounts;
-		while(_g < _g1.length) {
-			var n = _g1[_g];
-			++_g;
-			this.indexesTriPos.push(this.indexCount / 3 | 0);
-			this.indexCount += n;
-		}
-		this.indexes = new h3d_Indexes(this.indexCount);
-		entry.skip(this.data.indexPosition - (this.data.vertexPosition + size));
-		var bytes1 = hxd_impl_Tmp.getBytes(this.indexCount * 2);
-		entry.read(bytes1,0,this.indexCount * 2);
-		this.indexes.uploadBytes(bytes1,0,this.indexCount);
-		hxd_impl_Tmp.saveBytes(bytes1);
-		entry.close();
-		var pos = 0;
-		var _g2 = 0;
-		var _g11 = this.data.vertexFormat;
-		while(_g2 < _g11.length) {
-			var f = _g11[_g2];
-			++_g2;
-			this.addBuffer(f.name,this.buffer,pos);
-			pos += f.format & 7;
-		}
-		if(this.normalsRecomputed != null) {
-			this.recomputeNormals(this.normalsRecomputed);
-		}
-		var name = this.bufferAliases.keys();
-		while(name.hasNext()) {
-			var name1 = name.next();
-			var _this = this.bufferAliases;
-			var alias = __map_reserved[name1] != null ? _this.getReserved(name1) : _this.h[name1];
-			var this1 = this.bufferCache;
-			var key = hxsl_Globals.allocID(alias.realName);
-			var buffer = this1.h[key];
-			if(buffer == null) {
-				throw new js__$Boot_HaxeError("Buffer " + alias.realName + " not found for alias " + name1);
-			}
-			if(buffer.offset + alias.offset > buffer.buffer.buffer.stride) {
-				throw new js__$Boot_HaxeError("Alias " + name1 + " for buffer " + alias.realName + " outside stride");
-			}
-			this.addBuffer(name1,buffer.buffer,buffer.offset + alias.offset);
-		}
-	}
-	,recomputeNormals: function(name) {
-		if(name == null) {
-			name = "normal";
-		}
-		var pos = this.lib.getBuffers(this.data,[new hxd_fmt_hmd_GeometryFormat("position",3)]);
-		var ids = [];
-		var pts = [];
-		var _g1 = 0;
-		var _g = this.data.vertexCount;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var added = false;
-			var pt = new h3d_col_Point(pos.vertexes[i * 3],pos.vertexes[i * 3 + 1],pos.vertexes[i * 3 + 2]);
-			var _g3 = 0;
-			var _g2 = pts.length;
-			while(_g3 < _g2) {
-				var i1 = _g3++;
-				var p = pts[i1];
-				if(p.x == pt.x && p.y == pt.y && p.z == pt.z) {
-					ids.push(i1);
-					added = true;
-					break;
-				}
-			}
-			if(!added) {
-				ids.push(pts.length);
-				pts.push(pt);
-			}
-		}
-		var this1 = new Array(0);
-		var idx = this1;
-		var _g4 = 0;
-		var _g11 = pos.indexes;
-		while(_g4 < _g11.length) {
-			var i2 = _g11[_g4];
-			++_g4;
-			idx.push(ids[i2]);
-		}
-		var pol = new h3d_prim_Polygon(pts,idx);
-		pol.addNormals();
-		var this2 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
-		var v = this2;
-		var _g12 = 0;
-		var _g5 = this.data.vertexCount;
-		while(_g12 < _g5) {
-			var i3 = _g12++;
-			var n = pol.normals[ids[i3]];
-			var v1 = n.x;
-			if(v.pos == v.array.length) {
-				var newSize = v.array.length << 1;
-				if(newSize < 128) {
-					newSize = 128;
-				}
-				var newArray = new Float32Array(newSize);
-				newArray.set(v.array);
-				v.array = newArray;
-			}
-			v.array[v.pos++] = v1;
-			var v2 = n.y;
-			if(v.pos == v.array.length) {
-				var newSize1 = v.array.length << 1;
-				if(newSize1 < 128) {
-					newSize1 = 128;
-				}
-				var newArray1 = new Float32Array(newSize1);
-				newArray1.set(v.array);
-				v.array = newArray1;
-			}
-			v.array[v.pos++] = v2;
-			var v3 = n.z;
-			if(v.pos == v.array.length) {
-				var newSize2 = v.array.length << 1;
-				if(newSize2 < 128) {
-					newSize2 = 128;
-				}
-				var newArray2 = new Float32Array(newSize2);
-				newArray2.set(v.array);
-				v.array = newArray2;
-			}
-			v.array[v.pos++] = v3;
-		}
-		var buf = h3d_Buffer.ofFloats(v,3);
-		this.addBuffer(name,buf,0);
-		this.normalsRecomputed = name;
-	}
-	,render: function(engine) {
-		if(this.curMaterial < 0) {
-			h3d_prim_MeshPrimitive.prototype.render.call(this,engine);
-			return;
-		}
-		if(this.indexes == null || this.indexes.isDisposed()) {
-			this.alloc(engine);
-		}
-		engine.renderMultiBuffers(this.getBuffers(engine),this.indexes,this.indexesTriPos[this.curMaterial],this.data.indexCounts[this.curMaterial] / 3 | 0);
-		this.curMaterial = -1;
-	}
-	,initCollider: function(poly) {
-		var buf = this.lib.getBuffers(this.data,[new hxd_fmt_hmd_GeometryFormat("position",3)]);
-		poly.setData(buf.vertexes,buf.indexes);
-		if(this.collider == null) {
-			var _this = this.data.bounds;
-			var dx = _this.xMax - _this.xMin;
-			var dy = _this.yMax - _this.yMin;
-			var dz = _this.zMax - _this.zMin;
-			var sphere = new h3d_col_Sphere((_this.xMin + _this.xMax) * 0.5,(_this.yMin + _this.yMax) * 0.5,(_this.zMin + _this.zMax) * 0.5,Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5);
-			this.collider = new h3d_col_OptimizedCollider(sphere,poly);
-		}
-	}
-	,getCollider: function() {
-		if(this.collider != null) {
-			return this.collider;
-		}
-		var poly = new h3d_col_PolygonBuffer();
-		poly.source = { entry : this.lib.entry, geometryName : null};
-		var _g = 0;
-		var _g1 = this.lib.header.models;
-		while(_g < _g1.length) {
-			var h = _g1[_g];
-			++_g;
-			if(this.lib.header.geometries[h.geometry] == this.data) {
-				poly.source.geometryName = h.name;
-				break;
-			}
-		}
-		this.initCollider(poly);
-		return this.collider;
-	}
-	,customSerialize: function(ctx) {
-		var s = this.lib.entry.get_path();
-		if(s == null) {
-			ctx.out.addByte(0);
-		} else {
-			var b = haxe_io_Bytes.ofString(s);
-			var v = b.length + 1;
-			if(v >= 0 && v < 128) {
-				ctx.out.addByte(v);
-			} else {
-				ctx.out.addByte(128);
-				ctx.out.addInt32(v);
-			}
-			ctx.out.add(b);
-		}
-		var _g = 0;
-		var _g1 = this.lib.header.models;
-		while(_g < _g1.length) {
-			var m = _g1[_g];
-			++_g;
-			if(this.lib.header.geometries[m.geometry] == this.data) {
-				var s1 = m.name;
-				if(s1 == null) {
-					ctx.out.addByte(0);
-				} else {
-					var b1 = haxe_io_Bytes.ofString(s1);
-					var v1 = b1.length + 1;
-					if(v1 >= 0 && v1 < 128) {
-						ctx.out.addByte(v1);
-					} else {
-						ctx.out.addByte(128);
-						ctx.out.addInt32(v1);
-					}
-					ctx.out.add(b1);
-				}
-				break;
-			}
-		}
-	}
-	,customUnserialize: function(ctx) {
-		var v = ctx.input.b[ctx.inPos++];
-		if(v == 128) {
-			v = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var len = v;
-		var libPath;
-		if(len == 0) {
-			libPath = null;
-		} else {
-			--len;
-			var s = ctx.input.getString(ctx.inPos,len);
-			ctx.inPos += len;
-			libPath = s;
-		}
-		var v1 = ctx.input.b[ctx.inPos++];
-		if(v1 == 128) {
-			v1 = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var len1 = v1;
-		var modelPath;
-		if(len1 == 0) {
-			modelPath = null;
-		} else {
-			--len1;
-			var s1 = ctx.input.getString(ctx.inPos,len1);
-			ctx.inPos += len1;
-			modelPath = s1;
-		}
-		var ctx1 = ctx;
-		this.lib = ctx1.loadHMD(libPath);
-		var _g = 0;
-		var _g1 = this.lib.header.models;
-		while(_g < _g1.length) {
-			var m = _g1[_g];
-			++_g;
-			if(m.name == modelPath) {
-				this.data = this.lib.header.geometries[m.geometry];
-				this.lib.cachedPrimitives[m.geometry] = this;
-				break;
-			}
-		}
-		this.dataPosition = this.lib.header.dataPosition;
-	}
-	,getCLID: function() {
-		return h3d_prim_HMDModel.__clid;
-	}
-	,unserializeInit: function() {
-		h3d_prim_MeshPrimitive.prototype.unserializeInit.call(this);
-		this.bufferAliases = new haxe_ds_StringMap();
-	}
-	,unserialize: function(__ctx) {
-		h3d_prim_MeshPrimitive.prototype.unserialize.call(this,__ctx);
-	}
-	,__class__: h3d_prim_HMDModel
-});
-var h3d_prim_Plan2D = function() {
-	h3d_prim_Primitive.call(this);
-};
-$hxClasses["h3d.prim.Plan2D"] = h3d_prim_Plan2D;
-h3d_prim_Plan2D.__name__ = ["h3d","prim","Plan2D"];
-h3d_prim_Plan2D.get = function() {
-	if(h3d_prim_Plan2D.inst == null) {
-		h3d_prim_Plan2D.inst = new h3d_prim_Plan2D();
-	}
-	return h3d_prim_Plan2D.inst;
-};
-h3d_prim_Plan2D.__super__ = h3d_prim_Primitive;
-h3d_prim_Plan2D.prototype = $extend(h3d_prim_Primitive.prototype,{
-	triCount: function() {
-		return 2;
-	}
-	,vertexCount: function() {
-		return 4;
-	}
-	,alloc: function(engine) {
-		var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
-		var v = this1;
-		if(v.pos == v.array.length) {
-			var newSize = v.array.length << 1;
-			if(newSize < 128) {
-				newSize = 128;
-			}
-			var newArray = new Float32Array(newSize);
-			newArray.set(v.array);
-			v.array = newArray;
-		}
-		v.array[v.pos++] = -1;
-		if(v.pos == v.array.length) {
-			var newSize1 = v.array.length << 1;
-			if(newSize1 < 128) {
-				newSize1 = 128;
-			}
-			var newArray1 = new Float32Array(newSize1);
-			newArray1.set(v.array);
-			v.array = newArray1;
-		}
-		v.array[v.pos++] = -1;
-		if(v.pos == v.array.length) {
-			var newSize2 = v.array.length << 1;
-			if(newSize2 < 128) {
-				newSize2 = 128;
-			}
-			var newArray2 = new Float32Array(newSize2);
-			newArray2.set(v.array);
-			v.array = newArray2;
-		}
-		v.array[v.pos++] = 0;
-		if(v.pos == v.array.length) {
-			var newSize3 = v.array.length << 1;
-			if(newSize3 < 128) {
-				newSize3 = 128;
-			}
-			var newArray3 = new Float32Array(newSize3);
-			newArray3.set(v.array);
-			v.array = newArray3;
-		}
-		v.array[v.pos++] = 1;
-		if(v.pos == v.array.length) {
-			var newSize4 = v.array.length << 1;
-			if(newSize4 < 128) {
-				newSize4 = 128;
-			}
-			var newArray4 = new Float32Array(newSize4);
-			newArray4.set(v.array);
-			v.array = newArray4;
-		}
-		v.array[v.pos++] = -1;
-		if(v.pos == v.array.length) {
-			var newSize5 = v.array.length << 1;
-			if(newSize5 < 128) {
-				newSize5 = 128;
-			}
-			var newArray5 = new Float32Array(newSize5);
-			newArray5.set(v.array);
-			v.array = newArray5;
-		}
-		v.array[v.pos++] = 1;
-		if(v.pos == v.array.length) {
-			var newSize6 = v.array.length << 1;
-			if(newSize6 < 128) {
-				newSize6 = 128;
-			}
-			var newArray6 = new Float32Array(newSize6);
-			newArray6.set(v.array);
-			v.array = newArray6;
-		}
-		v.array[v.pos++] = 0;
-		if(v.pos == v.array.length) {
-			var newSize7 = v.array.length << 1;
-			if(newSize7 < 128) {
-				newSize7 = 128;
-			}
-			var newArray7 = new Float32Array(newSize7);
-			newArray7.set(v.array);
-			v.array = newArray7;
-		}
-		v.array[v.pos++] = 0;
-		if(v.pos == v.array.length) {
-			var newSize8 = v.array.length << 1;
-			if(newSize8 < 128) {
-				newSize8 = 128;
-			}
-			var newArray8 = new Float32Array(newSize8);
-			newArray8.set(v.array);
-			v.array = newArray8;
-		}
-		v.array[v.pos++] = 1;
-		if(v.pos == v.array.length) {
-			var newSize9 = v.array.length << 1;
-			if(newSize9 < 128) {
-				newSize9 = 128;
-			}
-			var newArray9 = new Float32Array(newSize9);
-			newArray9.set(v.array);
-			v.array = newArray9;
-		}
-		v.array[v.pos++] = -1;
-		if(v.pos == v.array.length) {
-			var newSize10 = v.array.length << 1;
-			if(newSize10 < 128) {
-				newSize10 = 128;
-			}
-			var newArray10 = new Float32Array(newSize10);
-			newArray10.set(v.array);
-			v.array = newArray10;
-		}
-		v.array[v.pos++] = 1;
-		if(v.pos == v.array.length) {
-			var newSize11 = v.array.length << 1;
-			if(newSize11 < 128) {
-				newSize11 = 128;
-			}
-			var newArray11 = new Float32Array(newSize11);
-			newArray11.set(v.array);
-			v.array = newArray11;
-		}
-		v.array[v.pos++] = 1;
-		if(v.pos == v.array.length) {
-			var newSize12 = v.array.length << 1;
-			if(newSize12 < 128) {
-				newSize12 = 128;
-			}
-			var newArray12 = new Float32Array(newSize12);
-			newArray12.set(v.array);
-			v.array = newArray12;
-		}
-		v.array[v.pos++] = 1;
-		if(v.pos == v.array.length) {
-			var newSize13 = v.array.length << 1;
-			if(newSize13 < 128) {
-				newSize13 = 128;
-			}
-			var newArray13 = new Float32Array(newSize13);
-			newArray13.set(v.array);
-			v.array = newArray13;
-		}
-		v.array[v.pos++] = 1;
-		if(v.pos == v.array.length) {
-			var newSize14 = v.array.length << 1;
-			if(newSize14 < 128) {
-				newSize14 = 128;
-			}
-			var newArray14 = new Float32Array(newSize14);
-			newArray14.set(v.array);
-			v.array = newArray14;
-		}
-		v.array[v.pos++] = 1;
-		if(v.pos == v.array.length) {
-			var newSize15 = v.array.length << 1;
-			if(newSize15 < 128) {
-				newSize15 = 128;
-			}
-			var newArray15 = new Float32Array(newSize15);
-			newArray15.set(v.array);
-			v.array = newArray15;
-		}
-		v.array[v.pos++] = 0;
-		this.buffer = h3d_Buffer.ofFloats(v,4,[h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat]);
-	}
-	,render: function(engine) {
-		if(this.buffer == null || this.buffer.isDisposed()) {
-			this.alloc(engine);
-		}
-		engine.renderBuffer(this.buffer,engine.mem.quadIndexes,2,0,-1);
-	}
-	,getCLID: function() {
-		return h3d_prim_Plan2D.__clid;
-	}
-	,__class__: h3d_prim_Plan2D
-});
-var h3d_prim_RawPrimitive = function(inf,persist) {
-	if(persist == null) {
-		persist = false;
-	}
-	h3d_prim_Primitive.call(this);
-	this.onContextLost = function() {
-		return inf;
-	};
-	this.bounds = inf.bounds;
-	this.alloc(null);
-	if(!persist) {
-		this.onContextLost = null;
-	}
-};
-$hxClasses["h3d.prim.RawPrimitive"] = h3d_prim_RawPrimitive;
-h3d_prim_RawPrimitive.__name__ = ["h3d","prim","RawPrimitive"];
-h3d_prim_RawPrimitive.__super__ = h3d_prim_Primitive;
-h3d_prim_RawPrimitive.prototype = $extend(h3d_prim_Primitive.prototype,{
-	alloc: function(engine) {
-		if(this.onContextLost == null) {
-			throw new js__$Boot_HaxeError("Cannot realloc " + Std.string(this));
-		}
-		var inf = this.onContextLost();
-		var flags = [];
-		if(inf.ibuf == null) {
-			flags.push(inf.quads ? h3d_BufferFlag.Quads : h3d_BufferFlag.Triangles);
-		}
-		if(inf.stride < 8) {
-			flags.push(h3d_BufferFlag.RawFormat);
-		}
-		this.buffer = h3d_Buffer.ofFloats(inf.vbuf,inf.stride,flags);
-		this.vcount = this.buffer.vertices;
-		this.tcount = inf.ibuf != null ? inf.ibuf.length / 3 | 0 : inf.quads ? this.vcount >> 1 : this.vcount / 3 | 0;
-		if(inf.ibuf != null) {
-			this.indexes = h3d_Indexes.alloc(inf.ibuf);
-		} else if(this.indexes != null) {
-			this.indexes.dispose();
-			this.indexes = null;
-		}
-	}
-	,getBounds: function() {
-		if(this.bounds == null) {
-			throw new js__$Boot_HaxeError("Bounds not defined for " + Std.string(this));
-		}
-		return this.bounds;
-	}
-	,triCount: function() {
-		return this.tcount;
-	}
-	,vertexCount: function() {
-		return this.vcount;
-	}
-	,getCLID: function() {
-		return h3d_prim_RawPrimitive.__clid;
-	}
-	,__class__: h3d_prim_RawPrimitive
-});
-var h3d_prim_UV = function(u,v) {
-	this.u = u;
-	this.v = v;
-};
-$hxClasses["h3d.prim.UV"] = h3d_prim_UV;
-h3d_prim_UV.__name__ = ["h3d","prim","UV"];
-h3d_prim_UV.prototype = {
-	clone: function() {
-		return new h3d_prim_UV(this.u,this.v);
-	}
-	,toString: function() {
-		return "{" + hxd_Math.fmt(this.u) + "," + hxd_Math.fmt(this.v) + "}";
-	}
-	,__class__: h3d_prim_UV
+			var px1 = v_x * absPos._11 + v_y * absPos._21 + v_z * absPos._31;
+			var py1 = v_x * absPos._12 + v_y * absPos._22 + v_z * absPos._32;
+			var pz1 = v_x * absPos._13 + v_y * absPos._23 + v_z * absPos._33;
+			v_x = px1;
+			v_y = py1;
+			v_z = pz1;
+		}
+		pt.sx = p_x;
+		pt.sy = p_y;
+		pt.sz = p_z;
+		pt.vx = v_x;
+		pt.vy = v_y;
+		pt.vz = v_z;
+		pt.time = time;
+		pt.life = life;
+		pt.initX = rot;
+		pt.initY = size;
+		pt.deltaX = vrot1;
+		pt.deltaY = vsize;
+	}
+	,__class__: h3d_parts_GpuPartGroup
 };
 var h3d_scene_Object = function(parent) {
 	this.__uid = hxbit_Serializer.SEQ << 24 | ++hxbit_Serializer.UID;
@@ -29071,7 +27083,24 @@ $hxClasses["h3d.scene.Object"] = h3d_scene_Object;
 h3d_scene_Object.__name__ = ["h3d","scene","Object"];
 h3d_scene_Object.__interfaces__ = [hxbit_Serializable];
 h3d_scene_Object.prototype = {
-	get_visible: function() {
+	flags: null
+	,children: null
+	,parent: null
+	,name: null
+	,x: null
+	,y: null
+	,z: null
+	,scaleX: null
+	,scaleY: null
+	,scaleZ: null
+	,follow: null
+	,defaultTransform: null
+	,currentAnimation: null
+	,absPos: null
+	,invPos: null
+	,qRot: null
+	,lastFrame: null
+	,get_visible: function() {
 		return (this.flags & 2) != 0;
 	}
 	,get_allocated: function() {
@@ -30289,6 +28318,7 @@ h3d_scene_Object.prototype = {
 		this.absPos = new h3d_Matrix();
 		this.absPos.identity();
 	}
+	,__uid: null
 	,getCLID: function() {
 		return h3d_scene_Object.__clid;
 	}
@@ -30443,169 +28473,6 @@ h3d_scene_Object.prototype = {
 	}
 	,__class__: h3d_scene_Object
 };
-var h3d_scene_Light = function(shader,parent) {
-	this.priority = 0;
-	this.cullingDistance = 1e10;
-	h3d_scene_Object.call(this,parent);
-	this.shader = shader;
-};
-$hxClasses["h3d.scene.Light"] = h3d_scene_Light;
-h3d_scene_Light.__name__ = ["h3d","scene","Light"];
-h3d_scene_Light.__super__ = h3d_scene_Object;
-h3d_scene_Light.prototype = $extend(h3d_scene_Object.prototype,{
-	get_color: function() {
-		return new h3d_Vector();
-	}
-	,get_enableSpecular: function() {
-		return false;
-	}
-	,set_enableSpecular: function(b) {
-		if(b) {
-			throw new js__$Boot_HaxeError("Not implemented for this light");
-		}
-		return false;
-	}
-	,emit: function(ctx) {
-		ctx.emitLight(this);
-	}
-	,customSerialize: function(ctx) {
-		h3d_scene_Object.prototype.customSerialize.call(this,ctx);
-		var v = this.get_color().x;
-		ctx.out.addDouble(v);
-		var v1 = this.get_color().y;
-		ctx.out.addDouble(v1);
-		var v2 = this.get_color().z;
-		ctx.out.addDouble(v2);
-		var v3 = this.get_color().w;
-		ctx.out.addDouble(v3);
-		var tmp = this.get_enableSpecular() ? 1 : 0;
-		ctx.out.addByte(tmp);
-	}
-	,customUnserialize: function(ctx) {
-		h3d_scene_Object.prototype.customUnserialize.call(this,ctx);
-		var _this = this.get_color();
-		var v = ctx.input.getDouble(ctx.inPos);
-		ctx.inPos += 8;
-		var v1 = ctx.input.getDouble(ctx.inPos);
-		ctx.inPos += 8;
-		var v2 = ctx.input.getDouble(ctx.inPos);
-		ctx.inPos += 8;
-		var v3 = ctx.input.getDouble(ctx.inPos);
-		ctx.inPos += 8;
-		_this.x = v;
-		_this.y = v1;
-		_this.z = v2;
-		_this.w = v3;
-		this.set_enableSpecular(ctx.input.b[ctx.inPos++] != 0);
-	}
-	,getCLID: function() {
-		return h3d_scene_Light.__clid;
-	}
-	,serialize: function(__ctx) {
-		h3d_scene_Object.prototype.serialize.call(this,__ctx);
-		__ctx.out.addFloat(this.cullingDistance);
-		var v = this.priority;
-		if(v >= 0 && v < 128) {
-			__ctx.out.addByte(v);
-		} else {
-			__ctx.out.addByte(128);
-			__ctx.out.addInt32(v);
-		}
-	}
-	,getSerializeSchema: function() {
-		var schema = h3d_scene_Object.prototype.getSerializeSchema.call(this);
-		schema.fieldsNames.push("cullingDistance");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
-		schema.fieldsNames.push("priority");
-		schema.fieldsTypes.push(hxbit_PropTypeDesc.PInt);
-		schema.isFinal = hxbit_Serializer.isClassFinal(h3d_scene_Light.__clid);
-		return schema;
-	}
-	,unserializeInit: function() {
-		h3d_scene_Object.prototype.unserializeInit.call(this);
-		this.cullingDistance = 1e10;
-		this.priority = 0;
-	}
-	,unserialize: function(__ctx) {
-		h3d_scene_Object.prototype.unserialize.call(this,__ctx);
-		var v = __ctx.input.getFloat(__ctx.inPos);
-		__ctx.inPos += 4;
-		this.cullingDistance = v;
-		var v1 = __ctx.input.b[__ctx.inPos++];
-		if(v1 == 128) {
-			v1 = __ctx.input.getInt32(__ctx.inPos);
-			__ctx.inPos += 4;
-		}
-		this.priority = v1;
-	}
-	,__class__: h3d_scene_Light
-});
-var h3d_scene_DirLight = function(dir,parent) {
-	this.dshader = new h3d_shader_DirLight();
-	this.direction = dir;
-	h3d_scene_Light.call(this,this.dshader,parent);
-	this.priority = 100;
-};
-$hxClasses["h3d.scene.DirLight"] = h3d_scene_DirLight;
-h3d_scene_DirLight.__name__ = ["h3d","scene","DirLight"];
-h3d_scene_DirLight.__super__ = h3d_scene_Light;
-h3d_scene_DirLight.prototype = $extend(h3d_scene_Light.prototype,{
-	get_color: function() {
-		return this.dshader.color__;
-	}
-	,get_enableSpecular: function() {
-		return this.dshader.enableSpecular__;
-	}
-	,set_enableSpecular: function(b) {
-		var _this = this.dshader;
-		_this.constModified = true;
-		return _this.enableSpecular__ = b;
-	}
-	,emit: function(ctx) {
-		var _this = this.dshader.direction__;
-		_this.x = this.direction.x;
-		_this.y = this.direction.y;
-		_this.z = this.direction.z;
-		_this.w = 1.;
-		this.dshader.direction__.normalize();
-		h3d_scene_Light.prototype.emit.call(this,ctx);
-	}
-	,customSerialize: function(ctx) {
-		h3d_scene_Light.prototype.customSerialize.call(this,ctx);
-		ctx.out.addDouble(this.direction.x);
-		ctx.out.addDouble(this.direction.y);
-		ctx.out.addDouble(this.direction.z);
-	}
-	,customUnserialize: function(ctx) {
-		this.shader = this.dshader = new h3d_shader_DirLight();
-		h3d_scene_Light.prototype.customUnserialize.call(this,ctx);
-		var v = ctx.input.getDouble(ctx.inPos);
-		ctx.inPos += 8;
-		var v1 = ctx.input.getDouble(ctx.inPos);
-		ctx.inPos += 8;
-		var v2 = ctx.input.getDouble(ctx.inPos);
-		ctx.inPos += 8;
-		this.direction = new h3d_Vector(v,v1,v2);
-	}
-	,getCLID: function() {
-		return h3d_scene_DirLight.__clid;
-	}
-	,__class__: h3d_scene_DirLight
-});
-var h3d_scene__$Graphics_GPoint = function(x,y,z,r,g,b,a) {
-	this.x = x;
-	this.y = y;
-	this.z = z;
-	this.r = r;
-	this.g = g;
-	this.b = b;
-	this.a = a;
-};
-$hxClasses["h3d.scene._Graphics.GPoint"] = h3d_scene__$Graphics_GPoint;
-h3d_scene__$Graphics_GPoint.__name__ = ["h3d","scene","_Graphics","GPoint"];
-h3d_scene__$Graphics_GPoint.prototype = {
-	__class__: h3d_scene__$Graphics_GPoint
-};
 var h3d_scene_Mesh = function(prim,mat,parent) {
 	h3d_scene_Object.call(this,parent);
 	this.primitive = prim;
@@ -30618,7 +28485,9 @@ $hxClasses["h3d.scene.Mesh"] = h3d_scene_Mesh;
 h3d_scene_Mesh.__name__ = ["h3d","scene","Mesh"];
 h3d_scene_Mesh.__super__ = h3d_scene_Object;
 h3d_scene_Mesh.prototype = $extend(h3d_scene_Object.prototype,{
-	getMeshMaterials: function() {
+	primitive: null
+	,material: null
+	,getMeshMaterials: function() {
 		return [this.material];
 	}
 	,getBounds: function(b,rec) {
@@ -30717,6 +28586,5474 @@ h3d_scene_Mesh.prototype = $extend(h3d_scene_Object.prototype,{
 	}
 	,__class__: h3d_scene_Mesh
 });
+var h3d_scene_MultiMaterial = function(prim,mats,parent) {
+	h3d_scene_Mesh.call(this,prim,mats == null ? null : mats[0],parent);
+	this.materials = mats == null ? [this.material] : mats;
+};
+$hxClasses["h3d.scene.MultiMaterial"] = h3d_scene_MultiMaterial;
+h3d_scene_MultiMaterial.__name__ = ["h3d","scene","MultiMaterial"];
+h3d_scene_MultiMaterial.__super__ = h3d_scene_Mesh;
+h3d_scene_MultiMaterial.prototype = $extend(h3d_scene_Mesh.prototype,{
+	materials: null
+	,getMeshMaterials: function() {
+		return this.materials.slice();
+	}
+	,clone: function(o) {
+		var m = o == null ? new h3d_scene_MultiMaterial(null,this.materials) : o;
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.materials;
+		while(_g1 < _g2.length) {
+			var m1 = _g2[_g1];
+			++_g1;
+			_g.push(m1 == null ? null : m1.clone());
+		}
+		m.materials = _g;
+		h3d_scene_Mesh.prototype.clone.call(this,m);
+		m.material = m.materials[0];
+		return m;
+	}
+	,emit: function(ctx) {
+		var _g1 = 0;
+		var _g = this.materials.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var m = this.materials[i];
+			if(m != null) {
+				var p = m.passes;
+				while(p != null) {
+					ctx.emitPass(p,this).index = i;
+					p = p.nextPass;
+				}
+			}
+		}
+	}
+	,getMaterialByName: function(name) {
+		var _g = 0;
+		var _g1 = this.materials;
+		while(_g < _g1.length) {
+			var m = _g1[_g];
+			++_g;
+			if(m != null && m.name == name) {
+				return m;
+			}
+		}
+		return h3d_scene_Mesh.prototype.getMaterialByName.call(this,name);
+	}
+	,getMaterials: function(a) {
+		if(a == null) {
+			a = [];
+		}
+		var _g = 0;
+		var _g1 = this.materials;
+		while(_g < _g1.length) {
+			var m = _g1[_g];
+			++_g;
+			if(m != null && a.indexOf(m) < 0) {
+				a.push(m);
+			}
+		}
+		var _g2 = 0;
+		var _g11 = this.children;
+		while(_g2 < _g11.length) {
+			var o = _g11[_g2];
+			++_g2;
+			o.getMaterials(a);
+		}
+		return a;
+	}
+	,draw: function(ctx) {
+		if(this.materials.length > 1) {
+			this.primitive.selectMaterial(ctx.drawPass.index);
+		}
+		h3d_scene_Mesh.prototype.draw.call(this,ctx);
+	}
+	,customSerialize: function(ctx) {
+		h3d_scene_Mesh.prototype.customSerialize.call(this,ctx);
+		var v = this.materials.length;
+		if(v >= 0 && v < 128) {
+			ctx.out.addByte(v);
+		} else {
+			ctx.out.addByte(128);
+			ctx.out.addInt32(v);
+		}
+		var _g = 0;
+		var _g1 = this.materials;
+		while(_g < _g1.length) {
+			var m = _g1[_g];
+			++_g;
+			ctx.addKnownRef(m);
+		}
+	}
+	,customUnserialize: function(ctx) {
+		h3d_scene_Mesh.prototype.customUnserialize.call(this,ctx);
+		var _g = [];
+		var _g2 = 0;
+		var v = ctx.input.b[ctx.inPos++];
+		if(v == 128) {
+			v = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var _g1 = v;
+		while(_g2 < _g1) {
+			var i = _g2++;
+			var c = h3d_mat_Material;
+			_g.push(ctx.getRef(c,c.__clid));
+		}
+		this.materials = _g;
+	}
+	,getCLID: function() {
+		return h3d_scene_MultiMaterial.__clid;
+	}
+	,__class__: h3d_scene_MultiMaterial
+});
+var h3d_prim_UV = function(u,v) {
+	this.u = u;
+	this.v = v;
+};
+$hxClasses["h3d.prim.UV"] = h3d_prim_UV;
+h3d_prim_UV.__name__ = ["h3d","prim","UV"];
+h3d_prim_UV.prototype = {
+	u: null
+	,v: null
+	,clone: function() {
+		return new h3d_prim_UV(this.u,this.v);
+	}
+	,toString: function() {
+		return "{" + hxd_Math.fmt(this.u) + "," + hxd_Math.fmt(this.v) + "}";
+	}
+	,__class__: h3d_prim_UV
+};
+var h3d_parts_GpuParticles = function(parent) {
+	this.amount = 1.;
+	this.duration = 0.;
+	this.currentTime = 0.;
+	this.seed = Std.random(16777216);
+	this.rnd = new hxd_Rand(0);
+	h3d_scene_MultiMaterial.call(this,null,[],parent);
+	this.bounds = new h3d_col_Bounds();
+	var _this = this.bounds;
+	if(0 < _this.xMin) {
+		_this.xMin = 0;
+	}
+	if(0 > _this.xMax) {
+		_this.xMax = 0;
+	}
+	if(0 < _this.yMin) {
+		_this.yMin = 0;
+	}
+	if(0 > _this.yMax) {
+		_this.yMax = 0;
+	}
+	if(0 < _this.zMin) {
+		_this.zMin = 0;
+	}
+	if(0 > _this.zMax) {
+		_this.zMax = 0;
+	}
+	this.groups = [];
+};
+$hxClasses["h3d.parts.GpuParticles"] = h3d_parts_GpuParticles;
+h3d_parts_GpuParticles.__name__ = ["h3d","parts","GpuParticles"];
+h3d_parts_GpuParticles.__super__ = h3d_scene_MultiMaterial;
+h3d_parts_GpuParticles.prototype = $extend(h3d_scene_MultiMaterial.prototype,{
+	groups: null
+	,primitiveBuffer: null
+	,resourcePath: null
+	,partAlloc: null
+	,rnd: null
+	,lastMove: null
+	,hideProps: null
+	,seed: null
+	,volumeBounds: null
+	,currentTime: null
+	,duration: null
+	,bounds: null
+	,amount: null
+	,uploadedCount: null
+	,getBounds: function(b,rec) {
+		if(rec == null) {
+			rec = false;
+		}
+		if((this.flags & 512) != 0) {
+			return h3d_scene_MultiMaterial.prototype.getBounds.call(this,b,rec);
+		}
+		var _g = 0;
+		var _g1 = this.groups;
+		while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			if(g.needRebuild) {
+				var s = this.getScene();
+				if(s != null) {
+					this.sync(s.renderer.ctx);
+				}
+				break;
+			}
+		}
+		return h3d_scene_MultiMaterial.prototype.getBounds.call(this,b,rec);
+	}
+	,onEnd: function() {
+		if(this.duration > 0) {
+			this.currentTime = -1;
+		}
+	}
+	,save: function() {
+		var bounds = null;
+		var _g = 0;
+		var _g1 = this.groups;
+		_hx_loop1: while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			var _g2 = g.emitMode;
+			switch(_g2[1]) {
+			case 2:case 4:
+				if(this.volumeBounds != null) {
+					var _this = this.volumeBounds;
+					var c_x = (_this.xMin + _this.xMax) * 0.5;
+					var c_y = (_this.yMin + _this.yMax) * 0.5;
+					var c_z = (_this.zMin + _this.zMax) * 0.5;
+					var _this1 = this.volumeBounds;
+					var _this2 = this.volumeBounds;
+					var _this3 = this.volumeBounds;
+					bounds = [c_x,c_y,c_z,_this1.xMax - _this1.xMin,_this2.yMax - _this2.yMin,_this3.zMax - _this3.zMin];
+					break _hx_loop1;
+				}
+				break;
+			default:
+			}
+		}
+		var _g3 = [];
+		var _g11 = 0;
+		var _g21 = this.groups;
+		while(_g11 < _g21.length) {
+			var g1 = _g21[_g11];
+			++_g11;
+			_g3.push(g1.save());
+		}
+		var save = { type : "particles3D", version : 2, groups : _g3, bounds : bounds};
+		if(this.hideProps != null) {
+			save.hide = this.hideProps;
+		}
+		return save;
+	}
+	,load: function(_o,resourcePath) {
+		this.resourcePath = resourcePath;
+		var o = _o;
+		if(o.version == 0 || o.version > 2) {
+			throw new js__$Boot_HaxeError("Unsupported version " + Std.string(_o.version));
+		}
+		var _g = 0;
+		var _g1 = o.groups;
+		while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			this.addGroup().load(o.version,g);
+		}
+		if(o.bounds != null) {
+			var x = o.bounds[0] - o.bounds[3] * 0.5;
+			var y = o.bounds[1] - o.bounds[4] * 0.5;
+			var z = o.bounds[2] - o.bounds[5] * 0.5;
+			var dx = o.bounds[3];
+			var dy = o.bounds[4];
+			var dz = o.bounds[5];
+			var b = new h3d_col_Bounds();
+			b.xMin = x;
+			b.yMin = y;
+			b.zMin = z;
+			b.xMax = x + dx;
+			b.yMax = y + dy;
+			b.zMax = z + dz;
+			this.set_volumeBounds(b);
+		}
+		this.hideProps = o.hide;
+	}
+	,addGroup: function(g,material,index) {
+		if(g == null) {
+			g = new h3d_parts_GpuPartGroup(this);
+		}
+		if(g.name == null) {
+			g.name = "Group#" + (this.groups.length + 1);
+		}
+		if(material == null) {
+			material = new h3d_mat_Material();
+			material.passes.set_culling(h3d_mat_Face.None);
+			material.passes.set_depthWrite(false);
+			material.set_blendMode(h2d_BlendMode.Alpha);
+			if(this.material == null) {
+				this.material = material;
+			}
+			if(g.material != null) {
+				material.set_props(g.getMaterialProps());
+				material.name = g.name;
+			}
+		}
+		material.passes.addShader(g.pshader);
+		if(index == null) {
+			index = this.groups.length;
+		}
+		this.materials.splice(index,0,material);
+		this.groups.splice(index,0,g);
+		g.needRebuild = true;
+		return g;
+	}
+	,set_seed: function(s) {
+		if(this.groups != null) {
+			var _g = 0;
+			var _g1 = this.groups;
+			while(_g < _g1.length) {
+				var g = _g1[_g];
+				++_g;
+				g.needRebuild = true;
+			}
+		}
+		return this.seed = s;
+	}
+	,set_volumeBounds: function(v) {
+		var _g = 0;
+		var _g1 = this.groups;
+		while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			g.needRebuild = true;
+		}
+		return this.volumeBounds = v;
+	}
+	,rebuild: function() {
+		var _g = 0;
+		var _g1 = this.groups;
+		while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			g.needRebuild = true;
+		}
+	}
+	,removeGroup: function(g) {
+		var idx = this.groups.indexOf(g);
+		if(idx < 0) {
+			return;
+		}
+		this.groups.splice(idx,1);
+		this.materials.splice(idx,1);
+		if(this.materials.length == 0) {
+			this.material = null;
+		}
+	}
+	,getGroup: function(name) {
+		var _g = 0;
+		var _g1 = this.groups;
+		while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			if(g.name == name) {
+				return g;
+			}
+		}
+		return null;
+	}
+	,getGroups: function() {
+		return HxOverrides.iter(this.groups);
+	}
+	,calcAbsPos: function() {
+		h3d_scene_MultiMaterial.prototype.calcAbsPos.call(this);
+		this.lastMove = this.currentTime;
+	}
+	,rebuildAll: function(cam) {
+		if(this.primitive != null) {
+			this.primitive.dispose();
+			this.primitive = null;
+		}
+		var ebounds = null;
+		var calcEmit = null;
+		var partCount = 0;
+		var partAlloc = this.partAlloc;
+		var _this = this.bounds;
+		_this.xMin = 1e20;
+		_this.xMax = -1e20;
+		_this.yMin = 1e20;
+		_this.yMax = -1e20;
+		_this.zMin = 1e20;
+		_this.zMax = -1e20;
+		this.duration = 0.;
+		var hasLoop = false;
+		var _g1 = 0;
+		var _g = this.groups.length;
+		while(_g1 < _g) {
+			var gid = _g1++;
+			var g = this.groups[gid];
+			g.partIndex = partCount;
+			partCount += g.nparts;
+			var p = g.particles;
+			while(p != null) {
+				var n = p.next;
+				p.next = partAlloc;
+				partAlloc = p;
+				p = n;
+			}
+			g.particles = null;
+			g.currentParts = 0;
+			g.maxTime = -1;
+			if(calcEmit != g.emitMode) {
+				calcEmit = g.emitMode;
+				var _g2 = g.emitMode;
+				switch(_g2[1]) {
+				case 0:case 1:
+					ebounds = null;
+					break;
+				case 2:case 4:
+					ebounds = this.volumeBounds;
+					if(ebounds == null) {
+						var b = new h3d_col_Bounds();
+						b.xMin = -1;
+						b.yMin = -1;
+						b.zMin = -1;
+						b.xMax = 1;
+						b.yMax = 1;
+						b.zMax = 1;
+						ebounds = this.set_volumeBounds(b);
+					}
+					break;
+				case 3:
+					var ignore = (this.flags & 512) != 0;
+					var f = 512;
+					this.flags |= f;
+					ebounds = this.parent.getBounds();
+					var f1 = 512;
+					if(ignore) {
+						this.flags |= f1;
+					} else {
+						this.flags &= ~f1;
+					}
+					ebounds.transform(this.getInvPos());
+					break;
+				}
+			}
+			g.ebounds = ebounds;
+			var maxLife = g.life * (1 + g.lifeRand) * (2 - g.emitSync) + g.emitDelay;
+			if(maxLife > this.duration) {
+				this.duration = maxLife;
+			}
+			if(g.emitLoop) {
+				hasLoop = true;
+			}
+			g.updateBounds(this.bounds);
+		}
+		this.partAlloc = partAlloc;
+		if(this.primitiveBuffer == null || this.primitiveBuffer.pos > 14 * partCount * 4) {
+			var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+			this.primitiveBuffer = this1;
+		}
+		var this2 = this.primitiveBuffer;
+		var _g11 = this2.pos;
+		var _g3 = 14 * partCount * 4;
+		while(_g11 < _g3) {
+			var i = _g11++;
+			if(this2.pos == this2.array.length) {
+				var newSize = this2.array.length << 1;
+				if(newSize < 128) {
+					newSize = 128;
+				}
+				var newArray = new Float32Array(newSize);
+				newArray.set(this2.array);
+				this2.array = newArray;
+			}
+			this2.array[this2.pos++] = 0.;
+		}
+		this.primitive = new h3d_prim_RawPrimitive({ vbuf : this.primitiveBuffer, stride : 14, quads : true, bounds : this.bounds},true);
+		this.primitive.buffer.flags |= 1 << h3d_BufferFlag.RawFormat[1];
+		if(hasLoop) {
+			if(this.currentTime < this.duration) {
+				this.currentTime = this.duration;
+			}
+			this.duration = 0;
+		} else if(this.currentTime > this.duration) {
+			this.currentTime = this.duration;
+		}
+		var _g4 = 0;
+		var _g12 = this.groups;
+		while(_g4 < _g12.length) {
+			var g1 = _g12[_g4];
+			++_g4;
+			g1.needRebuild = false;
+		}
+		this.rnd.init(this.seed);
+	}
+	,cleanParts: function(g,pneeded,checkMove) {
+		if(checkMove == null) {
+			checkMove = false;
+		}
+		if(g.maxTime < 0) {
+			return;
+		}
+		var p = g.particles;
+		var prev = null;
+		var ftime = g.maxTime;
+		while(p != null && g.currentParts > pneeded) {
+			var t = p.time + this.currentTime;
+			var st = t - t % p.life;
+			if(st > p.time + ftime && (!checkMove || -p.time < ftime)) {
+				var n = p.next;
+				p.next = this.partAlloc;
+				this.partAlloc = p;
+				if(prev == null) {
+					g.particles = n;
+				} else {
+					prev.next = n;
+				}
+				g.currentParts--;
+				p = n;
+				continue;
+			}
+			prev = p;
+			p = p.next;
+		}
+		g.maxTime = -1;
+	}
+	,syncGroup: function(g,camera,prevTime,visible) {
+		var needSync = false;
+		var f = g.amount * this.amount;
+		var pneeded = Math.ceil((f < 0. ? 0. : f > 1. ? 1. : f) * g.nparts);
+		if(this.lastMove != 0) {
+			var p = g.particles;
+			while(p != null) {
+				if(p.time > -this.lastMove) {
+					break;
+				}
+				p = p.next;
+			}
+			if(p == null) {
+				this.lastMove = 0;
+			} else {
+				var old = g.maxTime;
+				g.maxTime = this.lastMove;
+				var count = g.currentParts;
+				this.cleanParts(g,0,true);
+				if(g.currentParts < count) {
+					needSync = true;
+				}
+				g.maxTime = old;
+			}
+		}
+		if(g.currentParts != pneeded) {
+			if(g.currentParts < pneeded) {
+				if(this.lastMove == 0) {
+					this.cleanParts(g,pneeded);
+				}
+				var partAlloc = this.partAlloc;
+				while(g.currentParts < pneeded) {
+					var pt = partAlloc;
+					if(pt == null) {
+						pt = new h3d_parts__$GpuParticles_GpuPart();
+					} else {
+						partAlloc = pt.next;
+					}
+					g.emitPart(this.rnd,pt,this.absPos);
+					if(this.lastMove != 0) {
+						pt.time = -prevTime;
+					} else {
+						pt.time -= prevTime;
+					}
+					pt.index = -1;
+					pt.next = g.particles;
+					g.particles = pt;
+					g.currentParts++;
+				}
+				this.partAlloc = partAlloc;
+				needSync = true;
+			}
+			if(g.currentParts > pneeded && this.lastMove == 0) {
+				var ftime = g.maxTime;
+				if(ftime < 0) {
+					ftime = this.currentTime;
+					g.maxTime = ftime;
+				}
+				var p1 = g.particles;
+				var count1 = 0;
+				while(p1 != null) {
+					if(this.currentTime - (p1.time + this.currentTime) % p1.life > ftime) {
+						++count1;
+					}
+					p1 = p1.next;
+				}
+				if(g.currentParts - count1 <= pneeded || count1 > 1000) {
+					this.cleanParts(g,pneeded);
+					if(g.currentParts > pneeded) {
+						g.maxTime = ftime;
+					}
+					needSync = true;
+				}
+			}
+		}
+		var needSort = g.sortMode != h3d_parts_GpuSortMode.None && visible;
+		if(needSort) {
+			var p2 = g.particles;
+			var m = camera.m;
+			while(p2 != null) {
+				var t = p2.time + this.currentTime;
+				if(g.emitLoop) {
+					t %= p2.life;
+				}
+				var acc = (1 + g.speedIncr * t) * t;
+				p2.x = p2.sx + p2.vx * acc;
+				p2.y = p2.sy + p2.vy * acc;
+				p2.z = p2.sz + p2.vz * acc - g.gravity * t * t;
+				var cz = p2.x * m._13 + p2.y * m._23 + p2.z * m._33 + m._43;
+				var cw = p2.x * m._14 + p2.y * m._24 + p2.z * m._34 + m._44;
+				p2.w = cz / cw;
+				p2 = p2.next;
+			}
+			var list = g.particles;
+			var tmp;
+			if(list == null) {
+				tmp = null;
+			} else {
+				var insize = 1;
+				var nmerges;
+				var psize = 0;
+				var qsize = 0;
+				var p3;
+				var q;
+				var e;
+				var tail;
+				while(true) {
+					p3 = list;
+					list = null;
+					tail = null;
+					nmerges = 0;
+					while(p3 != null) {
+						++nmerges;
+						q = p3;
+						psize = 0;
+						var _g1 = 0;
+						var _g = insize;
+						while(_g1 < _g) {
+							var i = _g1++;
+							++psize;
+							q = q.next;
+							if(q == null) {
+								break;
+							}
+						}
+						qsize = insize;
+						while(psize > 0 || qsize > 0 && q != null) {
+							if(psize == 0) {
+								e = q;
+								q = q.next;
+								--qsize;
+							} else if(qsize == 0 || q == null || (p3.w < q.w ? 1 : -1) <= 0) {
+								e = p3;
+								p3 = p3.next;
+								--psize;
+							} else {
+								e = q;
+								q = q.next;
+								--qsize;
+							}
+							if(tail != null) {
+								tail.next = e;
+							} else {
+								list = e;
+							}
+							tail = e;
+						}
+						p3 = q;
+					}
+					tail.next = null;
+					if(nmerges <= 1) {
+						break;
+					}
+					insize *= 2;
+				}
+				tmp = list;
+			}
+			g.particles = tmp;
+			needSync = true;
+		}
+		if(!needSync) {
+			return;
+		}
+		var startIndex = g.partIndex * 14 * 4;
+		var index = startIndex;
+		var vbuf = this.primitiveBuffer;
+		var p4 = g.particles;
+		var uvs = h3d_parts_GpuParticles.PUVS;
+		var pidx = 0;
+		var firstPart = g.nparts;
+		var lastPart = -1;
+		while(p4 != null) {
+			if(p4.index == pidx) {
+				++pidx;
+				index += 56;
+				p4 = p4.next;
+				continue;
+			}
+			var _g2 = 0;
+			while(_g2 < uvs.length) {
+				var u = uvs[_g2];
+				++_g2;
+				vbuf.array[index++] = p4.sx;
+				vbuf.array[index++] = p4.sy;
+				vbuf.array[index++] = p4.sz;
+				vbuf.array[index++] = p4.vx;
+				vbuf.array[index++] = p4.vy;
+				vbuf.array[index++] = p4.vz;
+				vbuf.array[index++] = u.u;
+				vbuf.array[index++] = u.v;
+				vbuf.array[index++] = p4.time;
+				vbuf.array[index++] = p4.life;
+				vbuf.array[index++] = p4.initX;
+				vbuf.array[index++] = p4.initY;
+				vbuf.array[index++] = p4.deltaX;
+				vbuf.array[index++] = p4.deltaY;
+			}
+			if(pidx < firstPart) {
+				firstPart = pidx;
+			}
+			if(pidx > lastPart) {
+				lastPart = pidx;
+			}
+			p4.index = pidx++;
+			p4 = p4.next;
+		}
+		if(firstPart <= lastPart) {
+			this.uploadedCount += lastPart - firstPart + 1;
+			this.primitive.buffer.uploadVector(vbuf,(g.partIndex + firstPart) * 4 * 14,(lastPart - firstPart + 1) * 4,(g.partIndex + firstPart) * 4);
+		}
+	}
+	,emit: function(ctx) {
+		var _g1 = 0;
+		var _g = this.materials.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var m = this.materials[i];
+			var g = this.groups[i];
+			if(m != null && g.enable && g.currentParts > 0) {
+				var p = m.passes;
+				while(p != null) {
+					ctx.emitPass(p,this).index = i;
+					p = p.nextPass;
+				}
+			}
+		}
+	}
+	,sync: function(ctx) {
+		h3d_scene_MultiMaterial.prototype.sync.call(this,ctx);
+		if(this.partAlloc != null) {
+			this.partAlloc = this.partAlloc.next;
+		}
+		var prev = this.currentTime;
+		this.currentTime += ctx.elapsedTime;
+		if(prev < this.duration && this.currentTime >= this.duration) {
+			this.onEnd();
+			if((this.flags & 32) == 0) {
+				return;
+			}
+		}
+		if(this.primitive != null) {
+			var _g = 0;
+			var _g1 = this.groups;
+			while(_g < _g1.length) {
+				var g = _g1[_g];
+				++_g;
+				if(g.needRebuild) {
+					prev = 0;
+					this.currentTime = 0;
+					this.primitive.dispose();
+					this.primitive = null;
+					break;
+				}
+			}
+		}
+		var camera = ctx.camera;
+		if(camera == null) {
+			camera = new h3d_Camera();
+		}
+		if(this.primitive == null || this.primitive.buffer.isDisposed()) {
+			this.rebuildAll(camera);
+		}
+		this.uploadedCount = 0;
+		var hasPart = false;
+		var _g2 = 0;
+		var _g11 = this.groups;
+		while(_g2 < _g11.length) {
+			var g1 = _g11[_g2];
+			++_g2;
+			this.syncGroup(g1,camera,prev,ctx.visibleFlag);
+			if(g1.currentParts == 0) {
+				continue;
+			}
+			hasPart = true;
+			g1.syncParams();
+			g1.pshader.time__ = this.currentTime;
+			if(g1.pshader.clipBounds__) {
+				var _this = g1.pshader.volumeMin__;
+				_this.x = this.volumeBounds.xMin;
+				_this.y = this.volumeBounds.yMin;
+				_this.z = this.volumeBounds.zMin;
+				_this.w = 1.;
+				var _this1 = g1.pshader.volumeSize__;
+				var _this2 = this.volumeBounds;
+				var _this3 = this.volumeBounds;
+				var _this4 = this.volumeBounds;
+				_this1.x = _this2.xMax - _this2.xMin;
+				_this1.y = _this3.yMax - _this3.yMin;
+				_this1.z = _this4.zMax - _this4.zMin;
+				_this1.w = 1.;
+			}
+			if(g1.pshader.transform3D__) {
+				var _this5 = camera.target;
+				var v = camera.pos;
+				var r = new h3d_Vector(_this5.x - v.x,_this5.y - v.y,_this5.z - v.z,_this5.w - v.w);
+				r.z = 0;
+				r.normalize();
+				var q = new h3d_Quat();
+				q.initDirection(r);
+				q.saveToMatrix(g1.pshader.cameraRotation__);
+			}
+			if(g1.emitMode == h3d_parts_GpuEmitMode.CameraBounds) {
+				g1.pshader.transform__.loadFrom(camera.getInverseView());
+				var _this6 = g1.pshader.offset__;
+				_this6.x = -camera.pos.x * g1.emitDist;
+				_this6.y = -camera.pos.y * g1.emitDist;
+				_this6.z = -camera.pos.z * g1.emitDist;
+				_this6.w = 1.;
+				var _this7 = g1.pshader.offset__;
+				var m = camera.mcam;
+				var px = _this7.x * m._11 + _this7.y * m._21 + _this7.z * m._31;
+				var py = _this7.x * m._12 + _this7.y * m._22 + _this7.z * m._32;
+				var pz = _this7.x * m._13 + _this7.y * m._23 + _this7.z * m._33;
+				_this7.x = px;
+				_this7.y = py;
+				_this7.z = pz;
+				var _this8 = this.volumeBounds;
+				g1.pshader.offset__.x %= _this8.xMax - _this8.xMin;
+				var _this9 = this.volumeBounds;
+				g1.pshader.offset__.y %= _this9.yMax - _this9.yMin;
+				var _this10 = this.volumeBounds;
+				g1.pshader.offset__.z %= _this10.zMax - _this10.zMin;
+			} else {
+				g1.pshader.transform__.identity();
+				var _this11 = g1.pshader.offset__;
+				_this11.x = 0;
+				_this11.y = 0;
+				_this11.z = 0;
+				_this11.w = 1.;
+			}
+		}
+		if(this.duration == 0 && !hasPart) {
+			this.onEnd();
+		}
+	}
+	,get_count: function() {
+		var n = 0;
+		var _g = 0;
+		var _g1 = this.groups;
+		while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			n += g.currentParts;
+		}
+		return n;
+	}
+	,draw: function(ctx) {
+		if(this.primitive == null || this.primitive.buffer.isDisposed()) {
+			return;
+		}
+		var g = this.groups[ctx.drawPass.index];
+		if(this.primitive.buffer == null || this.primitive.buffer.isDisposed()) {
+			this.primitive.alloc(ctx.engine);
+		}
+		var _this = ctx.engine;
+		_this.renderBuffer(this.primitive.buffer,_this.mem.quadIndexes,2,g.partIndex * 2,g.currentParts * 2);
+	}
+	,loadTexture: function(path) {
+		try {
+			return hxd_res_Loader.currentInstance.load(path).toTexture();
+		} catch( e ) {
+			if (e instanceof js__$Boot_HaxeError) e = e.val;
+			if( js_Boot.__instanceof(e,hxd_fs_NotFound) ) {
+				return h3d_mat_Texture.fromColor(16711935);
+			} else throw(e);
+		}
+	}
+	,serialize: function(ctx) {
+		var old = this.primitive;
+		var oldMat = this.materials;
+		this.primitive = null;
+		this.materials = [];
+		h3d_scene_MultiMaterial.prototype.serialize.call(this,ctx);
+		this.primitive = old;
+		this.materials = oldMat;
+	}
+	,customSerialize: function(ctx) {
+		h3d_scene_MultiMaterial.prototype.customSerialize.call(this,ctx);
+		var s = this.resourcePath;
+		if(s == null) {
+			ctx.out.addByte(0);
+		} else {
+			var b = haxe_io_Bytes.ofString(s);
+			var v = b.length + 1;
+			if(v >= 0 && v < 128) {
+				ctx.out.addByte(v);
+			} else {
+				ctx.out.addByte(128);
+				ctx.out.addInt32(v);
+			}
+			ctx.out.add(b);
+		}
+		ctx.out.addFloat(this.amount);
+		if(this.resourcePath == null) {
+			ctx.addDynamic(this.save());
+		}
+	}
+	,customUnserialize: function(ctx) {
+		h3d_scene_MultiMaterial.prototype.customUnserialize.call(this,ctx);
+		var v = ctx.input.b[ctx.inPos++];
+		if(v == 128) {
+			v = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var len = v;
+		var tmp;
+		if(len == 0) {
+			tmp = null;
+		} else {
+			--len;
+			var s = ctx.input.getString(ctx.inPos,len);
+			ctx.inPos += len;
+			tmp = s;
+		}
+		this.resourcePath = tmp;
+		var v1 = ctx.input.getFloat(ctx.inPos);
+		ctx.inPos += 4;
+		this.amount = v1;
+		this.groups = [];
+		this.bounds = new h3d_col_Bounds();
+		if(this.resourcePath != null) {
+			this.load(JSON.parse(hxd_res_Loader.currentInstance.load(this.resourcePath).toText()),this.resourcePath);
+		} else {
+			this.load(ctx.getDynamic());
+		}
+	}
+	,getCLID: function() {
+		return h3d_parts_GpuParticles.__clid;
+	}
+	,unserializeInit: function() {
+		h3d_scene_MultiMaterial.prototype.unserializeInit.call(this);
+		this.rnd = new hxd_Rand(0);
+		this.set_seed(Std.random(16777216));
+		this.currentTime = 0.;
+		this.duration = 0.;
+		this.amount = 1.;
+	}
+	,unserialize: function(__ctx) {
+		h3d_scene_MultiMaterial.prototype.unserialize.call(this,__ctx);
+	}
+	,__class__: h3d_parts_GpuParticles
+});
+var h3d_pass_Base = function() {
+	this.forceProcessing = false;
+	this.priority = 0;
+};
+$hxClasses["h3d.pass.Base"] = h3d_pass_Base;
+h3d_pass_Base.__name__ = ["h3d","pass","Base"];
+h3d_pass_Base.prototype = {
+	ctx: null
+	,priority: null
+	,forceProcessing: null
+	,getTexture: function(index) {
+		if(index == null) {
+			index = 0;
+		}
+		return null;
+	}
+	,setTexture: function(t,index) {
+		if(index == null) {
+			index = 0;
+		}
+		throw new js__$Boot_HaxeError("Not implemented");
+	}
+	,compileShader: function(p) {
+		throw new js__$Boot_HaxeError("Not implemented for this pass");
+	}
+	,setContext: function(ctx) {
+		this.ctx = ctx;
+	}
+	,dispose: function() {
+	}
+	,draw: function(passes) {
+		return passes;
+	}
+	,__class__: h3d_pass_Base
+};
+var h3d_pass_ScreenFx = function(shader) {
+	this.shader = shader;
+	this.shaders = new hxsl_ShaderList(shader);
+	this.manager = new h3d_pass_ShaderManager();
+	this.pass = new h3d_mat_Pass(Std.string(this),new hxsl_ShaderList(shader));
+	this.pass.set_culling(h3d_mat_Face.None);
+	this.pass.depth(false,h3d_mat_Compare.Always);
+	this.plan = h3d_prim_Plan2D.get();
+	this.engine = h3d_Engine.CURRENT;
+};
+$hxClasses["h3d.pass.ScreenFx"] = h3d_pass_ScreenFx;
+h3d_pass_ScreenFx.__name__ = ["h3d","pass","ScreenFx"];
+h3d_pass_ScreenFx.prototype = {
+	shader: null
+	,pass: null
+	,manager: null
+	,plan: null
+	,engine: null
+	,shaders: null
+	,buffers: null
+	,setGlobals: function(ctx) {
+		var _g = 0;
+		var _g1 = ctx.sharedGlobals;
+		while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			this.manager.globals.map.h[g.gid] = g.value;
+		}
+	}
+	,render: function() {
+		var rts = this.manager.compileShaders(this.shaders);
+		this.engine.selectMaterial(this.pass);
+		this.engine.selectShader(rts);
+		if(this.buffers == null) {
+			this.buffers = new h3d_shader_Buffers(rts);
+		} else {
+			var _this = this.buffers;
+			_this.vertex.grow(rts.vertex);
+			_this.fragment.grow(rts.fragment);
+		}
+		this.manager.fillGlobals(this.buffers,rts);
+		this.manager.fillParams(this.buffers,rts,this.shaders);
+		this.engine.uploadShaderBuffers(this.buffers,0);
+		this.engine.uploadShaderBuffers(this.buffers,1);
+		this.engine.uploadShaderBuffers(this.buffers,2);
+		this.plan.render(this.engine);
+	}
+	,dispose: function() {
+	}
+	,__class__: h3d_pass_ScreenFx
+};
+var h3d_pass_Blur = function(quality,passes,sigma) {
+	if(sigma == null) {
+		sigma = 1.;
+	}
+	if(passes == null) {
+		passes = 1;
+	}
+	if(quality == null) {
+		quality = 1;
+	}
+	h3d_pass_ScreenFx.call(this,new h3d_shader_Blur());
+	this.set_quality(quality);
+	this.passes = passes;
+	this.set_sigma(sigma);
+};
+$hxClasses["h3d.pass.Blur"] = h3d_pass_Blur;
+h3d_pass_Blur.__name__ = ["h3d","pass","Blur"];
+h3d_pass_Blur.__super__ = h3d_pass_ScreenFx;
+h3d_pass_Blur.prototype = $extend(h3d_pass_ScreenFx.prototype,{
+	quality: null
+	,sigma: null
+	,passes: null
+	,depthBlur: null
+	,values: null
+	,set_quality: function(q) {
+		this.values = null;
+		return this.quality = q;
+	}
+	,set_sigma: function(s) {
+		this.values = null;
+		return this.sigma = s;
+	}
+	,set_depthBlur: function(d) {
+		this.depthBlur = d;
+		if(d == null) {
+			var _this = this.shader;
+			_this.constModified = true;
+			_this.isDepthDependant__ = false;
+			this.shader.depthTexture__ = null;
+			this.shader.normalTexture__ = null;
+		} else {
+			var _this1 = this.shader;
+			_this1.constModified = true;
+			_this1.isDepthDependant__ = true;
+			this.shader.depthTexture__ = d.depths;
+			this.shader.normalTexture__ = d.normals;
+		}
+		return d;
+	}
+	,gauss: function(x,s) {
+		if(s <= 0) {
+			if(x == 0) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+		var sq = s * s;
+		var p = Math.pow(2.718281828459,-(x * x) / (2 * sq));
+		return p / Math.sqrt(2 * Math.PI * sq);
+	}
+	,calcValues: function() {
+		this.values = [];
+		var tot = 0.;
+		var _g1 = 0;
+		var _g = this.quality + 1;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var g = this.gauss(i,this.sigma);
+			this.values[i] = g;
+			tot += g;
+			if(i > 0) {
+				tot += g;
+			}
+		}
+		var _g11 = 0;
+		var _g2 = this.quality + 1;
+		while(_g11 < _g2) {
+			var i1 = _g11++;
+			this.values[i1] /= tot;
+		}
+	}
+	,apply: function(src,tmp,output,isDepth) {
+		if(isDepth == null) {
+			isDepth = false;
+		}
+		if((this.quality <= 0 || this.passes <= 0 || this.sigma <= 0) && this.shader.fixedColor__ == null) {
+			return;
+		}
+		if(output == null) {
+			output = src;
+		}
+		var alloc = tmp == null;
+		if(alloc) {
+			tmp = new h3d_mat_Texture(src.width,src.height,[h3d_mat_TextureFlags.Target]);
+		}
+		if(this.values == null) {
+			this.calcValues();
+		}
+		var _this = this.shader;
+		_this.constModified = true;
+		_this.Quality__ = this.quality + 1;
+		this.shader.values__ = this.values;
+		var _this1 = this.shader;
+		_this1.constModified = true;
+		_this1.isDepth__ = isDepth;
+		if(this.depthBlur != null) {
+			this.shader.cameraInverseViewProj__ = this.depthBlur.camera.getInverseViewProj();
+		}
+		var outDepth = output.depthBuffer;
+		var tmpDepth = tmp.depthBuffer;
+		output.depthBuffer = null;
+		tmp.depthBuffer = null;
+		var _g1 = 0;
+		var _g = this.passes;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this.shader.texture__ = src;
+			var _this2 = this.shader.pixel__;
+			_this2.x = 1 / src.width;
+			_this2.y = 0;
+			_this2.z = 0.;
+			_this2.w = 1.;
+			this.engine.pushTarget(tmp);
+			this.render();
+			this.engine.popTarget();
+			this.shader.texture__ = tmp;
+			var _this3 = this.shader.pixel__;
+			_this3.x = 0;
+			_this3.y = 1 / tmp.height;
+			_this3.z = 0.;
+			_this3.w = 1.;
+			this.engine.pushTarget(output);
+			this.render();
+			this.engine.popTarget();
+		}
+		output.depthBuffer = outDepth;
+		tmp.depthBuffer = tmpDepth;
+		if(alloc) {
+			tmp.dispose();
+		}
+	}
+	,__class__: h3d_pass_Blur
+});
+var hxsl_Shader = function() {
+	this.priority = 0;
+	this.initialize();
+};
+$hxClasses["hxsl.Shader"] = hxsl_Shader;
+hxsl_Shader.__name__ = ["hxsl","Shader"];
+hxsl_Shader.prototype = {
+	priority: null
+	,shader: null
+	,instance: null
+	,constBits: null
+	,constModified: null
+	,initialize: function() {
+		this.constModified = true;
+		if(this.shader != null) {
+			return;
+		}
+		var cl = js_Boot.getClass(this);
+		this.shader = cl._SHADER;
+		if(this.shader == null) {
+			var curClass = cl;
+			while(curClass != null && curClass.SRC == null) curClass = Type.getSuperClass(curClass);
+			if(curClass == null) {
+				throw new js__$Boot_HaxeError(Type.getClassName(cl) + " has no shader source");
+			}
+			this.shader = curClass._SHADER;
+			if(this.shader == null) {
+				this.shader = new hxsl_SharedShader(curClass.SRC);
+				curClass._SHADER = this.shader;
+			}
+		}
+	}
+	,getParamValue: function(index) {
+		throw new js__$Boot_HaxeError("assert");
+	}
+	,getParamFloatValue: function(index) {
+		throw new js__$Boot_HaxeError("assert");
+	}
+	,updateConstants: function(globals) {
+		throw new js__$Boot_HaxeError("assert");
+	}
+	,updateConstantsFinal: function(globals) {
+		var c = this.shader.consts;
+		while(c != null) {
+			if(c.globalId == 0) {
+				c = c.next;
+				continue;
+			}
+			var v = globals.map.h[c.globalId];
+			var _g = c.v.type;
+			switch(_g[1]) {
+			case 1:
+				var v1 = v;
+				if(v1 >>> c.bits != 0) {
+					throw new js__$Boot_HaxeError("Constant " + c.v.name + " is outside range (" + v1 + " > " + ((1 << c.bits) - 1) + ")");
+				}
+				this.constBits |= v1 << c.pos;
+				break;
+			case 2:
+				var v2 = v;
+				if(v2) {
+					this.constBits |= 1 << c.pos;
+				}
+				break;
+			case 15:
+				var count = _g[2];
+				if(v == null) {
+					c = c.next;
+					continue;
+				}
+				var v3 = v;
+				var sel = v3.channel;
+				if(v3.texture == null) {
+					sel = hxsl_Channel.Unknown;
+				} else if(sel == null || sel == hxsl_Channel.Unknown) {
+					switch(count) {
+					case 1:
+						if(v3.texture.format == h3d_mat_Texture.nativeFormat) {
+							sel = hxsl_Channel.PackedFloat;
+						} else {
+							throw new js__$Boot_HaxeError("Constant " + c.v.name + " does not define channel select value");
+						}
+						break;
+					case 3:
+						if(v3.texture.format == h3d_mat_Texture.nativeFormat) {
+							sel = hxsl_Channel.PackedNormal;
+						} else {
+							throw new js__$Boot_HaxeError("Constant " + c.v.name + " does not define channel select value");
+						}
+						break;
+					default:
+						throw new js__$Boot_HaxeError("Constant " + c.v.name + " does not define channel select value");
+					}
+				}
+				this.constBits |= (globals.allocChannelID(v3.texture) << 3 | sel[1]) << c.pos;
+				break;
+			default:
+				throw new js__$Boot_HaxeError("assert");
+			}
+			c = c.next;
+		}
+		var _this = this.shader;
+		var constBits = this.constBits;
+		var i = _this.instanceCache.h[constBits];
+		this.instance = i == null ? _this.makeInstance(constBits) : i;
+	}
+	,clone: function() {
+		return this;
+	}
+	,toString: function() {
+		return Type.getClassName(js_Boot.getClass(this));
+	}
+	,__class__: hxsl_Shader
+};
+var h3d_pass__$Border_BorderShader = function() {
+	this.color__ = new h3d_Vector();
+	hxsl_Shader.call(this);
+};
+$hxClasses["h3d.pass._Border.BorderShader"] = h3d_pass__$Border_BorderShader;
+h3d_pass__$Border_BorderShader.__name__ = ["h3d","pass","_Border","BorderShader"];
+h3d_pass__$Border_BorderShader.__super__ = hxsl_Shader;
+h3d_pass__$Border_BorderShader.prototype = $extend(hxsl_Shader.prototype,{
+	color__: null
+	,get_color: function() {
+		return this.color__;
+	}
+	,set_color: function(_v) {
+		return this.color__ = _v;
+	}
+	,updateConstants: function(globals) {
+		this.constBits = 0;
+		this.updateConstantsFinal(globals);
+	}
+	,getParamValue: function(index) {
+		if(index == 0) {
+			return this.color__;
+		}
+		return null;
+	}
+	,getParamFloatValue: function(index) {
+		return 0.;
+	}
+	,clone: function() {
+		var s = Object.create(h3d_pass__$Border_BorderShader.prototype);
+		s.shader = this.shader;
+		s.color__ = this.color__;
+		return s;
+	}
+	,__class__: h3d_pass__$Border_BorderShader
+});
+var h3d_pass_Border = function(width,height,size) {
+	if(size == null) {
+		size = 1;
+	}
+	h3d_pass_ScreenFx.call(this,new h3d_pass__$Border_BorderShader());
+	var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+	var bbuf = this1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize = bbuf.array.length << 1;
+		if(newSize < 128) {
+			newSize = 128;
+		}
+		var newArray = new Float32Array(newSize);
+		newArray.set(bbuf.array);
+		bbuf.array = newArray;
+	}
+	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize1 = bbuf.array.length << 1;
+		if(newSize1 < 128) {
+			newSize1 = 128;
+		}
+		var newArray1 = new Float32Array(newSize1);
+		newArray1.set(bbuf.array);
+		bbuf.array = newArray1;
+	}
+	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize2 = bbuf.array.length << 1;
+		if(newSize2 < 128) {
+			newSize2 = 128;
+		}
+		var newArray2 = new Float32Array(newSize2);
+		newArray2.set(bbuf.array);
+		bbuf.array = newArray2;
+	}
+	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize3 = bbuf.array.length << 1;
+		if(newSize3 < 128) {
+			newSize3 = 128;
+		}
+		var newArray3 = new Float32Array(newSize3);
+		newArray3.set(bbuf.array);
+		bbuf.array = newArray3;
+	}
+	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize4 = bbuf.array.length << 1;
+		if(newSize4 < 128) {
+			newSize4 = 128;
+		}
+		var newArray4 = new Float32Array(newSize4);
+		newArray4.set(bbuf.array);
+		bbuf.array = newArray4;
+	}
+	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize5 = bbuf.array.length << 1;
+		if(newSize5 < 128) {
+			newSize5 = 128;
+		}
+		var newArray5 = new Float32Array(newSize5);
+		newArray5.set(bbuf.array);
+		bbuf.array = newArray5;
+	}
+	bbuf.array[bbuf.pos++] = 1 - size / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize6 = bbuf.array.length << 1;
+		if(newSize6 < 128) {
+			newSize6 = 128;
+		}
+		var newArray6 = new Float32Array(newSize6);
+		newArray6.set(bbuf.array);
+		bbuf.array = newArray6;
+	}
+	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize7 = bbuf.array.length << 1;
+		if(newSize7 < 128) {
+			newSize7 = 128;
+		}
+		var newArray7 = new Float32Array(newSize7);
+		newArray7.set(bbuf.array);
+		bbuf.array = newArray7;
+	}
+	bbuf.array[bbuf.pos++] = 1 - size / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize8 = bbuf.array.length << 1;
+		if(newSize8 < 128) {
+			newSize8 = 128;
+		}
+		var newArray8 = new Float32Array(newSize8);
+		newArray8.set(bbuf.array);
+		bbuf.array = newArray8;
+	}
+	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize9 = bbuf.array.length << 1;
+		if(newSize9 < 128) {
+			newSize9 = 128;
+		}
+		var newArray9 = new Float32Array(newSize9);
+		newArray9.set(bbuf.array);
+		bbuf.array = newArray9;
+	}
+	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize10 = bbuf.array.length << 1;
+		if(newSize10 < 128) {
+			newSize10 = 128;
+		}
+		var newArray10 = new Float32Array(newSize10);
+		newArray10.set(bbuf.array);
+		bbuf.array = newArray10;
+	}
+	bbuf.array[bbuf.pos++] = size / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize11 = bbuf.array.length << 1;
+		if(newSize11 < 128) {
+			newSize11 = 128;
+		}
+		var newArray11 = new Float32Array(newSize11);
+		newArray11.set(bbuf.array);
+		bbuf.array = newArray11;
+	}
+	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize12 = bbuf.array.length << 1;
+		if(newSize12 < 128) {
+			newSize12 = 128;
+		}
+		var newArray12 = new Float32Array(newSize12);
+		newArray12.set(bbuf.array);
+		bbuf.array = newArray12;
+	}
+	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize13 = bbuf.array.length << 1;
+		if(newSize13 < 128) {
+			newSize13 = 128;
+		}
+		var newArray13 = new Float32Array(newSize13);
+		newArray13.set(bbuf.array);
+		bbuf.array = newArray13;
+	}
+	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize14 = bbuf.array.length << 1;
+		if(newSize14 < 128) {
+			newSize14 = 128;
+		}
+		var newArray14 = new Float32Array(newSize14);
+		newArray14.set(bbuf.array);
+		bbuf.array = newArray14;
+	}
+	bbuf.array[bbuf.pos++] = size / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize15 = bbuf.array.length << 1;
+		if(newSize15 < 128) {
+			newSize15 = 128;
+		}
+		var newArray15 = new Float32Array(newSize15);
+		newArray15.set(bbuf.array);
+		bbuf.array = newArray15;
+	}
+	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize16 = bbuf.array.length << 1;
+		if(newSize16 < 128) {
+			newSize16 = 128;
+		}
+		var newArray16 = new Float32Array(newSize16);
+		newArray16.set(bbuf.array);
+		bbuf.array = newArray16;
+	}
+	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize17 = bbuf.array.length << 1;
+		if(newSize17 < 128) {
+			newSize17 = 128;
+		}
+		var newArray17 = new Float32Array(newSize17);
+		newArray17.set(bbuf.array);
+		bbuf.array = newArray17;
+	}
+	bbuf.array[bbuf.pos++] = 1 - (height - size) / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize18 = bbuf.array.length << 1;
+		if(newSize18 < 128) {
+			newSize18 = 128;
+		}
+		var newArray18 = new Float32Array(newSize18);
+		newArray18.set(bbuf.array);
+		bbuf.array = newArray18;
+	}
+	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize19 = bbuf.array.length << 1;
+		if(newSize19 < 128) {
+			newSize19 = 128;
+		}
+		var newArray19 = new Float32Array(newSize19);
+		newArray19.set(bbuf.array);
+		bbuf.array = newArray19;
+	}
+	bbuf.array[bbuf.pos++] = 1 - (height - size) / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize20 = bbuf.array.length << 1;
+		if(newSize20 < 128) {
+			newSize20 = 128;
+		}
+		var newArray20 = new Float32Array(newSize20);
+		newArray20.set(bbuf.array);
+		bbuf.array = newArray20;
+	}
+	bbuf.array[bbuf.pos++] = 0 / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize21 = bbuf.array.length << 1;
+		if(newSize21 < 128) {
+			newSize21 = 128;
+		}
+		var newArray21 = new Float32Array(newSize21);
+		newArray21.set(bbuf.array);
+		bbuf.array = newArray21;
+	}
+	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize22 = bbuf.array.length << 1;
+		if(newSize22 < 128) {
+			newSize22 = 128;
+		}
+		var newArray22 = new Float32Array(newSize22);
+		newArray22.set(bbuf.array);
+		bbuf.array = newArray22;
+	}
+	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize23 = bbuf.array.length << 1;
+		if(newSize23 < 128) {
+			newSize23 = 128;
+		}
+		var newArray23 = new Float32Array(newSize23);
+		newArray23.set(bbuf.array);
+		bbuf.array = newArray23;
+	}
+	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize24 = bbuf.array.length << 1;
+		if(newSize24 < 128) {
+			newSize24 = 128;
+		}
+		var newArray24 = new Float32Array(newSize24);
+		newArray24.set(bbuf.array);
+		bbuf.array = newArray24;
+	}
+	bbuf.array[bbuf.pos++] = (width - size) / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize25 = bbuf.array.length << 1;
+		if(newSize25 < 128) {
+			newSize25 = 128;
+		}
+		var newArray25 = new Float32Array(newSize25);
+		newArray25.set(bbuf.array);
+		bbuf.array = newArray25;
+	}
+	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize26 = bbuf.array.length << 1;
+		if(newSize26 < 128) {
+			newSize26 = 128;
+		}
+		var newArray26 = new Float32Array(newSize26);
+		newArray26.set(bbuf.array);
+		bbuf.array = newArray26;
+	}
+	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize27 = bbuf.array.length << 1;
+		if(newSize27 < 128) {
+			newSize27 = 128;
+		}
+		var newArray27 = new Float32Array(newSize27);
+		newArray27.set(bbuf.array);
+		bbuf.array = newArray27;
+	}
+	bbuf.array[bbuf.pos++] = 1 - 0 / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize28 = bbuf.array.length << 1;
+		if(newSize28 < 128) {
+			newSize28 = 128;
+		}
+		var newArray28 = new Float32Array(newSize28);
+		newArray28.set(bbuf.array);
+		bbuf.array = newArray28;
+	}
+	bbuf.array[bbuf.pos++] = (width - size) / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize29 = bbuf.array.length << 1;
+		if(newSize29 < 128) {
+			newSize29 = 128;
+		}
+		var newArray29 = new Float32Array(newSize29);
+		newArray29.set(bbuf.array);
+		bbuf.array = newArray29;
+	}
+	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize30 = bbuf.array.length << 1;
+		if(newSize30 < 128) {
+			newSize30 = 128;
+		}
+		var newArray30 = new Float32Array(newSize30);
+		newArray30.set(bbuf.array);
+		bbuf.array = newArray30;
+	}
+	bbuf.array[bbuf.pos++] = width / width * 2 - 1;
+	if(bbuf.pos == bbuf.array.length) {
+		var newSize31 = bbuf.array.length << 1;
+		if(newSize31 < 128) {
+			newSize31 = 128;
+		}
+		var newArray31 = new Float32Array(newSize31);
+		newArray31.set(bbuf.array);
+		bbuf.array = newArray31;
+	}
+	bbuf.array[bbuf.pos++] = 1 - height / height * 2;
+	this.plan = new h3d_prim_RawPrimitive({ vbuf : bbuf, stride : 2, quads : true},true);
+	var _this = this.shader.color__;
+	_this.x = 1;
+	_this.y = 1;
+	_this.z = 1;
+	_this.w = 1;
+};
+$hxClasses["h3d.pass.Border"] = h3d_pass_Border;
+h3d_pass_Border.__name__ = ["h3d","pass","Border"];
+h3d_pass_Border.__super__ = h3d_pass_ScreenFx;
+h3d_pass_Border.prototype = $extend(h3d_pass_ScreenFx.prototype,{
+	__class__: h3d_pass_Border
+});
+var h3d_shader_ScreenShader = function() {
+	hxsl_Shader.call(this);
+};
+$hxClasses["h3d.shader.ScreenShader"] = h3d_shader_ScreenShader;
+h3d_shader_ScreenShader.__name__ = ["h3d","shader","ScreenShader"];
+h3d_shader_ScreenShader.__super__ = hxsl_Shader;
+h3d_shader_ScreenShader.prototype = $extend(hxsl_Shader.prototype,{
+	updateConstants: function(globals) {
+		this.constBits = 0;
+		this.updateConstantsFinal(globals);
+	}
+	,getParamValue: function(index) {
+		return null;
+	}
+	,getParamFloatValue: function(index) {
+		return 0.;
+	}
+	,__class__: h3d_shader_ScreenShader
+});
+var h3d_pass__$Copy_CopyShader = function() {
+	h3d_shader_ScreenShader.call(this);
+};
+$hxClasses["h3d.pass._Copy.CopyShader"] = h3d_pass__$Copy_CopyShader;
+h3d_pass__$Copy_CopyShader.__name__ = ["h3d","pass","_Copy","CopyShader"];
+h3d_pass__$Copy_CopyShader.__super__ = h3d_shader_ScreenShader;
+h3d_pass__$Copy_CopyShader.prototype = $extend(h3d_shader_ScreenShader.prototype,{
+	texture__: null
+	,get_texture: function() {
+		return this.texture__;
+	}
+	,set_texture: function(_v) {
+		return this.texture__ = _v;
+	}
+	,updateConstants: function(globals) {
+		this.constBits = 0;
+		this.updateConstantsFinal(globals);
+	}
+	,getParamValue: function(index) {
+		if(index == 0) {
+			return this.texture__;
+		}
+		return null;
+	}
+	,getParamFloatValue: function(index) {
+		return 0.;
+	}
+	,clone: function() {
+		var s = Object.create(h3d_pass__$Copy_CopyShader.prototype);
+		s.shader = this.shader;
+		s.texture__ = this.texture__;
+		return s;
+	}
+	,__class__: h3d_pass__$Copy_CopyShader
+});
+var h3d_pass_Copy = function() {
+	h3d_pass_ScreenFx.call(this,new h3d_pass__$Copy_CopyShader());
+};
+$hxClasses["h3d.pass.Copy"] = h3d_pass_Copy;
+h3d_pass_Copy.__name__ = ["h3d","pass","Copy"];
+h3d_pass_Copy.run = function(from,to,blend,pass) {
+	if(to != null && from != null && (blend == null || blend == h2d_BlendMode.None) && pass == null && h3d_Engine.CURRENT.driver.copyTexture(from,to)) {
+		return;
+	}
+	if(h3d_pass_Copy.inst == null) {
+		h3d_pass_Copy.inst = new h3d_pass_Copy();
+	}
+	h3d_pass_Copy.inst.apply(from,to,blend,pass);
+	return;
+};
+h3d_pass_Copy.__super__ = h3d_pass_ScreenFx;
+h3d_pass_Copy.prototype = $extend(h3d_pass_ScreenFx.prototype,{
+	apply: function(from,to,blend,customPass) {
+		this.engine.pushTarget(to);
+		this.shader.texture__ = from;
+		if(customPass != null) {
+			var old = this.pass;
+			this.pass = customPass;
+			if(blend != null) {
+				this.pass.setBlendMode(blend);
+			}
+			var h = this.shaders;
+			while(h.next != null) h = h.next;
+			h.next = this.pass.shaders;
+			this.render();
+			this.pass = old;
+			h.next = null;
+		} else {
+			this.pass.setBlendMode(blend == null ? h2d_BlendMode.None : blend);
+			this.render();
+		}
+		this.shader.texture__ = null;
+		this.engine.popTarget();
+	}
+	,__class__: h3d_pass_Copy
+});
+var h3d_pass_Default = function() {
+	this.sortPasses = true;
+	this.textureCount = 1;
+	this.shaderCount = 1;
+	h3d_pass_Base.call(this);
+	this.manager = new h3d_pass_ShaderManager(this.getOutputs());
+	this.tcache = new h3d_impl_TextureCache();
+	this.shaderIdMap = [];
+	this.textureIdMap = [];
+	this.initGlobals();
+};
+$hxClasses["h3d.pass.Default"] = h3d_pass_Default;
+h3d_pass_Default.__name__ = ["h3d","pass","Default"];
+h3d_pass_Default.__super__ = h3d_pass_Base;
+h3d_pass_Default.prototype = $extend(h3d_pass_Base.prototype,{
+	manager: null
+	,cachedBuffer: null
+	,tcache: null
+	,shaderCount: null
+	,textureCount: null
+	,shaderIdMap: null
+	,textureIdMap: null
+	,sortPasses: null
+	,get_globals: function() {
+		return this.manager.globals;
+	}
+	,get_logEnable: function() {
+		return false;
+	}
+	,getTexture: function(index) {
+		if(index == null) {
+			index = 0;
+		}
+		return this.tcache.cache[index];
+	}
+	,setTexture: function(t,index) {
+		if(index == null) {
+			index = 0;
+		}
+		this.tcache.set(t,index);
+	}
+	,dispose: function() {
+		h3d_pass_Base.prototype.dispose.call(this);
+		this.tcache.dispose();
+	}
+	,getOutputs: function() {
+		return [hxsl_Output.Value("output.color")];
+	}
+	,compileShader: function(p) {
+		var o = new h3d_pass_Object();
+		o.pass = p;
+		this.setupShaders(o);
+		return this.manager.compileShaders(o.shaders);
+	}
+	,processShaders: function(p,shaders) {
+		var p1 = this.ctx.extraShaders;
+		while(p1 != null) {
+			shaders = this.ctx.allocShaderList(p1.s,shaders);
+			p1 = p1.next;
+		}
+		return shaders;
+	}
+	,setupShaders: function(passes) {
+		var p = passes;
+		var lightInit = false;
+		while(p != null) {
+			var shaders = p.pass.getShadersRec();
+			shaders = this.processShaders(p,shaders);
+			if(p.pass.enableLights && this.ctx.lightSystem != null) {
+				if(!lightInit) {
+					this.ctx.lightSystem.initGlobals(this.manager.globals);
+					lightInit = true;
+				}
+				shaders = this.ctx.lightSystem.computeLight(p.obj,shaders);
+			}
+			p.shader = this.manager.compileShaders(shaders);
+			p.shaders = shaders;
+			var t = p.shader.fragment.textures2D;
+			if(t == null) {
+				p.texture = 0;
+			} else {
+				var t1;
+				if(t.perObjectGlobal != null) {
+					var v = this.manager.globals.map.h[t.perObjectGlobal.gid];
+					if(v == null) {
+						throw new js__$Boot_HaxeError("Missing global value " + t.perObjectGlobal.path);
+					}
+					var _g = t.type;
+					t1 = _g[1] == 15 ? v.texture : v;
+				} else {
+					var si = shaders;
+					var n = t.instance;
+					while(--n > 0) si = si.next;
+					var v1 = si.s.getParamValue(t.index);
+					if(v1 == null && false) {
+						throw new js__$Boot_HaxeError("Missing param value " + Std.string(si.s) + "." + t.name);
+					}
+					t1 = v1;
+				}
+				p.texture = t1 == null ? 0 : t1.id;
+			}
+			p = p.next;
+		}
+	}
+	,uploadParams: function() {
+		this.manager.fillParams(this.cachedBuffer,this.ctx.drawPass.shader,this.ctx.drawPass.shaders);
+		this.ctx.engine.uploadShaderBuffers(this.cachedBuffer,1);
+		this.ctx.engine.uploadShaderBuffers(this.cachedBuffer,2);
+	}
+	,log: function(str) {
+	}
+	,drawObject: function(p) {
+		this.ctx.drawPass = p;
+		this.ctx.engine.selectMaterial(p.pass);
+		p.obj.draw(this.ctx);
+	}
+	,draw: function(passes) {
+		var _gthis = this;
+		var _g = 0;
+		var _g1 = this.ctx.sharedGlobals;
+		while(_g < _g1.length) {
+			var g = _g1[_g];
+			++_g;
+			this.manager.globals.map.h[g.gid] = g.value;
+		}
+		this.setGlobals();
+		this.setupShaders(passes);
+		var p = passes;
+		var shaderStart = this.shaderCount;
+		var textureStart = this.textureCount;
+		while(p != null) {
+			if(this.shaderIdMap[p.shader.id] < shaderStart) {
+				this.shaderIdMap[p.shader.id] = this.shaderCount++;
+			}
+			if(this.textureIdMap[p.texture] < textureStart) {
+				this.textureIdMap[p.texture] = this.textureCount++;
+			}
+			p = p.next;
+		}
+		if(this.sortPasses) {
+			var list = passes;
+			if(list == null) {
+				passes = null;
+			} else {
+				var insize = 1;
+				var nmerges;
+				var psize = 0;
+				var qsize = 0;
+				var p1;
+				var q;
+				var e;
+				var tail;
+				while(true) {
+					p1 = list;
+					list = null;
+					tail = null;
+					nmerges = 0;
+					while(p1 != null) {
+						++nmerges;
+						q = p1;
+						psize = 0;
+						var _g11 = 0;
+						var _g2 = insize;
+						while(_g11 < _g2) {
+							var i = _g11++;
+							++psize;
+							q = q.next;
+							if(q == null) {
+								break;
+							}
+						}
+						qsize = insize;
+						while(psize > 0 || qsize > 0 && q != null) {
+							if(psize == 0) {
+								e = q;
+								q = q.next;
+								--qsize;
+							} else {
+								var passes1;
+								if(!(qsize == 0 || q == null)) {
+									var d = _gthis.shaderIdMap[p1.shader.id] - _gthis.shaderIdMap[q.shader.id];
+									passes1 = (d != 0 ? d : _gthis.textureIdMap[p1.texture] - _gthis.textureIdMap[q.texture]) <= 0;
+								} else {
+									passes1 = true;
+								}
+								if(passes1) {
+									e = p1;
+									p1 = p1.next;
+									--psize;
+								} else {
+									e = q;
+									q = q.next;
+									--qsize;
+								}
+							}
+							if(tail != null) {
+								tail.next = e;
+							} else {
+								list = e;
+							}
+							tail = e;
+						}
+						p1 = q;
+					}
+					tail.next = null;
+					if(nmerges <= 1) {
+						break;
+					}
+					insize *= 2;
+				}
+				passes = list;
+			}
+		}
+		this.ctx.uploadParams = $bind(this,this.uploadParams);
+		var p2 = passes;
+		var buf = this.cachedBuffer;
+		var prevShader = null;
+		var drawTri = 0;
+		var drawCalls = 0;
+		var shaderSwitches = 0;
+		if(this.ctx.engine.driver.logEnable) {
+			drawTri = this.ctx.engine.drawTriangles;
+			drawCalls = this.ctx.engine.drawCalls;
+			shaderSwitches = this.ctx.engine.shaderSwitches;
+		}
+		while(p2 != null) {
+			var v = p2.obj.absPos;
+			this.manager.globals.map.h[this.globalModelView_id] = v;
+			if(p2.shader.globals.h.hasOwnProperty(this.globalModelViewInverse_id)) {
+				var v1 = p2.obj.getInvPos();
+				this.manager.globals.map.h[this.globalModelViewInverse_id] = v1;
+			}
+			if(prevShader != p2.shader) {
+				prevShader = p2.shader;
+				this.ctx.engine.selectShader(p2.shader);
+				if(buf == null) {
+					buf = this.cachedBuffer = new h3d_shader_Buffers(p2.shader);
+				} else {
+					var s = p2.shader;
+					buf.vertex.grow(s.vertex);
+					buf.fragment.grow(s.fragment);
+				}
+				this.manager.fillGlobals(buf,p2.shader);
+				this.ctx.engine.uploadShaderBuffers(buf,0);
+			}
+			if(!p2.pass.dynamicParameters) {
+				this.manager.fillParams(buf,p2.shader,p2.shaders);
+				this.ctx.engine.uploadShaderBuffers(buf,1);
+				this.ctx.engine.uploadShaderBuffers(buf,2);
+			}
+			this.drawObject(p2);
+			p2 = p2.next;
+		}
+		var _this = this.ctx;
+		_this.cachedPos = 0;
+		_this.drawPass = null;
+		return passes;
+	}
+	,cameraView_id: null
+	,get_cameraView: function() {
+		return this.manager.globals.map.h[this.cameraView_id];
+	}
+	,set_cameraView: function(v) {
+		this.manager.globals.map.h[this.cameraView_id] = v;
+		return v;
+	}
+	,cameraNear_id: null
+	,get_cameraNear: function() {
+		return this.manager.globals.map.h[this.cameraNear_id];
+	}
+	,set_cameraNear: function(v) {
+		this.manager.globals.map.h[this.cameraNear_id] = v;
+		return v;
+	}
+	,cameraFar_id: null
+	,get_cameraFar: function() {
+		return this.manager.globals.map.h[this.cameraFar_id];
+	}
+	,set_cameraFar: function(v) {
+		this.manager.globals.map.h[this.cameraFar_id] = v;
+		return v;
+	}
+	,cameraProj_id: null
+	,get_cameraProj: function() {
+		return this.manager.globals.map.h[this.cameraProj_id];
+	}
+	,set_cameraProj: function(v) {
+		this.manager.globals.map.h[this.cameraProj_id] = v;
+		return v;
+	}
+	,cameraPos_id: null
+	,get_cameraPos: function() {
+		return this.manager.globals.map.h[this.cameraPos_id];
+	}
+	,set_cameraPos: function(v) {
+		this.manager.globals.map.h[this.cameraPos_id] = v;
+		return v;
+	}
+	,cameraProjDiag_id: null
+	,get_cameraProjDiag: function() {
+		return this.manager.globals.map.h[this.cameraProjDiag_id];
+	}
+	,set_cameraProjDiag: function(v) {
+		this.manager.globals.map.h[this.cameraProjDiag_id] = v;
+		return v;
+	}
+	,cameraViewProj_id: null
+	,get_cameraViewProj: function() {
+		return this.manager.globals.map.h[this.cameraViewProj_id];
+	}
+	,set_cameraViewProj: function(v) {
+		this.manager.globals.map.h[this.cameraViewProj_id] = v;
+		return v;
+	}
+	,cameraInverseViewProj_id: null
+	,get_cameraInverseViewProj: function() {
+		return this.manager.globals.map.h[this.cameraInverseViewProj_id];
+	}
+	,set_cameraInverseViewProj: function(v) {
+		this.manager.globals.map.h[this.cameraInverseViewProj_id] = v;
+		return v;
+	}
+	,globalTime_id: null
+	,get_globalTime: function() {
+		return this.manager.globals.map.h[this.globalTime_id];
+	}
+	,set_globalTime: function(v) {
+		this.manager.globals.map.h[this.globalTime_id] = v;
+		return v;
+	}
+	,pixelSize_id: null
+	,get_pixelSize: function() {
+		return this.manager.globals.map.h[this.pixelSize_id];
+	}
+	,set_pixelSize: function(v) {
+		this.manager.globals.map.h[this.pixelSize_id] = v;
+		return v;
+	}
+	,globalModelView_id: null
+	,get_globalModelView: function() {
+		return this.manager.globals.map.h[this.globalModelView_id];
+	}
+	,set_globalModelView: function(v) {
+		this.manager.globals.map.h[this.globalModelView_id] = v;
+		return v;
+	}
+	,globalModelViewInverse_id: null
+	,get_globalModelViewInverse: function() {
+		return this.manager.globals.map.h[this.globalModelViewInverse_id];
+	}
+	,set_globalModelViewInverse: function(v) {
+		this.manager.globals.map.h[this.globalModelViewInverse_id] = v;
+		return v;
+	}
+	,initGlobals: function() {
+		var this1 = hxsl_Globals.allocID("camera.view");
+		this.cameraView_id = this1;
+		var this2 = hxsl_Globals.allocID("camera.zNear");
+		this.cameraNear_id = this2;
+		var this3 = hxsl_Globals.allocID("camera.zFar");
+		this.cameraFar_id = this3;
+		var this4 = hxsl_Globals.allocID("camera.proj");
+		this.cameraProj_id = this4;
+		var this5 = hxsl_Globals.allocID("camera.position");
+		this.cameraPos_id = this5;
+		var this6 = hxsl_Globals.allocID("camera.projDiag");
+		this.cameraProjDiag_id = this6;
+		var this7 = hxsl_Globals.allocID("camera.viewProj");
+		this.cameraViewProj_id = this7;
+		var this8 = hxsl_Globals.allocID("camera.inverseViewProj");
+		this.cameraInverseViewProj_id = this8;
+		var this9 = hxsl_Globals.allocID("global.time");
+		this.globalTime_id = this9;
+		var this10 = hxsl_Globals.allocID("global.pixelSize");
+		this.pixelSize_id = this10;
+		var this11 = hxsl_Globals.allocID("global.modelView");
+		this.globalModelView_id = this11;
+		var this12 = hxsl_Globals.allocID("global.modelViewInverse");
+		this.globalModelViewInverse_id = this12;
+	}
+	,setGlobals: function() {
+		var v = this.ctx.camera.mcam;
+		this.manager.globals.map.h[this.cameraView_id] = v;
+		var v1 = this.ctx.camera.zNear;
+		this.manager.globals.map.h[this.cameraNear_id] = v1;
+		var v2 = this.ctx.camera.zFar;
+		this.manager.globals.map.h[this.cameraFar_id] = v2;
+		var v3 = this.ctx.camera.mproj;
+		this.manager.globals.map.h[this.cameraProj_id] = v3;
+		var v4 = this.ctx.camera.pos;
+		this.manager.globals.map.h[this.cameraPos_id] = v4;
+		var v5 = new h3d_Vector(this.ctx.camera.mproj._11,this.ctx.camera.mproj._22,this.ctx.camera.mproj._33,this.ctx.camera.mproj._44);
+		this.manager.globals.map.h[this.cameraProjDiag_id] = v5;
+		var v6 = this.ctx.camera.m;
+		this.manager.globals.map.h[this.cameraViewProj_id] = v6;
+		var v7 = this.ctx.camera.getInverseViewProj();
+		this.manager.globals.map.h[this.cameraInverseViewProj_id] = v7;
+		var v8 = this.ctx.time;
+		this.manager.globals.map.h[this.globalTime_id] = v8;
+		var v9 = new h3d_Vector(2 / this.ctx.engine.width,2 / this.ctx.engine.height);
+		this.manager.globals.map.h[this.pixelSize_id] = v9;
+	}
+	,__class__: h3d_pass_Default
+});
+var h3d_pass_Depth = function() {
+	this.reduceSize = 0;
+	this.enableSky = false;
+	h3d_pass_Default.call(this);
+	this.priority = 10;
+	this.depthMapId = hxsl_Globals.allocID("depthMap");
+};
+$hxClasses["h3d.pass.Depth"] = h3d_pass_Depth;
+h3d_pass_Depth.__name__ = ["h3d","pass","Depth"];
+h3d_pass_Depth.__super__ = h3d_pass_Default;
+h3d_pass_Depth.prototype = $extend(h3d_pass_Default.prototype,{
+	depthMapId: null
+	,enableSky: null
+	,reduceSize: null
+	,getOutputs: function() {
+		return [hxsl_Output.PackFloat(hxsl_Output.Value("output.depth"))];
+	}
+	,draw: function(passes) {
+		var texture = this.tcache.allocTarget("depthMap",this.ctx,this.ctx.engine.width >> this.reduceSize,this.ctx.engine.height >> this.reduceSize,true);
+		this.ctx.engine.pushTarget(texture);
+		this.ctx.engine.clear(this.enableSky ? 0 : 16711680,1);
+		passes = h3d_pass_Default.prototype.draw.call(this,passes);
+		this.ctx.engine.popTarget();
+		this.ctx.setGlobalID(this.depthMapId,{ texture : texture});
+		return passes;
+	}
+	,__class__: h3d_pass_Depth
+});
+var h3d_pass__$HardwarePick_FixedColor = function() {
+	this.viewport__ = new h3d_Vector();
+	this.colorID__ = new h3d_Vector();
+	hxsl_Shader.call(this);
+};
+$hxClasses["h3d.pass._HardwarePick.FixedColor"] = h3d_pass__$HardwarePick_FixedColor;
+h3d_pass__$HardwarePick_FixedColor.__name__ = ["h3d","pass","_HardwarePick","FixedColor"];
+h3d_pass__$HardwarePick_FixedColor.__super__ = hxsl_Shader;
+h3d_pass__$HardwarePick_FixedColor.prototype = $extend(hxsl_Shader.prototype,{
+	colorID__: null
+	,get_colorID: function() {
+		return this.colorID__;
+	}
+	,set_colorID: function(_v) {
+		return this.colorID__ = _v;
+	}
+	,viewport__: null
+	,get_viewport: function() {
+		return this.viewport__;
+	}
+	,set_viewport: function(_v) {
+		return this.viewport__ = _v;
+	}
+	,updateConstants: function(globals) {
+		this.constBits = 0;
+		this.updateConstantsFinal(globals);
+	}
+	,getParamValue: function(index) {
+		switch(index) {
+		case 0:
+			return this.colorID__;
+		case 1:
+			return this.viewport__;
+		default:
+		}
+		return null;
+	}
+	,getParamFloatValue: function(index) {
+		return 0.;
+	}
+	,clone: function() {
+		var s = Object.create(h3d_pass__$HardwarePick_FixedColor.prototype);
+		s.shader = this.shader;
+		s.colorID__ = this.colorID__;
+		s.viewport__ = this.viewport__;
+		return s;
+	}
+	,__class__: h3d_pass__$HardwarePick_FixedColor
+});
+var h3d_pass_HardwarePick = function() {
+	this.pickedIndex = -1;
+	this.fixedColor = new h3d_pass__$HardwarePick_FixedColor();
+	h3d_pass_Default.call(this);
+	this.material = new h3d_mat_Pass("");
+	var _this = this.material;
+	var src = h3d_mat_Blend.One;
+	var dst = h3d_mat_Blend.Zero;
+	_this.set_blendSrc(src);
+	_this.set_blendAlphaSrc(src);
+	_this.set_blendDst(dst);
+	_this.set_blendAlphaDst(dst);
+	this.texOut = new h3d_mat_Texture(3,3,[h3d_mat_TextureFlags.Target]);
+	this.texOut.depthBuffer = new h3d_mat_DepthBuffer(3,3);
+};
+$hxClasses["h3d.pass.HardwarePick"] = h3d_pass_HardwarePick;
+h3d_pass_HardwarePick.__name__ = ["h3d","pass","HardwarePick"];
+h3d_pass_HardwarePick.__super__ = h3d_pass_Default;
+h3d_pass_HardwarePick.prototype = $extend(h3d_pass_Default.prototype,{
+	pickX: null
+	,pickY: null
+	,fixedColor: null
+	,colorID: null
+	,texOut: null
+	,material: null
+	,pickedIndex: null
+	,dispose: function() {
+		h3d_pass_Default.prototype.dispose.call(this);
+		this.texOut.dispose();
+		this.texOut.depthBuffer.dispose();
+	}
+	,getOutputs: function() {
+		return [hxsl_Output.Value("output.colorID")];
+	}
+	,drawObject: function(p) {
+		h3d_pass_Default.prototype.drawObject.call(this,p);
+		var _this = this.fixedColor.colorID__;
+		var c = -16777216 | ++this.colorID;
+		_this.x = (c >> 16 & 255) / 255;
+		_this.y = (c >> 8 & 255) / 255;
+		_this.z = (c & 255) / 255;
+		_this.w = (c >>> 24) / 255;
+	}
+	,nextID: function() {
+		var _this = this.fixedColor.colorID__;
+		var c = -16777216 | ++this.colorID;
+		_this.x = (c >> 16 & 255) / 255;
+		_this.y = (c >> 8 & 255) / 255;
+		_this.z = (c & 255) / 255;
+		_this.w = (c >>> 24) / 255;
+	}
+	,draw: function(passes) {
+		var cur = passes;
+		while(cur != null) {
+			var mask = 1073741760;
+			cur.pass.bits &= ~mask;
+			cur.pass.bits |= this.material.bits & mask;
+			cur = cur.next;
+		}
+		this.colorID = 0;
+		var _this = this.fixedColor.colorID__;
+		var c = -16777216 | ++this.colorID;
+		_this.x = (c >> 16 & 255) / 255;
+		_this.y = (c >> 8 & 255) / 255;
+		_this.z = (c & 255) / 255;
+		_this.w = (c >>> 24) / 255;
+		var _this1 = this.fixedColor.viewport__;
+		_this1.x = -(this.pickX * 2 / this.ctx.engine.width - 1);
+		_this1.y = this.pickY * 2 / this.ctx.engine.height - 1;
+		_this1.z = this.ctx.engine.width / this.texOut.width;
+		_this1.w = this.ctx.engine.height / this.texOut.height;
+		this.ctx.engine.pushTarget(this.texOut);
+		this.ctx.engine.clear(-16777216,1);
+		this.ctx.extraShaders = this.ctx.allocShaderList(this.fixedColor);
+		var passes1 = h3d_pass_Default.prototype.draw.call(this,passes);
+		this.ctx.extraShaders = null;
+		this.ctx.engine.popTarget();
+		var cur1 = passes1;
+		while(cur1 != null) {
+			cur1.pass.set_blendSrc(cur1.pass.blendSrc);
+			cur1.pass.set_blendDst(cur1.pass.blendDst);
+			cur1.pass.set_blendOp(cur1.pass.blendOp);
+			cur1.pass.set_blendAlphaSrc(cur1.pass.blendAlphaSrc);
+			cur1.pass.set_blendAlphaDst(cur1.pass.blendAlphaDst);
+			cur1.pass.set_blendAlphaOp(cur1.pass.blendAlphaOp);
+			cur1.pass.set_colorMask(cur1.pass.colorMask);
+			cur1 = cur1.next;
+		}
+		this.ctx.engine.clear(null,null,0);
+		var pix = this.texOut.capturePixels();
+		this.pickedIndex = (pix.getPixel(pix.width >> 1,pix.height >> 1) & 16777215) - 1;
+		return passes1;
+	}
+	,__class__: h3d_pass_HardwarePick
+});
+var h3d_pass_LightSystem = function() {
+	this.perPixelLighting = true;
+	this.maxLightsPerObject = 6;
+	this.ambientLight = new h3d_Vector(0.5,0.5,0.5);
+	this.ambientShader = new h3d_shader_AmbientLight();
+	this.set_additiveLighting(true);
+};
+$hxClasses["h3d.pass.LightSystem"] = h3d_pass_LightSystem;
+h3d_pass_LightSystem.__name__ = ["h3d","pass","LightSystem"];
+h3d_pass_LightSystem.prototype = {
+	maxLightsPerObject: null
+	,globals: null
+	,ambientShader: null
+	,lightCount: null
+	,ctx: null
+	,shadowLight: null
+	,ambientLight: null
+	,perPixelLighting: null
+	,get_additiveLighting: function() {
+		var value = this.ambientShader;
+		return ((value instanceof h3d_shader_AmbientLight) ? value : null).additive__;
+	}
+	,set_additiveLighting: function(b) {
+		var value = this.ambientShader;
+		var _this = (value instanceof h3d_shader_AmbientLight) ? value : null;
+		_this.constModified = true;
+		return _this.additive__ = b;
+	}
+	,initLights: function(ctx) {
+		this.lightCount = 0;
+		this.ctx = ctx;
+		var l = ctx.lights;
+		var prev = null;
+		var frustum = new h3d_col_Frustum(ctx.camera.m);
+		var s = new h3d_col_Sphere();
+		while(l != null) {
+			s.x = l.absPos._41;
+			s.y = l.absPos._42;
+			s.z = l.absPos._43;
+			s.r = l.cullingDistance;
+			if(!frustum.hasSphere(s)) {
+				if(prev == null) {
+					ctx.lights = l.next;
+				} else {
+					prev.next = l.next;
+				}
+				l = l.next;
+				continue;
+			}
+			this.lightCount++;
+			l.objectDistance = 0.;
+			prev = l;
+			l = l.next;
+		}
+		if(this.lightCount <= this.maxLightsPerObject) {
+			var list = ctx.lights;
+			var cmp = $bind(this,this.sortLight);
+			var tmp;
+			if(list == null) {
+				tmp = null;
+			} else {
+				var insize = 1;
+				var nmerges;
+				var psize = 0;
+				var qsize = 0;
+				var p;
+				var q;
+				var e;
+				var tail;
+				while(true) {
+					p = list;
+					list = null;
+					tail = null;
+					nmerges = 0;
+					while(p != null) {
+						++nmerges;
+						q = p;
+						psize = 0;
+						var _g1 = 0;
+						var _g = insize;
+						while(_g1 < _g) {
+							var i = _g1++;
+							++psize;
+							q = q.next;
+							if(q == null) {
+								break;
+							}
+						}
+						qsize = insize;
+						while(psize > 0 || qsize > 0 && q != null) {
+							if(psize == 0) {
+								e = q;
+								q = q.next;
+								--qsize;
+							} else if(qsize == 0 || q == null || cmp(p,q) <= 0) {
+								e = p;
+								p = p.next;
+								--psize;
+							} else {
+								e = q;
+								q = q.next;
+								--qsize;
+							}
+							if(tail != null) {
+								tail.next = e;
+							} else {
+								list = e;
+							}
+							tail = e;
+						}
+						p = q;
+					}
+					tail.next = null;
+					if(nmerges <= 1) {
+						break;
+					}
+					insize *= 2;
+				}
+				tmp = list;
+			}
+			ctx.lights = tmp;
+		}
+		if(this.shadowLight == null || this.shadowLight.parent == null) {
+			var l1 = ctx.lights;
+			while(l1 != null) {
+				var dl = (l1 instanceof h3d_scene_DirLight) ? l1 : null;
+				if(dl != null) {
+					this.shadowLight = dl;
+					break;
+				}
+				l1 = l1.next;
+			}
+		}
+	}
+	,initGlobals: function(globals) {
+		globals.set("global.ambientLight",this.ambientLight);
+		globals.set("global.perPixelLighting",this.perPixelLighting);
+	}
+	,sortLight: function(l1,l2) {
+		var p = l1.priority - l2.priority;
+		if(p != 0) {
+			return -p;
+		}
+		if(l1.objectDistance < l2.objectDistance) {
+			return -1;
+		} else {
+			return 1;
+		}
+	}
+	,computeLight: function(obj,shaders) {
+		var _gthis = this;
+		if(this.lightCount > this.maxLightsPerObject) {
+			var l = this.ctx.lights;
+			while(l != null) {
+				if((obj.flags & 16) != 0) {
+					var dx = l.absPos._41 - this.ctx.camera.target.x;
+					var dy = l.absPos._42 - this.ctx.camera.target.y;
+					var dz = l.absPos._43 - this.ctx.camera.target.z;
+					l.objectDistance = dx * dx + dy * dy + dz * dz;
+				} else {
+					var dx1 = l.absPos._41 - obj.absPos._41;
+					var dy1 = l.absPos._42 - obj.absPos._42;
+					var dz1 = l.absPos._43 - obj.absPos._43;
+					l.objectDistance = dx1 * dx1 + dy1 * dy1 + dz1 * dz1;
+				}
+				l = l.next;
+			}
+			var list = this.ctx.lights;
+			var cmp = $bind(this,this.sortLight);
+			var tmp;
+			if(list == null) {
+				tmp = null;
+			} else {
+				var insize = 1;
+				var nmerges;
+				var psize = 0;
+				var qsize = 0;
+				var p;
+				var q;
+				var e;
+				var tail;
+				while(true) {
+					p = list;
+					list = null;
+					tail = null;
+					nmerges = 0;
+					while(p != null) {
+						++nmerges;
+						q = p;
+						psize = 0;
+						var _g1 = 0;
+						var _g = insize;
+						while(_g1 < _g) {
+							var i = _g1++;
+							++psize;
+							q = q.next;
+							if(q == null) {
+								break;
+							}
+						}
+						qsize = insize;
+						while(psize > 0 || qsize > 0 && q != null) {
+							if(psize == 0) {
+								e = q;
+								q = q.next;
+								--qsize;
+							} else if(qsize == 0 || q == null || cmp(p,q) <= 0) {
+								e = p;
+								p = p.next;
+								--psize;
+							} else {
+								e = q;
+								q = q.next;
+								--qsize;
+							}
+							if(tail != null) {
+								tail.next = e;
+							} else {
+								list = e;
+							}
+							tail = e;
+						}
+						p = q;
+					}
+					tail.next = null;
+					if(nmerges <= 1) {
+						break;
+					}
+					insize *= 2;
+				}
+				tmp = list;
+			}
+			this.ctx.lights = tmp;
+		}
+		shaders = _gthis.ctx.allocShaderList(this.ambientShader,shaders);
+		var l1 = this.ctx.lights;
+		var i1 = 0;
+		while(l1 != null) {
+			if(i1++ == this.maxLightsPerObject) {
+				break;
+			}
+			shaders = _gthis.ctx.allocShaderList(l1.shader,shaders);
+			l1 = l1.next;
+		}
+		return shaders;
+	}
+	,__class__: h3d_pass_LightSystem
+};
+var h3d_pass_Normal = function() {
+	h3d_pass_Default.call(this);
+	this.priority = 10;
+	this.normalMapId = hxsl_Globals.allocID("normalMap");
+};
+$hxClasses["h3d.pass.Normal"] = h3d_pass_Normal;
+h3d_pass_Normal.__name__ = ["h3d","pass","Normal"];
+h3d_pass_Normal.__super__ = h3d_pass_Default;
+h3d_pass_Normal.prototype = $extend(h3d_pass_Default.prototype,{
+	normalMapId: null
+	,getOutputs: function() {
+		return [hxsl_Output.PackNormal(hxsl_Output.Value("output.normal"))];
+	}
+	,draw: function(passes) {
+		var texture = this.tcache.allocTarget("normalMal",this.ctx,this.ctx.engine.width,this.ctx.engine.height);
+		this.ctx.engine.pushTarget(texture);
+		this.ctx.engine.clear(8421504,1);
+		passes = h3d_pass_Default.prototype.draw.call(this,passes);
+		this.ctx.engine.popTarget();
+		this.ctx.setGlobalID(this.normalMapId,texture);
+		return passes;
+	}
+	,__class__: h3d_pass_Normal
+});
+var h3d_pass_Object = function() {
+	this.texture = 0;
+};
+$hxClasses["h3d.pass.Object"] = h3d_pass_Object;
+h3d_pass_Object.__name__ = ["h3d","pass","Object"];
+h3d_pass_Object.prototype = {
+	pass: null
+	,obj: null
+	,index: null
+	,next: null
+	,nextAlloc: null
+	,shaders: null
+	,shader: null
+	,depth: null
+	,texture: null
+	,__class__: h3d_pass_Object
+};
+var h3d_pass_ShaderManager = function(output) {
+	this.shaderCache = hxsl_Cache.get();
+	this.globals = new hxsl_Globals();
+	this.currentOutput = new hxsl_ShaderList(null);
+	this.setOutput(output);
+};
+$hxClasses["h3d.pass.ShaderManager"] = h3d_pass_ShaderManager;
+h3d_pass_ShaderManager.__name__ = ["h3d","pass","ShaderManager"];
+h3d_pass_ShaderManager.prototype = {
+	globals: null
+	,shaderCache: null
+	,currentOutput: null
+	,setOutput: function(output) {
+		if(output == null) {
+			output = [hxsl_Output.Value("output.color")];
+		}
+		this.currentOutput.s = this.shaderCache.getLinkShader(output);
+	}
+	,fillRec: function(v,type,out,pos) {
+		switch(type[1]) {
+		case 3:
+			out[pos] = v;
+			return 1;
+		case 5:
+			var n = type[2];
+			var v1 = v;
+			out[pos++] = v1.x;
+			out[pos++] = v1.y;
+			switch(n) {
+			case 3:
+				out[pos++] = v1.z;
+				break;
+			case 4:
+				out[pos++] = v1.z;
+				out[pos++] = v1.w;
+				break;
+			}
+			return n;
+		case 6:
+			var m = v;
+			out[pos++] = m._11;
+			out[pos++] = m._21;
+			out[pos++] = m._31;
+			out[pos++] = 0;
+			out[pos++] = m._12;
+			out[pos++] = m._22;
+			out[pos++] = m._32;
+			out[pos++] = 0;
+			out[pos++] = m._13;
+			out[pos++] = m._23;
+			out[pos++] = m._33;
+			out[pos++] = 0;
+			return 12;
+		case 7:
+			var m1 = v;
+			out[pos++] = m1._11;
+			out[pos++] = m1._21;
+			out[pos++] = m1._31;
+			out[pos++] = m1._41;
+			out[pos++] = m1._12;
+			out[pos++] = m1._22;
+			out[pos++] = m1._32;
+			out[pos++] = m1._42;
+			out[pos++] = m1._13;
+			out[pos++] = m1._23;
+			out[pos++] = m1._33;
+			out[pos++] = m1._43;
+			out[pos++] = m1._14;
+			out[pos++] = m1._24;
+			out[pos++] = m1._34;
+			out[pos++] = m1._44;
+			return 16;
+		case 8:
+			var m2 = v;
+			out[pos++] = m2._11;
+			out[pos++] = m2._21;
+			out[pos++] = m2._31;
+			out[pos++] = m2._41;
+			out[pos++] = m2._12;
+			out[pos++] = m2._22;
+			out[pos++] = m2._32;
+			out[pos++] = m2._42;
+			out[pos++] = m2._13;
+			out[pos++] = m2._23;
+			out[pos++] = m2._33;
+			out[pos++] = m2._43;
+			return 12;
+		case 12:
+			var vl = type[2];
+			var tot = 0;
+			var _g = 0;
+			while(_g < vl.length) {
+				var vv = vl[_g];
+				++_g;
+				tot += this.fillRec(Reflect.field(v,vv.name),vv.type,out,pos + tot);
+			}
+			return tot;
+		case 14:
+			switch(type[2][1]) {
+			case 3:
+				if(type[3][1] == 0) {
+					var len = type[3][2];
+					var v2 = v;
+					var size = 0;
+					var count = v2.length < len ? v2.length : len;
+					var _g1 = 0;
+					var _g2 = count;
+					while(_g1 < _g2) {
+						var i = _g1++;
+						out[pos++] = v2[i];
+					}
+					return len;
+				} else {
+					throw new js__$Boot_HaxeError("assert " + Std.string(type));
+				}
+				break;
+			case 5:
+				if(type[2][2] == 4) {
+					if(type[2][3][1] == 1) {
+						if(type[3][1] == 0) {
+							var len1 = type[3][2];
+							var v3 = v;
+							var _g11 = 0;
+							var _g3 = len1;
+							while(_g11 < _g3) {
+								var i1 = _g11++;
+								var n1 = v3[i1];
+								if(n1 == null) {
+									break;
+								}
+								out[pos++] = n1.x;
+								out[pos++] = n1.y;
+								out[pos++] = n1.z;
+								out[pos++] = n1.w;
+							}
+							return len1 * 4;
+						} else {
+							throw new js__$Boot_HaxeError("assert " + Std.string(type));
+						}
+					} else if(type[3][1] == 0) {
+						var len2 = type[3][2];
+						var t = type[2];
+						var v4 = v;
+						var size1 = 0;
+						var _g12 = 0;
+						var _g4 = len2;
+						while(_g12 < _g4) {
+							var i2 = _g12++;
+							var n2 = v4[i2];
+							if(n2 == null) {
+								break;
+							}
+							size1 = this.fillRec(n2,t,out,pos);
+							pos += size1;
+						}
+						return len2 * size1;
+					} else {
+						throw new js__$Boot_HaxeError("assert " + Std.string(type));
+					}
+				} else if(type[3][1] == 0) {
+					var len3 = type[3][2];
+					var t1 = type[2];
+					var v5 = v;
+					var size2 = 0;
+					var _g13 = 0;
+					var _g5 = len3;
+					while(_g13 < _g5) {
+						var i3 = _g13++;
+						var n3 = v5[i3];
+						if(n3 == null) {
+							break;
+						}
+						size2 = this.fillRec(n3,t1,out,pos);
+						pos += size2;
+					}
+					return len3 * size2;
+				} else {
+					throw new js__$Boot_HaxeError("assert " + Std.string(type));
+				}
+				break;
+			case 8:
+				if(type[3][1] == 0) {
+					var len4 = type[3][2];
+					var v6 = v;
+					var _g14 = 0;
+					var _g6 = len4;
+					while(_g14 < _g6) {
+						var i4 = _g14++;
+						var m3 = v6[i4];
+						if(m3 == null) {
+							break;
+						}
+						out[pos++] = m3._11;
+						out[pos++] = m3._21;
+						out[pos++] = m3._31;
+						out[pos++] = m3._41;
+						out[pos++] = m3._12;
+						out[pos++] = m3._22;
+						out[pos++] = m3._32;
+						out[pos++] = m3._42;
+						out[pos++] = m3._13;
+						out[pos++] = m3._23;
+						out[pos++] = m3._33;
+						out[pos++] = m3._43;
+					}
+					return len4 * 12;
+				} else {
+					throw new js__$Boot_HaxeError("assert " + Std.string(type));
+				}
+				break;
+			default:
+				if(type[3][1] == 0) {
+					var len5 = type[3][2];
+					var t2 = type[2];
+					var v7 = v;
+					var size3 = 0;
+					var _g15 = 0;
+					var _g7 = len5;
+					while(_g15 < _g7) {
+						var i5 = _g15++;
+						var n4 = v7[i5];
+						if(n4 == null) {
+							break;
+						}
+						size3 = this.fillRec(n4,t2,out,pos);
+						pos += size3;
+					}
+					return len5 * size3;
+				} else {
+					throw new js__$Boot_HaxeError("assert " + Std.string(type));
+				}
+			}
+			break;
+		default:
+			throw new js__$Boot_HaxeError("assert " + Std.string(type));
+		}
+	}
+	,getParamValue: function(p,shaders,opt) {
+		if(opt == null) {
+			opt = false;
+		}
+		if(p.perObjectGlobal != null) {
+			var v = this.globals.map.h[p.perObjectGlobal.gid];
+			if(v == null) {
+				throw new js__$Boot_HaxeError("Missing global value " + p.perObjectGlobal.path);
+			}
+			var _g = p.type;
+			if(_g[1] == 15) {
+				return v.texture;
+			}
+			return v;
+		}
+		var si = shaders;
+		var n = p.instance;
+		while(--n > 0) si = si.next;
+		var v1 = si.s.getParamValue(p.index);
+		if(v1 == null && !opt) {
+			throw new js__$Boot_HaxeError("Missing param value " + Std.string(si.s) + "." + p.name);
+		}
+		return v1;
+	}
+	,fillGlobals: function(buf,s) {
+		var _gthis = this;
+		var buf1 = buf.vertex;
+		var s1 = s.vertex;
+		var g = s1.globals;
+		while(g != null) {
+			var v = _gthis.globals.map.h[g.gid];
+			if(v == null) {
+				if(g.path == "__consts__") {
+					_gthis.fillRec(s1.consts,g.type,buf1.globals,g.pos);
+					g = g.next;
+					continue;
+				}
+				throw new js__$Boot_HaxeError("Missing global value " + g.path);
+			}
+			_gthis.fillRec(v,g.type,buf1.globals,g.pos);
+			g = g.next;
+		}
+		var buf2 = buf.fragment;
+		var s2 = s.fragment;
+		var g1 = s2.globals;
+		while(g1 != null) {
+			var v1 = _gthis.globals.map.h[g1.gid];
+			if(v1 == null) {
+				if(g1.path == "__consts__") {
+					_gthis.fillRec(s2.consts,g1.type,buf2.globals,g1.pos);
+					g1 = g1.next;
+					continue;
+				}
+				throw new js__$Boot_HaxeError("Missing global value " + g1.path);
+			}
+			_gthis.fillRec(v1,g1.type,buf2.globals,g1.pos);
+			g1 = g1.next;
+		}
+	}
+	,fillParams: function(buf,s,shaders) {
+		var _gthis = this;
+		var buf1 = buf.vertex;
+		var s1 = s.vertex;
+		var p = s1.params;
+		while(p != null) {
+			if(p.type == hxsl_Type.TFloat && p.perObjectGlobal == null) {
+				var si = shaders;
+				var n = p.instance;
+				while(--n > 0) si = si.next;
+				buf1.params[p.pos] = si.s.getParamFloatValue(p.index);
+				p = p.next;
+				continue;
+			}
+			var v;
+			if(p.perObjectGlobal != null) {
+				var v1 = _gthis.globals.map.h[p.perObjectGlobal.gid];
+				if(v1 == null) {
+					throw new js__$Boot_HaxeError("Missing global value " + p.perObjectGlobal.path);
+				}
+				var _g = p.type;
+				v = _g[1] == 15 ? v1.texture : v1;
+			} else {
+				var si1 = shaders;
+				var n1 = p.instance;
+				while(--n1 > 0) si1 = si1.next;
+				var v2 = si1.s.getParamValue(p.index);
+				if(v2 == null) {
+					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si1.s) + "." + p.name);
+				}
+				v = v2;
+			}
+			_gthis.fillRec(v,p.type,buf1.params,p.pos);
+			p = p.next;
+		}
+		var tid = 0;
+		var p1 = s1.textures2D;
+		while(p1 != null) {
+			var t;
+			if(p1.perObjectGlobal != null) {
+				var v3 = _gthis.globals.map.h[p1.perObjectGlobal.gid];
+				if(v3 == null) {
+					throw new js__$Boot_HaxeError("Missing global value " + p1.perObjectGlobal.path);
+				}
+				var _g1 = p1.type;
+				t = _g1[1] == 15 ? v3.texture : v3;
+			} else {
+				var si2 = shaders;
+				var n2 = p1.instance;
+				while(--n2 > 0) si2 = si2.next;
+				var v4 = si2.s.getParamValue(p1.index);
+				if(v4 == null) {
+					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si2.s) + "." + p1.name);
+				}
+				t = v4;
+			}
+			if(t == null) {
+				t = h3d_mat_Texture.fromColor(16711935);
+			}
+			buf1.tex[tid++] = t;
+			p1 = p1.next;
+		}
+		var p2 = s1.texturesCube;
+		while(p2 != null) {
+			var t1;
+			if(p2.perObjectGlobal != null) {
+				var v5 = _gthis.globals.map.h[p2.perObjectGlobal.gid];
+				if(v5 == null) {
+					throw new js__$Boot_HaxeError("Missing global value " + p2.perObjectGlobal.path);
+				}
+				var _g2 = p2.type;
+				t1 = _g2[1] == 15 ? v5.texture : v5;
+			} else {
+				var si3 = shaders;
+				var n3 = p2.instance;
+				while(--n3 > 0) si3 = si3.next;
+				var v6 = si3.s.getParamValue(p2.index);
+				if(v6 == null) {
+					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si3.s) + "." + p2.name);
+				}
+				t1 = v6;
+			}
+			if(t1 == null) {
+				t1 = h3d_mat_Texture.fromColor(16711935);
+			}
+			buf1.tex[tid++] = t1;
+			p2 = p2.next;
+		}
+		var buf2 = buf.fragment;
+		var s2 = s.fragment;
+		var p3 = s2.params;
+		while(p3 != null) {
+			if(p3.type == hxsl_Type.TFloat && p3.perObjectGlobal == null) {
+				var si4 = shaders;
+				var n4 = p3.instance;
+				while(--n4 > 0) si4 = si4.next;
+				buf2.params[p3.pos] = si4.s.getParamFloatValue(p3.index);
+				p3 = p3.next;
+				continue;
+			}
+			var v7;
+			if(p3.perObjectGlobal != null) {
+				var v8 = _gthis.globals.map.h[p3.perObjectGlobal.gid];
+				if(v8 == null) {
+					throw new js__$Boot_HaxeError("Missing global value " + p3.perObjectGlobal.path);
+				}
+				var _g3 = p3.type;
+				v7 = _g3[1] == 15 ? v8.texture : v8;
+			} else {
+				var si5 = shaders;
+				var n5 = p3.instance;
+				while(--n5 > 0) si5 = si5.next;
+				var v9 = si5.s.getParamValue(p3.index);
+				if(v9 == null) {
+					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si5.s) + "." + p3.name);
+				}
+				v7 = v9;
+			}
+			_gthis.fillRec(v7,p3.type,buf2.params,p3.pos);
+			p3 = p3.next;
+		}
+		var tid1 = 0;
+		var p4 = s2.textures2D;
+		while(p4 != null) {
+			var t2;
+			if(p4.perObjectGlobal != null) {
+				var v10 = _gthis.globals.map.h[p4.perObjectGlobal.gid];
+				if(v10 == null) {
+					throw new js__$Boot_HaxeError("Missing global value " + p4.perObjectGlobal.path);
+				}
+				var _g4 = p4.type;
+				t2 = _g4[1] == 15 ? v10.texture : v10;
+			} else {
+				var si6 = shaders;
+				var n6 = p4.instance;
+				while(--n6 > 0) si6 = si6.next;
+				var v11 = si6.s.getParamValue(p4.index);
+				if(v11 == null) {
+					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si6.s) + "." + p4.name);
+				}
+				t2 = v11;
+			}
+			if(t2 == null) {
+				t2 = h3d_mat_Texture.fromColor(16711935);
+			}
+			buf2.tex[tid1++] = t2;
+			p4 = p4.next;
+		}
+		var p5 = s2.texturesCube;
+		while(p5 != null) {
+			var t3;
+			if(p5.perObjectGlobal != null) {
+				var v12 = _gthis.globals.map.h[p5.perObjectGlobal.gid];
+				if(v12 == null) {
+					throw new js__$Boot_HaxeError("Missing global value " + p5.perObjectGlobal.path);
+				}
+				var _g5 = p5.type;
+				t3 = _g5[1] == 15 ? v12.texture : v12;
+			} else {
+				var si7 = shaders;
+				var n7 = p5.instance;
+				while(--n7 > 0) si7 = si7.next;
+				var v13 = si7.s.getParamValue(p5.index);
+				if(v13 == null) {
+					throw new js__$Boot_HaxeError("Missing param value " + Std.string(si7.s) + "." + p5.name);
+				}
+				t3 = v13;
+			}
+			if(t3 == null) {
+				t3 = h3d_mat_Texture.fromColor(16711935);
+			}
+			buf2.tex[tid1++] = t3;
+			p5 = p5.next;
+		}
+	}
+	,compileShaders: function(shaders) {
+		this.globals.maxChannels = 0;
+		var _g_l = shaders;
+		var _g_last = null;
+		while(_g_l != _g_last) {
+			var s = _g_l.s;
+			_g_l = _g_l.next;
+			var s1 = s;
+			s1.updateConstants(this.globals);
+		}
+		this.currentOutput.next = shaders;
+		var s2 = this.shaderCache.link(this.currentOutput);
+		this.currentOutput.next = null;
+		return s2;
+	}
+	,__class__: h3d_pass_ShaderManager
+};
+var h3d_pass_ShadowMap = function(size) {
+	this.bias = 0.01;
+	this.power = 10.0;
+	h3d_pass_Default.call(this);
+	this.set_size(size);
+	this.priority = 9;
+	this.lightCamera = new h3d_Camera();
+	this.lightCamera.orthoBounds = new h3d_col_Bounds();
+	this.shadowMapId = hxsl_Globals.allocID("shadow.map");
+	this.shadowProjId = hxsl_Globals.allocID("shadow.proj");
+	this.shadowColorId = hxsl_Globals.allocID("shadow.color");
+	this.shadowPowerId = hxsl_Globals.allocID("shadow.power");
+	this.shadowBiasId = hxsl_Globals.allocID("shadow.bias");
+	this.color = new h3d_Vector();
+	this.blur = new h3d_pass_Blur(2,3);
+	this.border = new h3d_pass_Border(size,size);
+	this.customDepth = h3d_Engine.CURRENT.driver.hasFeature(h3d_impl_Feature.AllocDepthBuffer);
+	if(!this.customDepth) {
+		this.depth = h3d_mat_DepthBuffer.getDefault();
+	}
+};
+$hxClasses["h3d.pass.ShadowMap"] = h3d_pass_ShadowMap;
+h3d_pass_ShadowMap.__name__ = ["h3d","pass","ShadowMap"];
+h3d_pass_ShadowMap.__super__ = h3d_pass_Default;
+h3d_pass_ShadowMap.prototype = $extend(h3d_pass_Default.prototype,{
+	lightCamera: null
+	,shadowMapId: null
+	,shadowProjId: null
+	,shadowColorId: null
+	,shadowPowerId: null
+	,shadowBiasId: null
+	,customDepth: null
+	,depth: null
+	,border: null
+	,size: null
+	,color: null
+	,power: null
+	,bias: null
+	,blur: null
+	,set_size: function(s) {
+		if(this.border != null && this.size != s) {
+			this.border.dispose();
+			this.border = new h3d_pass_Border(s,s);
+		}
+		return this.size = s;
+	}
+	,dispose: function() {
+		h3d_pass_Default.prototype.dispose.call(this);
+		this.blur.dispose();
+		if(this.border != null) {
+			this.border.dispose();
+		}
+	}
+	,calcShadowBounds: function(camera) {
+		var bounds = camera.orthoBounds;
+		var mtmp = new h3d_Matrix();
+		this.ctx.scene.iterVisibleMeshes(function(m) {
+			if(m.primitive == null || !m.material.castShadows) {
+				return;
+			}
+			var b = m.primitive.getBounds();
+			if(b.xMin > b.xMax) {
+				return;
+			}
+			var tmp = m.getAbsPos();
+			mtmp.multiply3x4(tmp,camera.mcam);
+			var p_x = b.xMin;
+			var p_y = b.yMin;
+			var p_z = b.zMin;
+			var px = p_x * mtmp._11 + p_y * mtmp._21 + p_z * mtmp._31 + mtmp._41;
+			var py = p_x * mtmp._12 + p_y * mtmp._22 + p_z * mtmp._32 + mtmp._42;
+			var pz = p_x * mtmp._13 + p_y * mtmp._23 + p_z * mtmp._33 + mtmp._43;
+			p_x = px;
+			p_y = py;
+			p_z = pz;
+			if(p_x < bounds.xMin) {
+				bounds.xMin = p_x;
+			}
+			if(p_x > bounds.xMax) {
+				bounds.xMax = p_x;
+			}
+			if(p_y < bounds.yMin) {
+				bounds.yMin = p_y;
+			}
+			if(p_y > bounds.yMax) {
+				bounds.yMax = p_y;
+			}
+			if(p_z < bounds.zMin) {
+				bounds.zMin = p_z;
+			}
+			if(p_z > bounds.zMax) {
+				bounds.zMax = p_z;
+			}
+			var p_x1 = b.xMin;
+			var p_y1 = b.yMin;
+			var p_z1 = b.zMax;
+			var px1 = p_x1 * mtmp._11 + p_y1 * mtmp._21 + p_z1 * mtmp._31 + mtmp._41;
+			var py1 = p_x1 * mtmp._12 + p_y1 * mtmp._22 + p_z1 * mtmp._32 + mtmp._42;
+			var pz1 = p_x1 * mtmp._13 + p_y1 * mtmp._23 + p_z1 * mtmp._33 + mtmp._43;
+			p_x1 = px1;
+			p_y1 = py1;
+			p_z1 = pz1;
+			if(p_x1 < bounds.xMin) {
+				bounds.xMin = p_x1;
+			}
+			if(p_x1 > bounds.xMax) {
+				bounds.xMax = p_x1;
+			}
+			if(p_y1 < bounds.yMin) {
+				bounds.yMin = p_y1;
+			}
+			if(p_y1 > bounds.yMax) {
+				bounds.yMax = p_y1;
+			}
+			if(p_z1 < bounds.zMin) {
+				bounds.zMin = p_z1;
+			}
+			if(p_z1 > bounds.zMax) {
+				bounds.zMax = p_z1;
+			}
+			var p_x2 = b.xMin;
+			var p_y2 = b.yMax;
+			var p_z2 = b.zMin;
+			var px2 = p_x2 * mtmp._11 + p_y2 * mtmp._21 + p_z2 * mtmp._31 + mtmp._41;
+			var py2 = p_x2 * mtmp._12 + p_y2 * mtmp._22 + p_z2 * mtmp._32 + mtmp._42;
+			var pz2 = p_x2 * mtmp._13 + p_y2 * mtmp._23 + p_z2 * mtmp._33 + mtmp._43;
+			p_x2 = px2;
+			p_y2 = py2;
+			p_z2 = pz2;
+			if(p_x2 < bounds.xMin) {
+				bounds.xMin = p_x2;
+			}
+			if(p_x2 > bounds.xMax) {
+				bounds.xMax = p_x2;
+			}
+			if(p_y2 < bounds.yMin) {
+				bounds.yMin = p_y2;
+			}
+			if(p_y2 > bounds.yMax) {
+				bounds.yMax = p_y2;
+			}
+			if(p_z2 < bounds.zMin) {
+				bounds.zMin = p_z2;
+			}
+			if(p_z2 > bounds.zMax) {
+				bounds.zMax = p_z2;
+			}
+			var p_x3 = b.xMin;
+			var p_y3 = b.yMax;
+			var p_z3 = b.zMax;
+			var px3 = p_x3 * mtmp._11 + p_y3 * mtmp._21 + p_z3 * mtmp._31 + mtmp._41;
+			var py3 = p_x3 * mtmp._12 + p_y3 * mtmp._22 + p_z3 * mtmp._32 + mtmp._42;
+			var pz3 = p_x3 * mtmp._13 + p_y3 * mtmp._23 + p_z3 * mtmp._33 + mtmp._43;
+			p_x3 = px3;
+			p_y3 = py3;
+			p_z3 = pz3;
+			if(p_x3 < bounds.xMin) {
+				bounds.xMin = p_x3;
+			}
+			if(p_x3 > bounds.xMax) {
+				bounds.xMax = p_x3;
+			}
+			if(p_y3 < bounds.yMin) {
+				bounds.yMin = p_y3;
+			}
+			if(p_y3 > bounds.yMax) {
+				bounds.yMax = p_y3;
+			}
+			if(p_z3 < bounds.zMin) {
+				bounds.zMin = p_z3;
+			}
+			if(p_z3 > bounds.zMax) {
+				bounds.zMax = p_z3;
+			}
+			var p_x4 = b.xMax;
+			var p_y4 = b.yMin;
+			var p_z4 = b.zMin;
+			var px4 = p_x4 * mtmp._11 + p_y4 * mtmp._21 + p_z4 * mtmp._31 + mtmp._41;
+			var py4 = p_x4 * mtmp._12 + p_y4 * mtmp._22 + p_z4 * mtmp._32 + mtmp._42;
+			var pz4 = p_x4 * mtmp._13 + p_y4 * mtmp._23 + p_z4 * mtmp._33 + mtmp._43;
+			p_x4 = px4;
+			p_y4 = py4;
+			p_z4 = pz4;
+			if(p_x4 < bounds.xMin) {
+				bounds.xMin = p_x4;
+			}
+			if(p_x4 > bounds.xMax) {
+				bounds.xMax = p_x4;
+			}
+			if(p_y4 < bounds.yMin) {
+				bounds.yMin = p_y4;
+			}
+			if(p_y4 > bounds.yMax) {
+				bounds.yMax = p_y4;
+			}
+			if(p_z4 < bounds.zMin) {
+				bounds.zMin = p_z4;
+			}
+			if(p_z4 > bounds.zMax) {
+				bounds.zMax = p_z4;
+			}
+			var p_x5 = b.xMax;
+			var p_y5 = b.yMin;
+			var p_z5 = b.zMax;
+			var px5 = p_x5 * mtmp._11 + p_y5 * mtmp._21 + p_z5 * mtmp._31 + mtmp._41;
+			var py5 = p_x5 * mtmp._12 + p_y5 * mtmp._22 + p_z5 * mtmp._32 + mtmp._42;
+			var pz5 = p_x5 * mtmp._13 + p_y5 * mtmp._23 + p_z5 * mtmp._33 + mtmp._43;
+			p_x5 = px5;
+			p_y5 = py5;
+			p_z5 = pz5;
+			if(p_x5 < bounds.xMin) {
+				bounds.xMin = p_x5;
+			}
+			if(p_x5 > bounds.xMax) {
+				bounds.xMax = p_x5;
+			}
+			if(p_y5 < bounds.yMin) {
+				bounds.yMin = p_y5;
+			}
+			if(p_y5 > bounds.yMax) {
+				bounds.yMax = p_y5;
+			}
+			if(p_z5 < bounds.zMin) {
+				bounds.zMin = p_z5;
+			}
+			if(p_z5 > bounds.zMax) {
+				bounds.zMax = p_z5;
+			}
+			var p_x6 = b.xMax;
+			var p_y6 = b.yMax;
+			var p_z6 = b.zMin;
+			var px6 = p_x6 * mtmp._11 + p_y6 * mtmp._21 + p_z6 * mtmp._31 + mtmp._41;
+			var py6 = p_x6 * mtmp._12 + p_y6 * mtmp._22 + p_z6 * mtmp._32 + mtmp._42;
+			var pz6 = p_x6 * mtmp._13 + p_y6 * mtmp._23 + p_z6 * mtmp._33 + mtmp._43;
+			p_x6 = px6;
+			p_y6 = py6;
+			p_z6 = pz6;
+			if(p_x6 < bounds.xMin) {
+				bounds.xMin = p_x6;
+			}
+			if(p_x6 > bounds.xMax) {
+				bounds.xMax = p_x6;
+			}
+			if(p_y6 < bounds.yMin) {
+				bounds.yMin = p_y6;
+			}
+			if(p_y6 > bounds.yMax) {
+				bounds.yMax = p_y6;
+			}
+			if(p_z6 < bounds.zMin) {
+				bounds.zMin = p_z6;
+			}
+			if(p_z6 > bounds.zMax) {
+				bounds.zMax = p_z6;
+			}
+			var p_x7 = b.xMax;
+			var p_y7 = b.yMax;
+			var p_z7 = b.zMax;
+			var px7 = p_x7 * mtmp._11 + p_y7 * mtmp._21 + p_z7 * mtmp._31 + mtmp._41;
+			var py7 = p_x7 * mtmp._12 + p_y7 * mtmp._22 + p_z7 * mtmp._32 + mtmp._42;
+			var pz7 = p_x7 * mtmp._13 + p_y7 * mtmp._23 + p_z7 * mtmp._33 + mtmp._43;
+			p_x7 = px7;
+			p_y7 = py7;
+			p_z7 = pz7;
+			if(p_x7 < bounds.xMin) {
+				bounds.xMin = p_x7;
+			}
+			if(p_x7 > bounds.xMax) {
+				bounds.xMax = p_x7;
+			}
+			if(p_y7 < bounds.yMin) {
+				bounds.yMin = p_y7;
+			}
+			if(p_y7 > bounds.yMax) {
+				bounds.yMax = p_y7;
+			}
+			if(p_z7 < bounds.zMin) {
+				bounds.zMin = p_z7;
+			}
+			if(p_z7 > bounds.zMax) {
+				bounds.zMax = p_z7;
+			}
+		});
+		var cameraBounds = new h3d_col_Bounds();
+		var _g = 0;
+		var _g1 = this.ctx.camera.getFrustumCorners();
+		while(_g < _g1.length) {
+			var pt = _g1[_g];
+			++_g;
+			var m1 = camera.mcam;
+			var px8 = pt.x * m1._11 + pt.y * m1._21 + pt.z * m1._31 + pt.w * m1._41;
+			var py8 = pt.x * m1._12 + pt.y * m1._22 + pt.z * m1._32 + pt.w * m1._42;
+			var pz8 = pt.x * m1._13 + pt.y * m1._23 + pt.z * m1._33 + pt.w * m1._43;
+			var pw = pt.x * m1._14 + pt.y * m1._24 + pt.z * m1._34 + pt.w * m1._44;
+			pt.x = px8;
+			pt.y = py8;
+			pt.z = pz8;
+			pt.w = pw;
+			var x = pt.x;
+			var y = pt.y;
+			var z = pt.z;
+			if(x < cameraBounds.xMin) {
+				cameraBounds.xMin = x;
+			}
+			if(x > cameraBounds.xMax) {
+				cameraBounds.xMax = x;
+			}
+			if(y < cameraBounds.yMin) {
+				cameraBounds.yMin = y;
+			}
+			if(y > cameraBounds.yMax) {
+				cameraBounds.yMax = y;
+			}
+			if(z < cameraBounds.zMin) {
+				cameraBounds.zMin = z;
+			}
+			if(z > cameraBounds.zMax) {
+				cameraBounds.zMax = z;
+			}
+		}
+		bounds.intersection(bounds,cameraBounds);
+		bounds.scaleCenter(1.01);
+	}
+	,getOutputs: function() {
+		return [hxsl_Output.PackFloat(hxsl_Output.Value("output.depth"))];
+	}
+	,setGlobals: function() {
+		h3d_pass_Default.prototype.setGlobals.call(this);
+		var _this = this.lightCamera.orthoBounds;
+		_this.xMin = 1e20;
+		_this.xMax = -1e20;
+		_this.yMin = 1e20;
+		_this.yMax = -1e20;
+		_this.zMin = 1e20;
+		_this.zMax = -1e20;
+		this.calcShadowBounds(this.lightCamera);
+		this.lightCamera.update();
+		var v = this.lightCamera.m;
+		this.manager.globals.map.h[this.cameraViewProj_id] = v;
+	}
+	,draw: function(passes) {
+		var texture = this.tcache.allocTarget("shadowMap",this.ctx,this.size,this.size,false);
+		if(this.customDepth && (this.depth == null || this.depth.width != this.size || this.depth.height != this.size || this.depth.isDisposed())) {
+			if(this.depth != null) {
+				this.depth.dispose();
+			}
+			this.depth = new h3d_mat_DepthBuffer(this.size,this.size);
+		}
+		texture.depthBuffer = this.depth;
+		var ct = this.ctx.camera.target;
+		var slight = this.ctx.lightSystem.shadowLight;
+		if(slight == null) {
+			var _this = this.lightCamera.target;
+			_this.x = 0;
+			_this.y = 0;
+			_this.z = -1;
+			_this.w = 1.;
+		} else {
+			var _this1 = this.lightCamera.target;
+			_this1.x = slight.direction.x;
+			_this1.y = slight.direction.y;
+			_this1.z = slight.direction.z;
+			_this1.w = 1.;
+			this.lightCamera.target.normalize();
+		}
+		this.lightCamera.target.x += ct.x;
+		this.lightCamera.target.y += ct.y;
+		this.lightCamera.target.z += ct.z;
+		var _this2 = this.lightCamera.pos;
+		_this2.x = ct.x;
+		_this2.y = ct.y;
+		_this2.z = ct.z;
+		_this2.w = ct.w;
+		this.lightCamera.update();
+		this.ctx.engine.pushTarget(texture);
+		this.ctx.engine.clear(16777215,1);
+		passes = h3d_pass_Default.prototype.draw.call(this,passes);
+		if(this.border != null) {
+			this.border.render();
+		}
+		this.ctx.engine.popTarget();
+		if(this.blur.quality > 0 && this.blur.passes > 0) {
+			this.blur.apply(texture,this.tcache.allocTarget("tmpBlur",this.ctx,this.size,this.size,false),null,true);
+		}
+		this.ctx.setGlobalID(this.shadowMapId,{ texture : texture});
+		this.ctx.setGlobalID(this.shadowProjId,this.lightCamera.m);
+		this.ctx.setGlobalID(this.shadowColorId,this.color);
+		this.ctx.setGlobalID(this.shadowPowerId,this.power);
+		this.ctx.setGlobalID(this.shadowBiasId,this.bias);
+		return passes;
+	}
+	,__class__: h3d_pass_ShadowMap
+});
+var h3d_prim_BigPrimitive = function(stride,isRaw,pos) {
+	if(isRaw == null) {
+		isRaw = false;
+	}
+	this.startIndex = 0;
+	this.idxPos = 0;
+	this.bufPos = 0;
+	h3d_prim_Primitive.call(this);
+	this.isRaw = isRaw;
+	this.buffers = [];
+	this.allIndexes = [];
+	this.bounds = new h3d_col_Bounds();
+	this.stride = stride;
+	if(stride < 3) {
+		throw new js__$Boot_HaxeError("Minimum stride = 3");
+	}
+};
+$hxClasses["h3d.prim.BigPrimitive"] = h3d_prim_BigPrimitive;
+h3d_prim_BigPrimitive.__name__ = ["h3d","prim","BigPrimitive"];
+h3d_prim_BigPrimitive.__super__ = h3d_prim_Primitive;
+h3d_prim_BigPrimitive.prototype = $extend(h3d_prim_Primitive.prototype,{
+	isRaw: null
+	,stride: null
+	,buffers: null
+	,allIndexes: null
+	,tmpBuf: null
+	,tmpIdx: null
+	,bounds: null
+	,bufPos: null
+	,idxPos: null
+	,startIndex: null
+	,flushing: null
+	,begin: function(vcount,icount) {
+		this.startIndex = this.bufPos / this.stride | 0;
+		if(this.startIndex + vcount >= 65535) {
+			if(vcount >= 65535) {
+				throw new js__$Boot_HaxeError("Too many vertices in begin()");
+			}
+			this.flush();
+		}
+		if(this.tmpBuf == null) {
+			this.tmpBuf = h3d_prim_BigPrimitive.PREV_BUFFER;
+			if(this.tmpBuf == null) {
+				var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+				this.tmpBuf = this1;
+			} else {
+				h3d_prim_BigPrimitive.PREV_BUFFER = null;
+			}
+			var this2 = this.tmpBuf;
+			var _g1 = this2.pos;
+			var _g = 65535 * this.stride;
+			while(_g1 < _g) {
+				var i = _g1++;
+				if(this2.pos == this2.array.length) {
+					var newSize = this2.array.length << 1;
+					if(newSize < 128) {
+						newSize = 128;
+					}
+					var newArray = new Float32Array(newSize);
+					newArray.set(this2.array);
+					this2.array = newArray;
+				}
+				this2.array[this2.pos++] = 0.;
+			}
+		}
+		if(this.tmpIdx == null) {
+			this.tmpIdx = h3d_prim_BigPrimitive.PREV_INDEX;
+			if(this.tmpIdx == null) {
+				var this3 = new Array(0);
+				this.tmpIdx = this3;
+			} else {
+				h3d_prim_BigPrimitive.PREV_INDEX = null;
+			}
+		}
+		if(this.idxPos + icount > this.tmpIdx.length) {
+			var size = this.tmpIdx.length == 0 ? 1024 : this.tmpIdx.length;
+			var req = this.idxPos + icount;
+			while(size < req) size <<= 1;
+			var this4 = this.tmpIdx;
+			while(this4.length < size) this4.push(0);
+		}
+	}
+	,addPoint: function(x,y,z) {
+		this.tmpBuf.array[this.bufPos++] = x;
+		this.tmpBuf.array[this.bufPos++] = y;
+		this.tmpBuf.array[this.bufPos++] = z;
+		var _this = this.bounds;
+		if(x < _this.xMin) {
+			_this.xMin = x;
+		}
+		if(x > _this.xMax) {
+			_this.xMax = x;
+		}
+		if(y < _this.yMin) {
+			_this.yMin = y;
+		}
+		if(y > _this.yMax) {
+			_this.yMax = y;
+		}
+		if(z < _this.zMin) {
+			_this.zMin = z;
+		}
+		if(z > _this.zMax) {
+			_this.zMax = z;
+		}
+	}
+	,addBounds: function(x,y,z) {
+		var _this = this.bounds;
+		if(x < _this.xMin) {
+			_this.xMin = x;
+		}
+		if(x > _this.xMax) {
+			_this.xMax = x;
+		}
+		if(y < _this.yMin) {
+			_this.yMin = y;
+		}
+		if(y > _this.yMax) {
+			_this.yMax = y;
+		}
+		if(z < _this.zMin) {
+			_this.zMin = z;
+		}
+		if(z > _this.zMax) {
+			_this.zMax = z;
+		}
+	}
+	,addVertexValue: function(v) {
+		this.tmpBuf.array[this.bufPos++] = v;
+	}
+	,addIndex: function(i) {
+		this.tmpIdx[this.idxPos++] = i + this.startIndex;
+	}
+	,triCount: function() {
+		var count = 0;
+		var _g = 0;
+		var _g1 = this.allIndexes;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			count += i.count;
+		}
+		count += this.idxPos;
+		return count / 3 | 0;
+	}
+	,vertexCount: function() {
+		var count = 0;
+		var _g = 0;
+		var _g1 = this.buffers;
+		while(_g < _g1.length) {
+			var b = _g1[_g];
+			++_g;
+			count += b.vertices;
+		}
+		count += this.bufPos / this.stride | 0;
+		return count;
+	}
+	,flush: function() {
+		if(this.tmpBuf != null) {
+			if(this.bufPos > 0 && this.idxPos > 0) {
+				this.flushing = true;
+				var b = h3d_Buffer.ofSubFloats(this.tmpBuf,this.stride,this.bufPos / this.stride | 0);
+				if(this.isRaw) {
+					b.flags |= 1 << h3d_BufferFlag.RawFormat[1];
+				}
+				this.buffers.push(b);
+				this.allIndexes.push(h3d_Indexes.alloc(this.tmpIdx,0,this.idxPos));
+				this.flushing = false;
+			}
+			if(h3d_prim_BigPrimitive.PREV_BUFFER == null || h3d_prim_BigPrimitive.PREV_BUFFER.pos < this.tmpBuf.pos) {
+				h3d_prim_BigPrimitive.PREV_BUFFER = this.tmpBuf;
+			}
+			if(h3d_prim_BigPrimitive.PREV_INDEX == null || h3d_prim_BigPrimitive.PREV_INDEX.length < this.tmpIdx.length) {
+				h3d_prim_BigPrimitive.PREV_INDEX = this.tmpIdx;
+			}
+			this.tmpBuf = null;
+			this.tmpIdx = null;
+			this.bufPos = 0;
+			this.idxPos = 0;
+			this.startIndex = 0;
+		}
+	}
+	,render: function(engine) {
+		if(this.tmpBuf != null) {
+			this.flush();
+		}
+		var _g1 = 0;
+		var _g = this.buffers.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			engine.renderIndexed(this.buffers[i],this.allIndexes[i]);
+		}
+	}
+	,getBounds: function() {
+		return this.bounds;
+	}
+	,dispose: function() {
+		this.clear();
+	}
+	,clear: function() {
+		if(this.flushing) {
+			throw new js__$Boot_HaxeError("Cannot clear() BigPrimitive while it's flushing");
+		}
+		var _this = this.bounds;
+		_this.xMin = 1e20;
+		_this.xMax = -1e20;
+		_this.yMin = 1e20;
+		_this.yMax = -1e20;
+		_this.zMin = 1e20;
+		_this.zMax = -1e20;
+		var _g = 0;
+		var _g1 = this.buffers;
+		while(_g < _g1.length) {
+			var b = _g1[_g];
+			++_g;
+			b.dispose();
+		}
+		var _g2 = 0;
+		var _g11 = this.allIndexes;
+		while(_g2 < _g11.length) {
+			var i = _g11[_g2];
+			++_g2;
+			i.dispose();
+		}
+		this.buffers = [];
+		this.allIndexes = [];
+		this.bufPos = 0;
+		this.tmpBuf = null;
+		this.tmpIdx = null;
+	}
+	,add: function(buf,idx,dx,dy,dz,rotation,scale,stride) {
+		if(stride == null) {
+			stride = -1;
+		}
+		if(scale == null) {
+			scale = 1.;
+		}
+		if(rotation == null) {
+			rotation = 0.;
+		}
+		if(dz == null) {
+			dz = 0.;
+		}
+		if(dy == null) {
+			dy = 0.;
+		}
+		if(dx == null) {
+			dx = 0.;
+		}
+		this.addSub(buf,idx,0,0,buf.pos / (stride < 0 ? this.stride : stride) | 0,idx.length / 3 | 0,dx,dy,dz,rotation,scale,stride);
+		return;
+	}
+	,addSub: function(buf,idx,startVert,startTri,nvert,triCount,dx,dy,dz,rotation,scale,stride,deltaU,deltaV,color) {
+		if(color == null) {
+			color = 1.;
+		}
+		if(deltaV == null) {
+			deltaV = 0.;
+		}
+		if(deltaU == null) {
+			deltaU = 0.;
+		}
+		if(stride == null) {
+			stride = -1;
+		}
+		if(scale == null) {
+			scale = 1.;
+		}
+		if(rotation == null) {
+			rotation = 0.;
+		}
+		if(dz == null) {
+			dz = 0.;
+		}
+		if(dy == null) {
+			dy = 0.;
+		}
+		if(dx == null) {
+			dx = 0.;
+		}
+		if(stride < 0) {
+			stride = this.stride;
+		}
+		if(stride < this.stride) {
+			throw new js__$Boot_HaxeError("only stride >= " + this.stride + " allowed");
+		}
+		this.begin(nvert,triCount * 3);
+		var start = this.startIndex;
+		var cr = Math.cos(rotation);
+		var sr = Math.sin(rotation);
+		var pos = this.bufPos;
+		var tmpBuf = this.tmpBuf;
+		var _g1 = 0;
+		var _g = nvert;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var p = (i + startVert) * stride;
+			var x = buf.array[p++];
+			var y = buf.array[p++];
+			var z = buf.array[p++];
+			var tx = (x * cr - y * sr) * scale;
+			var ty = (x * sr + y * cr) * scale;
+			var vx = dx + tx;
+			var vy = dy + ty;
+			var vz = dz + z * scale;
+			tmpBuf.array[pos++] = vx;
+			tmpBuf.array[pos++] = vy;
+			tmpBuf.array[pos++] = vz;
+			var _this = this.bounds;
+			if(vx < _this.xMin) {
+				_this.xMin = vx;
+			}
+			if(vx > _this.xMax) {
+				_this.xMax = vx;
+			}
+			if(vy < _this.yMin) {
+				_this.yMin = vy;
+			}
+			if(vy > _this.yMax) {
+				_this.yMax = vy;
+			}
+			if(vz < _this.zMin) {
+				_this.zMin = vz;
+			}
+			if(vz > _this.zMax) {
+				_this.zMax = vz;
+			}
+			var _g2 = this.stride;
+			switch(_g2) {
+			case 3:
+				continue;
+			case 4:
+				tmpBuf.array[pos++] = buf.array[p++];
+				break;
+			case 5:
+				tmpBuf.array[pos++] = buf.array[p++] + deltaU;
+				tmpBuf.array[pos++] = buf.array[p++] + deltaV;
+				break;
+			case 6:
+				var nx = buf.array[p++];
+				var ny = buf.array[p++];
+				var nz = buf.array[p++];
+				var tnx = nx * cr - ny * sr;
+				var tny = nx * sr + ny * cr;
+				tmpBuf.array[pos++] = tnx;
+				tmpBuf.array[pos++] = tny;
+				tmpBuf.array[pos++] = nz;
+				break;
+			case 7:
+				var nx1 = buf.array[p++];
+				var ny1 = buf.array[p++];
+				var nz1 = buf.array[p++];
+				var tnx1 = nx1 * cr - ny1 * sr;
+				var tny1 = nx1 * sr + ny1 * cr;
+				tmpBuf.array[pos++] = tnx1;
+				tmpBuf.array[pos++] = tny1;
+				tmpBuf.array[pos++] = nz1;
+				tmpBuf.array[pos++] = buf.array[p++] + deltaU;
+				break;
+			case 8:case 9:case 10:
+				var nx2 = buf.array[p++];
+				var ny2 = buf.array[p++];
+				var nz2 = buf.array[p++];
+				var tnx2 = nx2 * cr - ny2 * sr;
+				var tny2 = nx2 * sr + ny2 * cr;
+				tmpBuf.array[pos++] = tnx2;
+				tmpBuf.array[pos++] = tny2;
+				tmpBuf.array[pos++] = nz2;
+				tmpBuf.array[pos++] = buf.array[p++] + deltaU;
+				tmpBuf.array[pos++] = buf.array[p++] + deltaV;
+				var _g3 = 8;
+				var _g21 = this.stride;
+				while(_g3 < _g21) {
+					var i1 = _g3++;
+					tmpBuf.array[pos++] = buf.array[p++];
+				}
+				break;
+			default:
+				var nx3 = buf.array[p++];
+				var ny3 = buf.array[p++];
+				var nz3 = buf.array[p++];
+				var tnx3 = nx3 * cr - ny3 * sr;
+				var tny3 = nx3 * sr + ny3 * cr;
+				tmpBuf.array[pos++] = tnx3;
+				tmpBuf.array[pos++] = tny3;
+				tmpBuf.array[pos++] = nz3;
+				tmpBuf.array[pos++] = buf.array[p++] + deltaU;
+				tmpBuf.array[pos++] = buf.array[p++] + deltaV;
+				tmpBuf.array[pos++] = buf.array[p++] * color;
+				tmpBuf.array[pos++] = buf.array[p++] * color;
+				tmpBuf.array[pos++] = buf.array[p++] * color;
+				var _g31 = 11;
+				var _g22 = this.stride;
+				while(_g31 < _g22) {
+					var i2 = _g31++;
+					tmpBuf.array[pos++] = buf.array[p++];
+				}
+			}
+		}
+		this.bufPos = pos;
+		start -= startVert;
+		var _g11 = 0;
+		var _g4 = triCount * 3;
+		while(_g11 < _g4) {
+			var i3 = _g11++;
+			var tmp = idx[i3 + startTri * 3] + start;
+			this.tmpIdx[this.idxPos++] = tmp;
+		}
+	}
+	,customSerialize: function(ctx) {
+		this.flush();
+		ctx.out.addByte(this.isRaw ? 1 : 0);
+		var v = this.stride;
+		if(v >= 0 && v < 128) {
+			ctx.out.addByte(v);
+		} else {
+			ctx.out.addByte(128);
+			ctx.out.addInt32(v);
+		}
+		ctx.out.addFloat(this.bounds.xMin);
+		ctx.out.addFloat(this.bounds.yMin);
+		ctx.out.addFloat(this.bounds.zMin);
+		ctx.out.addFloat(this.bounds.xMax);
+		ctx.out.addFloat(this.bounds.yMax);
+		ctx.out.addFloat(this.bounds.zMax);
+		var v1 = this.buffers.length;
+		if(v1 >= 0 && v1 < 128) {
+			ctx.out.addByte(v1);
+		} else {
+			ctx.out.addByte(128);
+			ctx.out.addInt32(v1);
+		}
+		var reqSize = 0;
+		var _g = 0;
+		var _g1 = this.allIndexes;
+		while(_g < _g1.length) {
+			var a = _g1[_g];
+			++_g;
+			var sz = a.count << 1;
+			if(reqSize < sz) {
+				reqSize = sz;
+			}
+		}
+		var _g2 = 0;
+		var _g11 = this.buffers;
+		while(_g2 < _g11.length) {
+			var b = _g11[_g2];
+			++_g2;
+			var sz1 = b.vertices * this.stride << 2;
+			if(reqSize < sz1) {
+				reqSize = sz1;
+			}
+		}
+		var tmpBytes = new haxe_io_Bytes(new ArrayBuffer(reqSize));
+		var _g12 = 0;
+		var _g3 = this.buffers.length;
+		while(_g12 < _g3) {
+			var i = _g12++;
+			var idx = this.allIndexes[i];
+			idx.readBytes(tmpBytes,0,idx.count);
+			var v2 = idx.count;
+			if(v2 >= 0 && v2 < 128) {
+				ctx.out.addByte(v2);
+			} else {
+				ctx.out.addByte(128);
+				ctx.out.addInt32(v2);
+			}
+			var len = idx.count << 1;
+			if(tmpBytes == null) {
+				ctx.out.addByte(0);
+			} else {
+				var v3 = len + 1;
+				if(v3 >= 0 && v3 < 128) {
+					ctx.out.addByte(v3);
+				} else {
+					ctx.out.addByte(128);
+					ctx.out.addInt32(v3);
+				}
+				ctx.out.addBytes(tmpBytes,0,len);
+			}
+			var b1 = this.buffers[i];
+			b1.readBytes(tmpBytes,0,b1.vertices);
+			var v4 = b1.vertices;
+			if(v4 >= 0 && v4 < 128) {
+				ctx.out.addByte(v4);
+			} else {
+				ctx.out.addByte(128);
+				ctx.out.addInt32(v4);
+			}
+			var len1 = b1.vertices * this.stride << 2;
+			if(tmpBytes == null) {
+				ctx.out.addByte(0);
+			} else {
+				var v5 = len1 + 1;
+				if(v5 >= 0 && v5 < 128) {
+					ctx.out.addByte(v5);
+				} else {
+					ctx.out.addByte(128);
+					ctx.out.addInt32(v5);
+				}
+				ctx.out.addBytes(tmpBytes,0,len1);
+			}
+		}
+	}
+	,customUnserialize: function(ctx) {
+		this.isRaw = ctx.input.b[ctx.inPos++] != 0;
+		var v = ctx.input.b[ctx.inPos++];
+		if(v == 128) {
+			v = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		this.stride = v;
+		this.bounds = new h3d_col_Bounds();
+		var v1 = ctx.input.getFloat(ctx.inPos);
+		ctx.inPos += 4;
+		this.bounds.xMin = v1;
+		var v2 = ctx.input.getFloat(ctx.inPos);
+		ctx.inPos += 4;
+		this.bounds.yMin = v2;
+		var v3 = ctx.input.getFloat(ctx.inPos);
+		ctx.inPos += 4;
+		this.bounds.zMin = v3;
+		var v4 = ctx.input.getFloat(ctx.inPos);
+		ctx.inPos += 4;
+		this.bounds.xMin = v4;
+		var v5 = ctx.input.getFloat(ctx.inPos);
+		ctx.inPos += 4;
+		this.bounds.yMax = v5;
+		var v6 = ctx.input.getFloat(ctx.inPos);
+		ctx.inPos += 4;
+		this.bounds.zMax = v6;
+		var v7 = ctx.input.b[ctx.inPos++];
+		if(v7 == 128) {
+			v7 = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var count = v7;
+		this.buffers = [];
+		this.allIndexes = [];
+		var _g1 = 0;
+		var _g = count;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var v8 = ctx.input.b[ctx.inPos++];
+			if(v8 == 128) {
+				v8 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var nidx = v8;
+			var idx = new h3d_Indexes(nidx);
+			var v9 = ctx.input.b[ctx.inPos++];
+			if(v9 == 128) {
+				v9 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var len = v9;
+			var tmp;
+			if(len == 0) {
+				tmp = null;
+			} else {
+				--len;
+				var s = ctx.input.sub(ctx.inPos,len);
+				ctx.inPos += len;
+				tmp = s;
+			}
+			idx.uploadBytes(tmp,0,nidx);
+			this.allIndexes.push(idx);
+			var v10 = ctx.input.b[ctx.inPos++];
+			if(v10 == 128) {
+				v10 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var nvert = v10;
+			var buf = new h3d_Buffer(nvert,this.stride);
+			var v11 = ctx.input.b[ctx.inPos++];
+			if(v11 == 128) {
+				v11 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var len1 = v11;
+			var tmp1;
+			if(len1 == 0) {
+				tmp1 = null;
+			} else {
+				--len1;
+				var s1 = ctx.input.sub(ctx.inPos,len1);
+				ctx.inPos += len1;
+				tmp1 = s1;
+			}
+			buf.uploadBytes(tmp1,0,nvert);
+			this.buffers.push(buf);
+		}
+	}
+	,getCLID: function() {
+		return h3d_prim_BigPrimitive.__clid;
+	}
+	,unserializeInit: function() {
+		h3d_prim_Primitive.prototype.unserializeInit.call(this);
+		this.bufPos = 0;
+		this.idxPos = 0;
+		this.startIndex = 0;
+	}
+	,unserialize: function(__ctx) {
+		h3d_prim_Primitive.prototype.unserialize.call(this,__ctx);
+	}
+	,__class__: h3d_prim_BigPrimitive
+});
+var h3d_prim_MeshPrimitive = function() {
+	h3d_prim_Primitive.call(this);
+};
+$hxClasses["h3d.prim.MeshPrimitive"] = h3d_prim_MeshPrimitive;
+h3d_prim_MeshPrimitive.__name__ = ["h3d","prim","MeshPrimitive"];
+h3d_prim_MeshPrimitive.__super__ = h3d_prim_Primitive;
+h3d_prim_MeshPrimitive.prototype = $extend(h3d_prim_Primitive.prototype,{
+	bufferCache: null
+	,prevNames: null
+	,prevBuffers: null
+	,allocBuffer: function(engine,name) {
+		return null;
+	}
+	,hasBuffer: function(name) {
+		if(this.bufferCache == null) {
+			return false;
+		}
+		var this1 = this.bufferCache;
+		var key = hxsl_Globals.allocID(name);
+		return this1.h.hasOwnProperty(key);
+	}
+	,addBuffer: function(name,buf,offset) {
+		if(offset == null) {
+			offset = 0;
+		}
+		if(this.bufferCache == null) {
+			this.bufferCache = new haxe_ds_IntMap();
+		}
+		var id = hxsl_Globals.allocID(name);
+		var old = this.bufferCache.h[id];
+		if(old != null) {
+			old.dispose();
+		}
+		var this1 = this.bufferCache;
+		var value = new h3d_BufferOffset(buf,offset);
+		this1.h[id] = value;
+	}
+	,dispose: function() {
+		h3d_prim_Primitive.prototype.dispose.call(this);
+		if(this.bufferCache != null) {
+			var b = this.bufferCache.iterator();
+			while(b.hasNext()) {
+				var b1 = b.next();
+				b1.dispose();
+			}
+		}
+		this.bufferCache = null;
+		this.prevNames = null;
+	}
+	,getBuffers: function(engine) {
+		if(this.bufferCache == null) {
+			this.bufferCache = new haxe_ds_IntMap();
+		}
+		var names = engine.driver.getShaderInputNames();
+		if(names == this.prevNames) {
+			return this.prevBuffers;
+		}
+		var buffers = null;
+		var prev = null;
+		var _g = 0;
+		while(_g < names.length) {
+			var name = names[_g];
+			++_g;
+			var id = hxsl_Globals.allocID(name);
+			var b = this.bufferCache.h[id];
+			if(b == null) {
+				b = this.allocBuffer(engine,name);
+				if(b == null) {
+					throw new js__$Boot_HaxeError("Buffer " + name + " is not available");
+				}
+				this.bufferCache.h[id] = b;
+			}
+			b.next = null;
+			if(prev == null) {
+				prev = b;
+				buffers = prev;
+			} else {
+				prev.next = b;
+				prev = b;
+			}
+		}
+		this.prevNames = names;
+		return this.prevBuffers = buffers;
+	}
+	,render: function(engine) {
+		if(this.indexes == null || this.indexes.isDisposed()) {
+			this.alloc(engine);
+		}
+		engine.renderMultiBuffers(this.getBuffers(engine),this.indexes);
+	}
+	,getCLID: function() {
+		return h3d_prim_MeshPrimitive.__clid;
+	}
+	,__class__: h3d_prim_MeshPrimitive
+});
+var h3d_prim_HMDModel = function(data,dataPos,lib) {
+	this.bufferAliases = new haxe_ds_StringMap();
+	h3d_prim_MeshPrimitive.call(this);
+	this.data = data;
+	this.dataPosition = dataPos;
+	this.lib = lib;
+};
+$hxClasses["h3d.prim.HMDModel"] = h3d_prim_HMDModel;
+h3d_prim_HMDModel.__name__ = ["h3d","prim","HMDModel"];
+h3d_prim_HMDModel.__super__ = h3d_prim_MeshPrimitive;
+h3d_prim_HMDModel.prototype = $extend(h3d_prim_MeshPrimitive.prototype,{
+	data: null
+	,dataPosition: null
+	,indexCount: null
+	,indexesTriPos: null
+	,lib: null
+	,curMaterial: null
+	,collider: null
+	,normalsRecomputed: null
+	,bufferAliases: null
+	,triCount: function() {
+		return this.data.get_indexCount() / 3 | 0;
+	}
+	,vertexCount: function() {
+		return this.data.vertexCount;
+	}
+	,getBounds: function() {
+		return this.data.bounds;
+	}
+	,selectMaterial: function(i) {
+		this.curMaterial = i;
+	}
+	,getDataBuffers: function(fmt,defaults,material) {
+		return this.lib.getBuffers(this.data,fmt,defaults,material);
+	}
+	,loadSkin: function(skin) {
+		this.lib.loadSkin(this.data,skin);
+	}
+	,addAlias: function(name,realName,offset) {
+		if(offset == null) {
+			offset = 0;
+		}
+		var _this = this.bufferAliases;
+		var value = { realName : realName, offset : offset};
+		if(__map_reserved[name] != null) {
+			_this.setReserved(name,value);
+		} else {
+			_this.h[name] = value;
+		}
+	}
+	,alloc: function(engine) {
+		this.dispose();
+		this.buffer = new h3d_Buffer(this.data.vertexCount,this.data.vertexStride);
+		var entry = this.lib.entry;
+		entry.open();
+		entry.skip(this.dataPosition + this.data.vertexPosition);
+		var size = this.data.vertexCount * this.data.vertexStride * 4;
+		var bytes = hxd_impl_Tmp.getBytes(size);
+		entry.read(bytes,0,size);
+		this.buffer.uploadBytes(bytes,0,this.data.vertexCount);
+		hxd_impl_Tmp.saveBytes(bytes);
+		this.indexCount = 0;
+		this.indexesTriPos = [];
+		var _g = 0;
+		var _g1 = this.data.indexCounts;
+		while(_g < _g1.length) {
+			var n = _g1[_g];
+			++_g;
+			this.indexesTriPos.push(this.indexCount / 3 | 0);
+			this.indexCount += n;
+		}
+		this.indexes = new h3d_Indexes(this.indexCount);
+		entry.skip(this.data.indexPosition - (this.data.vertexPosition + size));
+		var bytes1 = hxd_impl_Tmp.getBytes(this.indexCount * 2);
+		entry.read(bytes1,0,this.indexCount * 2);
+		this.indexes.uploadBytes(bytes1,0,this.indexCount);
+		hxd_impl_Tmp.saveBytes(bytes1);
+		entry.close();
+		var pos = 0;
+		var _g2 = 0;
+		var _g11 = this.data.vertexFormat;
+		while(_g2 < _g11.length) {
+			var f = _g11[_g2];
+			++_g2;
+			this.addBuffer(f.name,this.buffer,pos);
+			pos += f.format & 7;
+		}
+		if(this.normalsRecomputed != null) {
+			this.recomputeNormals(this.normalsRecomputed);
+		}
+		var name = this.bufferAliases.keys();
+		while(name.hasNext()) {
+			var name1 = name.next();
+			var _this = this.bufferAliases;
+			var alias = __map_reserved[name1] != null ? _this.getReserved(name1) : _this.h[name1];
+			var this1 = this.bufferCache;
+			var key = hxsl_Globals.allocID(alias.realName);
+			var buffer = this1.h[key];
+			if(buffer == null) {
+				throw new js__$Boot_HaxeError("Buffer " + alias.realName + " not found for alias " + name1);
+			}
+			if(buffer.offset + alias.offset > buffer.buffer.buffer.stride) {
+				throw new js__$Boot_HaxeError("Alias " + name1 + " for buffer " + alias.realName + " outside stride");
+			}
+			this.addBuffer(name1,buffer.buffer,buffer.offset + alias.offset);
+		}
+	}
+	,recomputeNormals: function(name) {
+		if(name == null) {
+			name = "normal";
+		}
+		var pos = this.lib.getBuffers(this.data,[new hxd_fmt_hmd_GeometryFormat("position",3)]);
+		var ids = [];
+		var pts = [];
+		var _g1 = 0;
+		var _g = this.data.vertexCount;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var added = false;
+			var pt = new h3d_col_Point(pos.vertexes[i * 3],pos.vertexes[i * 3 + 1],pos.vertexes[i * 3 + 2]);
+			var _g3 = 0;
+			var _g2 = pts.length;
+			while(_g3 < _g2) {
+				var i1 = _g3++;
+				var p = pts[i1];
+				if(p.x == pt.x && p.y == pt.y && p.z == pt.z) {
+					ids.push(i1);
+					added = true;
+					break;
+				}
+			}
+			if(!added) {
+				ids.push(pts.length);
+				pts.push(pt);
+			}
+		}
+		var this1 = new Array(0);
+		var idx = this1;
+		var _g4 = 0;
+		var _g11 = pos.indexes;
+		while(_g4 < _g11.length) {
+			var i2 = _g11[_g4];
+			++_g4;
+			idx.push(ids[i2]);
+		}
+		var pol = new h3d_prim_Polygon(pts,idx);
+		pol.addNormals();
+		var this2 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+		var v = this2;
+		var _g12 = 0;
+		var _g5 = this.data.vertexCount;
+		while(_g12 < _g5) {
+			var i3 = _g12++;
+			var n = pol.normals[ids[i3]];
+			var v1 = n.x;
+			if(v.pos == v.array.length) {
+				var newSize = v.array.length << 1;
+				if(newSize < 128) {
+					newSize = 128;
+				}
+				var newArray = new Float32Array(newSize);
+				newArray.set(v.array);
+				v.array = newArray;
+			}
+			v.array[v.pos++] = v1;
+			var v2 = n.y;
+			if(v.pos == v.array.length) {
+				var newSize1 = v.array.length << 1;
+				if(newSize1 < 128) {
+					newSize1 = 128;
+				}
+				var newArray1 = new Float32Array(newSize1);
+				newArray1.set(v.array);
+				v.array = newArray1;
+			}
+			v.array[v.pos++] = v2;
+			var v3 = n.z;
+			if(v.pos == v.array.length) {
+				var newSize2 = v.array.length << 1;
+				if(newSize2 < 128) {
+					newSize2 = 128;
+				}
+				var newArray2 = new Float32Array(newSize2);
+				newArray2.set(v.array);
+				v.array = newArray2;
+			}
+			v.array[v.pos++] = v3;
+		}
+		var buf = h3d_Buffer.ofFloats(v,3);
+		this.addBuffer(name,buf,0);
+		this.normalsRecomputed = name;
+	}
+	,render: function(engine) {
+		if(this.curMaterial < 0) {
+			h3d_prim_MeshPrimitive.prototype.render.call(this,engine);
+			return;
+		}
+		if(this.indexes == null || this.indexes.isDisposed()) {
+			this.alloc(engine);
+		}
+		engine.renderMultiBuffers(this.getBuffers(engine),this.indexes,this.indexesTriPos[this.curMaterial],this.data.indexCounts[this.curMaterial] / 3 | 0);
+		this.curMaterial = -1;
+	}
+	,initCollider: function(poly) {
+		var buf = this.lib.getBuffers(this.data,[new hxd_fmt_hmd_GeometryFormat("position",3)]);
+		poly.setData(buf.vertexes,buf.indexes);
+		if(this.collider == null) {
+			var _this = this.data.bounds;
+			var dx = _this.xMax - _this.xMin;
+			var dy = _this.yMax - _this.yMin;
+			var dz = _this.zMax - _this.zMin;
+			var sphere = new h3d_col_Sphere((_this.xMin + _this.xMax) * 0.5,(_this.yMin + _this.yMax) * 0.5,(_this.zMin + _this.zMax) * 0.5,Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5);
+			this.collider = new h3d_col_OptimizedCollider(sphere,poly);
+		}
+	}
+	,getCollider: function() {
+		if(this.collider != null) {
+			return this.collider;
+		}
+		var poly = new h3d_col_PolygonBuffer();
+		poly.source = { entry : this.lib.entry, geometryName : null};
+		var _g = 0;
+		var _g1 = this.lib.header.models;
+		while(_g < _g1.length) {
+			var h = _g1[_g];
+			++_g;
+			if(this.lib.header.geometries[h.geometry] == this.data) {
+				poly.source.geometryName = h.name;
+				break;
+			}
+		}
+		this.initCollider(poly);
+		return this.collider;
+	}
+	,customSerialize: function(ctx) {
+		var s = this.lib.entry.get_path();
+		if(s == null) {
+			ctx.out.addByte(0);
+		} else {
+			var b = haxe_io_Bytes.ofString(s);
+			var v = b.length + 1;
+			if(v >= 0 && v < 128) {
+				ctx.out.addByte(v);
+			} else {
+				ctx.out.addByte(128);
+				ctx.out.addInt32(v);
+			}
+			ctx.out.add(b);
+		}
+		var _g = 0;
+		var _g1 = this.lib.header.models;
+		while(_g < _g1.length) {
+			var m = _g1[_g];
+			++_g;
+			if(this.lib.header.geometries[m.geometry] == this.data) {
+				var s1 = m.name;
+				if(s1 == null) {
+					ctx.out.addByte(0);
+				} else {
+					var b1 = haxe_io_Bytes.ofString(s1);
+					var v1 = b1.length + 1;
+					if(v1 >= 0 && v1 < 128) {
+						ctx.out.addByte(v1);
+					} else {
+						ctx.out.addByte(128);
+						ctx.out.addInt32(v1);
+					}
+					ctx.out.add(b1);
+				}
+				break;
+			}
+		}
+	}
+	,customUnserialize: function(ctx) {
+		var v = ctx.input.b[ctx.inPos++];
+		if(v == 128) {
+			v = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var len = v;
+		var libPath;
+		if(len == 0) {
+			libPath = null;
+		} else {
+			--len;
+			var s = ctx.input.getString(ctx.inPos,len);
+			ctx.inPos += len;
+			libPath = s;
+		}
+		var v1 = ctx.input.b[ctx.inPos++];
+		if(v1 == 128) {
+			v1 = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var len1 = v1;
+		var modelPath;
+		if(len1 == 0) {
+			modelPath = null;
+		} else {
+			--len1;
+			var s1 = ctx.input.getString(ctx.inPos,len1);
+			ctx.inPos += len1;
+			modelPath = s1;
+		}
+		var ctx1 = ctx;
+		this.lib = ctx1.loadHMD(libPath);
+		var _g = 0;
+		var _g1 = this.lib.header.models;
+		while(_g < _g1.length) {
+			var m = _g1[_g];
+			++_g;
+			if(m.name == modelPath) {
+				this.data = this.lib.header.geometries[m.geometry];
+				this.lib.cachedPrimitives[m.geometry] = this;
+				break;
+			}
+		}
+		this.dataPosition = this.lib.header.dataPosition;
+	}
+	,getCLID: function() {
+		return h3d_prim_HMDModel.__clid;
+	}
+	,unserializeInit: function() {
+		h3d_prim_MeshPrimitive.prototype.unserializeInit.call(this);
+		this.bufferAliases = new haxe_ds_StringMap();
+	}
+	,unserialize: function(__ctx) {
+		h3d_prim_MeshPrimitive.prototype.unserialize.call(this,__ctx);
+	}
+	,__class__: h3d_prim_HMDModel
+});
+var h3d_prim_Plan2D = function() {
+	h3d_prim_Primitive.call(this);
+};
+$hxClasses["h3d.prim.Plan2D"] = h3d_prim_Plan2D;
+h3d_prim_Plan2D.__name__ = ["h3d","prim","Plan2D"];
+h3d_prim_Plan2D.get = function() {
+	if(h3d_prim_Plan2D.inst == null) {
+		h3d_prim_Plan2D.inst = new h3d_prim_Plan2D();
+	}
+	return h3d_prim_Plan2D.inst;
+};
+h3d_prim_Plan2D.__super__ = h3d_prim_Primitive;
+h3d_prim_Plan2D.prototype = $extend(h3d_prim_Primitive.prototype,{
+	triCount: function() {
+		return 2;
+	}
+	,vertexCount: function() {
+		return 4;
+	}
+	,alloc: function(engine) {
+		var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+		var v = this1;
+		if(v.pos == v.array.length) {
+			var newSize = v.array.length << 1;
+			if(newSize < 128) {
+				newSize = 128;
+			}
+			var newArray = new Float32Array(newSize);
+			newArray.set(v.array);
+			v.array = newArray;
+		}
+		v.array[v.pos++] = -1;
+		if(v.pos == v.array.length) {
+			var newSize1 = v.array.length << 1;
+			if(newSize1 < 128) {
+				newSize1 = 128;
+			}
+			var newArray1 = new Float32Array(newSize1);
+			newArray1.set(v.array);
+			v.array = newArray1;
+		}
+		v.array[v.pos++] = -1;
+		if(v.pos == v.array.length) {
+			var newSize2 = v.array.length << 1;
+			if(newSize2 < 128) {
+				newSize2 = 128;
+			}
+			var newArray2 = new Float32Array(newSize2);
+			newArray2.set(v.array);
+			v.array = newArray2;
+		}
+		v.array[v.pos++] = 0;
+		if(v.pos == v.array.length) {
+			var newSize3 = v.array.length << 1;
+			if(newSize3 < 128) {
+				newSize3 = 128;
+			}
+			var newArray3 = new Float32Array(newSize3);
+			newArray3.set(v.array);
+			v.array = newArray3;
+		}
+		v.array[v.pos++] = 1;
+		if(v.pos == v.array.length) {
+			var newSize4 = v.array.length << 1;
+			if(newSize4 < 128) {
+				newSize4 = 128;
+			}
+			var newArray4 = new Float32Array(newSize4);
+			newArray4.set(v.array);
+			v.array = newArray4;
+		}
+		v.array[v.pos++] = -1;
+		if(v.pos == v.array.length) {
+			var newSize5 = v.array.length << 1;
+			if(newSize5 < 128) {
+				newSize5 = 128;
+			}
+			var newArray5 = new Float32Array(newSize5);
+			newArray5.set(v.array);
+			v.array = newArray5;
+		}
+		v.array[v.pos++] = 1;
+		if(v.pos == v.array.length) {
+			var newSize6 = v.array.length << 1;
+			if(newSize6 < 128) {
+				newSize6 = 128;
+			}
+			var newArray6 = new Float32Array(newSize6);
+			newArray6.set(v.array);
+			v.array = newArray6;
+		}
+		v.array[v.pos++] = 0;
+		if(v.pos == v.array.length) {
+			var newSize7 = v.array.length << 1;
+			if(newSize7 < 128) {
+				newSize7 = 128;
+			}
+			var newArray7 = new Float32Array(newSize7);
+			newArray7.set(v.array);
+			v.array = newArray7;
+		}
+		v.array[v.pos++] = 0;
+		if(v.pos == v.array.length) {
+			var newSize8 = v.array.length << 1;
+			if(newSize8 < 128) {
+				newSize8 = 128;
+			}
+			var newArray8 = new Float32Array(newSize8);
+			newArray8.set(v.array);
+			v.array = newArray8;
+		}
+		v.array[v.pos++] = 1;
+		if(v.pos == v.array.length) {
+			var newSize9 = v.array.length << 1;
+			if(newSize9 < 128) {
+				newSize9 = 128;
+			}
+			var newArray9 = new Float32Array(newSize9);
+			newArray9.set(v.array);
+			v.array = newArray9;
+		}
+		v.array[v.pos++] = -1;
+		if(v.pos == v.array.length) {
+			var newSize10 = v.array.length << 1;
+			if(newSize10 < 128) {
+				newSize10 = 128;
+			}
+			var newArray10 = new Float32Array(newSize10);
+			newArray10.set(v.array);
+			v.array = newArray10;
+		}
+		v.array[v.pos++] = 1;
+		if(v.pos == v.array.length) {
+			var newSize11 = v.array.length << 1;
+			if(newSize11 < 128) {
+				newSize11 = 128;
+			}
+			var newArray11 = new Float32Array(newSize11);
+			newArray11.set(v.array);
+			v.array = newArray11;
+		}
+		v.array[v.pos++] = 1;
+		if(v.pos == v.array.length) {
+			var newSize12 = v.array.length << 1;
+			if(newSize12 < 128) {
+				newSize12 = 128;
+			}
+			var newArray12 = new Float32Array(newSize12);
+			newArray12.set(v.array);
+			v.array = newArray12;
+		}
+		v.array[v.pos++] = 1;
+		if(v.pos == v.array.length) {
+			var newSize13 = v.array.length << 1;
+			if(newSize13 < 128) {
+				newSize13 = 128;
+			}
+			var newArray13 = new Float32Array(newSize13);
+			newArray13.set(v.array);
+			v.array = newArray13;
+		}
+		v.array[v.pos++] = 1;
+		if(v.pos == v.array.length) {
+			var newSize14 = v.array.length << 1;
+			if(newSize14 < 128) {
+				newSize14 = 128;
+			}
+			var newArray14 = new Float32Array(newSize14);
+			newArray14.set(v.array);
+			v.array = newArray14;
+		}
+		v.array[v.pos++] = 1;
+		if(v.pos == v.array.length) {
+			var newSize15 = v.array.length << 1;
+			if(newSize15 < 128) {
+				newSize15 = 128;
+			}
+			var newArray15 = new Float32Array(newSize15);
+			newArray15.set(v.array);
+			v.array = newArray15;
+		}
+		v.array[v.pos++] = 0;
+		this.buffer = h3d_Buffer.ofFloats(v,4,[h3d_BufferFlag.Quads,h3d_BufferFlag.RawFormat]);
+	}
+	,render: function(engine) {
+		if(this.buffer == null || this.buffer.isDisposed()) {
+			this.alloc(engine);
+		}
+		engine.renderBuffer(this.buffer,engine.mem.quadIndexes,2,0,-1);
+	}
+	,getCLID: function() {
+		return h3d_prim_Plan2D.__clid;
+	}
+	,__class__: h3d_prim_Plan2D
+});
+var h3d_prim_Polygon = function(points,idx) {
+	this.translatedZ = 0.;
+	this.translatedY = 0.;
+	this.translatedX = 0.;
+	this.scaled = 1.;
+	h3d_prim_Primitive.call(this);
+	this.points = points;
+	this.idx = idx;
+};
+$hxClasses["h3d.prim.Polygon"] = h3d_prim_Polygon;
+h3d_prim_Polygon.__name__ = ["h3d","prim","Polygon"];
+h3d_prim_Polygon.__super__ = h3d_prim_Primitive;
+h3d_prim_Polygon.prototype = $extend(h3d_prim_Primitive.prototype,{
+	points: null
+	,normals: null
+	,uvs: null
+	,idx: null
+	,colors: null
+	,scaled: null
+	,translatedX: null
+	,translatedY: null
+	,translatedZ: null
+	,getBounds: function() {
+		var b = new h3d_col_Bounds();
+		var _g = 0;
+		var _g1 = this.points;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			if(p.x < b.xMin) {
+				b.xMin = p.x;
+			}
+			if(p.x > b.xMax) {
+				b.xMax = p.x;
+			}
+			if(p.y < b.yMin) {
+				b.yMin = p.y;
+			}
+			if(p.y > b.yMax) {
+				b.yMax = p.y;
+			}
+			if(p.z < b.zMin) {
+				b.zMin = p.z;
+			}
+			if(p.z > b.zMax) {
+				b.zMax = p.z;
+			}
+		}
+		return b;
+	}
+	,alloc: function(engine) {
+		this.dispose();
+		var size = 3;
+		if(this.normals != null) {
+			size += 3;
+		}
+		if(this.uvs != null) {
+			size += 2;
+		}
+		if(this.colors != null) {
+			size += 3;
+		}
+		var this1 = hxd__$FloatBuffer_Float32Expand_$Impl_$._new(0);
+		var buf = this1;
+		var _g1 = 0;
+		var _g = this.points.length;
+		while(_g1 < _g) {
+			var k = _g1++;
+			var p = this.points[k];
+			var v = p.x;
+			if(buf.pos == buf.array.length) {
+				var newSize = buf.array.length << 1;
+				if(newSize < 128) {
+					newSize = 128;
+				}
+				var newArray = new Float32Array(newSize);
+				newArray.set(buf.array);
+				buf.array = newArray;
+			}
+			buf.array[buf.pos++] = v;
+			var v1 = p.y;
+			if(buf.pos == buf.array.length) {
+				var newSize1 = buf.array.length << 1;
+				if(newSize1 < 128) {
+					newSize1 = 128;
+				}
+				var newArray1 = new Float32Array(newSize1);
+				newArray1.set(buf.array);
+				buf.array = newArray1;
+			}
+			buf.array[buf.pos++] = v1;
+			var v2 = p.z;
+			if(buf.pos == buf.array.length) {
+				var newSize2 = buf.array.length << 1;
+				if(newSize2 < 128) {
+					newSize2 = 128;
+				}
+				var newArray2 = new Float32Array(newSize2);
+				newArray2.set(buf.array);
+				buf.array = newArray2;
+			}
+			buf.array[buf.pos++] = v2;
+			if(this.normals != null) {
+				var n = this.normals[k];
+				var v3 = n.x;
+				if(buf.pos == buf.array.length) {
+					var newSize3 = buf.array.length << 1;
+					if(newSize3 < 128) {
+						newSize3 = 128;
+					}
+					var newArray3 = new Float32Array(newSize3);
+					newArray3.set(buf.array);
+					buf.array = newArray3;
+				}
+				buf.array[buf.pos++] = v3;
+				var v4 = n.y;
+				if(buf.pos == buf.array.length) {
+					var newSize4 = buf.array.length << 1;
+					if(newSize4 < 128) {
+						newSize4 = 128;
+					}
+					var newArray4 = new Float32Array(newSize4);
+					newArray4.set(buf.array);
+					buf.array = newArray4;
+				}
+				buf.array[buf.pos++] = v4;
+				var v5 = n.z;
+				if(buf.pos == buf.array.length) {
+					var newSize5 = buf.array.length << 1;
+					if(newSize5 < 128) {
+						newSize5 = 128;
+					}
+					var newArray5 = new Float32Array(newSize5);
+					newArray5.set(buf.array);
+					buf.array = newArray5;
+				}
+				buf.array[buf.pos++] = v5;
+			}
+			if(this.uvs != null) {
+				var t = this.uvs[k];
+				var v6 = t.u;
+				if(buf.pos == buf.array.length) {
+					var newSize6 = buf.array.length << 1;
+					if(newSize6 < 128) {
+						newSize6 = 128;
+					}
+					var newArray6 = new Float32Array(newSize6);
+					newArray6.set(buf.array);
+					buf.array = newArray6;
+				}
+				buf.array[buf.pos++] = v6;
+				var v7 = t.v;
+				if(buf.pos == buf.array.length) {
+					var newSize7 = buf.array.length << 1;
+					if(newSize7 < 128) {
+						newSize7 = 128;
+					}
+					var newArray7 = new Float32Array(newSize7);
+					newArray7.set(buf.array);
+					buf.array = newArray7;
+				}
+				buf.array[buf.pos++] = v7;
+			}
+			if(this.colors != null) {
+				var c = this.colors[k];
+				var v8 = c.x;
+				if(buf.pos == buf.array.length) {
+					var newSize8 = buf.array.length << 1;
+					if(newSize8 < 128) {
+						newSize8 = 128;
+					}
+					var newArray8 = new Float32Array(newSize8);
+					newArray8.set(buf.array);
+					buf.array = newArray8;
+				}
+				buf.array[buf.pos++] = v8;
+				var v9 = c.y;
+				if(buf.pos == buf.array.length) {
+					var newSize9 = buf.array.length << 1;
+					if(newSize9 < 128) {
+						newSize9 = 128;
+					}
+					var newArray9 = new Float32Array(newSize9);
+					newArray9.set(buf.array);
+					buf.array = newArray9;
+				}
+				buf.array[buf.pos++] = v9;
+				var v10 = c.z;
+				if(buf.pos == buf.array.length) {
+					var newSize10 = buf.array.length << 1;
+					if(newSize10 < 128) {
+						newSize10 = 128;
+					}
+					var newArray10 = new Float32Array(newSize10);
+					newArray10.set(buf.array);
+					buf.array = newArray10;
+				}
+				buf.array[buf.pos++] = v10;
+			}
+		}
+		var flags = [];
+		if(this.idx == null) {
+			flags.push(h3d_BufferFlag.Triangles);
+		}
+		if(this.normals == null) {
+			flags.push(h3d_BufferFlag.RawFormat);
+		}
+		this.buffer = h3d_Buffer.ofFloats(buf,size,flags);
+		if(this.idx != null) {
+			this.indexes = h3d_Indexes.alloc(this.idx);
+		}
+	}
+	,unindex: function() {
+		if(this.idx != null && this.points.length != this.idx.length) {
+			var p = [];
+			var _g1 = 0;
+			var _g = this.idx.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				var _this = this.points[this.idx[i]];
+				p.push(new h3d_col_Point(_this.x,_this.y,_this.z));
+			}
+			if(this.normals != null) {
+				var n = [];
+				var _g11 = 0;
+				var _g2 = this.idx.length;
+				while(_g11 < _g2) {
+					var i1 = _g11++;
+					var _this1 = this.normals[this.idx[i1]];
+					n.push(new h3d_col_Point(_this1.x,_this1.y,_this1.z));
+				}
+				this.normals = n;
+			}
+			if(this.colors != null) {
+				var n1 = [];
+				var _g12 = 0;
+				var _g3 = this.idx.length;
+				while(_g12 < _g3) {
+					var i2 = _g12++;
+					var _this2 = this.colors[this.idx[i2]];
+					n1.push(new h3d_col_Point(_this2.x,_this2.y,_this2.z));
+				}
+				this.colors = n1;
+			}
+			if(this.uvs != null) {
+				var t = [];
+				var _g13 = 0;
+				var _g4 = this.idx.length;
+				while(_g13 < _g4) {
+					var i3 = _g13++;
+					t.push(this.uvs[this.idx[i3]].clone());
+				}
+				this.uvs = t;
+			}
+			this.points = p;
+			this.idx = null;
+		}
+	}
+	,translate: function(dx,dy,dz) {
+		this.translatedX += dx;
+		this.translatedY += dy;
+		this.translatedZ += dz;
+		var _g = 0;
+		var _g1 = this.points;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			p.x += dx;
+			p.y += dy;
+			p.z += dz;
+		}
+	}
+	,scale: function(s) {
+		this.scaled *= s;
+		var _g = 0;
+		var _g1 = this.points;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			p.x *= s;
+			p.y *= s;
+			p.z *= s;
+		}
+	}
+	,addNormals: function() {
+		this.normals = [];
+		var _g1 = 0;
+		var _g = this.points.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this.normals[i] = new h3d_col_Point();
+		}
+		var pos = 0;
+		var _g11 = 0;
+		var _g2 = this.triCount();
+		while(_g11 < _g2) {
+			var i1 = _g11++;
+			var i0;
+			var i11;
+			var i2;
+			if(this.idx == null) {
+				i0 = pos++;
+				i11 = pos++;
+				i2 = pos++;
+			} else {
+				i0 = this.idx[pos++];
+				i11 = this.idx[pos++];
+				i2 = this.idx[pos++];
+			}
+			var p0 = this.points[i0];
+			var p1 = this.points[i11];
+			var p2 = this.points[i2];
+			var _this_x = p1.x - p0.x;
+			var _this_y = p1.y - p0.y;
+			var _this_z = p1.z - p0.z;
+			var p_x = p2.x - p0.x;
+			var p_y = p2.y - p0.y;
+			var p_z = p2.z - p0.z;
+			var n_x = _this_y * p_z - _this_z * p_y;
+			var n_y = _this_z * p_x - _this_x * p_z;
+			var n_z = _this_x * p_y - _this_y * p_x;
+			this.normals[i0].x += n_x;
+			this.normals[i0].y += n_y;
+			this.normals[i0].z += n_z;
+			this.normals[i11].x += n_x;
+			this.normals[i11].y += n_y;
+			this.normals[i11].z += n_z;
+			this.normals[i2].x += n_x;
+			this.normals[i2].y += n_y;
+			this.normals[i2].z += n_z;
+		}
+		var _g3 = 0;
+		var _g12 = this.normals;
+		while(_g3 < _g12.length) {
+			var n = _g12[_g3];
+			++_g3;
+			n.normalize();
+		}
+	}
+	,addUVs: function() {
+		throw new js__$Boot_HaxeError("Not implemented for this polygon");
+	}
+	,uvScale: function(su,sv) {
+		if(this.uvs == null) {
+			throw new js__$Boot_HaxeError("Missing UVs");
+		}
+		var m = new haxe_ds_ObjectMap();
+		var _g = 0;
+		var _g1 = this.uvs;
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			if(m.h.__keys__[t.__id__] != null) {
+				continue;
+			}
+			m.set(t,true);
+			t.u *= su;
+			t.v *= sv;
+		}
+	}
+	,triCount: function() {
+		var n = h3d_prim_Primitive.prototype.triCount.call(this);
+		if(n != 0) {
+			return n;
+		}
+		return (this.idx == null ? this.points.length : this.idx.length) / 3 | 0;
+	}
+	,vertexCount: function() {
+		return this.points.length;
+	}
+	,getCollider: function() {
+		var length = this.points.length * 3;
+		var this1 = new Array(length);
+		var vertexes = this1;
+		var length1 = this.idx.length;
+		var this2 = new Array(length1);
+		var indexes = this2;
+		var vid = 0;
+		var _g = 0;
+		var _g1 = this.points;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			vertexes[vid++] = p.x;
+			vertexes[vid++] = p.y;
+			vertexes[vid++] = p.z;
+		}
+		var _g11 = 0;
+		var _g2 = this.idx.length;
+		while(_g11 < _g2) {
+			var i = _g11++;
+			indexes[i] = this.idx[i];
+		}
+		var poly = new h3d_col_Polygon();
+		poly.addBuffers(vertexes,indexes);
+		return poly;
+	}
+	,customSerialize: function(ctx) {
+		var v = this.points.length;
+		if(v >= 0 && v < 128) {
+			ctx.out.addByte(v);
+		} else {
+			ctx.out.addByte(128);
+			ctx.out.addInt32(v);
+		}
+		var _g = 0;
+		var _g1 = this.points;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			ctx.out.addDouble(p.x);
+			ctx.out.addDouble(p.y);
+			ctx.out.addDouble(p.z);
+		}
+		if(this.normals == null) {
+			ctx.out.addByte(0);
+		} else {
+			var v1 = this.normals.length;
+			if(v1 >= 0 && v1 < 128) {
+				ctx.out.addByte(v1);
+			} else {
+				ctx.out.addByte(128);
+				ctx.out.addInt32(v1);
+			}
+			var _g2 = 0;
+			var _g11 = this.normals;
+			while(_g2 < _g11.length) {
+				var p1 = _g11[_g2];
+				++_g2;
+				ctx.out.addDouble(p1.x);
+				ctx.out.addDouble(p1.y);
+				ctx.out.addDouble(p1.z);
+			}
+		}
+		if(this.uvs == null) {
+			ctx.out.addByte(0);
+		} else {
+			var v2 = this.uvs.length;
+			if(v2 >= 0 && v2 < 128) {
+				ctx.out.addByte(v2);
+			} else {
+				ctx.out.addByte(128);
+				ctx.out.addInt32(v2);
+			}
+			var _g3 = 0;
+			var _g12 = this.uvs;
+			while(_g3 < _g12.length) {
+				var uv = _g12[_g3];
+				++_g3;
+				ctx.out.addDouble(uv.u);
+				ctx.out.addDouble(uv.v);
+			}
+		}
+		if(this.idx == null) {
+			ctx.out.addByte(0);
+		} else {
+			var v3 = this.idx.length;
+			if(v3 >= 0 && v3 < 128) {
+				ctx.out.addByte(v3);
+			} else {
+				ctx.out.addByte(128);
+				ctx.out.addInt32(v3);
+			}
+			var _g4 = 0;
+			var _g13 = this.idx;
+			while(_g4 < _g13.length) {
+				var i = _g13[_g4];
+				++_g4;
+				if(i >= 0 && i < 128) {
+					ctx.out.addByte(i);
+				} else {
+					ctx.out.addByte(128);
+					ctx.out.addInt32(i);
+				}
+			}
+		}
+		if(this.colors == null) {
+			ctx.out.addByte(0);
+		} else {
+			var v4 = this.colors.length;
+			if(v4 >= 0 && v4 < 128) {
+				ctx.out.addByte(v4);
+			} else {
+				ctx.out.addByte(128);
+				ctx.out.addInt32(v4);
+			}
+			var _g5 = 0;
+			var _g14 = this.colors;
+			while(_g5 < _g14.length) {
+				var c = _g14[_g5];
+				++_g5;
+				ctx.out.addDouble(c.x);
+				ctx.out.addDouble(c.y);
+				ctx.out.addDouble(c.z);
+			}
+		}
+	}
+	,customUnserialize: function(ctx) {
+		var _g = [];
+		var _g2 = 0;
+		var v = ctx.input.b[ctx.inPos++];
+		if(v == 128) {
+			v = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var _g1 = v;
+		while(_g2 < _g1) {
+			var i = _g2++;
+			var v1 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			var v2 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			var v3 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			_g.push(new h3d_col_Point(v1,v2,v3));
+		}
+		this.points = _g;
+		var _g11 = [];
+		var _g3 = 0;
+		var v4 = ctx.input.b[ctx.inPos++];
+		if(v4 == 128) {
+			v4 = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var _g21 = v4;
+		while(_g3 < _g21) {
+			var i1 = _g3++;
+			var v5 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			var v6 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			var v7 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			_g11.push(new h3d_col_Point(v5,v6,v7));
+		}
+		this.normals = _g11;
+		var _g22 = [];
+		var _g4 = 0;
+		var v8 = ctx.input.b[ctx.inPos++];
+		if(v8 == 128) {
+			v8 = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var _g31 = v8;
+		while(_g4 < _g31) {
+			var i2 = _g4++;
+			var v9 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			var v10 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			_g22.push(new h3d_prim_UV(v9,v10));
+		}
+		this.uvs = _g22;
+		if(this.normals.length == 0) {
+			this.normals = null;
+		}
+		if(this.uvs.length == 0) {
+			this.uvs = null;
+		}
+		var v11 = ctx.input.b[ctx.inPos++];
+		if(v11 == 128) {
+			v11 = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var nindex = v11;
+		if(nindex > 0) {
+			var this1 = new Array(0);
+			this.idx = this1;
+			var this2 = this.idx;
+			while(this2.length < nindex) this2.push(0);
+			var _g41 = 0;
+			var _g32 = nindex;
+			while(_g41 < _g32) {
+				var i3 = _g41++;
+				var this3 = this.idx;
+				var v12 = ctx.input.b[ctx.inPos++];
+				if(v12 == 128) {
+					v12 = ctx.input.getInt32(ctx.inPos);
+					ctx.inPos += 4;
+				}
+				this3[i3] = v12;
+			}
+		}
+		var _g33 = [];
+		var _g5 = 0;
+		var v13 = ctx.input.b[ctx.inPos++];
+		if(v13 == 128) {
+			v13 = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+		}
+		var _g42 = v13;
+		while(_g5 < _g42) {
+			var i4 = _g5++;
+			var v14 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			var v15 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			var v16 = ctx.input.getDouble(ctx.inPos);
+			ctx.inPos += 8;
+			_g33.push(new h3d_col_Point(v14,v15,v16));
+		}
+		this.colors = _g33;
+		if(this.colors.length == 0) {
+			this.colors = null;
+		}
+	}
+	,getCLID: function() {
+		return h3d_prim_Polygon.__clid;
+	}
+	,serialize: function(__ctx) {
+		h3d_prim_Primitive.prototype.serialize.call(this,__ctx);
+		__ctx.out.addFloat(this.scaled);
+		__ctx.out.addFloat(this.translatedX);
+		__ctx.out.addFloat(this.translatedY);
+		__ctx.out.addFloat(this.translatedZ);
+	}
+	,getSerializeSchema: function() {
+		var schema = h3d_prim_Primitive.prototype.getSerializeSchema.call(this);
+		schema.fieldsNames.push("scaled");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
+		schema.fieldsNames.push("translatedX");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
+		schema.fieldsNames.push("translatedY");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
+		schema.fieldsNames.push("translatedZ");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
+		schema.isFinal = hxbit_Serializer.isClassFinal(h3d_prim_Polygon.__clid);
+		return schema;
+	}
+	,unserializeInit: function() {
+		h3d_prim_Primitive.prototype.unserializeInit.call(this);
+		this.scaled = 1.;
+		this.translatedX = 0.;
+		this.translatedY = 0.;
+		this.translatedZ = 0.;
+	}
+	,unserialize: function(__ctx) {
+		h3d_prim_Primitive.prototype.unserialize.call(this,__ctx);
+		var v = __ctx.input.getFloat(__ctx.inPos);
+		__ctx.inPos += 4;
+		this.scaled = v;
+		var v1 = __ctx.input.getFloat(__ctx.inPos);
+		__ctx.inPos += 4;
+		this.translatedX = v1;
+		var v2 = __ctx.input.getFloat(__ctx.inPos);
+		__ctx.inPos += 4;
+		this.translatedY = v2;
+		var v3 = __ctx.input.getFloat(__ctx.inPos);
+		__ctx.inPos += 4;
+		this.translatedZ = v3;
+	}
+	,__class__: h3d_prim_Polygon
+});
+var h3d_prim_RawPrimitive = function(inf,persist) {
+	if(persist == null) {
+		persist = false;
+	}
+	h3d_prim_Primitive.call(this);
+	this.onContextLost = function() {
+		return inf;
+	};
+	this.bounds = inf.bounds;
+	this.alloc(null);
+	if(!persist) {
+		this.onContextLost = null;
+	}
+};
+$hxClasses["h3d.prim.RawPrimitive"] = h3d_prim_RawPrimitive;
+h3d_prim_RawPrimitive.__name__ = ["h3d","prim","RawPrimitive"];
+h3d_prim_RawPrimitive.__super__ = h3d_prim_Primitive;
+h3d_prim_RawPrimitive.prototype = $extend(h3d_prim_Primitive.prototype,{
+	vcount: null
+	,tcount: null
+	,bounds: null
+	,onContextLost: null
+	,alloc: function(engine) {
+		if(this.onContextLost == null) {
+			throw new js__$Boot_HaxeError("Cannot realloc " + Std.string(this));
+		}
+		var inf = this.onContextLost();
+		var flags = [];
+		if(inf.ibuf == null) {
+			flags.push(inf.quads ? h3d_BufferFlag.Quads : h3d_BufferFlag.Triangles);
+		}
+		if(inf.stride < 8) {
+			flags.push(h3d_BufferFlag.RawFormat);
+		}
+		this.buffer = h3d_Buffer.ofFloats(inf.vbuf,inf.stride,flags);
+		this.vcount = this.buffer.vertices;
+		this.tcount = inf.ibuf != null ? inf.ibuf.length / 3 | 0 : inf.quads ? this.vcount >> 1 : this.vcount / 3 | 0;
+		if(inf.ibuf != null) {
+			this.indexes = h3d_Indexes.alloc(inf.ibuf);
+		} else if(this.indexes != null) {
+			this.indexes.dispose();
+			this.indexes = null;
+		}
+	}
+	,getBounds: function() {
+		if(this.bounds == null) {
+			throw new js__$Boot_HaxeError("Bounds not defined for " + Std.string(this));
+		}
+		return this.bounds;
+	}
+	,triCount: function() {
+		return this.tcount;
+	}
+	,vertexCount: function() {
+		return this.vcount;
+	}
+	,getCLID: function() {
+		return h3d_prim_RawPrimitive.__clid;
+	}
+	,__class__: h3d_prim_RawPrimitive
+});
 var h3d_scene_Graphics = function(parent) {
 	this.lineSize = 0.;
 	this.curR = 0.;
@@ -30735,7 +34072,19 @@ $hxClasses["h3d.scene.Graphics"] = h3d_scene_Graphics;
 h3d_scene_Graphics.__name__ = ["h3d","scene","Graphics"];
 h3d_scene_Graphics.__super__ = h3d_scene_Mesh;
 h3d_scene_Graphics.prototype = $extend(h3d_scene_Mesh.prototype,{
-	set_is3D: function(v) {
+	bprim: null
+	,curX: null
+	,curY: null
+	,curZ: null
+	,curR: null
+	,curG: null
+	,curB: null
+	,curA: null
+	,lineSize: null
+	,lineShader: null
+	,tmpPoints: null
+	,is3D: null
+	,set_is3D: function(v) {
 		if(this.is3D == v) {
 			return v;
 		}
@@ -31119,6 +34468,647 @@ h3d_scene_Graphics.prototype = $extend(h3d_scene_Mesh.prototype,{
 	}
 	,__class__: h3d_scene_Graphics
 });
+var h3d_scene_Box = function(color,bounds,depth,parent) {
+	if(depth == null) {
+		depth = true;
+	}
+	if(color == null) {
+		color = -65536;
+	}
+	this.prevZMax = -1e9;
+	this.prevYMax = -1e9;
+	this.prevXMax = -1e9;
+	this.prevZMin = 1e9;
+	this.prevYMin = 1e9;
+	this.prevXMin = 1e9;
+	h3d_scene_Graphics.call(this,parent);
+	this.color = color;
+	this.bounds = bounds;
+	if(!depth) {
+		this.material.passes.depth(true,h3d_mat_Compare.Always);
+	}
+};
+$hxClasses["h3d.scene.Box"] = h3d_scene_Box;
+h3d_scene_Box.__name__ = ["h3d","scene","Box"];
+h3d_scene_Box.__super__ = h3d_scene_Graphics;
+h3d_scene_Box.prototype = $extend(h3d_scene_Graphics.prototype,{
+	color: null
+	,bounds: null
+	,prevXMin: null
+	,prevYMin: null
+	,prevZMin: null
+	,prevXMax: null
+	,prevYMax: null
+	,prevZMax: null
+	,sync: function(ctx) {
+		if(this.bounds == null) {
+			if(this.prevXMin == -0.5 && this.prevYMin == -0.5 && this.prevZMin == -0.5 && this.prevXMax == 0.5 && this.prevYMax == 0.5 && this.prevZMax == 0.5) {
+				return;
+			}
+			this.prevXMin = -0.5;
+			this.prevYMin = -0.5;
+			this.prevZMin = -0.5;
+			this.prevXMax = 0.5;
+			this.prevYMax = 0.5;
+			this.prevZMax = 0.5;
+		} else {
+			if(this.prevXMin == this.bounds.xMin && this.prevYMin == this.bounds.yMin && this.prevZMin == this.bounds.zMin && this.prevXMax == this.bounds.xMax && this.prevYMax == this.bounds.yMax && this.prevZMax == this.bounds.zMax) {
+				return;
+			}
+			this.prevXMin = this.bounds.xMin;
+			this.prevYMin = this.bounds.yMin;
+			this.prevZMin = this.bounds.zMin;
+			this.prevXMax = this.bounds.xMax;
+			this.prevYMax = this.bounds.yMax;
+			this.prevZMax = this.bounds.zMax;
+		}
+		this.clear();
+		this.lineStyle(1,this.color);
+		this.moveTo(this.prevXMin,this.prevYMin,this.prevZMin);
+		this.lineTo(this.prevXMax,this.prevYMin,this.prevZMin);
+		this.lineTo(this.prevXMax,this.prevYMax,this.prevZMin);
+		this.lineTo(this.prevXMin,this.prevYMax,this.prevZMin);
+		this.lineTo(this.prevXMin,this.prevYMin,this.prevZMin);
+		this.lineTo(this.prevXMin,this.prevYMin,this.prevZMax);
+		this.lineTo(this.prevXMax,this.prevYMin,this.prevZMax);
+		this.lineTo(this.prevXMax,this.prevYMax,this.prevZMax);
+		this.lineTo(this.prevXMin,this.prevYMax,this.prevZMax);
+		this.lineTo(this.prevXMin,this.prevYMin,this.prevZMax);
+		this.moveTo(this.prevXMax,this.prevYMin,this.prevZMin);
+		this.lineTo(this.prevXMax,this.prevYMin,this.prevZMax);
+		this.moveTo(this.prevXMin,this.prevYMax,this.prevZMin);
+		this.lineTo(this.prevXMin,this.prevYMax,this.prevZMax);
+		this.moveTo(this.prevXMax,this.prevYMax,this.prevZMin);
+		this.lineTo(this.prevXMax,this.prevYMax,this.prevZMax);
+		h3d_scene_Graphics.prototype.sync.call(this,ctx);
+	}
+	,getCLID: function() {
+		return h3d_scene_Box.__clid;
+	}
+	,unserializeInit: function() {
+		h3d_scene_Graphics.prototype.unserializeInit.call(this);
+		this.prevXMin = 1e9;
+		this.prevYMin = 1e9;
+		this.prevZMin = 1e9;
+		this.prevXMax = -1e9;
+		this.prevYMax = -1e9;
+		this.prevZMax = -1e9;
+	}
+	,unserialize: function(__ctx) {
+		h3d_scene_Graphics.prototype.unserialize.call(this,__ctx);
+	}
+	,__class__: h3d_scene_Box
+});
+var h3d_scene_CameraController = function(distance,parent) {
+	this.targetOffset = new h3d_Vector(0,0,0,0);
+	this.targetPos = new h3d_Vector(0.4,Math.PI / 4,Math.PI * 5 / 13);
+	this.curOffset = new h3d_Vector();
+	this.curPos = new h3d_Vector();
+	this.moveY = 0.;
+	this.moveX = 0.;
+	this.pushY = 0.;
+	this.pushX = 0.;
+	this.pushing = -1;
+	this.panSpeed = 1.;
+	this.fovZoomAmount = 1.1;
+	this.zoomAmount = 1.15;
+	this.rotateSpeed = 1.;
+	this.friction = 0.4;
+	h3d_scene_Object.call(this,parent);
+	this.set(distance);
+	var f = 256;
+	this.flags |= f;
+	this.toTarget();
+};
+$hxClasses["h3d.scene.CameraController"] = h3d_scene_CameraController;
+h3d_scene_CameraController.__name__ = ["h3d","scene","CameraController"];
+h3d_scene_CameraController.__super__ = h3d_scene_Object;
+h3d_scene_CameraController.prototype = $extend(h3d_scene_Object.prototype,{
+	friction: null
+	,rotateSpeed: null
+	,zoomAmount: null
+	,fovZoomAmount: null
+	,panSpeed: null
+	,scene: null
+	,pushing: null
+	,pushX: null
+	,pushY: null
+	,moveX: null
+	,moveY: null
+	,curPos: null
+	,curOffset: null
+	,targetPos: null
+	,targetOffset: null
+	,get_distance: function() {
+		return this.curPos.x / this.curOffset.w;
+	}
+	,get_theta: function() {
+		return this.curPos.y;
+	}
+	,get_phi: function() {
+		return this.curPos.z;
+	}
+	,get_fovY: function() {
+		return this.curOffset.w;
+	}
+	,get_target: function() {
+		var _this = this.curOffset;
+		return new h3d_col_Point(_this.x,_this.y,_this.z);
+	}
+	,set: function(distance,theta,phi,target,fovY) {
+		if(theta != null) {
+			this.targetPos.y = theta;
+		}
+		if(phi != null) {
+			this.targetPos.z = phi;
+		}
+		if(target != null) {
+			var _this = this.targetOffset;
+			_this.x = target.x;
+			_this.y = target.y;
+			_this.z = target.z;
+			_this.w = this.targetOffset.w;
+		}
+		if(fovY != null) {
+			this.targetOffset.w = fovY;
+		}
+		if(distance != null) {
+			this.targetPos.x = distance * (this.targetOffset.w == 0 ? 1 : this.targetOffset.w);
+		}
+	}
+	,loadFromCamera: function(animate) {
+		if(animate == null) {
+			animate = false;
+		}
+		var scene = this.scene == null ? this.getScene() : this.scene;
+		if(scene == null) {
+			throw new js__$Boot_HaxeError("Not in scene");
+		}
+		var _this = this.targetOffset;
+		var v = scene.camera.target;
+		_this.x = v.x;
+		_this.y = v.y;
+		_this.z = v.z;
+		_this.w = v.w;
+		this.targetOffset.w = scene.camera.fovY;
+		var _this1 = scene.camera.pos;
+		var v1 = scene.camera.target;
+		var pos_x = _this1.x - v1.x;
+		var pos_y = _this1.y - v1.y;
+		var pos_z = _this1.z - v1.z;
+		var pos_w = _this1.w - v1.w;
+		var r = Math.sqrt(pos_x * pos_x + pos_y * pos_y + pos_z * pos_z);
+		var _this2 = this.targetPos;
+		var y = Math.atan2(pos_y,pos_x);
+		var z = Math.acos(pos_z / r);
+		_this2.x = r;
+		_this2.y = y;
+		_this2.z = z;
+		_this2.w = 1.;
+		this.targetPos.x *= this.targetOffset.w;
+		if(!animate) {
+			this.toTarget();
+		} else {
+			this.syncCamera();
+		}
+	}
+	,initFromScene: function() {
+		var scene = this.getScene();
+		if(scene == null) {
+			throw new js__$Boot_HaxeError("Not in scene");
+		}
+		var bounds = scene.getBounds();
+		var center_x = (bounds.xMin + bounds.xMax) * 0.5;
+		var center_y = (bounds.yMin + bounds.yMax) * 0.5;
+		var center_z = (bounds.zMin + bounds.zMax) * 0.5;
+		var _this = scene.camera.target;
+		var v_x = center_x;
+		var v_y = center_y;
+		var v_z = center_z;
+		var v_w = 1.;
+		_this.x = v_x;
+		_this.y = v_y;
+		_this.z = v_z;
+		_this.w = v_w;
+		var _this_x = bounds.xMax;
+		var _this_y = bounds.yMax;
+		var _this_z = bounds.zMax;
+		var d = new h3d_col_Point(_this_x - center_x,_this_y - center_y,_this_z - center_z);
+		d.x *= 5;
+		d.y *= 5;
+		d.z *= 5;
+		d.z *= 0.5;
+		d = new h3d_col_Point(d.x + center_x,d.y + center_y,d.z + center_z);
+		var _this1 = scene.camera.pos;
+		var v_x1 = d.x;
+		var v_y1 = d.y;
+		var v_z1 = d.z;
+		var v_w1 = 1.;
+		_this1.x = v_x1;
+		_this1.y = v_y1;
+		_this1.z = v_z1;
+		_this1.w = v_w1;
+		this.loadFromCamera();
+	}
+	,toTarget: function() {
+		var _this = this.curPos;
+		var v = this.targetPos;
+		_this.x = v.x;
+		_this.y = v.y;
+		_this.z = v.z;
+		_this.w = v.w;
+		var _this1 = this.curOffset;
+		var v1 = this.targetOffset;
+		_this1.x = v1.x;
+		_this1.y = v1.y;
+		_this1.z = v1.z;
+		_this1.w = v1.w;
+	}
+	,onAdd: function() {
+		h3d_scene_Object.prototype.onAdd.call(this);
+		this.scene = this.getScene();
+		this.scene.addEventListener($bind(this,this.onEvent));
+		if(this.curOffset.w == 0) {
+			this.curPos.x *= this.scene.camera.fovY;
+		}
+		this.curOffset.w = this.scene.camera.fovY;
+		var _this = this.targetPos;
+		var v = this.curPos;
+		_this.x = v.x;
+		_this.y = v.y;
+		_this.z = v.z;
+		_this.w = v.w;
+		var _this1 = this.targetOffset;
+		var v1 = this.curOffset;
+		_this1.x = v1.x;
+		_this1.y = v1.y;
+		_this1.z = v1.z;
+		_this1.w = v1.w;
+	}
+	,onRemove: function() {
+		h3d_scene_Object.prototype.onRemove.call(this);
+		this.scene.removeEventListener($bind(this,this.onEvent));
+		this.scene = null;
+	}
+	,onEvent: function(e) {
+		var _gthis = this;
+		var p = this;
+		while(p != null) {
+			if((p.flags & 2) == 0) {
+				e.propagate = true;
+				return;
+			}
+			p = p.parent;
+		}
+		var _g = e.kind;
+		switch(_g[1]) {
+		case 0:
+			this.scene.events.startDrag($bind(this,this.onEvent),function() {
+				_gthis.pushing = -1;
+			},e);
+			this.pushing = e.button;
+			this.pushX = e.relX;
+			this.pushY = e.relY;
+			break;
+		case 1:case 10:
+			if(this.pushing == e.button) {
+				this.pushing = -1;
+				this.scene.events.stopDrag();
+			}
+			break;
+		case 2:
+			var _g1 = this.pushing;
+			switch(_g1) {
+			case 0:
+				if(hxd_Key.isDown(18)) {
+					this.targetPos.x *= Math.pow(this.zoomAmount,-(e.relX - this.pushX + (e.relY - this.pushY)) * 0.03);
+				} else {
+					this.moveX += e.relX - this.pushX;
+					this.moveY += e.relY - this.pushY;
+				}
+				this.pushX = e.relX;
+				this.pushY = e.relY;
+				break;
+			case 1:
+				var m = 0.001 * this.curPos.x * this.panSpeed / 25;
+				var v_x = -(e.relX - this.pushX) * m;
+				var v_y = (e.relY - this.pushY) * m;
+				var v_z = 0.;
+				var v_w = 1.;
+				this.scene.camera.update();
+				var m1 = this.scene.camera.getInverseView();
+				var px = v_x * m1._11 + v_y * m1._21 + v_z * m1._31;
+				var py = v_x * m1._12 + v_y * m1._22 + v_z * m1._32;
+				var pz = v_x * m1._13 + v_y * m1._23 + v_z * m1._33;
+				v_x = px;
+				v_y = py;
+				v_z = pz;
+				v_w = 0;
+				var _this = this.targetOffset;
+				this.targetOffset = new h3d_Vector(_this.x + v_x,_this.y + v_y,_this.z + v_z,_this.w + v_w);
+				this.pushX = e.relX;
+				this.pushY = e.relY;
+				break;
+			default:
+			}
+			break;
+		case 5:
+			if(hxd_Key.isDown(17)) {
+				this.targetOffset.w += e.wheelDelta * this.fovZoomAmount * 2;
+				if(this.targetOffset.w >= 179) {
+					this.targetOffset.w = 179;
+				}
+				if(this.targetOffset.w < 1) {
+					this.targetOffset.w = 1;
+				}
+			} else {
+				this.targetPos.x *= Math.pow(this.zoomAmount,e.wheelDelta);
+			}
+			break;
+		default:
+		}
+	}
+	,syncCamera: function() {
+		var cam = this.getScene().camera;
+		var _this = cam.target;
+		var v = this.curOffset;
+		_this.x = v.x;
+		_this.y = v.y;
+		_this.z = v.z;
+		_this.w = v.w;
+		cam.target.w = 1;
+		var _this1 = cam.pos;
+		var y = this.curPos.x / this.curOffset.w * Math.sin(this.curPos.y) * Math.sin(this.curPos.z) + cam.target.y;
+		var z = this.curPos.x / this.curOffset.w * Math.cos(this.curPos.z) + cam.target.z;
+		_this1.x = this.curPos.x / this.curOffset.w * Math.cos(this.curPos.y) * Math.sin(this.curPos.z) + cam.target.x;
+		_this1.y = y;
+		_this1.z = z;
+		_this1.w = 1.;
+		cam.zNear = this.curPos.x / this.curOffset.w * 0.01;
+		cam.zFar = this.curPos.x / this.curOffset.w * 100;
+		cam.fovY = this.curOffset.w;
+	}
+	,sync: function(ctx) {
+		if(this.moveX != 0) {
+			this.targetPos.y += this.moveX * 0.003 * this.rotateSpeed;
+			this.moveX *= 1 - this.friction;
+			if(Math.abs(this.moveX) < 1) {
+				this.moveX = 0;
+			}
+		}
+		if(this.moveY != 0) {
+			this.targetPos.z -= this.moveY * 0.003 * this.rotateSpeed;
+			var E = 1e-8;
+			var bound = Math.PI - E;
+			if(this.targetPos.z < E) {
+				this.targetPos.z = E;
+			}
+			if(this.targetPos.z > bound) {
+				this.targetPos.z = bound;
+			}
+			this.moveY *= 1 - this.friction;
+			if(Math.abs(this.moveY) < 1) {
+				this.moveY = 0;
+			}
+		}
+		var b = 1 - Math.pow(0.9,ctx.elapsedTime * 60);
+		var dt = 1 > b ? b : 1;
+		var cam = this.scene.camera;
+		var _this = this.curOffset;
+		var v1 = this.curOffset;
+		var v2 = this.targetOffset;
+		var a = v1.x;
+		var x = a + dt * (v2.x - a);
+		var a1 = v1.y;
+		var y = a1 + dt * (v2.y - a1);
+		var a2 = v1.z;
+		var z = a2 + dt * (v2.z - a2);
+		var a3 = v1.w;
+		var w = a3 + dt * (v2.w - a3);
+		_this.x = x;
+		_this.y = y;
+		_this.z = z;
+		_this.w = w;
+		var _this1 = this.curPos;
+		var v11 = this.curPos;
+		var v21 = this.targetPos;
+		var a4 = v11.x;
+		var x1 = a4 + dt * (v21.x - a4);
+		var a5 = v11.y;
+		var y1 = a5 + dt * (v21.y - a5);
+		var a6 = v11.z;
+		var z1 = a6 + dt * (v21.z - a6);
+		var a7 = v11.w;
+		var w1 = a7 + dt * (v21.w - a7);
+		_this1.x = x1;
+		_this1.y = y1;
+		_this1.z = z1;
+		_this1.w = w1;
+		this.syncCamera();
+		h3d_scene_Object.prototype.sync.call(this,ctx);
+	}
+	,getCLID: function() {
+		return h3d_scene_CameraController.__clid;
+	}
+	,unserializeInit: function() {
+		h3d_scene_Object.prototype.unserializeInit.call(this);
+		this.friction = 0.4;
+		this.rotateSpeed = 1.;
+		this.zoomAmount = 1.15;
+		this.fovZoomAmount = 1.1;
+		this.panSpeed = 1.;
+		this.pushing = -1;
+		this.pushX = 0.;
+		this.pushY = 0.;
+		this.moveX = 0.;
+		this.moveY = 0.;
+		this.curPos = new h3d_Vector();
+		this.curOffset = new h3d_Vector();
+		this.targetPos = new h3d_Vector(0.4,Math.PI / 4,Math.PI * 5 / 13);
+		this.targetOffset = new h3d_Vector(0,0,0,0);
+	}
+	,unserialize: function(__ctx) {
+		h3d_scene_Object.prototype.unserialize.call(this,__ctx);
+	}
+	,__class__: h3d_scene_CameraController
+});
+var h3d_scene_Light = function(shader,parent) {
+	this.priority = 0;
+	this.cullingDistance = 1e10;
+	h3d_scene_Object.call(this,parent);
+	this.shader = shader;
+};
+$hxClasses["h3d.scene.Light"] = h3d_scene_Light;
+h3d_scene_Light.__name__ = ["h3d","scene","Light"];
+h3d_scene_Light.__super__ = h3d_scene_Object;
+h3d_scene_Light.prototype = $extend(h3d_scene_Object.prototype,{
+	shader: null
+	,objectDistance: null
+	,cullingDistance: null
+	,next: null
+	,priority: null
+	,get_color: function() {
+		return new h3d_Vector();
+	}
+	,get_enableSpecular: function() {
+		return false;
+	}
+	,set_enableSpecular: function(b) {
+		if(b) {
+			throw new js__$Boot_HaxeError("Not implemented for this light");
+		}
+		return false;
+	}
+	,emit: function(ctx) {
+		ctx.emitLight(this);
+	}
+	,customSerialize: function(ctx) {
+		h3d_scene_Object.prototype.customSerialize.call(this,ctx);
+		var v = this.get_color().x;
+		ctx.out.addDouble(v);
+		var v1 = this.get_color().y;
+		ctx.out.addDouble(v1);
+		var v2 = this.get_color().z;
+		ctx.out.addDouble(v2);
+		var v3 = this.get_color().w;
+		ctx.out.addDouble(v3);
+		var tmp = this.get_enableSpecular() ? 1 : 0;
+		ctx.out.addByte(tmp);
+	}
+	,customUnserialize: function(ctx) {
+		h3d_scene_Object.prototype.customUnserialize.call(this,ctx);
+		var _this = this.get_color();
+		var v = ctx.input.getDouble(ctx.inPos);
+		ctx.inPos += 8;
+		var v1 = ctx.input.getDouble(ctx.inPos);
+		ctx.inPos += 8;
+		var v2 = ctx.input.getDouble(ctx.inPos);
+		ctx.inPos += 8;
+		var v3 = ctx.input.getDouble(ctx.inPos);
+		ctx.inPos += 8;
+		_this.x = v;
+		_this.y = v1;
+		_this.z = v2;
+		_this.w = v3;
+		this.set_enableSpecular(ctx.input.b[ctx.inPos++] != 0);
+	}
+	,getCLID: function() {
+		return h3d_scene_Light.__clid;
+	}
+	,serialize: function(__ctx) {
+		h3d_scene_Object.prototype.serialize.call(this,__ctx);
+		__ctx.out.addFloat(this.cullingDistance);
+		var v = this.priority;
+		if(v >= 0 && v < 128) {
+			__ctx.out.addByte(v);
+		} else {
+			__ctx.out.addByte(128);
+			__ctx.out.addInt32(v);
+		}
+	}
+	,getSerializeSchema: function() {
+		var schema = h3d_scene_Object.prototype.getSerializeSchema.call(this);
+		schema.fieldsNames.push("cullingDistance");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
+		schema.fieldsNames.push("priority");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PInt);
+		schema.isFinal = hxbit_Serializer.isClassFinal(h3d_scene_Light.__clid);
+		return schema;
+	}
+	,unserializeInit: function() {
+		h3d_scene_Object.prototype.unserializeInit.call(this);
+		this.cullingDistance = 1e10;
+		this.priority = 0;
+	}
+	,unserialize: function(__ctx) {
+		h3d_scene_Object.prototype.unserialize.call(this,__ctx);
+		var v = __ctx.input.getFloat(__ctx.inPos);
+		__ctx.inPos += 4;
+		this.cullingDistance = v;
+		var v1 = __ctx.input.b[__ctx.inPos++];
+		if(v1 == 128) {
+			v1 = __ctx.input.getInt32(__ctx.inPos);
+			__ctx.inPos += 4;
+		}
+		this.priority = v1;
+	}
+	,__class__: h3d_scene_Light
+});
+var h3d_scene_DirLight = function(dir,parent) {
+	this.dshader = new h3d_shader_DirLight();
+	this.direction = dir;
+	h3d_scene_Light.call(this,this.dshader,parent);
+	this.priority = 100;
+};
+$hxClasses["h3d.scene.DirLight"] = h3d_scene_DirLight;
+h3d_scene_DirLight.__name__ = ["h3d","scene","DirLight"];
+h3d_scene_DirLight.__super__ = h3d_scene_Light;
+h3d_scene_DirLight.prototype = $extend(h3d_scene_Light.prototype,{
+	dshader: null
+	,direction: null
+	,get_color: function() {
+		return this.dshader.color__;
+	}
+	,get_enableSpecular: function() {
+		return this.dshader.enableSpecular__;
+	}
+	,set_enableSpecular: function(b) {
+		var _this = this.dshader;
+		_this.constModified = true;
+		return _this.enableSpecular__ = b;
+	}
+	,emit: function(ctx) {
+		var _this = this.dshader.direction__;
+		_this.x = this.direction.x;
+		_this.y = this.direction.y;
+		_this.z = this.direction.z;
+		_this.w = 1.;
+		this.dshader.direction__.normalize();
+		h3d_scene_Light.prototype.emit.call(this,ctx);
+	}
+	,customSerialize: function(ctx) {
+		h3d_scene_Light.prototype.customSerialize.call(this,ctx);
+		ctx.out.addDouble(this.direction.x);
+		ctx.out.addDouble(this.direction.y);
+		ctx.out.addDouble(this.direction.z);
+	}
+	,customUnserialize: function(ctx) {
+		this.shader = this.dshader = new h3d_shader_DirLight();
+		h3d_scene_Light.prototype.customUnserialize.call(this,ctx);
+		var v = ctx.input.getDouble(ctx.inPos);
+		ctx.inPos += 8;
+		var v1 = ctx.input.getDouble(ctx.inPos);
+		ctx.inPos += 8;
+		var v2 = ctx.input.getDouble(ctx.inPos);
+		ctx.inPos += 8;
+		this.direction = new h3d_Vector(v,v1,v2);
+	}
+	,getCLID: function() {
+		return h3d_scene_DirLight.__clid;
+	}
+	,__class__: h3d_scene_DirLight
+});
+var h3d_scene__$Graphics_GPoint = function(x,y,z,r,g,b,a) {
+	this.x = x;
+	this.y = y;
+	this.z = z;
+	this.r = r;
+	this.g = g;
+	this.b = b;
+	this.a = a;
+};
+$hxClasses["h3d.scene._Graphics.GPoint"] = h3d_scene__$Graphics_GPoint;
+h3d_scene__$Graphics_GPoint.__name__ = ["h3d","scene","_Graphics","GPoint"];
+h3d_scene__$Graphics_GPoint.prototype = {
+	x: null
+	,y: null
+	,z: null
+	,r: null
+	,g: null
+	,b: null
+	,a: null
+	,__class__: h3d_scene__$Graphics_GPoint
+};
 var h3d_scene_Interactive = function(shape,parent) {
 	this.hitPoint = new h3d_Vector();
 	this.mouseDownButton = -1;
@@ -31133,7 +35123,18 @@ h3d_scene_Interactive.__name__ = ["h3d","scene","Interactive"];
 h3d_scene_Interactive.__interfaces__ = [hxd_Interactive];
 h3d_scene_Interactive.__super__ = h3d_scene_Object;
 h3d_scene_Interactive.prototype = $extend(h3d_scene_Object.prototype,{
-	onAdd: function() {
+	shape: null
+	,preciseShape: null
+	,priority: null
+	,cursor: null
+	,cancelEvents: null
+	,propagateEvents: null
+	,enableRightButton: null
+	,bestMatch: null
+	,scene: null
+	,mouseDownButton: null
+	,hitPoint: null
+	,onAdd: function() {
 		this.scene = this.getScene();
 		if(this.scene != null) {
 			this.scene.addEventTarget(this);
@@ -31344,126 +35345,6 @@ h3d_scene_Interactive.prototype = $extend(h3d_scene_Object.prototype,{
 	}
 	,__class__: h3d_scene_Interactive
 });
-var h3d_scene_MultiMaterial = function(prim,mats,parent) {
-	h3d_scene_Mesh.call(this,prim,mats == null ? null : mats[0],parent);
-	this.materials = mats == null ? [this.material] : mats;
-};
-$hxClasses["h3d.scene.MultiMaterial"] = h3d_scene_MultiMaterial;
-h3d_scene_MultiMaterial.__name__ = ["h3d","scene","MultiMaterial"];
-h3d_scene_MultiMaterial.__super__ = h3d_scene_Mesh;
-h3d_scene_MultiMaterial.prototype = $extend(h3d_scene_Mesh.prototype,{
-	getMeshMaterials: function() {
-		return this.materials.slice();
-	}
-	,clone: function(o) {
-		var m = o == null ? new h3d_scene_MultiMaterial(null,this.materials) : o;
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.materials;
-		while(_g1 < _g2.length) {
-			var m1 = _g2[_g1];
-			++_g1;
-			_g.push(m1 == null ? null : m1.clone());
-		}
-		m.materials = _g;
-		h3d_scene_Mesh.prototype.clone.call(this,m);
-		m.material = m.materials[0];
-		return m;
-	}
-	,emit: function(ctx) {
-		var _g1 = 0;
-		var _g = this.materials.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var m = this.materials[i];
-			if(m != null) {
-				var p = m.passes;
-				while(p != null) {
-					ctx.emitPass(p,this).index = i;
-					p = p.nextPass;
-				}
-			}
-		}
-	}
-	,getMaterialByName: function(name) {
-		var _g = 0;
-		var _g1 = this.materials;
-		while(_g < _g1.length) {
-			var m = _g1[_g];
-			++_g;
-			if(m != null && m.name == name) {
-				return m;
-			}
-		}
-		return h3d_scene_Mesh.prototype.getMaterialByName.call(this,name);
-	}
-	,getMaterials: function(a) {
-		if(a == null) {
-			a = [];
-		}
-		var _g = 0;
-		var _g1 = this.materials;
-		while(_g < _g1.length) {
-			var m = _g1[_g];
-			++_g;
-			if(m != null && a.indexOf(m) < 0) {
-				a.push(m);
-			}
-		}
-		var _g2 = 0;
-		var _g11 = this.children;
-		while(_g2 < _g11.length) {
-			var o = _g11[_g2];
-			++_g2;
-			o.getMaterials(a);
-		}
-		return a;
-	}
-	,draw: function(ctx) {
-		if(this.materials.length > 1) {
-			this.primitive.selectMaterial(ctx.drawPass.index);
-		}
-		h3d_scene_Mesh.prototype.draw.call(this,ctx);
-	}
-	,customSerialize: function(ctx) {
-		h3d_scene_Mesh.prototype.customSerialize.call(this,ctx);
-		var v = this.materials.length;
-		if(v >= 0 && v < 128) {
-			ctx.out.addByte(v);
-		} else {
-			ctx.out.addByte(128);
-			ctx.out.addInt32(v);
-		}
-		var _g = 0;
-		var _g1 = this.materials;
-		while(_g < _g1.length) {
-			var m = _g1[_g];
-			++_g;
-			ctx.addKnownRef(m);
-		}
-	}
-	,customUnserialize: function(ctx) {
-		h3d_scene_Mesh.prototype.customUnserialize.call(this,ctx);
-		var _g = [];
-		var _g2 = 0;
-		var v = ctx.input.b[ctx.inPos++];
-		if(v == 128) {
-			v = ctx.input.getInt32(ctx.inPos);
-			ctx.inPos += 4;
-		}
-		var _g1 = v;
-		while(_g2 < _g1) {
-			var i = _g2++;
-			var c = h3d_mat_Material;
-			_g.push(ctx.getRef(c,c.__clid));
-		}
-		this.materials = _g;
-	}
-	,getCLID: function() {
-		return h3d_scene_MultiMaterial.__clid;
-	}
-	,__class__: h3d_scene_MultiMaterial
-});
 var h3d_scene__$Object_ObjectFlags_$Impl_$ = {};
 $hxClasses["h3d.scene._Object.ObjectFlags_Impl_"] = h3d_scene__$Object_ObjectFlags_$Impl_$;
 h3d_scene__$Object_ObjectFlags_$Impl_$.__name__ = ["h3d","scene","_Object","ObjectFlags_Impl_"];
@@ -31492,7 +35373,9 @@ var h3d_scene__$RenderContext_SharedGlobal = function(gid,value) {
 $hxClasses["h3d.scene._RenderContext.SharedGlobal"] = h3d_scene__$RenderContext_SharedGlobal;
 h3d_scene__$RenderContext_SharedGlobal.__name__ = ["h3d","scene","_RenderContext","SharedGlobal"];
 h3d_scene__$RenderContext_SharedGlobal.prototype = {
-	__class__: h3d_scene__$RenderContext_SharedGlobal
+	gid: null
+	,value: null
+	,__class__: h3d_scene__$RenderContext_SharedGlobal
 };
 var h3d_scene_RenderContext = function() {
 	h3d_impl_RenderContext.call(this);
@@ -31502,7 +35385,21 @@ $hxClasses["h3d.scene.RenderContext"] = h3d_scene_RenderContext;
 h3d_scene_RenderContext.__name__ = ["h3d","scene","RenderContext"];
 h3d_scene_RenderContext.__super__ = h3d_impl_RenderContext;
 h3d_scene_RenderContext.prototype = $extend(h3d_impl_RenderContext.prototype,{
-	emit: function(mat,obj,index) {
+	camera: null
+	,scene: null
+	,drawPass: null
+	,sharedGlobals: null
+	,lightSystem: null
+	,uploadParams: null
+	,extraShaders: null
+	,visibleFlag: null
+	,pool: null
+	,firstAlloc: null
+	,cachedShaderList: null
+	,cachedPos: null
+	,passes: null
+	,lights: null
+	,emit: function(mat,obj,index) {
 		if(index == null) {
 			index = 0;
 		}
@@ -31620,7 +35517,10 @@ var h3d_scene_PassGroup = function(name,passes) {
 $hxClasses["h3d.scene.PassGroup"] = h3d_scene_PassGroup;
 h3d_scene_PassGroup.__name__ = ["h3d","scene","PassGroup"];
 h3d_scene_PassGroup.prototype = {
-	__class__: h3d_scene_PassGroup
+	name: null
+	,passes: null
+	,rendered: null
+	,__class__: h3d_scene_PassGroup
 };
 var h3d_scene_Renderer = function() {
 	this.hasSetTarget = false;
@@ -31632,7 +35532,17 @@ var h3d_scene_Renderer = function() {
 $hxClasses["h3d.scene.Renderer"] = h3d_scene_Renderer;
 h3d_scene_Renderer.__name__ = ["h3d","scene","Renderer"];
 h3d_scene_Renderer.prototype = {
-	dispose: function() {
+	def: null
+	,depth: null
+	,normal: null
+	,shadow: null
+	,passes: null
+	,passGroups: null
+	,allPasses: null
+	,ctx: null
+	,tcache: null
+	,hasSetTarget: null
+	,dispose: function() {
 		var _g = 0;
 		var _g1 = this.allPasses;
 		while(_g < _g1.length) {
@@ -31994,7 +35904,16 @@ h3d_scene_Scene.__name__ = ["h3d","scene","Scene"];
 h3d_scene_Scene.__interfaces__ = [hxd_InteractiveScene,h3d_IDrawable];
 h3d_scene_Scene.__super__ = h3d_scene_Object;
 h3d_scene_Scene.prototype = $extend(h3d_scene_Object.prototype,{
-	setEvents: function(events) {
+	camera: null
+	,lightSystem: null
+	,renderer: null
+	,ctx: null
+	,interactives: null
+	,events: null
+	,hitInteractives: null
+	,eventListeners: null
+	,stage: null
+	,setEvents: function(events) {
 		this.events = events;
 	}
 	,addEventListener: function(f) {
@@ -32295,6 +36214,7 @@ h3d_scene_Scene.prototype = $extend(h3d_scene_Object.prototype,{
 	,setElapsedTime: function(elapsedTime) {
 		this.ctx.elapsedTime = elapsedTime;
 	}
+	,hardwarePass: null
 	,hardwarePick: function(pixelX,pixelY) {
 		var _gthis = this;
 		var engine = h3d_Engine.CURRENT;
@@ -32536,7 +36456,9 @@ $hxClasses["h3d.scene.Joint"] = h3d_scene_Joint;
 h3d_scene_Joint.__name__ = ["h3d","scene","Joint"];
 h3d_scene_Joint.__super__ = h3d_scene_Object;
 h3d_scene_Joint.prototype = $extend(h3d_scene_Object.prototype,{
-	syncPos: function() {
+	skin: null
+	,index: null
+	,syncPos: function() {
 		var p = this.parent;
 		while(p != null) {
 			if((p.flags & 1) != 0) {
@@ -32607,7 +36529,18 @@ $hxClasses["h3d.scene.Skin"] = h3d_scene_Skin;
 h3d_scene_Skin.__name__ = ["h3d","scene","Skin"];
 h3d_scene_Skin.__super__ = h3d_scene_MultiMaterial;
 h3d_scene_Skin.prototype = $extend(h3d_scene_MultiMaterial.prototype,{
-	clone: function(o) {
+	skinData: null
+	,currentRelPose: null
+	,currentAbsPose: null
+	,currentPalette: null
+	,splitPalette: null
+	,jointsUpdated: null
+	,jointsAbsPosInv: null
+	,paletteChanged: null
+	,skinShader: null
+	,jointsGraphics: null
+	,showJoints: null
+	,clone: function(o) {
 		var s = o == null ? new h3d_scene_Skin(null,this.materials.slice()) : o;
 		h3d_scene_MultiMaterial.prototype.clone.call(this,s);
 		s.setSkinData(this.skinData);
@@ -33029,7 +36962,8 @@ $hxClasses["h3d.shader.AmbientLight"] = h3d_shader_AmbientLight;
 h3d_shader_AmbientLight.__name__ = ["h3d","shader","AmbientLight"];
 h3d_shader_AmbientLight.__super__ = hxsl_Shader;
 h3d_shader_AmbientLight.prototype = $extend(hxsl_Shader.prototype,{
-	get_additive: function() {
+	additive__: null
+	,get_additive: function() {
 		return this.additive__;
 	}
 	,set_additive: function(_v) {
@@ -33076,18 +37010,21 @@ $hxClasses["h3d.shader.Base2d"] = h3d_shader_Base2d;
 h3d_shader_Base2d.__name__ = ["h3d","shader","Base2d"];
 h3d_shader_Base2d.__super__ = hxsl_Shader;
 h3d_shader_Base2d.prototype = $extend(hxsl_Shader.prototype,{
-	get_zValue: function() {
+	zValue__: null
+	,get_zValue: function() {
 		return this.zValue__;
 	}
 	,set_zValue: function(_v) {
 		return this.zValue__ = _v;
 	}
+	,texture__: null
 	,get_texture: function() {
 		return this.texture__;
 	}
 	,set_texture: function(_v) {
 		return this.texture__ = _v;
 	}
+	,isRelative__: null
 	,get_isRelative: function() {
 		return this.isRelative__;
 	}
@@ -33095,36 +37032,42 @@ h3d_shader_Base2d.prototype = $extend(hxsl_Shader.prototype,{
 		this.constModified = true;
 		return this.isRelative__ = _v;
 	}
+	,color__: null
 	,get_color: function() {
 		return this.color__;
 	}
 	,set_color: function(_v) {
 		return this.color__ = _v;
 	}
+	,absoluteMatrixA__: null
 	,get_absoluteMatrixA: function() {
 		return this.absoluteMatrixA__;
 	}
 	,set_absoluteMatrixA: function(_v) {
 		return this.absoluteMatrixA__ = _v;
 	}
+	,absoluteMatrixB__: null
 	,get_absoluteMatrixB: function() {
 		return this.absoluteMatrixB__;
 	}
 	,set_absoluteMatrixB: function(_v) {
 		return this.absoluteMatrixB__ = _v;
 	}
+	,filterMatrixA__: null
 	,get_filterMatrixA: function() {
 		return this.filterMatrixA__;
 	}
 	,set_filterMatrixA: function(_v) {
 		return this.filterMatrixA__ = _v;
 	}
+	,filterMatrixB__: null
 	,get_filterMatrixB: function() {
 		return this.filterMatrixB__;
 	}
 	,set_filterMatrixB: function(_v) {
 		return this.filterMatrixB__ = _v;
 	}
+	,hasUVPos__: null
 	,get_hasUVPos: function() {
 		return this.hasUVPos__;
 	}
@@ -33132,12 +37075,14 @@ h3d_shader_Base2d.prototype = $extend(hxsl_Shader.prototype,{
 		this.constModified = true;
 		return this.hasUVPos__ = _v;
 	}
+	,uvPos__: null
 	,get_uvPos: function() {
 		return this.uvPos__;
 	}
 	,set_uvPos: function(_v) {
 		return this.uvPos__ = _v;
 	}
+	,killAlpha__: null
 	,get_killAlpha: function() {
 		return this.killAlpha__;
 	}
@@ -33145,6 +37090,7 @@ h3d_shader_Base2d.prototype = $extend(hxsl_Shader.prototype,{
 		this.constModified = true;
 		return this.killAlpha__ = _v;
 	}
+	,pixelAlign__: null
 	,get_pixelAlign: function() {
 		return this.pixelAlign__;
 	}
@@ -33152,12 +37098,14 @@ h3d_shader_Base2d.prototype = $extend(hxsl_Shader.prototype,{
 		this.constModified = true;
 		return this.pixelAlign__ = _v;
 	}
+	,halfPixelInverse__: null
 	,get_halfPixelInverse: function() {
 		return this.halfPixelInverse__;
 	}
 	,set_halfPixelInverse: function(_v) {
 		return this.halfPixelInverse__ = _v;
 	}
+	,viewport__: null
 	,get_viewport: function() {
 		return this.viewport__;
 	}
@@ -33264,24 +37212,28 @@ $hxClasses["h3d.shader.BaseMesh"] = h3d_shader_BaseMesh;
 h3d_shader_BaseMesh.__name__ = ["h3d","shader","BaseMesh"];
 h3d_shader_BaseMesh.__super__ = hxsl_Shader;
 h3d_shader_BaseMesh.prototype = $extend(hxsl_Shader.prototype,{
-	get_color: function() {
+	color__: null
+	,get_color: function() {
 		return this.color__;
 	}
 	,set_color: function(_v) {
 		return this.color__ = _v;
 	}
+	,specularPower__: null
 	,get_specularPower: function() {
 		return this.specularPower__;
 	}
 	,set_specularPower: function(_v) {
 		return this.specularPower__ = _v;
 	}
+	,specularAmount__: null
 	,get_specularAmount: function() {
 		return this.specularAmount__;
 	}
 	,set_specularAmount: function(_v) {
 		return this.specularAmount__ = _v;
 	}
+	,specularColor__: null
 	,get_specularColor: function() {
 		return this.specularColor__;
 	}
@@ -33339,24 +37291,28 @@ $hxClasses["h3d.shader.Blur"] = h3d_shader_Blur;
 h3d_shader_Blur.__name__ = ["h3d","shader","Blur"];
 h3d_shader_Blur.__super__ = h3d_shader_ScreenShader;
 h3d_shader_Blur.prototype = $extend(h3d_shader_ScreenShader.prototype,{
-	get_cameraInverseViewProj: function() {
+	cameraInverseViewProj__: null
+	,get_cameraInverseViewProj: function() {
 		return this.cameraInverseViewProj__;
 	}
 	,set_cameraInverseViewProj: function(_v) {
 		return this.cameraInverseViewProj__ = _v;
 	}
+	,texture__: null
 	,get_texture: function() {
 		return this.texture__;
 	}
 	,set_texture: function(_v) {
 		return this.texture__ = _v;
 	}
+	,depthTexture__: null
 	,get_depthTexture: function() {
 		return this.depthTexture__;
 	}
 	,set_depthTexture: function(_v) {
 		return this.depthTexture__ = _v;
 	}
+	,Quality__: null
 	,get_Quality: function() {
 		return this.Quality__;
 	}
@@ -33364,6 +37320,7 @@ h3d_shader_Blur.prototype = $extend(h3d_shader_ScreenShader.prototype,{
 		this.constModified = true;
 		return this.Quality__ = _v;
 	}
+	,isDepth__: null
 	,get_isDepth: function() {
 		return this.isDepth__;
 	}
@@ -33371,18 +37328,21 @@ h3d_shader_Blur.prototype = $extend(h3d_shader_ScreenShader.prototype,{
 		this.constModified = true;
 		return this.isDepth__ = _v;
 	}
+	,values__: null
 	,get_values: function() {
 		return this.values__;
 	}
 	,set_values: function(_v) {
 		return this.values__ = _v;
 	}
+	,pixel__: null
 	,get_pixel: function() {
 		return this.pixel__;
 	}
 	,set_pixel: function(_v) {
 		return this.pixel__ = _v;
 	}
+	,hasFixedColor__: null
 	,get_hasFixedColor: function() {
 		return this.hasFixedColor__;
 	}
@@ -33390,6 +37350,7 @@ h3d_shader_Blur.prototype = $extend(h3d_shader_ScreenShader.prototype,{
 		this.constModified = true;
 		return this.hasFixedColor__ = _v;
 	}
+	,smoothFixedColor__: null
 	,get_smoothFixedColor: function() {
 		return this.smoothFixedColor__;
 	}
@@ -33397,12 +37358,14 @@ h3d_shader_Blur.prototype = $extend(h3d_shader_ScreenShader.prototype,{
 		this.constModified = true;
 		return this.smoothFixedColor__ = _v;
 	}
+	,fixedColor__: null
 	,get_fixedColor: function() {
 		return this.fixedColor__;
 	}
 	,set_fixedColor: function(_v) {
 		return this.fixedColor__ = _v;
 	}
+	,isDepthDependant__: null
 	,get_isDepthDependant: function() {
 		return this.isDepthDependant__;
 	}
@@ -33410,6 +37373,7 @@ h3d_shader_Blur.prototype = $extend(h3d_shader_ScreenShader.prototype,{
 		this.constModified = true;
 		return this.isDepthDependant__ = _v;
 	}
+	,hasNormal__: null
 	,get_hasNormal: function() {
 		return this.hasNormal__;
 	}
@@ -33417,6 +37381,7 @@ h3d_shader_Blur.prototype = $extend(h3d_shader_ScreenShader.prototype,{
 		this.constModified = true;
 		return this.hasNormal__ = _v;
 	}
+	,normalTexture__: null
 	,get_normalTexture: function() {
 		return this.normalTexture__;
 	}
@@ -33512,7 +37477,10 @@ var h3d_shader_ShaderBuffers = function(s) {
 $hxClasses["h3d.shader.ShaderBuffers"] = h3d_shader_ShaderBuffers;
 h3d_shader_ShaderBuffers.__name__ = ["h3d","shader","ShaderBuffers"];
 h3d_shader_ShaderBuffers.prototype = {
-	grow: function(s) {
+	globals: null
+	,params: null
+	,tex: null
+	,grow: function(s) {
 		var ng = s.globalsSize << 2;
 		var np = s.paramsSize << 2;
 		var nt = s.textures2DCount + s.texturesCubeCount;
@@ -33536,7 +37504,9 @@ var h3d_shader_Buffers = function(s) {
 $hxClasses["h3d.shader.Buffers"] = h3d_shader_Buffers;
 h3d_shader_Buffers.__name__ = ["h3d","shader","Buffers"];
 h3d_shader_Buffers.prototype = {
-	grow: function(s) {
+	vertex: null
+	,fragment: null
+	,grow: function(s) {
 		this.vertex.grow(s.vertex);
 		this.fragment.grow(s.fragment);
 	}
@@ -33558,7 +37528,8 @@ $hxClasses["h3d.shader.ColorAdd"] = h3d_shader_ColorAdd;
 h3d_shader_ColorAdd.__name__ = ["h3d","shader","ColorAdd"];
 h3d_shader_ColorAdd.__super__ = hxsl_Shader;
 h3d_shader_ColorAdd.prototype = $extend(hxsl_Shader.prototype,{
-	get_color: function() {
+	color__: null
+	,get_color: function() {
 		return this.color__;
 	}
 	,set_color: function(_v) {
@@ -33601,7 +37572,8 @@ $hxClasses["h3d.shader.ColorKey"] = h3d_shader_ColorKey;
 h3d_shader_ColorKey.__name__ = ["h3d","shader","ColorKey"];
 h3d_shader_ColorKey.__super__ = hxsl_Shader;
 h3d_shader_ColorKey.prototype = $extend(hxsl_Shader.prototype,{
-	get_colorKey: function() {
+	colorKey__: null
+	,get_colorKey: function() {
 		return this.colorKey__;
 	}
 	,set_colorKey: function(_v) {
@@ -33641,7 +37613,8 @@ $hxClasses["h3d.shader.ColorMatrix"] = h3d_shader_ColorMatrix;
 h3d_shader_ColorMatrix.__name__ = ["h3d","shader","ColorMatrix"];
 h3d_shader_ColorMatrix.__super__ = hxsl_Shader;
 h3d_shader_ColorMatrix.prototype = $extend(hxsl_Shader.prototype,{
-	get_matrix: function() {
+	matrix__: null
+	,get_matrix: function() {
 		return this.matrix__;
 	}
 	,set_matrix: function(_v) {
@@ -33682,18 +37655,21 @@ $hxClasses["h3d.shader.DirLight"] = h3d_shader_DirLight;
 h3d_shader_DirLight.__name__ = ["h3d","shader","DirLight"];
 h3d_shader_DirLight.__super__ = hxsl_Shader;
 h3d_shader_DirLight.prototype = $extend(hxsl_Shader.prototype,{
-	get_color: function() {
+	color__: null
+	,get_color: function() {
 		return this.color__;
 	}
 	,set_color: function(_v) {
 		return this.color__ = _v;
 	}
+	,direction__: null
 	,get_direction: function() {
 		return this.direction__;
 	}
 	,set_direction: function(_v) {
 		return this.direction__ = _v;
 	}
+	,enableSpecular__: null
 	,get_enableSpecular: function() {
 		return this.enableSpecular__;
 	}
@@ -33733,6 +37709,304 @@ h3d_shader_DirLight.prototype = $extend(hxsl_Shader.prototype,{
 	}
 	,__class__: h3d_shader_DirLight
 });
+var h3d_shader_GpuParticle = function() {
+	this.cameraRotation__ = new h3d_Matrix();
+	this.offset__ = new h3d_Vector();
+	this.volumeSize__ = new h3d_Vector();
+	this.volumeMin__ = new h3d_Vector();
+	this.transform__ = new h3d_Matrix();
+	this.frameDivision__ = new h3d_Vector();
+	this.frameSize__ = new h3d_Vector();
+	this.totalFrames__ = 0;
+	this.animationFixedFrame__ = 0;
+	this.animationRepeat__ = 0;
+	this.loopCounter__ = 0;
+	this.maxTime__ = 0;
+	this.time__ = 0;
+	this.gravity__ = 0;
+	this.speedIncr__ = 0;
+	this.fadePower__ = 0;
+	this.fadeOut__ = 0;
+	this.fadeIn__ = 0;
+	hxsl_Shader.call(this);
+};
+$hxClasses["h3d.shader.GpuParticle"] = h3d_shader_GpuParticle;
+h3d_shader_GpuParticle.__name__ = ["h3d","shader","GpuParticle"];
+h3d_shader_GpuParticle.__super__ = hxsl_Shader;
+h3d_shader_GpuParticle.prototype = $extend(hxsl_Shader.prototype,{
+	fadeIn__: null
+	,get_fadeIn: function() {
+		return this.fadeIn__;
+	}
+	,set_fadeIn: function(_v) {
+		return this.fadeIn__ = _v;
+	}
+	,fadeOut__: null
+	,get_fadeOut: function() {
+		return this.fadeOut__;
+	}
+	,set_fadeOut: function(_v) {
+		return this.fadeOut__ = _v;
+	}
+	,fadePower__: null
+	,get_fadePower: function() {
+		return this.fadePower__;
+	}
+	,set_fadePower: function(_v) {
+		return this.fadePower__ = _v;
+	}
+	,speedIncr__: null
+	,get_speedIncr: function() {
+		return this.speedIncr__;
+	}
+	,set_speedIncr: function(_v) {
+		return this.speedIncr__ = _v;
+	}
+	,gravity__: null
+	,get_gravity: function() {
+		return this.gravity__;
+	}
+	,set_gravity: function(_v) {
+		return this.gravity__ = _v;
+	}
+	,color__: null
+	,get_color: function() {
+		return this.color__;
+	}
+	,set_color: function(_v) {
+		return this.color__ = _v;
+	}
+	,texture__: null
+	,get_texture: function() {
+		return this.texture__;
+	}
+	,set_texture: function(_v) {
+		return this.texture__ = _v;
+	}
+	,time__: null
+	,get_time: function() {
+		return this.time__;
+	}
+	,set_time: function(_v) {
+		return this.time__ = _v;
+	}
+	,maxTime__: null
+	,get_maxTime: function() {
+		return this.maxTime__;
+	}
+	,set_maxTime: function(_v) {
+		return this.maxTime__ = _v;
+	}
+	,loopCounter__: null
+	,get_loopCounter: function() {
+		return this.loopCounter__;
+	}
+	,set_loopCounter: function(_v) {
+		return this.loopCounter__ = _v;
+	}
+	,animationRepeat__: null
+	,get_animationRepeat: function() {
+		return this.animationRepeat__;
+	}
+	,set_animationRepeat: function(_v) {
+		return this.animationRepeat__ = _v;
+	}
+	,animationFixedFrame__: null
+	,get_animationFixedFrame: function() {
+		return this.animationFixedFrame__;
+	}
+	,set_animationFixedFrame: function(_v) {
+		return this.animationFixedFrame__ = _v;
+	}
+	,totalFrames__: null
+	,get_totalFrames: function() {
+		return this.totalFrames__;
+	}
+	,set_totalFrames: function(_v) {
+		return this.totalFrames__ = _v;
+	}
+	,frameSize__: null
+	,get_frameSize: function() {
+		return this.frameSize__;
+	}
+	,set_frameSize: function(_v) {
+		return this.frameSize__ = _v;
+	}
+	,frameDivision__: null
+	,get_frameDivision: function() {
+		return this.frameDivision__;
+	}
+	,set_frameDivision: function(_v) {
+		return this.frameDivision__ = _v;
+	}
+	,transform__: null
+	,get_transform: function() {
+		return this.transform__;
+	}
+	,set_transform: function(_v) {
+		return this.transform__ = _v;
+	}
+	,clipBounds__: null
+	,get_clipBounds: function() {
+		return this.clipBounds__;
+	}
+	,set_clipBounds: function(_v) {
+		this.constModified = true;
+		return this.clipBounds__ = _v;
+	}
+	,volumeMin__: null
+	,get_volumeMin: function() {
+		return this.volumeMin__;
+	}
+	,set_volumeMin: function(_v) {
+		return this.volumeMin__ = _v;
+	}
+	,volumeSize__: null
+	,get_volumeSize: function() {
+		return this.volumeSize__;
+	}
+	,set_volumeSize: function(_v) {
+		return this.volumeSize__ = _v;
+	}
+	,offset__: null
+	,get_offset: function() {
+		return this.offset__;
+	}
+	,set_offset: function(_v) {
+		return this.offset__ = _v;
+	}
+	,cameraRotation__: null
+	,get_cameraRotation: function() {
+		return this.cameraRotation__;
+	}
+	,set_cameraRotation: function(_v) {
+		return this.cameraRotation__ = _v;
+	}
+	,transform3D__: null
+	,get_transform3D: function() {
+		return this.transform3D__;
+	}
+	,set_transform3D: function(_v) {
+		this.constModified = true;
+		return this.transform3D__ = _v;
+	}
+	,updateConstants: function(globals) {
+		this.constBits = 0;
+		if(this.clipBounds__) {
+			this.constBits |= 1;
+		}
+		if(this.transform3D__) {
+			this.constBits |= 2;
+		}
+		this.updateConstantsFinal(globals);
+	}
+	,getParamValue: function(index) {
+		switch(index) {
+		case 0:
+			return this.fadeIn__;
+		case 1:
+			return this.fadeOut__;
+		case 2:
+			return this.fadePower__;
+		case 3:
+			return this.speedIncr__;
+		case 4:
+			return this.gravity__;
+		case 5:
+			return this.color__;
+		case 6:
+			return this.texture__;
+		case 7:
+			return this.time__;
+		case 8:
+			return this.maxTime__;
+		case 9:
+			return this.loopCounter__;
+		case 10:
+			return this.animationRepeat__;
+		case 11:
+			return this.animationFixedFrame__;
+		case 12:
+			return this.totalFrames__;
+		case 13:
+			return this.frameSize__;
+		case 14:
+			return this.frameDivision__;
+		case 15:
+			return this.transform__;
+		case 16:
+			return this.clipBounds__;
+		case 17:
+			return this.volumeMin__;
+		case 18:
+			return this.volumeSize__;
+		case 19:
+			return this.offset__;
+		case 20:
+			return this.cameraRotation__;
+		case 21:
+			return this.transform3D__;
+		default:
+		}
+		return null;
+	}
+	,getParamFloatValue: function(index) {
+		switch(index) {
+		case 0:
+			return this.fadeIn__;
+		case 1:
+			return this.fadeOut__;
+		case 2:
+			return this.fadePower__;
+		case 3:
+			return this.speedIncr__;
+		case 4:
+			return this.gravity__;
+		case 7:
+			return this.time__;
+		case 8:
+			return this.maxTime__;
+		case 9:
+			return this.loopCounter__;
+		case 10:
+			return this.animationRepeat__;
+		case 11:
+			return this.animationFixedFrame__;
+		case 12:
+			return this.totalFrames__;
+		default:
+		}
+		return 0.;
+	}
+	,clone: function() {
+		var s = Object.create(h3d_shader_GpuParticle.prototype);
+		s.shader = this.shader;
+		s.fadeIn__ = this.fadeIn__;
+		s.fadeOut__ = this.fadeOut__;
+		s.fadePower__ = this.fadePower__;
+		s.speedIncr__ = this.speedIncr__;
+		s.gravity__ = this.gravity__;
+		s.color__ = this.color__;
+		s.texture__ = this.texture__;
+		s.time__ = this.time__;
+		s.maxTime__ = this.maxTime__;
+		s.loopCounter__ = this.loopCounter__;
+		s.animationRepeat__ = this.animationRepeat__;
+		s.animationFixedFrame__ = this.animationFixedFrame__;
+		s.totalFrames__ = this.totalFrames__;
+		s.frameSize__ = this.frameSize__;
+		s.frameDivision__ = this.frameDivision__;
+		s.transform__ = this.transform__;
+		s.clipBounds__ = this.clipBounds__;
+		s.volumeMin__ = this.volumeMin__;
+		s.volumeSize__ = this.volumeSize__;
+		s.offset__ = this.offset__;
+		s.cameraRotation__ = this.cameraRotation__;
+		s.transform3D__ = this.transform3D__;
+		return s;
+	}
+	,__class__: h3d_shader_GpuParticle
+});
 var h3d_shader_LineShader = function(width,lengthScale) {
 	if(lengthScale == null) {
 		lengthScale = 1.;
@@ -33750,12 +38024,14 @@ $hxClasses["h3d.shader.LineShader"] = h3d_shader_LineShader;
 h3d_shader_LineShader.__name__ = ["h3d","shader","LineShader"];
 h3d_shader_LineShader.__super__ = hxsl_Shader;
 h3d_shader_LineShader.prototype = $extend(hxsl_Shader.prototype,{
-	get_lengthScale: function() {
+	lengthScale__: null
+	,get_lengthScale: function() {
 		return this.lengthScale__;
 	}
 	,set_lengthScale: function(_v) {
 		return this.lengthScale__ = _v;
 	}
+	,width__: null
 	,get_width: function() {
 		return this.width__;
 	}
@@ -33802,7 +38078,8 @@ $hxClasses["h3d.shader.Shadow"] = h3d_shader_Shadow;
 h3d_shader_Shadow.__name__ = ["h3d","shader","Shadow"];
 h3d_shader_Shadow.__super__ = hxsl_Shader;
 h3d_shader_Shadow.prototype = $extend(hxsl_Shader.prototype,{
-	get_perPixel: function() {
+	perPixel__: null
+	,get_perPixel: function() {
 		return this.perPixel__;
 	}
 	,set_perPixel: function(_v) {
@@ -33844,13 +38121,15 @@ $hxClasses["h3d.shader.Skin"] = h3d_shader_Skin;
 h3d_shader_Skin.__name__ = ["h3d","shader","Skin"];
 h3d_shader_Skin.__super__ = hxsl_Shader;
 h3d_shader_Skin.prototype = $extend(hxsl_Shader.prototype,{
-	get_MaxBones: function() {
+	MaxBones__: null
+	,get_MaxBones: function() {
 		return this.MaxBones__;
 	}
 	,set_MaxBones: function(_v) {
 		this.constModified = true;
 		return this.MaxBones__ = _v;
 	}
+	,bonesMatrixes__: null
 	,get_bonesMatrixes: function() {
 		return this.bonesMatrixes__;
 	}
@@ -33896,7 +38175,8 @@ $hxClasses["h3d.shader.SpecularTexture"] = h3d_shader_SpecularTexture;
 h3d_shader_SpecularTexture.__name__ = ["h3d","shader","SpecularTexture"];
 h3d_shader_SpecularTexture.__super__ = hxsl_Shader;
 h3d_shader_SpecularTexture.prototype = $extend(hxsl_Shader.prototype,{
-	get_texture: function() {
+	texture__: null
+	,get_texture: function() {
 		return this.texture__;
 	}
 	,set_texture: function(_v) {
@@ -33933,13 +38213,15 @@ $hxClasses["h3d.shader.Texture"] = h3d_shader_Texture;
 h3d_shader_Texture.__name__ = ["h3d","shader","Texture"];
 h3d_shader_Texture.__super__ = hxsl_Shader;
 h3d_shader_Texture.prototype = $extend(hxsl_Shader.prototype,{
-	get_additive: function() {
+	additive__: null
+	,get_additive: function() {
 		return this.additive__;
 	}
 	,set_additive: function(_v) {
 		this.constModified = true;
 		return this.additive__ = _v;
 	}
+	,killAlpha__: null
 	,get_killAlpha: function() {
 		return this.killAlpha__;
 	}
@@ -33947,6 +38229,7 @@ h3d_shader_Texture.prototype = $extend(hxsl_Shader.prototype,{
 		this.constModified = true;
 		return this.killAlpha__ = _v;
 	}
+	,specularAlpha__: null
 	,get_specularAlpha: function() {
 		return this.specularAlpha__;
 	}
@@ -33954,12 +38237,14 @@ h3d_shader_Texture.prototype = $extend(hxsl_Shader.prototype,{
 		this.constModified = true;
 		return this.specularAlpha__ = _v;
 	}
+	,killAlphaThreshold__: null
 	,get_killAlphaThreshold: function() {
 		return this.killAlphaThreshold__;
 	}
 	,set_killAlphaThreshold: function(_v) {
 		return this.killAlphaThreshold__ = _v;
 	}
+	,texture__: null
 	,get_texture: function() {
 		return this.texture__;
 	}
@@ -34044,12 +38329,14 @@ $hxClasses["h3d.shader.UVDelta"] = h3d_shader_UVDelta;
 h3d_shader_UVDelta.__name__ = ["h3d","shader","UVDelta"];
 h3d_shader_UVDelta.__super__ = hxsl_Shader;
 h3d_shader_UVDelta.prototype = $extend(hxsl_Shader.prototype,{
-	get_uvDelta: function() {
+	uvDelta__: null
+	,get_uvDelta: function() {
 		return this.uvDelta__;
 	}
 	,set_uvDelta: function(_v) {
 		return this.uvDelta__ = _v;
 	}
+	,uvScale__: null
 	,get_uvScale: function() {
 		return this.uvScale__;
 	}
@@ -34089,7 +38376,8 @@ $hxClasses["h3d.shader.VertexColorAlpha"] = h3d_shader_VertexColorAlpha;
 h3d_shader_VertexColorAlpha.__name__ = ["h3d","shader","VertexColorAlpha"];
 h3d_shader_VertexColorAlpha.__super__ = hxsl_Shader;
 h3d_shader_VertexColorAlpha.prototype = $extend(hxsl_Shader.prototype,{
-	get_additive: function() {
+	additive__: null
+	,get_additive: function() {
 		return this.additive__;
 	}
 	,set_additive: function(_v) {
@@ -34139,12 +38427,14 @@ $hxClasses["h3d.shader.VolumeDecal"] = h3d_shader_VolumeDecal;
 h3d_shader_VolumeDecal.__name__ = ["h3d","shader","VolumeDecal"];
 h3d_shader_VolumeDecal.__super__ = hxsl_Shader;
 h3d_shader_VolumeDecal.prototype = $extend(hxsl_Shader.prototype,{
-	get_scale: function() {
+	scale__: null
+	,get_scale: function() {
 		return this.scale__;
 	}
 	,set_scale: function(_v) {
 		return this.scale__ = _v;
 	}
+	,normal__: null
 	,get_normal: function() {
 		return this.normal__;
 	}
@@ -34181,7 +38471,9 @@ var haxe_IMap = function() { };
 $hxClasses["haxe.IMap"] = haxe_IMap;
 haxe_IMap.__name__ = ["haxe","IMap"];
 haxe_IMap.prototype = {
-	__class__: haxe_IMap
+	get: null
+	,keys: null
+	,__class__: haxe_IMap
 };
 var haxe_EntryPoint = function() { };
 $hxClasses["haxe.EntryPoint"] = haxe_EntryPoint;
@@ -34205,6 +38497,9 @@ haxe_EntryPoint.run = function() {
 	var rqf = $window.requestAnimationFrame || $window.webkitRequestAnimationFrame || $window.mozRequestAnimationFrame;
 	rqf(haxe_EntryPoint.run);
 };
+var haxe__$Int32_Int32_$Impl_$ = {};
+$hxClasses["haxe._Int32.Int32_Impl_"] = haxe__$Int32_Int32_$Impl_$;
+haxe__$Int32_Int32_$Impl_$.__name__ = ["haxe","_Int32","Int32_Impl_"];
 var haxe__$Int64__$_$_$Int64 = function(high,low) {
 	this.high = high;
 	this.low = low;
@@ -34212,7 +38507,9 @@ var haxe__$Int64__$_$_$Int64 = function(high,low) {
 $hxClasses["haxe._Int64.___Int64"] = haxe__$Int64__$_$_$Int64;
 haxe__$Int64__$_$_$Int64.__name__ = ["haxe","_Int64","___Int64"];
 haxe__$Int64__$_$_$Int64.prototype = {
-	__class__: haxe__$Int64__$_$_$Int64
+	high: null
+	,low: null
+	,__class__: haxe__$Int64__$_$_$Int64
 };
 var haxe_Log = function() { };
 $hxClasses["haxe.Log"] = haxe_Log;
@@ -34241,7 +38538,12 @@ var haxe_MainEvent = function(f,p) {
 $hxClasses["haxe.MainEvent"] = haxe_MainEvent;
 haxe_MainEvent.__name__ = ["haxe","MainEvent"];
 haxe_MainEvent.prototype = {
-	__class__: haxe_MainEvent
+	f: null
+	,prev: null
+	,next: null
+	,nextRun: null
+	,priority: null
+	,__class__: haxe_MainEvent
 };
 var haxe_MainLoop = function() { };
 $hxClasses["haxe.MainLoop"] = haxe_MainLoop;
@@ -34348,24 +38650,6 @@ haxe_MainLoop.tick = function() {
 	}
 	return wait;
 };
-var haxe_Resource = function() { };
-$hxClasses["haxe.Resource"] = haxe_Resource;
-haxe_Resource.__name__ = ["haxe","Resource"];
-haxe_Resource.getBytes = function(name) {
-	var _g = 0;
-	var _g1 = haxe_Resource.content;
-	while(_g < _g1.length) {
-		var x = _g1[_g];
-		++_g;
-		if(x.name == name) {
-			if(x.str != null) {
-				return haxe_io_Bytes.ofString(x.str);
-			}
-			return haxe_crypto_Base64.decode(x.data);
-		}
-	}
-	return null;
-};
 var haxe_Timer = function(time_ms) {
 	var me = this;
 	this.id = setInterval(function() {
@@ -34383,7 +38667,8 @@ haxe_Timer.delay = function(f,time_ms) {
 	return t;
 };
 haxe_Timer.prototype = {
-	stop: function() {
+	id: null
+	,stop: function() {
 		if(this.id == null) {
 			return;
 		}
@@ -34436,7 +38721,13 @@ haxe_Unserializer.run = function(v) {
 	return new haxe_Unserializer(v).unserialize();
 };
 haxe_Unserializer.prototype = {
-	readDigits: function() {
+	buf: null
+	,pos: null
+	,length: null
+	,cache: null
+	,scache: null
+	,resolver: null
+	,readDigits: function() {
 		var k = 0;
 		var s = false;
 		var fpos = this.pos;
@@ -34758,7 +39049,9 @@ haxe_crypto_Adler32.read = function(i) {
 	return a;
 };
 haxe_crypto_Adler32.prototype = {
-	update: function(b,pos,len) {
+	a1: null
+	,a2: null
+	,update: function(b,pos,len) {
 		var a1 = this.a1;
 		var a2 = this.a2;
 		var _g1 = pos;
@@ -34781,173 +39074,6 @@ haxe_crypto_Adler32.prototype = {
 	}
 	,__class__: haxe_crypto_Adler32
 };
-var haxe_io_Bytes = function(data) {
-	this.length = data.byteLength;
-	this.b = new Uint8Array(data);
-	this.b.bufferValue = data;
-	data.hxBytes = this;
-	data.bytes = this.b;
-};
-$hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
-haxe_io_Bytes.__name__ = ["haxe","io","Bytes"];
-haxe_io_Bytes.alloc = function(length) {
-	return new haxe_io_Bytes(new ArrayBuffer(length));
-};
-haxe_io_Bytes.ofString = function(s) {
-	var a = [];
-	var i = 0;
-	while(i < s.length) {
-		var c = s.charCodeAt(i++);
-		if(55296 <= c && c <= 56319) {
-			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
-		}
-		if(c <= 127) {
-			a.push(c);
-		} else if(c <= 2047) {
-			a.push(192 | c >> 6);
-			a.push(128 | c & 63);
-		} else if(c <= 65535) {
-			a.push(224 | c >> 12);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		} else {
-			a.push(240 | c >> 18);
-			a.push(128 | c >> 12 & 63);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		}
-	}
-	return new haxe_io_Bytes(new Uint8Array(a).buffer);
-};
-haxe_io_Bytes.ofData = function(b) {
-	var hb = b.hxBytes;
-	if(hb != null) {
-		return hb;
-	}
-	return new haxe_io_Bytes(b);
-};
-haxe_io_Bytes.fastGet = function(b,pos) {
-	return b.bytes[pos];
-};
-haxe_io_Bytes.prototype = {
-	blit: function(pos,src,srcpos,len) {
-		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
-		}
-		if(srcpos == 0 && len == src.b.byteLength) {
-			this.b.set(src.b,pos);
-		} else {
-			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
-		}
-	}
-	,fill: function(pos,len,value) {
-		var _g1 = 0;
-		var _g = len;
-		while(_g1 < _g) {
-			var i = _g1++;
-			this.b[pos++] = value & 255;
-		}
-	}
-	,sub: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
-		}
-		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
-	}
-	,getDouble: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getFloat64(pos,true);
-	}
-	,getFloat: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getFloat32(pos,true);
-	}
-	,setFloat: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setFloat32(pos,v,true);
-	}
-	,getUInt16: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getUint16(pos,true);
-	}
-	,setUInt16: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setUint16(pos,v,true);
-	}
-	,getInt32: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getInt32(pos,true);
-	}
-	,setInt32: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setInt32(pos,v,true);
-	}
-	,getInt64: function(pos) {
-		var this1 = new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
-		return this1;
-	}
-	,getString: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
-		}
-		var s = "";
-		var b = this.b;
-		var fcc = String.fromCharCode;
-		var i = pos;
-		var max = pos + len;
-		while(i < max) {
-			var c = b[i++];
-			if(c < 128) {
-				if(c == 0) {
-					break;
-				}
-				s += fcc(c);
-			} else if(c < 224) {
-				s += fcc((c & 63) << 6 | b[i++] & 127);
-			} else if(c < 240) {
-				var c2 = b[i++];
-				s += fcc((c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127);
-			} else {
-				var c21 = b[i++];
-				var c3 = b[i++];
-				var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
-				s += fcc((u >> 10) + 55232);
-				s += fcc(u & 1023 | 56320);
-			}
-		}
-		return s;
-	}
-	,toString: function() {
-		return this.getString(0,this.length);
-	}
-	,__class__: haxe_io_Bytes
-};
-var haxe_crypto_Base64 = function() { };
-$hxClasses["haxe.crypto.Base64"] = haxe_crypto_Base64;
-haxe_crypto_Base64.__name__ = ["haxe","crypto","Base64"];
-haxe_crypto_Base64.decode = function(str,complement) {
-	if(complement == null) {
-		complement = true;
-	}
-	if(complement) {
-		while(HxOverrides.cca(str,str.length - 1) == 61) str = HxOverrides.substr(str,0,-1);
-	}
-	return new haxe_crypto_BaseCode(haxe_crypto_Base64.BYTES).decodeBytes(haxe_io_Bytes.ofString(str));
-};
 var haxe_crypto_BaseCode = function(base) {
 	var len = base.length;
 	var nbits = 1;
@@ -34961,7 +39087,10 @@ var haxe_crypto_BaseCode = function(base) {
 $hxClasses["haxe.crypto.BaseCode"] = haxe_crypto_BaseCode;
 haxe_crypto_BaseCode.__name__ = ["haxe","crypto","BaseCode"];
 haxe_crypto_BaseCode.prototype = {
-	initTable: function() {
+	base: null
+	,nbits: null
+	,tbl: null
+	,initTable: function() {
 		var tbl = [];
 		var _g = 0;
 		while(_g < 256) {
@@ -35034,7 +39163,8 @@ haxe_crypto_Crc32.make = function(data) {
 	return crc ^ init;
 };
 haxe_crypto_Crc32.prototype = {
-	byte: function(b) {
+	crc: null
+	,byte: function(b) {
 		var tmp = (this.crc ^ b) & 255;
 		var _g = 0;
 		while(_g < 8) {
@@ -35382,7 +39512,8 @@ $hxClasses["haxe.ds.BalancedTree"] = haxe_ds_BalancedTree;
 haxe_ds_BalancedTree.__name__ = ["haxe","ds","BalancedTree"];
 haxe_ds_BalancedTree.__interfaces__ = [haxe_IMap];
 haxe_ds_BalancedTree.prototype = {
-	set: function(key,value) {
+	root: null
+	,set: function(key,value) {
 		this.root = this.setLoop(key,value,this.root);
 	}
 	,get: function(key) {
@@ -35494,7 +39625,12 @@ var haxe_ds_TreeNode = function(l,k,v,r,h) {
 $hxClasses["haxe.ds.TreeNode"] = haxe_ds_TreeNode;
 haxe_ds_TreeNode.__name__ = ["haxe","ds","TreeNode"];
 haxe_ds_TreeNode.prototype = {
-	__class__: haxe_ds_TreeNode
+	left: null
+	,right: null
+	,key: null
+	,value: null
+	,_height: null
+	,__class__: haxe_ds_TreeNode
 };
 var haxe_ds_EnumValueMap = function() {
 	haxe_ds_BalancedTree.call(this);
@@ -35550,7 +39686,8 @@ $hxClasses["haxe.ds.IntMap"] = haxe_ds_IntMap;
 haxe_ds_IntMap.__name__ = ["haxe","ds","IntMap"];
 haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
 haxe_ds_IntMap.prototype = {
-	get: function(key) {
+	h: null
+	,get: function(key) {
 		return this.h[key];
 	}
 	,remove: function(key) {
@@ -35584,7 +39721,8 @@ $hxClasses["haxe.ds.ObjectMap"] = haxe_ds_ObjectMap;
 haxe_ds_ObjectMap.__name__ = ["haxe","ds","ObjectMap"];
 haxe_ds_ObjectMap.__interfaces__ = [haxe_IMap];
 haxe_ds_ObjectMap.prototype = {
-	set: function(key,value) {
+	h: null
+	,set: function(key,value) {
 		var id = key.__id__ || (key.__id__ = ++haxe_ds_ObjectMap.count);
 		this.h[id] = value;
 		this.h.__keys__[id] = key;
@@ -35621,7 +39759,11 @@ var haxe_ds__$StringMap_StringMapIterator = function(map,keys) {
 $hxClasses["haxe.ds._StringMap.StringMapIterator"] = haxe_ds__$StringMap_StringMapIterator;
 haxe_ds__$StringMap_StringMapIterator.__name__ = ["haxe","ds","_StringMap","StringMapIterator"];
 haxe_ds__$StringMap_StringMapIterator.prototype = {
-	hasNext: function() {
+	map: null
+	,keys: null
+	,index: null
+	,count: null
+	,hasNext: function() {
 		return this.index < this.count;
 	}
 	,next: function() {
@@ -35642,7 +39784,9 @@ $hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
 haxe_ds_StringMap.__name__ = ["haxe","ds","StringMap"];
 haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
 haxe_ds_StringMap.prototype = {
-	get: function(key) {
+	h: null
+	,rh: null
+	,get: function(key) {
 		if(__map_reserved[key] != null) {
 			return this.getReserved(key);
 		}
@@ -35728,6 +39872,164 @@ haxe_ds__$Vector_Vector_$Impl_$.blit = function(src,srcPos,dest,destPos,len) {
 		}
 	}
 };
+var haxe_io_Bytes = function(data) {
+	this.length = data.byteLength;
+	this.b = new Uint8Array(data);
+	this.b.bufferValue = data;
+	data.hxBytes = this;
+	data.bytes = this.b;
+};
+$hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
+haxe_io_Bytes.__name__ = ["haxe","io","Bytes"];
+haxe_io_Bytes.alloc = function(length) {
+	return new haxe_io_Bytes(new ArrayBuffer(length));
+};
+haxe_io_Bytes.ofString = function(s) {
+	var a = [];
+	var i = 0;
+	while(i < s.length) {
+		var c = s.charCodeAt(i++);
+		if(55296 <= c && c <= 56319) {
+			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
+		}
+		if(c <= 127) {
+			a.push(c);
+		} else if(c <= 2047) {
+			a.push(192 | c >> 6);
+			a.push(128 | c & 63);
+		} else if(c <= 65535) {
+			a.push(224 | c >> 12);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		} else {
+			a.push(240 | c >> 18);
+			a.push(128 | c >> 12 & 63);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		}
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
+};
+haxe_io_Bytes.ofData = function(b) {
+	var hb = b.hxBytes;
+	if(hb != null) {
+		return hb;
+	}
+	return new haxe_io_Bytes(b);
+};
+haxe_io_Bytes.fastGet = function(b,pos) {
+	return b.bytes[pos];
+};
+haxe_io_Bytes.prototype = {
+	length: null
+	,b: null
+	,data: null
+	,blit: function(pos,src,srcpos,len) {
+		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
+			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
+		}
+		if(srcpos == 0 && len == src.b.byteLength) {
+			this.b.set(src.b,pos);
+		} else {
+			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
+		}
+	}
+	,fill: function(pos,len,value) {
+		var _g1 = 0;
+		var _g = len;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this.b[pos++] = value & 255;
+		}
+	}
+	,sub: function(pos,len) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
+		}
+		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
+	}
+	,getDouble: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getFloat64(pos,true);
+	}
+	,getFloat: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getFloat32(pos,true);
+	}
+	,setFloat: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setFloat32(pos,v,true);
+	}
+	,getUInt16: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getUint16(pos,true);
+	}
+	,setUInt16: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setUint16(pos,v,true);
+	}
+	,getInt32: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getInt32(pos,true);
+	}
+	,setInt32: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setInt32(pos,v,true);
+	}
+	,getInt64: function(pos) {
+		var this1 = new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
+		return this1;
+	}
+	,getString: function(pos,len) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
+		}
+		var s = "";
+		var b = this.b;
+		var fcc = String.fromCharCode;
+		var i = pos;
+		var max = pos + len;
+		while(i < max) {
+			var c = b[i++];
+			if(c < 128) {
+				if(c == 0) {
+					break;
+				}
+				s += fcc(c);
+			} else if(c < 224) {
+				s += fcc((c & 63) << 6 | b[i++] & 127);
+			} else if(c < 240) {
+				var c2 = b[i++];
+				s += fcc((c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127);
+			} else {
+				var c21 = b[i++];
+				var c3 = b[i++];
+				var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
+				s += fcc((u >> 10) + 55232);
+				s += fcc(u & 1023 | 56320);
+			}
+		}
+		return s;
+	}
+	,toString: function() {
+		return this.getString(0,this.length);
+	}
+	,__class__: haxe_io_Bytes
+};
 var haxe_io_BytesBuffer = function() {
 	this.pos = 0;
 	this.size = 0;
@@ -35735,7 +40037,12 @@ var haxe_io_BytesBuffer = function() {
 $hxClasses["haxe.io.BytesBuffer"] = haxe_io_BytesBuffer;
 haxe_io_BytesBuffer.__name__ = ["haxe","io","BytesBuffer"];
 haxe_io_BytesBuffer.prototype = {
-	addByte: function(byte) {
+	buffer: null
+	,view: null
+	,u8: null
+	,pos: null
+	,size: null
+	,addByte: function(byte) {
 		if(this.pos == this.size) {
 			this.grow(1);
 		}
@@ -35823,7 +40130,8 @@ var haxe_io_Input = function() { };
 $hxClasses["haxe.io.Input"] = haxe_io_Input;
 haxe_io_Input.__name__ = ["haxe","io","Input"];
 haxe_io_Input.prototype = {
-	readByte: function() {
+	bigEndian: null
+	,readByte: function() {
 		throw new js__$Boot_HaxeError("Not implemented");
 	}
 	,readBytes: function(s,pos,len) {
@@ -35960,7 +40268,11 @@ $hxClasses["haxe.io.BytesInput"] = haxe_io_BytesInput;
 haxe_io_BytesInput.__name__ = ["haxe","io","BytesInput"];
 haxe_io_BytesInput.__super__ = haxe_io_Input;
 haxe_io_BytesInput.prototype = $extend(haxe_io_Input.prototype,{
-	readByte: function() {
+	b: null
+	,pos: null
+	,len: null
+	,totlen: null
+	,readByte: function() {
 		if(this.len == 0) {
 			throw new js__$Boot_HaxeError(new haxe_io_Eof());
 		}
@@ -35995,7 +40307,8 @@ var haxe_io_Output = function() { };
 $hxClasses["haxe.io.Output"] = haxe_io_Output;
 haxe_io_Output.__name__ = ["haxe","io","Output"];
 haxe_io_Output.prototype = {
-	writeByte: function(c) {
+	bigEndian: null
+	,writeByte: function(c) {
 		throw new js__$Boot_HaxeError("Not implemented");
 	}
 	,writeBytes: function(s,pos,len) {
@@ -36064,7 +40377,8 @@ $hxClasses["haxe.io.BytesOutput"] = haxe_io_BytesOutput;
 haxe_io_BytesOutput.__name__ = ["haxe","io","BytesOutput"];
 haxe_io_BytesOutput.__super__ = haxe_io_Output;
 haxe_io_BytesOutput.prototype = $extend(haxe_io_Output.prototype,{
-	writeByte: function(c) {
+	b: null
+	,writeByte: function(c) {
 		this.b.addByte(c);
 	}
 	,writeBytes: function(buf,pos,len) {
@@ -36289,7 +40603,8 @@ var haxe_xml_Fast = function(x) {
 $hxClasses["haxe.xml.Fast"] = haxe_xml_Fast;
 haxe_xml_Fast.__name__ = ["haxe","xml","Fast"];
 haxe_xml_Fast.prototype = {
-	get_name: function() {
+	x: null
+	,get_name: function() {
 		if(this.x.nodeType == Xml.Document) {
 			return "Document";
 		} else {
@@ -36389,7 +40704,12 @@ var haxe_xml_XmlParserException = function(message,xml,position) {
 $hxClasses["haxe.xml.XmlParserException"] = haxe_xml_XmlParserException;
 haxe_xml_XmlParserException.__name__ = ["haxe","xml","XmlParserException"];
 haxe_xml_XmlParserException.prototype = {
-	toString: function() {
+	message: null
+	,lineNumber: null
+	,positionAtLine: null
+	,position: null
+	,xml: null
+	,toString: function() {
 		return Type.getClassName(js_Boot.getClass(this)) + ": " + this.message + " at line " + this.lineNumber + " char " + this.positionAtLine;
 	}
 	,__class__: haxe_xml_XmlParserException
@@ -36874,7 +41194,10 @@ var haxe_zip__$InflateImpl_Window = function(hasCrc) {
 $hxClasses["haxe.zip._InflateImpl.Window"] = haxe_zip__$InflateImpl_Window;
 haxe_zip__$InflateImpl_Window.__name__ = ["haxe","zip","_InflateImpl","Window"];
 haxe_zip__$InflateImpl_Window.prototype = {
-	slide: function() {
+	buffer: null
+	,pos: null
+	,crc: null
+	,slide: function() {
 		if(this.crc != null) {
 			this.crc.update(this.buffer,0,32768);
 		}
@@ -36984,7 +41307,22 @@ haxe_zip_InflateImpl.run = function(i,bufsize) {
 	return output.getBytes();
 };
 haxe_zip_InflateImpl.prototype = {
-	buildFixedHuffman: function() {
+	nbits: null
+	,bits: null
+	,state: null
+	,final: null
+	,huffman: null
+	,huffdist: null
+	,htools: null
+	,len: null
+	,dist: null
+	,needed: null
+	,output: null
+	,outpos: null
+	,input: null
+	,lengths: null
+	,window: null
+	,buildFixedHuffman: function() {
 		if(haxe_zip_InflateImpl.FIXED_HUFFMAN != null) {
 			return haxe_zip_InflateImpl.FIXED_HUFFMAN;
 		}
@@ -37275,7 +41613,12 @@ var hxbit_ConvertField = function(from,to) {
 $hxClasses["hxbit.ConvertField"] = hxbit_ConvertField;
 hxbit_ConvertField.__name__ = ["hxbit","ConvertField"];
 hxbit_ConvertField.prototype = {
-	__class__: hxbit_ConvertField
+	index: null
+	,same: null
+	,defaultValue: null
+	,from: null
+	,to: null
+	,__class__: hxbit_ConvertField
 };
 var hxbit_Convert = function(ourSchema,schema) {
 	var ourMap = new haxe_ds_StringMap();
@@ -37500,7 +41843,9 @@ hxbit_Convert.getDefault = function(t) {
 	}
 };
 hxbit_Convert.prototype = {
-	toString: function() {
+	read: null
+	,write: null
+	,toString: function() {
 		var _g = [];
 		var _g2 = 0;
 		var _g1 = this.write.length;
@@ -37577,7 +41922,10 @@ $hxClasses["hxbit.Schema"] = hxbit_Schema;
 hxbit_Schema.__name__ = ["hxbit","Schema"];
 hxbit_Schema.__interfaces__ = [hxbit_Serializable];
 hxbit_Schema.prototype = {
-	get_checkSum: function() {
+	isFinal: null
+	,fieldsNames: null
+	,fieldsTypes: null
+	,get_checkSum: function() {
 		var s = new hxbit_Serializer();
 		s.begin();
 		var old = this.__uid;
@@ -37587,6 +41935,7 @@ hxbit_Schema.prototype = {
 		var bytes = s.end();
 		return haxe_crypto_Crc32.make(bytes);
 	}
+	,__uid: null
 	,getCLID: function() {
 		return hxbit_Schema.__clid;
 	}
@@ -38188,7 +42537,10 @@ hxd_BitmapData.fromNative = function(data) {
 	return b;
 };
 hxd_BitmapData.prototype = {
-	clear: function(color) {
+	ctx: null
+	,lockImage: null
+	,pixel: null
+	,clear: function(color) {
 		this.fill(0,0,this.ctx.canvas.width,this.ctx.canvas.height,color);
 	}
 	,fill: function(x,y,width,height,color) {
@@ -38435,7 +42787,8 @@ hxd_Charset.getDefault = function() {
 	return hxd_Charset.inst;
 };
 hxd_Charset.prototype = {
-	resolveChar: function(code,glyphs) {
+	map: null
+	,resolveChar: function(code,glyphs) {
 		var c = code;
 		while(c != null) {
 			var g = glyphs.h[c];
@@ -38496,7 +42849,12 @@ var hxd_CustomCursor = function(frames,speed,offsetX,offsetY) {
 $hxClasses["hxd.CustomCursor"] = hxd_CustomCursor;
 hxd_CustomCursor.__name__ = ["hxd","CustomCursor"];
 hxd_CustomCursor.prototype = {
-	dispose: function() {
+	frames: null
+	,speed: null
+	,offsetX: null
+	,offsetY: null
+	,alloc: null
+	,dispose: function() {
 		var _g = 0;
 		var _g1 = this.frames;
 		while(_g < _g1.length) {
@@ -38568,7 +42926,18 @@ var hxd_Event = function(k,x,y) {
 $hxClasses["hxd.Event"] = hxd_Event;
 hxd_Event.__name__ = ["hxd","Event"];
 hxd_Event.prototype = {
-	toString: function() {
+	kind: null
+	,relX: null
+	,relY: null
+	,relZ: null
+	,propagate: null
+	,cancel: null
+	,button: null
+	,touchId: null
+	,keyCode: null
+	,charCode: null
+	,wheelDelta: null
+	,toString: function() {
 		var tmp = Std.string(this.kind) + "[" + (this.relX | 0) + "," + (this.relY | 0) + "]";
 		var _g = this.kind;
 		var tmp1;
@@ -38592,6 +42961,49 @@ hxd_Event.prototype = {
 		return tmp + tmp1;
 	}
 	,__class__: hxd_Event
+};
+var hxd_File = function() { };
+$hxClasses["hxd.File"] = hxd_File;
+hxd_File.__name__ = ["hxd","File"];
+hxd_File.browse = function(onSelect,options) {
+	if(options == null) {
+		options = { };
+	}
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File.saveAs = function(dataContent,options) {
+	if(options == null) {
+		options = { };
+	}
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File.exists = function(path) {
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File["delete"] = function(path) {
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File.listDirectory = function(path) {
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File.getBytes = function(path) {
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File.saveBytes = function(path,data) {
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File.load = function(path,onLoad,onError) {
+	if(onError == null) {
+		onError = function(_) {
+		};
+	}
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File.createDirectory = function(path) {
+	throw new js__$Boot_HaxeError("Not supported");
+};
+hxd_File.applicationPath = function() {
+	throw new js__$Boot_HaxeError("Not supported");
 };
 var hxd__$FloatBuffer_Float32Expand_$Impl_$ = {};
 $hxClasses["hxd._FloatBuffer.Float32Expand_Impl_"] = hxd__$FloatBuffer_Float32Expand_$Impl_$;
@@ -38651,7 +43063,10 @@ var hxd__$FloatBuffer_InnerIterator = function(b) {
 $hxClasses["hxd._FloatBuffer.InnerIterator"] = hxd__$FloatBuffer_InnerIterator;
 hxd__$FloatBuffer_InnerIterator.__name__ = ["hxd","_FloatBuffer","InnerIterator"];
 hxd__$FloatBuffer_InnerIterator.prototype = {
-	hasNext: function() {
+	b: null
+	,len: null
+	,pos: null
+	,hasNext: function() {
 		return this.pos < this.len;
 	}
 	,next: function() {
@@ -38729,7 +43144,10 @@ var hxd__$IndexBuffer_InnerIterator = function(b) {
 $hxClasses["hxd._IndexBuffer.InnerIterator"] = hxd__$IndexBuffer_InnerIterator;
 hxd__$IndexBuffer_InnerIterator.__name__ = ["hxd","_IndexBuffer","InnerIterator"];
 hxd__$IndexBuffer_InnerIterator.prototype = {
-	hasNext: function() {
+	b: null
+	,len: null
+	,pos: null
+	,hasNext: function() {
 		return this.pos < this.len;
 	}
 	,next: function() {
@@ -39176,7 +43594,14 @@ hxd_Pixels.alloc = function(width,height,format) {
 	return new hxd_Pixels(width,height,hxd_impl_Tmp.getBytes(width * height * hxd_Pixels.bytesPerPixel(format)),format);
 };
 hxd_Pixels.prototype = {
-	get_format: function() {
+	bytes: null
+	,width: null
+	,height: null
+	,offset: null
+	,flags: null
+	,bpp: null
+	,innerFormat: null
+	,get_format: function() {
 		return this.innerFormat;
 	}
 	,set_innerFormat: function(fmt) {
@@ -39624,17 +44049,105 @@ hxd_Pixels.prototype = {
 	}
 	,__class__: hxd_Pixels
 };
-var hxd_Res = function() { };
-$hxClasses["hxd.Res"] = hxd_Res;
-hxd_Res.__name__ = ["hxd","Res"];
-hxd_Res.load = function(name) {
-	return hxd_Res.get_loader().load(name);
+var hxd_Rand = function(seed) {
+	this.init(seed);
 };
-hxd_Res.get_loader = function() {
-	return hxd_res_Loader.currentInstance;
+$hxClasses["hxd.Rand"] = hxd_Rand;
+hxd_Rand.__name__ = ["hxd","Rand"];
+hxd_Rand.hash = function(n,seed) {
+	if(seed == null) {
+		seed = 5381;
+	}
+	var n1 = n;
+	n1 = haxe__$Int32_Int32_$Impl_$._mul(n1,-862048943);
+	n1 = n1 << 15 | n1 >>> 17;
+	n1 = haxe__$Int32_Int32_$Impl_$._mul(n1,461845907);
+	var h = seed;
+	h = h ^ n1;
+	h = h << 13 | h >>> 19;
+	h = haxe__$Int32_Int32_$Impl_$._mul(h,5) + -430675100 | 0;
+	h = h ^ h >> 16;
+	h = haxe__$Int32_Int32_$Impl_$._mul(h,-2048144789);
+	h = h ^ h >> 13;
+	h = haxe__$Int32_Int32_$Impl_$._mul(h,-1028477387);
+	h = h ^ h >> 16;
+	return h;
 };
-hxd_Res.set_loader = function(l) {
-	return hxd_res_Loader.currentInstance = l;
+hxd_Rand.inlineHash = function(n,seed) {
+	var n1 = n;
+	n1 = haxe__$Int32_Int32_$Impl_$._mul(n1,-862048943);
+	n1 = n1 << 15 | n1 >>> 17;
+	n1 = haxe__$Int32_Int32_$Impl_$._mul(n1,461845907);
+	var h = seed;
+	h = h ^ n1;
+	h = h << 13 | h >>> 19;
+	h = haxe__$Int32_Int32_$Impl_$._mul(h,5) + -430675100 | 0;
+	h = h ^ h >> 16;
+	h = haxe__$Int32_Int32_$Impl_$._mul(h,-2048144789);
+	h = h ^ h >> 13;
+	h = haxe__$Int32_Int32_$Impl_$._mul(h,-1028477387);
+	h = h ^ h >> 16;
+	return h;
+};
+hxd_Rand.prototype = {
+	seed: null
+	,seed2: null
+	,init: function(seed) {
+		this.seed = seed;
+		this.seed2 = hxd_Rand.hash(seed);
+		if(this.seed == 0) {
+			this.seed = 1;
+		}
+		if(this.seed2 == 0) {
+			this.seed2 = 1;
+		}
+	}
+	,random: function(n) {
+		this.seed = 36969 * (this.seed & 65535) + (this.seed >> 16);
+		this.seed2 = 18000 * (this.seed2 & 65535) + (this.seed2 >> 16);
+		return (((this.seed << 16) + this.seed2 | 0) & 1073741823) % n;
+	}
+	,shuffle: function(a) {
+		var len = a.length;
+		var _g1 = 0;
+		var _g = len;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this.seed = 36969 * (this.seed & 65535) + (this.seed >> 16);
+			this.seed2 = 18000 * (this.seed2 & 65535) + (this.seed2 >> 16);
+			var x = (((this.seed << 16) + this.seed2 | 0) & 1073741823) % len;
+			this.seed = 36969 * (this.seed & 65535) + (this.seed >> 16);
+			this.seed2 = 18000 * (this.seed2 & 65535) + (this.seed2 >> 16);
+			var y = (((this.seed << 16) + this.seed2 | 0) & 1073741823) % len;
+			var tmp = a[x];
+			a[x] = a[y];
+			a[y] = tmp;
+		}
+	}
+	,rand: function() {
+		this.seed = 36969 * (this.seed & 65535) + (this.seed >> 16);
+		this.seed2 = 18000 * (this.seed2 & 65535) + (this.seed2 >> 16);
+		return (((this.seed << 16) + this.seed2 | 0) & 1073741823) % 10007 / 10007.0;
+	}
+	,srand: function(scale) {
+		if(scale == null) {
+			scale = 1.0;
+		}
+		this.seed = 36969 * (this.seed & 65535) + (this.seed >> 16);
+		this.seed2 = 18000 * (this.seed2 & 65535) + (this.seed2 >> 16);
+		return ((this.seed << 16) + this.seed2 | 0) % 10007 / 10007.0 * scale;
+	}
+	,int: function() {
+		this.seed = 36969 * (this.seed & 65535) + (this.seed >> 16);
+		this.seed2 = 18000 * (this.seed2 & 65535) + (this.seed2 >> 16);
+		return (this.seed << 16) + this.seed2 | 0;
+	}
+	,uint: function() {
+		this.seed = 36969 * (this.seed & 65535) + (this.seed >> 16);
+		this.seed2 = 18000 * (this.seed2 & 65535) + (this.seed2 >> 16);
+		return ((this.seed << 16) + this.seed2 | 0) & 1073741823;
+	}
+	,__class__: hxd_Rand
 };
 var hxd_SceneEvents = function(stage) {
 	this.onOut = new hxd_Event(hxd_EventKind.EOut);
@@ -39655,7 +44168,20 @@ var hxd_SceneEvents = function(stage) {
 $hxClasses["hxd.SceneEvents"] = hxd_SceneEvents;
 hxd_SceneEvents.__name__ = ["hxd","SceneEvents"];
 hxd_SceneEvents.prototype = {
-	onRemove: function(i) {
+	stage: null
+	,scenes: null
+	,currentOver: null
+	,currentFocus: null
+	,pendingEvents: null
+	,pushList: null
+	,currentDrag: null
+	,mouseX: null
+	,mouseY: null
+	,lastTouch: null
+	,focusLost: null
+	,checkPos: null
+	,onOut: null
+	,onRemove: function(i) {
 		if(i == this.currentFocus) {
 			this.currentFocus = null;
 		}
@@ -40009,7 +44535,17 @@ hxd_Stage.getInstance = function() {
 	return hxd_Stage.inst;
 };
 hxd_Stage.prototype = {
-	checkResize: function() {
+	resizeEvents: null
+	,eventTargets: null
+	,curMouseX: null
+	,curMouseY: null
+	,canvas: null
+	,element: null
+	,canvasPos: null
+	,timer: null
+	,curW: null
+	,curH: null
+	,checkResize: function() {
 		this.canvasPos = this.canvas.getBoundingClientRect();
 		var cw = this.get_width();
 		var ch = this.get_height();
@@ -40364,22 +44900,22 @@ hxd_Timer.reset = function() {
 	hxd_Timer.oldTime = new Date().getTime() / 1000;
 	hxd_Timer.calc_tmod = 1.;
 };
-var hxd_res_Embed = function() { };
-$hxClasses["hxd.res.Embed"] = hxd_res_Embed;
-hxd_res_Embed.__name__ = ["hxd","res","Embed"];
-var hxd__$res_R_$trueTypeFont_$ttf = function() { };
-$hxClasses["hxd._res.R_trueTypeFont_ttf"] = hxd__$res_R_$trueTypeFont_$ttf;
-hxd__$res_R_$trueTypeFont_$ttf.__name__ = ["hxd","_res","R_trueTypeFont_ttf"];
-hxd__$res_R_$trueTypeFont_$ttf.__super__ = hxd_res_Embed;
-hxd__$res_R_$trueTypeFont_$ttf.prototype = $extend(hxd_res_Embed.prototype,{
-	__class__: hxd__$res_R_$trueTypeFont_$ttf
-});
 var hxd_earcut_EarNode = function() {
 };
 $hxClasses["hxd.earcut.EarNode"] = hxd_earcut_EarNode;
 hxd_earcut_EarNode.__name__ = ["hxd","earcut","EarNode"];
 hxd_earcut_EarNode.prototype = {
-	__class__: hxd_earcut_EarNode
+	next: null
+	,prev: null
+	,nextZ: null
+	,prevZ: null
+	,allocNext: null
+	,x: null
+	,y: null
+	,i: null
+	,z: null
+	,steiner: null
+	,__class__: hxd_earcut_EarNode
 };
 var hxd_earcut_Earcut = function() {
 };
@@ -40608,6 +45144,13 @@ hxd_earcut_Earcut.prototype = {
 		node.next.prev = node;
 		return node;
 	}
+	,triangles: null
+	,cache: null
+	,allocated: null
+	,minX: null
+	,minY: null
+	,size: null
+	,hasSize: null
 	,triangulateNode: function(root,useZOrder) {
 		this.triangles = [];
 		root = this.filterPoints(root);
@@ -41431,14 +45974,23 @@ var hxd_fmt_grd_Gradient = function() {
 $hxClasses["hxd.fmt.grd.Gradient"] = hxd_fmt_grd_Gradient;
 hxd_fmt_grd_Gradient.__name__ = ["hxd","fmt","grd","Gradient"];
 hxd_fmt_grd_Gradient.prototype = {
-	__class__: hxd_fmt_grd_Gradient
+	name: null
+	,interpolation: null
+	,colorStops: null
+	,transparencyStops: null
+	,gradientStops: null
+	,__class__: hxd_fmt_grd_Gradient
 };
 var hxd_fmt_grd_ColorStop = function() {
 };
 $hxClasses["hxd.fmt.grd.ColorStop"] = hxd_fmt_grd_ColorStop;
 hxd_fmt_grd_ColorStop.__name__ = ["hxd","fmt","grd","ColorStop"];
 hxd_fmt_grd_ColorStop.prototype = {
-	__class__: hxd_fmt_grd_ColorStop
+	color: null
+	,location: null
+	,midpoint: null
+	,type: null
+	,__class__: hxd_fmt_grd_ColorStop
 };
 var hxd_fmt_grd_ColorStopType = $hxClasses["hxd.fmt.grd.ColorStopType"] = { __ename__ : true, __constructs__ : ["User","Background","Foreground"] };
 hxd_fmt_grd_ColorStopType.User = ["User",0];
@@ -41456,7 +46008,10 @@ var hxd_fmt_grd_TransparencyStop = function() {
 $hxClasses["hxd.fmt.grd.TransparencyStop"] = hxd_fmt_grd_TransparencyStop;
 hxd_fmt_grd_TransparencyStop.__name__ = ["hxd","fmt","grd","TransparencyStop"];
 hxd_fmt_grd_TransparencyStop.prototype = {
-	__class__: hxd_fmt_grd_TransparencyStop
+	opacity: null
+	,location: null
+	,midpoint: null
+	,__class__: hxd_fmt_grd_TransparencyStop
 };
 var hxd_fmt_grd_Color = $hxClasses["hxd.fmt.grd.Color"] = { __ename__ : true, __constructs__ : ["RGB","HSB"] };
 hxd_fmt_grd_Color.RGB = function(r,g,b) { var $x = ["RGB",0,r,g,b]; $x.__enum__ = hxd_fmt_grd_Color; $x.toString = $estr; return $x; };
@@ -41467,7 +46022,9 @@ var hxd_fmt_grd_GradientStop = function() {
 $hxClasses["hxd.fmt.grd.GradientStop"] = hxd_fmt_grd_GradientStop;
 hxd_fmt_grd_GradientStop.__name__ = ["hxd","fmt","grd","GradientStop"];
 hxd_fmt_grd_GradientStop.prototype = {
-	__class__: hxd_fmt_grd_GradientStop
+	opacity: null
+	,colorStop: null
+	,__class__: hxd_fmt_grd_GradientStop
 };
 var hxd_fmt_grd_Data = function() {
 	haxe_ds_StringMap.call(this);
@@ -41485,7 +46042,9 @@ var hxd_fmt_grd_Reader = function(i) {
 $hxClasses["hxd.fmt.grd.Reader"] = hxd_fmt_grd_Reader;
 hxd_fmt_grd_Reader.__name__ = ["hxd","fmt","grd","Reader"];
 hxd_fmt_grd_Reader.prototype = {
-	readUnicode: function(input,len) {
+	i: null
+	,version: null
+	,readUnicode: function(input,len) {
 		var res = "";
 		var _g1 = 0;
 		var _g = len - 1;
@@ -41753,7 +46312,16 @@ var hxd_fmt_hmd_Position = function() {
 $hxClasses["hxd.fmt.hmd.Position"] = hxd_fmt_hmd_Position;
 hxd_fmt_hmd_Position.__name__ = ["hxd","fmt","hmd","Position"];
 hxd_fmt_hmd_Position.prototype = {
-	loadQuaternion: function(q) {
+	x: null
+	,y: null
+	,z: null
+	,qx: null
+	,qy: null
+	,qz: null
+	,sx: null
+	,sy: null
+	,sz: null
+	,loadQuaternion: function(q) {
 		q.x = this.qx;
 		q.y = this.qy;
 		q.z = this.qz;
@@ -41804,14 +46372,24 @@ var hxd_fmt_hmd_GeometryFormat = function(name,format) {
 $hxClasses["hxd.fmt.hmd.GeometryFormat"] = hxd_fmt_hmd_GeometryFormat;
 hxd_fmt_hmd_GeometryFormat.__name__ = ["hxd","fmt","hmd","GeometryFormat"];
 hxd_fmt_hmd_GeometryFormat.prototype = {
-	__class__: hxd_fmt_hmd_GeometryFormat
+	name: null
+	,format: null
+	,__class__: hxd_fmt_hmd_GeometryFormat
 };
 var hxd_fmt_hmd_Geometry = function() {
 };
 $hxClasses["hxd.fmt.hmd.Geometry"] = hxd_fmt_hmd_Geometry;
 hxd_fmt_hmd_Geometry.__name__ = ["hxd","fmt","hmd","Geometry"];
 hxd_fmt_hmd_Geometry.prototype = {
-	get_indexCount: function() {
+	props: null
+	,vertexCount: null
+	,vertexStride: null
+	,vertexFormat: null
+	,vertexPosition: null
+	,indexCounts: null
+	,indexPosition: null
+	,bounds: null
+	,get_indexCount: function() {
 		var k = 0;
 		var _g = 0;
 		var _g1 = this.indexCounts;
@@ -41846,35 +46424,62 @@ var hxd_fmt_hmd_Material = function() {
 $hxClasses["hxd.fmt.hmd.Material"] = hxd_fmt_hmd_Material;
 hxd_fmt_hmd_Material.__name__ = ["hxd","fmt","hmd","Material"];
 hxd_fmt_hmd_Material.prototype = {
-	__class__: hxd_fmt_hmd_Material
+	name: null
+	,props: null
+	,diffuseTexture: null
+	,blendMode: null
+	,culling: null
+	,killAlpha: null
+	,flags: null
+	,__class__: hxd_fmt_hmd_Material
 };
 var hxd_fmt_hmd_SkinJoint = function() {
 };
 $hxClasses["hxd.fmt.hmd.SkinJoint"] = hxd_fmt_hmd_SkinJoint;
 hxd_fmt_hmd_SkinJoint.__name__ = ["hxd","fmt","hmd","SkinJoint"];
 hxd_fmt_hmd_SkinJoint.prototype = {
-	__class__: hxd_fmt_hmd_SkinJoint
+	name: null
+	,props: null
+	,parent: null
+	,position: null
+	,bind: null
+	,transpos: null
+	,__class__: hxd_fmt_hmd_SkinJoint
 };
 var hxd_fmt_hmd_SkinSplit = function() {
 };
 $hxClasses["hxd.fmt.hmd.SkinSplit"] = hxd_fmt_hmd_SkinSplit;
 hxd_fmt_hmd_SkinSplit.__name__ = ["hxd","fmt","hmd","SkinSplit"];
 hxd_fmt_hmd_SkinSplit.prototype = {
-	__class__: hxd_fmt_hmd_SkinSplit
+	materialIndex: null
+	,joints: null
+	,__class__: hxd_fmt_hmd_SkinSplit
 };
 var hxd_fmt_hmd_Skin = function() {
 };
 $hxClasses["hxd.fmt.hmd.Skin"] = hxd_fmt_hmd_Skin;
 hxd_fmt_hmd_Skin.__name__ = ["hxd","fmt","hmd","Skin"];
 hxd_fmt_hmd_Skin.prototype = {
-	__class__: hxd_fmt_hmd_Skin
+	name: null
+	,props: null
+	,joints: null
+	,split: null
+	,__class__: hxd_fmt_hmd_Skin
 };
 var hxd_fmt_hmd_Model = function() {
 };
 $hxClasses["hxd.fmt.hmd.Model"] = hxd_fmt_hmd_Model;
 hxd_fmt_hmd_Model.__name__ = ["hxd","fmt","hmd","Model"];
 hxd_fmt_hmd_Model.prototype = {
-	__class__: hxd_fmt_hmd_Model
+	name: null
+	,props: null
+	,parent: null
+	,follow: null
+	,position: null
+	,geometry: null
+	,materials: null
+	,skin: null
+	,__class__: hxd_fmt_hmd_Model
 };
 var hxd_fmt_hmd_AnimationFlag = $hxClasses["hxd.fmt.hmd.AnimationFlag"] = { __ename__ : true, __constructs__ : ["HasPosition","HasRotation","HasScale","HasUV","HasAlpha","SinglePosition","HasProps","Reserved"] };
 hxd_fmt_hmd_AnimationFlag.HasPosition = ["HasPosition",0];
@@ -41907,28 +46512,50 @@ var hxd_fmt_hmd_AnimationObject = function() {
 $hxClasses["hxd.fmt.hmd.AnimationObject"] = hxd_fmt_hmd_AnimationObject;
 hxd_fmt_hmd_AnimationObject.__name__ = ["hxd","fmt","hmd","AnimationObject"];
 hxd_fmt_hmd_AnimationObject.prototype = {
-	__class__: hxd_fmt_hmd_AnimationObject
+	name: null
+	,flags: null
+	,props: null
+	,__class__: hxd_fmt_hmd_AnimationObject
 };
 var hxd_fmt_hmd_AnimationEvent = function() {
 };
 $hxClasses["hxd.fmt.hmd.AnimationEvent"] = hxd_fmt_hmd_AnimationEvent;
 hxd_fmt_hmd_AnimationEvent.__name__ = ["hxd","fmt","hmd","AnimationEvent"];
 hxd_fmt_hmd_AnimationEvent.prototype = {
-	__class__: hxd_fmt_hmd_AnimationEvent
+	frame: null
+	,data: null
+	,__class__: hxd_fmt_hmd_AnimationEvent
 };
 var hxd_fmt_hmd_Animation = function() {
 };
 $hxClasses["hxd.fmt.hmd.Animation"] = hxd_fmt_hmd_Animation;
 hxd_fmt_hmd_Animation.__name__ = ["hxd","fmt","hmd","Animation"];
 hxd_fmt_hmd_Animation.prototype = {
-	__class__: hxd_fmt_hmd_Animation
+	name: null
+	,props: null
+	,frames: null
+	,sampling: null
+	,speed: null
+	,loop: null
+	,objects: null
+	,events: null
+	,dataPosition: null
+	,__class__: hxd_fmt_hmd_Animation
 };
 var hxd_fmt_hmd_Data = function() {
 };
 $hxClasses["hxd.fmt.hmd.Data"] = hxd_fmt_hmd_Data;
 hxd_fmt_hmd_Data.__name__ = ["hxd","fmt","hmd","Data"];
 hxd_fmt_hmd_Data.prototype = {
-	__class__: hxd_fmt_hmd_Data
+	version: null
+	,props: null
+	,geometries: null
+	,materials: null
+	,models: null
+	,animations: null
+	,dataPosition: null
+	,data: null
+	,__class__: hxd_fmt_hmd_Data
 };
 var hxd_fmt_hmd__$Library_FormatMap = function(size,offset,def,next) {
 	this.size = size;
@@ -41939,14 +46566,20 @@ var hxd_fmt_hmd__$Library_FormatMap = function(size,offset,def,next) {
 $hxClasses["hxd.fmt.hmd._Library.FormatMap"] = hxd_fmt_hmd__$Library_FormatMap;
 hxd_fmt_hmd__$Library_FormatMap.__name__ = ["hxd","fmt","hmd","_Library","FormatMap"];
 hxd_fmt_hmd__$Library_FormatMap.prototype = {
-	__class__: hxd_fmt_hmd__$Library_FormatMap
+	size: null
+	,offset: null
+	,def: null
+	,next: null
+	,__class__: hxd_fmt_hmd__$Library_FormatMap
 };
 var hxd_fmt_hmd_GeometryBuffer = function() {
 };
 $hxClasses["hxd.fmt.hmd.GeometryBuffer"] = hxd_fmt_hmd_GeometryBuffer;
 hxd_fmt_hmd_GeometryBuffer.__name__ = ["hxd","fmt","hmd","GeometryBuffer"];
 hxd_fmt_hmd_GeometryBuffer.prototype = {
-	__class__: hxd_fmt_hmd_GeometryBuffer
+	vertexes: null
+	,indexes: null
+	,__class__: hxd_fmt_hmd_GeometryBuffer
 };
 var hxd_fmt_hmd_Library = function(entry,header) {
 	this.tmp = new haxe_io_Bytes(new ArrayBuffer(4));
@@ -41959,7 +46592,13 @@ var hxd_fmt_hmd_Library = function(entry,header) {
 $hxClasses["hxd.fmt.hmd.Library"] = hxd_fmt_hmd_Library;
 hxd_fmt_hmd_Library.__name__ = ["hxd","fmt","hmd","Library"];
 hxd_fmt_hmd_Library.prototype = {
-	getData: function() {
+	header: null
+	,entry: null
+	,cachedPrimitives: null
+	,cachedAnimations: null
+	,cachedSkin: null
+	,tmp: null
+	,getData: function() {
 		var b = new haxe_io_Bytes(new ArrayBuffer(this.entry.get_size() - this.header.dataPosition));
 		this.entry.open();
 		this.entry.skip(this.header.dataPosition);
@@ -42832,7 +47471,9 @@ var hxd_fmt_hmd_Reader = function(i) {
 $hxClasses["hxd.fmt.hmd.Reader"] = hxd_fmt_hmd_Reader;
 hxd_fmt_hmd_Reader.__name__ = ["hxd","fmt","hmd","Reader"];
 hxd_fmt_hmd_Reader.prototype = {
-	readProperty: function() {
+	i: null
+	,version: null
+	,readProperty: function() {
 		var _g = this.i.readByte();
 		switch(_g) {
 		case 0:
@@ -43107,7 +47748,8 @@ var hxd_fs_FileEntry = function() { };
 $hxClasses["hxd.fs.FileEntry"] = hxd_fs_FileEntry;
 hxd_fs_FileEntry.__name__ = ["hxd","fs","FileEntry"];
 hxd_fs_FileEntry.prototype = {
-	getSign: function() {
+	name: null
+	,getSign: function() {
 		return 0;
 	}
 	,getBytes: function() {
@@ -43187,7 +47829,10 @@ $hxClasses["hxd.fs.BytesFileEntry"] = hxd_fs_BytesFileEntry;
 hxd_fs_BytesFileEntry.__name__ = ["hxd","fs","BytesFileEntry"];
 hxd_fs_BytesFileEntry.__super__ = hxd_fs_FileEntry;
 hxd_fs_BytesFileEntry.prototype = $extend(hxd_fs_FileEntry.prototype,{
-	get_path: function() {
+	fullPath: null
+	,bytes: null
+	,pos: null
+	,get_path: function() {
 		return this.fullPath;
 	}
 	,getSign: function() {
@@ -43235,7 +47880,11 @@ var hxd_fs_FileSystem = function() { };
 $hxClasses["hxd.fs.FileSystem"] = hxd_fs_FileSystem;
 hxd_fs_FileSystem.__name__ = ["hxd","fs","FileSystem"];
 hxd_fs_FileSystem.prototype = {
-	__class__: hxd_fs_FileSystem
+	getRoot: null
+	,get: null
+	,exists: null
+	,dispose: null
+	,__class__: hxd_fs_FileSystem
 };
 var hxd_fs_BytesFileSystem = function() {
 };
@@ -43263,195 +47912,6 @@ hxd_fs_BytesFileSystem.prototype = {
 	}
 	,__class__: hxd_fs_BytesFileSystem
 };
-var hxd_fs__$EmbedFileSystem_EmbedEntry = function(fs,name,relPath,data) {
-	this.fs = fs;
-	this.name = name;
-	this.relPath = relPath;
-	this.data = data;
-};
-$hxClasses["hxd.fs._EmbedFileSystem.EmbedEntry"] = hxd_fs__$EmbedFileSystem_EmbedEntry;
-hxd_fs__$EmbedFileSystem_EmbedEntry.__name__ = ["hxd","fs","_EmbedFileSystem","EmbedEntry"];
-hxd_fs__$EmbedFileSystem_EmbedEntry.__super__ = hxd_fs_FileEntry;
-hxd_fs__$EmbedFileSystem_EmbedEntry.prototype = $extend(hxd_fs_FileEntry.prototype,{
-	getSign: function() {
-		var old = this.readPos;
-		this.open();
-		this.readPos = old;
-		return this.bytes.b[0] | this.bytes.b[1] << 8 | this.bytes.b[2] << 16 | this.bytes.b[3] << 24;
-	}
-	,getBytes: function() {
-		if(this.bytes == null) {
-			this.open();
-		}
-		return this.bytes;
-	}
-	,open: function() {
-		if(this.bytes == null) {
-			this.bytes = haxe_Resource.getBytes(this.data);
-			if(this.bytes == null) {
-				throw new js__$Boot_HaxeError("Missing resource " + this.data);
-			}
-		}
-		this.readPos = 0;
-	}
-	,skip: function(nbytes) {
-		this.readPos += nbytes;
-	}
-	,readByte: function() {
-		return this.bytes.b[this.readPos++];
-	}
-	,read: function(out,pos,size) {
-		out.blit(pos,this.bytes,this.readPos,size);
-		this.readPos += size;
-	}
-	,close: function() {
-		this.bytes = null;
-		this.readPos = 0;
-	}
-	,load: function(onReady) {
-		if(onReady != null) {
-			haxe_Timer.delay(onReady,1);
-		}
-	}
-	,loadBitmap: function(onLoaded) {
-		var rawData = null;
-		var _g = 0;
-		var _g1 = haxe_Resource.content;
-		while(_g < _g1.length) {
-			var res = _g1[_g];
-			++_g;
-			if(res.name == this.data) {
-				rawData = res.data;
-				break;
-			}
-		}
-		if(rawData == null) {
-			throw new js__$Boot_HaxeError("Missing resource " + this.data);
-		}
-		var image = new Image();
-		image.onload = function(_) {
-			var this1 = image;
-			onLoaded(this1);
-		};
-		var extra = "";
-		var bytes = rawData.length * 6 >> 3;
-		var _g11 = 0;
-		var _g2 = (3 - bytes * 4 % 3) % 3;
-		while(_g11 < _g2) {
-			var i = _g11++;
-			extra += "=";
-		}
-		var tmp = "data:image/" + this.get_extension() + ";base64," + rawData;
-		image.src = tmp + extra;
-	}
-	,get_isDirectory: function() {
-		return this.fs.isDirectory(this.relPath);
-	}
-	,get_path: function() {
-		if(this.relPath == ".") {
-			return "<root>";
-		} else {
-			return this.relPath;
-		}
-	}
-	,exists: function(name) {
-		return this.fs.exists(this.relPath == "." ? name : this.relPath + "/" + name);
-	}
-	,get: function(name) {
-		return this.fs.get(this.relPath == "." ? name : this.relPath + "/" + name);
-	}
-	,get_size: function() {
-		this.open();
-		return this.bytes.length;
-	}
-	,iterator: function() {
-		return new hxd_impl_ArrayIterator_$hxd_$fs_$FileEntry(this.fs.subFiles(this.relPath));
-	}
-	,__class__: hxd_fs__$EmbedFileSystem_EmbedEntry
-});
-var hxd_fs_EmbedFileSystem = function(root) {
-	this.root = root;
-};
-$hxClasses["hxd.fs.EmbedFileSystem"] = hxd_fs_EmbedFileSystem;
-hxd_fs_EmbedFileSystem.__name__ = ["hxd","fs","EmbedFileSystem"];
-hxd_fs_EmbedFileSystem.__interfaces__ = [hxd_fs_FileSystem];
-hxd_fs_EmbedFileSystem.resolve = function(path) {
-	return "R_" + path.replace(hxd_fs_EmbedFileSystem.invalidChars.r,"_");
-};
-hxd_fs_EmbedFileSystem.prototype = {
-	getRoot: function() {
-		return new hxd_fs__$EmbedFileSystem_EmbedEntry(this,"root",".",null);
-	}
-	,splitPath: function(path) {
-		if(path == ".") {
-			return [];
-		} else {
-			return path.split("/");
-		}
-	}
-	,subFiles: function(path) {
-		var r = this.root;
-		var _g = 0;
-		var _g1 = this.splitPath(path);
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			r = Reflect.field(r,p);
-		}
-		if(r == null) {
-			throw new js__$Boot_HaxeError(path + " is not a directory");
-		}
-		var fields = Reflect.fields(r);
-		fields.sort(Reflect.compare);
-		var _g2 = [];
-		var _g11 = 0;
-		while(_g11 < fields.length) {
-			var name = fields[_g11];
-			++_g11;
-			_g2.push(this.get(path == "." ? name : path + "/" + name));
-		}
-		return _g2;
-	}
-	,isDirectory: function(path) {
-		var r = this.root;
-		var _g = 0;
-		var _g1 = this.splitPath(path);
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			r = Reflect.field(r,p);
-		}
-		if(r != null) {
-			return r != true;
-		} else {
-			return false;
-		}
-	}
-	,exists: function(path) {
-		var r = this.root;
-		var _g = 0;
-		var _g1 = this.splitPath(path);
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			r = Reflect.field(r,p);
-			if(r == null) {
-				return false;
-			}
-		}
-		return true;
-	}
-	,get: function(path) {
-		if(!this.exists(path)) {
-			throw new js__$Boot_HaxeError(new hxd_fs_NotFound(path));
-		}
-		var id = hxd_fs_EmbedFileSystem.resolve(path);
-		return new hxd_fs__$EmbedFileSystem_EmbedEntry(this,path.split("/").pop(),path,id);
-	}
-	,dispose: function() {
-	}
-	,__class__: hxd_fs_EmbedFileSystem
-};
 var hxd_fs_FileInput = function(f) {
 	this.f = f;
 	f.open();
@@ -43460,7 +47920,8 @@ $hxClasses["hxd.fs.FileInput"] = hxd_fs_FileInput;
 hxd_fs_FileInput.__name__ = ["hxd","fs","FileInput"];
 hxd_fs_FileInput.__super__ = haxe_io_Input;
 hxd_fs_FileInput.prototype = $extend(haxe_io_Input.prototype,{
-	skip: function(nbytes) {
+	f: null
+	,skip: function(nbytes) {
 		this.f.skip(nbytes);
 	}
 	,readByte: function() {
@@ -43496,7 +47957,8 @@ var hxd_fs_NotFound = function(path) {
 $hxClasses["hxd.fs.NotFound"] = hxd_fs_NotFound;
 hxd_fs_NotFound.__name__ = ["hxd","fs","NotFound"];
 hxd_fs_NotFound.prototype = {
-	toString: function() {
+	path: null
+	,toString: function() {
 		return "Resource file not found '" + this.path + "'";
 	}
 	,__class__: hxd_fs_NotFound
@@ -43509,7 +47971,10 @@ var hxd_impl_ArrayIterator = function(a) {
 $hxClasses["hxd.impl.ArrayIterator"] = hxd_impl_ArrayIterator;
 hxd_impl_ArrayIterator.__name__ = ["hxd","impl","ArrayIterator"];
 hxd_impl_ArrayIterator.prototype = {
-	hasNext: function() {
+	i: null
+	,l: null
+	,a: null
+	,hasNext: function() {
 		return this.i < this.l;
 	}
 	,next: function() {
@@ -43525,7 +47990,10 @@ var hxd_impl_ArrayIterator_$h2d_$Sprite = function(a) {
 $hxClasses["hxd.impl.ArrayIterator_h2d_Sprite"] = hxd_impl_ArrayIterator_$h2d_$Sprite;
 hxd_impl_ArrayIterator_$h2d_$Sprite.__name__ = ["hxd","impl","ArrayIterator_h2d_Sprite"];
 hxd_impl_ArrayIterator_$h2d_$Sprite.prototype = {
-	hasNext: function() {
+	i: null
+	,l: null
+	,a: null
+	,hasNext: function() {
 		return this.i < this.l;
 	}
 	,next: function() {
@@ -43541,7 +48009,10 @@ var hxd_impl_ArrayIterator_$h3d_$scene_$Object = function(a) {
 $hxClasses["hxd.impl.ArrayIterator_h3d_scene_Object"] = hxd_impl_ArrayIterator_$h3d_$scene_$Object;
 hxd_impl_ArrayIterator_$h3d_$scene_$Object.__name__ = ["hxd","impl","ArrayIterator_h3d_scene_Object"];
 hxd_impl_ArrayIterator_$h3d_$scene_$Object.prototype = {
-	hasNext: function() {
+	i: null
+	,l: null
+	,a: null
+	,hasNext: function() {
 		return this.i < this.l;
 	}
 	,next: function() {
@@ -43557,7 +48028,10 @@ var hxd_impl_ArrayIterator_$hxd_$fs_$FileEntry = function(a) {
 $hxClasses["hxd.impl.ArrayIterator_hxd_fs_FileEntry"] = hxd_impl_ArrayIterator_$hxd_$fs_$FileEntry;
 hxd_impl_ArrayIterator_$hxd_$fs_$FileEntry.__name__ = ["hxd","impl","ArrayIterator_hxd_fs_FileEntry"];
 hxd_impl_ArrayIterator_$hxd_$fs_$FileEntry.prototype = {
-	hasNext: function() {
+	i: null
+	,l: null
+	,a: null
+	,hasNext: function() {
 		return this.i < this.l;
 	}
 	,next: function() {
@@ -43573,7 +48047,10 @@ var hxd_impl_ArrayIterator_$hxd_$res_$Any = function(a) {
 $hxClasses["hxd.impl.ArrayIterator_hxd_res_Any"] = hxd_impl_ArrayIterator_$hxd_$res_$Any;
 hxd_impl_ArrayIterator_$hxd_$res_$Any.__name__ = ["hxd","impl","ArrayIterator_hxd_res_Any"];
 hxd_impl_ArrayIterator_$hxd_$res_$Any.prototype = {
-	hasNext: function() {
+	i: null
+	,l: null
+	,a: null
+	,hasNext: function() {
 		return this.i < this.l;
 	}
 	,next: function() {
@@ -43702,7 +48179,9 @@ var hxd_poly2tri_Edge = function(p1,p2) {
 $hxClasses["hxd.poly2tri.Edge"] = hxd_poly2tri_Edge;
 hxd_poly2tri_Edge.__name__ = ["hxd","poly2tri","Edge"];
 hxd_poly2tri_Edge.prototype = {
-	toString: function() {
+	p: null
+	,q: null
+	,toString: function() {
 		return "Edge(" + Std.string(this.p) + ", " + Std.string(this.q) + ")";
 	}
 	,__class__: hxd_poly2tri_Edge
@@ -43732,7 +48211,11 @@ hxd_poly2tri_Point.cmpPoints = function(l,r) {
 	return 0;
 };
 hxd_poly2tri_Point.prototype = {
-	get_edge_list: function() {
+	id: null
+	,x: null
+	,y: null
+	,edge_list: null
+	,get_edge_list: function() {
 		if(this.edge_list == null) {
 			this.edge_list = [];
 		}
@@ -43759,7 +48242,9 @@ $hxClasses["hxd.res._Any.SingleFileSystem"] = hxd_res__$Any_SingleFileSystem;
 hxd_res__$Any_SingleFileSystem.__name__ = ["hxd","res","_Any","SingleFileSystem"];
 hxd_res__$Any_SingleFileSystem.__super__ = hxd_fs_BytesFileSystem;
 hxd_res__$Any_SingleFileSystem.prototype = $extend(hxd_fs_BytesFileSystem.prototype,{
-	getBytes: function(p) {
+	path: null
+	,bytes: null
+	,getBytes: function(p) {
 		if(p == this.path) {
 			return this.bytes;
 		} else {
@@ -43774,7 +48259,8 @@ var hxd_res_Resource = function(entry) {
 $hxClasses["hxd.res.Resource"] = hxd_res_Resource;
 hxd_res_Resource.__name__ = ["hxd","res","Resource"];
 hxd_res_Resource.prototype = {
-	get_name: function() {
+	entry: null
+	,get_name: function() {
 		return this.entry.name;
 	}
 	,toString: function() {
@@ -43799,7 +48285,8 @@ hxd_res_Any.fromBytes = function(path,bytes) {
 };
 hxd_res_Any.__super__ = hxd_res_Resource;
 hxd_res_Any.prototype = $extend(hxd_res_Resource.prototype,{
-	toModel: function() {
+	loader: null
+	,toModel: function() {
 		return this.loader.loadModel(this.entry.get_path());
 	}
 	,toHmd: function() {
@@ -43853,7 +48340,8 @@ $hxClasses["hxd.res.Atlas"] = hxd_res_Atlas;
 hxd_res_Atlas.__name__ = ["hxd","res","Atlas"];
 hxd_res_Atlas.__super__ = hxd_res_Resource;
 hxd_res_Atlas.prototype = $extend(hxd_res_Resource.prototype,{
-	tileAlign: function(t,halign,valign,width,height) {
+	contents: null
+	,tileAlign: function(t,halign,valign,width,height) {
 		if(halign == null) {
 			halign = h2d_FlowAlign.Left;
 		}
@@ -44026,7 +48514,9 @@ $hxClasses["hxd.res.BitmapFont"] = hxd_res_BitmapFont;
 hxd_res_BitmapFont.__name__ = ["hxd","res","BitmapFont"];
 hxd_res_BitmapFont.__super__ = hxd_res_Resource;
 hxd_res_BitmapFont.prototype = $extend(hxd_res_Resource.prototype,{
-	toFont: function() {
+	loader: null
+	,font: null
+	,toFont: function() {
 		if(this.font != null) {
 			return this.font;
 		}
@@ -44121,6 +48611,23 @@ hxd_res_BitmapFont.prototype = $extend(hxd_res_Resource.prototype,{
 	}
 	,__class__: hxd_res_BitmapFont
 });
+var hxd_res_DefaultFont = function() { };
+$hxClasses["hxd.res.DefaultFont"] = hxd_res_DefaultFont;
+hxd_res_DefaultFont.__name__ = ["hxd","res","DefaultFont"];
+hxd_res_DefaultFont.get = function() {
+	var engine = h3d_Engine.CURRENT;
+	var fnt = engine.resCache.h[hxd_res_DefaultFont.__id__];
+	if(fnt == null) {
+		var BYTES = hxd_res_Any.fromBytes("hxd/res/defaultFont.png",haxe_Unserializer.run("s3176:iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAACPBJREFUeJztnelypDoMRp2p%:6v3PNjhrlCLX1aLIPBPlWppI03bCG0QOfn8:m0zbr8KupnS9FDqRKAzUOhAvBRfqO:tfrSZ86H:ET79o6Rhc%JzzNSD7Xn:XyEH9RPtP4X:6GDDj6ttR:Hb62d9pmX8b487StA4:DFlup5z5MSWS%tL:f6eG4BXDppGQdtApJEtPm0zkf427Oo1fAxtfO2hDIruGXCLgnAD:jNyzSsKxa18yBphyqQ1jqwBN1zHmgcU3V3jHui9xaArkS0%XzTohOX%jvGauzvjMrlUJXuqSeV07G0ekgTovWS1t61vr0CQAez7nkj7uFIELJqmdN7RWvzil7hnnXV5qLOzSMAmlcQub9ZRuEsaNoq0w5RZbN0rye1ASzplWyAiGEXQVK3kZOdRcgy9:FLoRogI02WNc7rRQw3jzsZAfWB7skR44%3jdo6Wv2qfr4rFuUCZlftrT1jjpezSih4b75ClQDMvrizz%82uA1wMCqsKvUv3YO045rxma2vjY3mpPUvuV1WKDzbLtqfNu9:AjA6tl69QM3Zn1Wfl1M8G:CUW4s6b%sWIEXWtM:omNeXrnaDRm:OyIsE1UOfQ1gCwMOLdFCqWnj8Grl5nsjVakRjHMj1DgnEcQvw%OV0AE0wGisfqTKrbBYrZ4BiB:T4ldE8dPsMxU2oEWgZZtoAyMCq2GxtLlWCFbEB%PGIYWv1kxECq0%TbDKITjpirVr9SW2zC:skqqKdUp%QwwbILKwlgZk2mkBlmUVgPPOI3IbL0GwASY2PiMdbPrfVF6:vVctIq5SoVqNdxtrvWXt1:EguYHVL:ZV4Q8F781%KVwD25r8UagTyYE4TjkllmfrU4udtI%XZdrRcm5c1T%3cPXjq9RqEYTewIrau1a%ODVSBomgeL4cLudedG%H2pah4KBQx8gSnWMC:8AvDKwS0fXU5n59Uf7gAXA1dfG1TtM1Bm2ZtKi%PCGaVlpXKrf67ngeI%uFXoW1WdvNH0ztuV3vNBvAOrC30wR0LG7kX0:p3MjoCqPYfiQNI3BK%BEhq31vfYtS5UkN5lCD%NGWMSBxAWyyeyKkAJYc2Z6JrfqpvGYF0IzxqNWoDoPrSeNJ8POMgtJg76rtSEyDNErGzUF5F3ZOq9wI2D%VtbuBsaFfkNGwBGMtUmy3BjUAtxs3x3LOk8mi7zWB6Xw7leCNlb%LRXkrk%wEOpESIlezxlvM%uSWuzQXNx1Ofjqd5Aah:qW5PGDfbjpZzRCGlbwZ5T0TqMHMVoLgCP56Nj0fqo7mhLOeMGoDPx4wE0sW64mRmXLSDaCZvxPjSeNnAGKx:hxcw8%a3Zkc7tTqjyWgbs:4d3w8wW:7AC42l3zF:dH9H9SGedwO9rmEEz4nMpCXuznFoSS5tf9x9e24ByFjqodKAQio6EjfP9C8duzLHoZ0r8oD%LzRyAZY1XN2umux8n0L3OkeygcdnDzMYTSvQvc47G7g4q3xL2EqE8jhbAN6H9YDJ6TaxBeCduJNy3AjkrghySay8QXOU84lZSQ8plj:ioYuIG%axvLUrcoRxHHGHXelgKzkTWSxtLK:7whM8UaGLzs3qJ7P5IxNI0axh%hbAgxhWMGJ01M%KVKIASXQcipVR7MEz524XboQNoKVwPZPNhkpRjD5yRdM53B0c0qKDvE4X9PVw78JYWPc7usEo9cm1TAa0%R:hh44n1UXz1sjaB0dbJATdGoB:R1Dv:c4DGktSez33TNqW96MZtVo:R53sPLQxvGseCWu7y2d7Kji70MgQRUIwM5nNb%1bc8HyK%MAHiMtq2q5ypaOS39rdTz9jMaac4kg87eDpSsp4%bx:iS3UZLOqMQPM44Y3jGuSoCVabERyaCsj:90qs7TG1soWePZbICViWharvnSgrfTwYsz0gjckvUApHcDOdwa9waDvIGjCFZ:2vwzfVeGj7W%qs4ns0ettbMASJvG:WfJ%JAGHOVvI6GSxtMEUfNENK%FH%NtNaz1qzif7B79mcC2AdbG8zVxyNqMtrGkTQqZWmHUqvJjDJg%BZ9Rf552I8qtY%a:jUMnEG3j9V1RvWgUryfqFyXql1etX2aP:vGER8JWCCLdxhME4OlMbWTdLQCRhA%qX1WegVrZEbtjCjQjsDnKM200Y8nLjDaAx%WdVgg8:zfQY%1620Q8grcxpRDcfQvwMN2ivYm7s4GSRkGZLuRvV5T3AP1tAe08q8qtY38KJo4Ejgglbxh3awCJQyL35l:AjAKwN:5CKozAqpRm7zibBBUCMDJFi:p5GlMKcJUbGAm4aIkdlPCpttK9xz1RxMhzAdVCkDmnE5H:GURPXLta7ypHcz248%GLWR6Q%cL7ZdHRVOddWHPt1VRWX6O1mERXuNt6HmBmooGXnlB178MX3vIr5nhCejkUbf7VhgyalyWwngcjqsorxxg5xy%oDeDZ:Du0Qub%2aP6M%XVfSFK90D6ihjranoC2pUgUVVe0VdUw2bmeEKyASx1OwvWfQ7dPqi1XlFe1Vd0nbu1C:%HEeEObuSH:LyRKzSW6QZKvjDXDNKxqvIsR19a:624vKKvW9Zy5nTw5swQO2zGbODmDNdmpWwBmJ%hNo7n7WAJ5L703FN4DD:Sr3RcK6uar0XVnHvHUbHeDqadawaLFA3jbTwW6tH2aC%5oqgfLXYRGcOab5SKOVvz8sY75AneZATyQd:qyt1ByFjkGoCrR6u8gXLtc2tn:51qD22s7Pwi5Z5jEryNtS6jy6U5qfS8HZwFTWp0ogWdj3Wu0nmPWJ8K3HO62gvoul:dhKbBPPWmp:fdwBXwXNGa8TY92ruBzVG%GpoqnUXtp9CeCdza4JvZLhDqyqb3hT8RRDtH5VmyavKKREn0XCW1f3WiDKWmpTpf7GTQc:F6OpCdC3guJdp5C8CzkTY9JAg8Ekh:bxaAPxVMf28WgP7XMMrWAovwhO8I2gxkC8DibAFYnC0Ai6OFgjeL4Pmm0M2L0dzAzSJY2cDNy:E8ELJ5MdsLWJwtAIuzBWBxtgAszhaAxdkCsDi:AYnqZwd25SoPAAAAAElFTkSuQmCC"));
+		var DESC = hxd_res_Any.fromBytes("hxd/res/defaultFont.fnt",haxe_Unserializer.run("s14270:PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxGb250IHNpemU9IjEyIiBmYW1pbHk9IlBpeGVsIE9wZXJhdG9yIiBoZWlnaHQ9IjE2IiBzdHlsZT0iUmVndWxhciI%DQogPENoYXIgd2lkdGg9IjQiIG9mZnNldD0iMCAxMyIgcmVjdD0iMSAxMiAwIDAiIGNvZGU9IiAiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjIgMyAxIDkiIGNvZGU9IiEiLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjQgMyAzIDMiIGNvZGU9IiZxdW90OyIvPg0KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgNCIgcmVjdD0iOCAzIDYgOSIgY29kZT0iIyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iMTUgMSA1IDEzIiBjb2RlPSIkIi8%DQogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSA0IiByZWN0PSIyMSAzIDcgOSIgY29kZT0iJSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMjkgMyA1IDkiIGNvZGU9IiZhbXA7Ii8%DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMSA0IiByZWN0PSIzNSAzIDEgMyIgY29kZT0iJyIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMzcgMyAzIDkiIGNvZGU9IigiLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjQxIDMgMyA5IiBjb2RlPSIpIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI0NSAzIDUgNSIgY29kZT0iKiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iNTEgNSA1IDUiIGNvZGU9IisiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIwIDEyIiByZWN0PSI1NyAxMSAyIDMiIGNvZGU9IiwiLz4NCiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDgiIHJlY3Q9IjYwIDcgNCAxIiBjb2RlPSItIi8%DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMSAxMiIgcmVjdD0iNjUgMTEgMSAxIiBjb2RlPSIuIi8%DQogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMSA0IiByZWN0PSI2NyAzIDMgOSIgY29kZT0iLyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNzEgMyA1IDkiIGNvZGU9IjAiLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDQiIHJlY3Q9Ijc3IDMgMyA5IiBjb2RlPSIxIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI4MSAzIDUgOSIgY29kZT0iMiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iODcgMyA1IDkiIGNvZGU9IjMiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjkzIDMgNSA5IiBjb2RlPSI0Ii8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI5OSAzIDUgOSIgY29kZT0iNSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMTA1IDMgNSA5IiBjb2RlPSI2Ii8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSIxMTEgMyA1IDkiIGNvZGU9IjciLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjExNyAzIDUgOSIgY29kZT0iOCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMSAxNSA1IDkiIGNvZGU9IjkiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDYiIHJlY3Q9IjcgMTcgMSA3IiBjb2RlPSI6Ii8%DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMCA2IiByZWN0PSI5IDE3IDIgOSIgY29kZT0iOyIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgNiIgcmVjdD0iMTIgMTcgMyA1IiBjb2RlPSImbHQ7Ii8%DQogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSA3IiByZWN0PSIxNiAxOCA0IDMiIGNvZGU9Ij0iLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDYiIHJlY3Q9IjIxIDE3IDMgNSIgY29kZT0iPiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMjUgMTUgNSA5IiBjb2RlPSI:Ii8%DQogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSA0IiByZWN0PSIzMSAxNSA3IDkiIGNvZGU9IkAiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjM5IDE1IDUgOSIgY29kZT0iQSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNDUgMTUgNSA5IiBjb2RlPSJCIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI1MSAxNSA1IDkiIGNvZGU9IkMiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjU3IDE1IDUgOSIgY29kZT0iRCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNjMgMTUgNSA5IiBjb2RlPSJFIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI2OSAxNSA1IDkiIGNvZGU9IkYiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9Ijc1IDE1IDUgOSIgY29kZT0iRyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iODEgMTUgNSA5IiBjb2RlPSJIIi8%DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMSA0IiByZWN0PSI4NyAxNSAxIDkiIGNvZGU9IkkiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9Ijg5IDE1IDUgOSIgY29kZT0iSiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iOTUgMTUgNSA5IiBjb2RlPSJLIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSIxMDEgMTUgNSA5IiBjb2RlPSJMIi8%DQogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSA0IiByZWN0PSIxMDcgMTUgNyA5IiBjb2RlPSJNIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSIxMTUgMTUgNSA5IiBjb2RlPSJOIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSIxMjEgMTUgNSA5IiBjb2RlPSJPIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSIxIDI3IDUgOSIgY29kZT0iUCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNyAyNyA1IDkiIGNvZGU9IlEiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjEzIDI3IDUgOSIgY29kZT0iUiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMTkgMjcgNSA5IiBjb2RlPSJTIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSIyNSAyNyA1IDkiIGNvZGU9IlQiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjMxIDI3IDUgOSIgY29kZT0iVSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMzcgMjcgNSA5IiBjb2RlPSJWIi8%DQogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSA0IiByZWN0PSI0MyAyNyA3IDkiIGNvZGU9IlciLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjUxIDI3IDUgOSIgY29kZT0iWCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNTcgMjcgNSA5IiBjb2RlPSJZIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI2MyAyNyA1IDkiIGNvZGU9IloiLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjY5IDI3IDMgOSIgY29kZT0iWyIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNzMgMjcgMyA5IiBjb2RlPSJcIi8%DQogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMSA0IiByZWN0PSI3NyAyNyAzIDkiIGNvZGU9Il0iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjgxIDI3IDUgMyIgY29kZT0iXiIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgMTQiIHJlY3Q9Ijg3IDM3IDUgMSIgY29kZT0iXyIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjAgNCIgcmVjdD0iOTMgMjcgMiAyIiBjb2RlPSJgIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSI5NiAyOSA1IDciIGNvZGU9ImEiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjEwMiAyNyA1IDkiIGNvZGU9ImIiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDYiIHJlY3Q9IjEwOCAyOSA1IDciIGNvZGU9ImMiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjExNCAyNyA1IDkiIGNvZGU9ImQiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDYiIHJlY3Q9IjEyMCAyOSA1IDciIGNvZGU9ImUiLz4NCiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjEgMzkgNSA5IiBjb2RlPSJmIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSI3IDQxIDUgOSIgY29kZT0iZyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMTMgMzkgNSA5IiBjb2RlPSJoIi8%DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMSA0IiByZWN0PSIxOSAzOSAxIDkiIGNvZGU9ImkiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjIxIDM5IDUgMTEiIGNvZGU9ImoiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjI3IDM5IDUgOSIgY29kZT0iayIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgNCIgcmVjdD0iMzMgMzkgMSA5IiBjb2RlPSJsIi8%DQogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSA2IiByZWN0PSIzNSA0MSA3IDciIGNvZGU9Im0iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDYiIHJlY3Q9IjQzIDQxIDUgNyIgY29kZT0ibiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iNDkgNDEgNSA3IiBjb2RlPSJvIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSI1NSA0MSA1IDkiIGNvZGU9InAiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDYiIHJlY3Q9IjYxIDQxIDUgOSIgY29kZT0icSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iNjcgNDEgNSA3IiBjb2RlPSJyIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSI3MyA0MSA1IDciIGNvZGU9InMiLz4NCiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDUiIHJlY3Q9Ijc5IDQwIDUgOCIgY29kZT0idCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iODUgNDEgNSA3IiBjb2RlPSJ1Ii8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSI5MSA0MSA1IDciIGNvZGU9InYiLz4NCiA8Q2hhciB3aWR0aD0iOSIgb2Zmc2V0PSIxIDYiIHJlY3Q9Ijk3IDQxIDcgNyIgY29kZT0idyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iMTA1IDQxIDUgNyIgY29kZT0ieCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iMTExIDQxIDUgOSIgY29kZT0ieSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iMTE3IDQxIDUgNyIgY29kZT0ieiIvPg0KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMSA1NCA0IDkiIGNvZGU9InsiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjYgNTQgMSA5IiBjb2RlPSJ8Ii8%DQogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSA0IiByZWN0PSI4IDU0IDQgOSIgY29kZT0ifSIvPg0KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMTMgNTQgNiAyIiBjb2RlPSJ%Ii8%DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMSA2IiByZWN0PSIyMCA1NiAxIDkiIGNvZGU9IsKhIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSIyMiA1NCA1IDExIiBjb2RlPSLCoiIvPg0KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMjggNTQgNiA5IiBjb2RlPSLCoyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMzUgNTQgNSA5IiBjb2RlPSLCpSIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgNCIgcmVjdD0iNDEgNTQgMSA5IiBjb2RlPSLCpiIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNDMgNTQgMyAxIiBjb2RlPSLCqCIvPg0KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNDcgNTQgNyA5IiBjb2RlPSLCqSIvPg0KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgNiIgcmVjdD0iNTUgNTYgNiA1IiBjb2RlPSLCqyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgOCIgcmVjdD0iNjIgNTggNSAzIiBjb2RlPSLCrCIvPg0KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNjggNTQgNCA0IiBjb2RlPSLCsCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iNzMgNTYgNSA3IiBjb2RlPSLCsSIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgNCIgcmVjdD0iNzkgNTQgMiAyIiBjb2RlPSLCtCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNiIgcmVjdD0iODIgNTYgNSA5IiBjb2RlPSLCtSIvPg0KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgNCIgcmVjdD0iODggNTQgNyA5IiBjb2RlPSLCtiIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgOCIgcmVjdD0iOTYgNTggMSAxIiBjb2RlPSLCtyIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgMTMiIHJlY3Q9Ijk4IDYzIDMgMiIgY29kZT0iwrgiLz4NCiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSIxIDYiIHJlY3Q9IjEwMiA1NiA2IDUiIGNvZGU9IsK7Ii8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSIxMDkgNTYgNSA5IiBjb2RlPSLCvyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTE1IDUxIDUgMTIiIGNvZGU9IsOAIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMjEgNTEgNSAxMiIgY29kZT0iw4EiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEgNjcgNSAxMiIgY29kZT0iw4IiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjcgNjcgNiAxMiIgY29kZT0iw4MiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjE0IDY4IDUgMTEiIGNvZGU9IsOEIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAwIiByZWN0PSIyMCA2NiA1IDEzIiBjb2RlPSLDhSIvPg0KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjI2IDcwIDkgOSIgY29kZT0iw4YiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjM2IDcwIDUgMTEiIGNvZGU9IsOHIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI0MiA2NyA1IDEyIiBjb2RlPSLDiCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDggNjcgNSAxMiIgY29kZT0iw4kiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjU0IDY3IDUgMTIiIGNvZGU9IsOKIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAyIiByZWN0PSI2MCA2OCA1IDExIiBjb2RlPSLDiyIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjAgMSIgcmVjdD0iNjYgNjcgMiAxMiIgY29kZT0iw4wiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjY5IDY3IDIgMTIiIGNvZGU9IsONIi8%DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMCAxIiByZWN0PSI3MiA2NyAzIDEyIiBjb2RlPSLDjiIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjAgMiIgcmVjdD0iNzYgNjggMyAxMSIgY29kZT0iw48iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjgwIDcwIDYgOSIgY29kZT0iw5AiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijg3IDY3IDYgMTIiIGNvZGU9IsORIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI5NCA2NyA1IDEyIiBjb2RlPSLDkiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTAwIDY3IDUgMTIiIGNvZGU9IsOTIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMDYgNjcgNSAxMiIgY29kZT0iw5QiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExMiA2NyA2IDEyIiBjb2RlPSLDlSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iMTE5IDY4IDUgMTEiIGNvZGU9IsOWIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSIxIDg3IDUgNSIgY29kZT0iw5ciLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjcgODUgNyA5IiBjb2RlPSLDmCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTUgODIgNSAxMiIgY29kZT0iw5kiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjIxIDgyIDUgMTIiIGNvZGU9IsOaIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIyNyA4MiA1IDEyIiBjb2RlPSLDmyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iMzMgODMgNSAxMSIgY29kZT0iw5wiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM5IDgyIDUgMTIiIGNvZGU9IsOdIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI0NSA4NSA1IDkiIGNvZGU9IsOeIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI1MSA4NSA1IDkiIGNvZGU9IsOfIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSI1NyA4NCA1IDEwIiBjb2RlPSLDoCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iNjMgODQgNSAxMCIgY29kZT0iw6EiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjY5IDg0IDUgMTAiIGNvZGU9IsOiIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSI3NSA4NCA2IDEwIiBjb2RlPSLDoyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iODIgODUgNSA5IiBjb2RlPSLDpCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iODggODMgNSAxMSIgY29kZT0iw6UiLz4NCiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMSA2IiByZWN0PSI5NCA4NyA5IDciIGNvZGU9IsOmIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSIxMDQgODcgNSA5IiBjb2RlPSLDpyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMTEwIDg0IDUgMTAiIGNvZGU9IsOoIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIxMTYgODQgNSAxMCIgY29kZT0iw6kiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjEgOTcgNSAxMCIgY29kZT0iw6oiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjcgOTggNSA5IiBjb2RlPSLDqyIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjAgMyIgcmVjdD0iMTMgOTcgMiAxMCIgY29kZT0iw6wiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjE2IDk3IDIgMTAiIGNvZGU9IsOtIi8%DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMCAzIiByZWN0PSIxOSA5NyAzIDEwIiBjb2RlPSLDriIvPg0KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMjMgOTggMyA5IiBjb2RlPSLDryIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMjcgOTggNiA5IiBjb2RlPSLDsCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMzQgOTcgNiAxMCIgY29kZT0iw7EiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjQxIDk3IDUgMTAiIGNvZGU9IsOyIi8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSI0NyA5NyA1IDEwIiBjb2RlPSLDsyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iNTMgOTcgNSAxMCIgY29kZT0iw7QiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjU5IDk3IDYgMTAiIGNvZGU9IsO1Ii8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSI2NiA5OCA1IDkiIGNvZGU9IsO2Ii8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA2IiByZWN0PSI3MiAxMDAgNSA1IiBjb2RlPSLDtyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjAgNiIgcmVjdD0iNzggMTAwIDcgNyIgY29kZT0iw7giLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9Ijg2IDk3IDUgMTAiIGNvZGU9IsO5Ii8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSI5MiA5NyA1IDEwIiBjb2RlPSLDuiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iOTggOTcgNSAxMCIgY29kZT0iw7siLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjEwNCA5OCA1IDkiIGNvZGU9IsO8Ii8%DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIxMTAgOTcgNSAxMiIgY29kZT0iw70iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjExNiA5OCA1IDExIiBjb2RlPSLDviIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMSAxMTAgNSAxMSIgY29kZT0iw78iLz4NCjwvRm9udD4NCg"));
+		fnt = new hxd_res_BitmapFont(BYTES.loader,DESC.entry).toFont();
+		engine.resCache.set(hxd_res_DefaultFont,fnt);
+	}
+	return fnt;
+};
+var hxd_res_Embed = function() { };
+$hxClasses["hxd.res.Embed"] = hxd_res_Embed;
+hxd_res_Embed.__name__ = ["hxd","res","Embed"];
 var hxd_res_Font = function(entry) {
 	hxd_res_Resource.call(this,entry);
 };
@@ -44173,7 +48680,10 @@ hxd_res_FontBuilder.dispose = function() {
 	hxd_res_FontBuilder.FONTS = new haxe_ds_StringMap();
 };
 hxd_res_FontBuilder.prototype = {
-	build: function() {
+	font: null
+	,options: null
+	,innerTex: null
+	,build: function() {
 		var bmp = window.document.createElement("canvas");
 		var ctx = bmp.getContext("2d",null);
 		ctx.font = "" + this.font.size + "px " + this.font.name;
@@ -44426,7 +48936,8 @@ hxd_res_Gradients.HSVtoRGB = function(h,s,v) {
 };
 hxd_res_Gradients.__super__ = hxd_res_Resource;
 hxd_res_Gradients.prototype = $extend(hxd_res_Resource.prototype,{
-	toTexture: function(name,resolution) {
+	data: null
+	,toTexture: function(name,resolution) {
 		if(resolution == null) {
 			resolution = 256;
 		}
@@ -44508,7 +49019,9 @@ $hxClasses["hxd.res.Image"] = hxd_res_Image;
 hxd_res_Image.__name__ = ["hxd","res","Image"];
 hxd_res_Image.__super__ = hxd_res_Resource;
 hxd_res_Image.prototype = $extend(hxd_res_Resource.prototype,{
-	getFormat: function() {
+	tex: null
+	,inf: null
+	,getFormat: function() {
 		this.getSize();
 		return this.inf.format;
 	}
@@ -44717,7 +49230,9 @@ var hxd_res_Loader = function(fs) {
 $hxClasses["hxd.res.Loader"] = hxd_res_Loader;
 hxd_res_Loader.__name__ = ["hxd","res","Loader"];
 hxd_res_Loader.prototype = {
-	cleanCache: function() {
+	fs: null
+	,cache: null
+	,cleanCache: function() {
 		this.cache = new haxe_ds_StringMap();
 	}
 	,exists: function(path) {
@@ -44853,7 +49368,18 @@ var hxd_res__$NanoJpeg_Component = function() {
 $hxClasses["hxd.res._NanoJpeg.Component"] = hxd_res__$NanoJpeg_Component;
 hxd_res__$NanoJpeg_Component.__name__ = ["hxd","res","_NanoJpeg","Component"];
 hxd_res__$NanoJpeg_Component.prototype = {
-	__class__: hxd_res__$NanoJpeg_Component
+	cid: null
+	,ssx: null
+	,ssy: null
+	,width: null
+	,height: null
+	,stride: null
+	,qtsel: null
+	,actabsel: null
+	,dctabsel: null
+	,dcpred: null
+	,pixels: null
+	,__class__: hxd_res__$NanoJpeg_Component
 };
 var hxd_res_NanoJpeg = function() {
 	this.comps = [new hxd_res__$NanoJpeg_Component(),new hxd_res__$NanoJpeg_Component(),new hxd_res__$NanoJpeg_Component()].slice(0);
@@ -44904,7 +49430,32 @@ hxd_res_NanoJpeg.decode = function(bytes,filter,position,size) {
 	return hxd_res_NanoJpeg.inst.njDecode();
 };
 hxd_res_NanoJpeg.prototype = {
-	alloc: function(nbytes) {
+	bytes: null
+	,pos: null
+	,size: null
+	,length: null
+	,width: null
+	,height: null
+	,ncomp: null
+	,comps: null
+	,counts: null
+	,qtab: null
+	,qtused: null
+	,qtavail: null
+	,vlctab: null
+	,block: null
+	,njZZ: null
+	,progressive: null
+	,mbsizex: null
+	,mbsizey: null
+	,mbwidth: null
+	,mbheight: null
+	,rstinterval: null
+	,buf: null
+	,bufbits: null
+	,pixels: null
+	,filter: null
+	,alloc: function(nbytes) {
 		return hxd_impl_Tmp.getBytes(nbytes);
 	}
 	,free: function(bytes) {
@@ -45194,6 +49745,7 @@ hxd_res_NanoJpeg.prototype = {
 		this.size -= count;
 		this.length -= count;
 	}
+	,vlcCode: null
 	,njGetVLC: function(vlc) {
 		var value = this.njShowBits(16);
 		var bits = vlc.b[value << 1];
@@ -45917,7 +50469,10 @@ hxd_res_Sound.startWorker = function() {
 };
 hxd_res_Sound.__super__ = hxd_res_Resource;
 hxd_res_Sound.prototype = $extend(hxd_res_Resource.prototype,{
-	getData: function() {
+	data: null
+	,channel: null
+	,lastPlay: null
+	,getData: function() {
 		if(this.data != null) {
 			return this.data;
 		}
@@ -46046,7 +50601,10 @@ hxd_snd_NativeChannel.getContext = function() {
 	return hxd_snd_NativeChannel.ctx;
 };
 hxd_snd_NativeChannel.prototype = {
-	onJsSample: function(event) {
+	sproc: null
+	,tmpBuffer: null
+	,bufferSamples: null
+	,onJsSample: function(event) {
 		this.onSample(this.tmpBuffer);
 		var r = 0;
 		var left = event.outputBuffer.getChannelData(0);
@@ -46078,7 +50636,9 @@ $hxClasses["hxd.snd._ALEmulator.ALChannel"] = hxd_snd__$ALEmulator_ALChannel;
 hxd_snd__$ALEmulator_ALChannel.__name__ = ["hxd","snd","_ALEmulator","ALChannel"];
 hxd_snd__$ALEmulator_ALChannel.__super__ = hxd_snd_NativeChannel;
 hxd_snd__$ALEmulator_ALChannel.prototype = $extend(hxd_snd_NativeChannel.prototype,{
-	onSample: function(out) {
+	source: null
+	,startup: null
+	,onSample: function(out) {
 		var pos = 0;
 		var count = out.length >> 1;
 		if(this.source.duration > 0) {
@@ -46164,7 +50724,16 @@ hxd_snd_ALSource.ofInt = function(i) {
 	return hxd_snd_ALSource.all.h[i];
 };
 hxd_snd_ALSource.prototype = {
-	updateDuration: function() {
+	id: null
+	,chan: null
+	,playedTime: null
+	,currentSample: null
+	,buffers: null
+	,loop: null
+	,volume: null
+	,duration: null
+	,frequency: null
+	,updateDuration: function() {
 		this.frequency = this.buffers.length == 0 ? 1 : this.buffers[0].frequency;
 		this.duration = 0.;
 		var _g = 0;
@@ -46219,7 +50788,11 @@ hxd_snd_ALBuffer.ofInt = function(i) {
 	return hxd_snd_ALBuffer.all.h[i];
 };
 hxd_snd_ALBuffer.prototype = {
-	dispose: function() {
+	id: null
+	,data: null
+	,frequency: null
+	,samples: null
+	,dispose: function() {
 		this.data = null;
 		hxd_snd_ALBuffer.all.remove(this.id);
 		this.id = 0;
@@ -46665,7 +51238,8 @@ var hxd_snd_ALContext = function(d) {
 $hxClasses["hxd.snd.ALContext"] = hxd_snd_ALContext;
 hxd_snd_ALContext.__name__ = ["hxd","snd","ALContext"];
 hxd_snd_ALContext.prototype = {
-	__class__: hxd_snd_ALContext
+	device: null
+	,__class__: hxd_snd_ALContext
 };
 var hxd_snd_ALCEmulator = function() { };
 $hxClasses["hxd.snd.ALCEmulator"] = hxd_snd_ALCEmulator;
@@ -46722,7 +51296,14 @@ var hxd_snd_ChannelBase = function() {
 $hxClasses["hxd.snd.ChannelBase"] = hxd_snd_ChannelBase;
 hxd_snd_ChannelBase.__name__ = ["hxd","snd","ChannelBase"];
 hxd_snd_ChannelBase.prototype = {
-	getEffect: function(etype) {
+	priority: null
+	,mute: null
+	,effects: null
+	,removedEffects: null
+	,volume: null
+	,currentFade: null
+	,currentVolume: null
+	,getEffect: function(etype) {
 		var _g = 0;
 		var _g1 = this.effects;
 		while(_g < _g1.length) {
@@ -46802,7 +51383,24 @@ $hxClasses["hxd.snd.Channel"] = hxd_snd_Channel;
 hxd_snd_Channel.__name__ = ["hxd","snd","Channel"];
 hxd_snd_Channel.__super__ = hxd_snd_ChannelBase;
 hxd_snd_Channel.prototype = $extend(hxd_snd_ChannelBase.prototype,{
-	onEnd: function() {
+	next: null
+	,driver: null
+	,source: null
+	,id: null
+	,sound: null
+	,soundGroup: null
+	,channelGroup: null
+	,duration: null
+	,position: null
+	,pause: null
+	,loop: null
+	,streaming: null
+	,audibleGain: null
+	,lastStamp: null
+	,isVirtual: null
+	,positionChanged: null
+	,queue: null
+	,onEnd: function() {
 	}
 	,set_position: function(v) {
 		this.lastStamp = new Date().getTime() / 1000;
@@ -46886,7 +51484,8 @@ $hxClasses["hxd.snd.ChannelGroup"] = hxd_snd_ChannelGroup;
 hxd_snd_ChannelGroup.__name__ = ["hxd","snd","ChannelGroup"];
 hxd_snd_ChannelGroup.__super__ = hxd_snd_ChannelBase;
 hxd_snd_ChannelGroup.prototype = $extend(hxd_snd_ChannelBase.prototype,{
-	__class__: hxd_snd_ChannelGroup
+	name: null
+	,__class__: hxd_snd_ChannelGroup
 });
 var hxd_snd_SampleFormat = $hxClasses["hxd.snd.SampleFormat"] = { __ename__ : true, __constructs__ : ["UI8","I16","F32"] };
 hxd_snd_SampleFormat.UI8 = ["UI8",0];
@@ -46913,7 +51512,11 @@ hxd_snd_Data.formatBytes = function(format) {
 	}
 };
 hxd_snd_Data.prototype = {
-	decode: function(out,outPos,sampleStart,sampleCount) {
+	samples: null
+	,samplingRate: null
+	,sampleFormat: null
+	,channels: null
+	,decode: function(out,outPos,sampleStart,sampleCount) {
 		var bpp = this.getBytesPerSample();
 		if(sampleStart < 0 || sampleCount < 0 || outPos < 0 || outPos + sampleCount * bpp > out.length) {
 			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
@@ -47125,7 +51728,18 @@ var hxd_snd_Source = function(inst) {
 $hxClasses["hxd.snd.Source"] = hxd_snd_Source;
 hxd_snd_Source.__name__ = ["hxd","snd","Source"];
 hxd_snd_Source.prototype = {
-	__class__: hxd_snd_Source
+	inst: null
+	,channel: null
+	,buffers: null
+	,loop: null
+	,volume: null
+	,playing: null
+	,hasQueue: null
+	,streamData: null
+	,streamSample: null
+	,streamPosition: null
+	,streamPositionNext: null
+	,__class__: hxd_snd_Source
 };
 var hxd_snd_Buffer = function(inst) {
 	this.inst = inst;
@@ -47133,7 +51747,11 @@ var hxd_snd_Buffer = function(inst) {
 $hxClasses["hxd.snd.Buffer"] = hxd_snd_Buffer;
 hxd_snd_Buffer.__name__ = ["hxd","snd","Buffer"];
 hxd_snd_Buffer.prototype = {
-	unref: function() {
+	inst: null
+	,sound: null
+	,playCount: null
+	,lastStop: null
+	,unref: function() {
 		if(this.sound == null) {
 			var tmp = new haxe_io_Bytes(new ArrayBuffer(4));
 			tmp.setInt32(0,this.inst.id);
@@ -47206,7 +51824,21 @@ hxd_snd_Driver.get = function() {
 	return hxd_snd_Driver.instance;
 };
 hxd_snd_Driver.prototype = {
-	addPreUpdateCallback: function(f) {
+	masterVolume: null
+	,masterSoundGroup: null
+	,masterChannelGroup: null
+	,listener: null
+	,channels: null
+	,cachedBytes: null
+	,resampleBytes: null
+	,alDevice: null
+	,alContext: null
+	,buffers: null
+	,sources: null
+	,bufferMap: null
+	,preUpdateCallbacks: null
+	,postUpdateCallbacks: null
+	,addPreUpdateCallback: function(f) {
 		this.preUpdateCallbacks.push(f);
 	}
 	,addPostUpdateCallback: function(f) {
@@ -47750,6 +52382,10 @@ hxd_snd_Driver.prototype = {
 			buffer.playCount++;
 		}
 	}
+	,targetRate: null
+	,targetFormat: null
+	,targetChannels: null
+	,alFormat: null
 	,checkTargetFormat: function(dat,forceMono) {
 		if(forceMono == null) {
 			forceMono = false;
@@ -47953,7 +52589,8 @@ var hxd_snd_Effect = function() {
 $hxClasses["hxd.snd.Effect"] = hxd_snd_Effect;
 hxd_snd_Effect.__name__ = ["hxd","snd","Effect"];
 hxd_snd_Effect.prototype = {
-	get_allocated: function() {
+	refs: null
+	,get_allocated: function() {
 		return this.refs > 0;
 	}
 	,applyAudibleGainModifier: function(v) {
@@ -47994,7 +52631,11 @@ var hxd_snd_Listener = function() {
 $hxClasses["hxd.snd.Listener"] = hxd_snd_Listener;
 hxd_snd_Listener.__name__ = ["hxd","snd","Listener"];
 hxd_snd_Listener.prototype = {
-	syncCamera: function(cam) {
+	position: null
+	,direction: null
+	,velocity: null
+	,up: null
+	,syncCamera: function(cam) {
 		var _this = this.position;
 		var v = cam.pos;
 		_this.x = v.x;
@@ -48053,7 +52694,9 @@ $hxClasses["hxd.snd.Mp3Data"] = hxd_snd_Mp3Data;
 hxd_snd_Mp3Data.__name__ = ["hxd","snd","Mp3Data"];
 hxd_snd_Mp3Data.__super__ = hxd_snd_Data;
 hxd_snd_Mp3Data.prototype = $extend(hxd_snd_Data.prototype,{
-	load: function(onEnd) {
+	buffer: null
+	,onEnd: null
+	,load: function(onEnd) {
 		if(this.buffer != null) {
 			onEnd();
 		} else {
@@ -48101,7 +52744,11 @@ var hxd_snd_SoundGroup = function(name) {
 $hxClasses["hxd.snd.SoundGroup"] = hxd_snd_SoundGroup;
 hxd_snd_SoundGroup.__name__ = ["hxd","snd","SoundGroup"];
 hxd_snd_SoundGroup.prototype = {
-	__class__: hxd_snd_SoundGroup
+	name: null
+	,volume: null
+	,maxAudible: null
+	,mono: null
+	,__class__: hxd_snd_SoundGroup
 };
 var hxd_snd_WavData = function(bytes) {
 	if(bytes != null) {
@@ -48112,7 +52759,8 @@ $hxClasses["hxd.snd.WavData"] = hxd_snd_WavData;
 hxd_snd_WavData.__name__ = ["hxd","snd","WavData"];
 hxd_snd_WavData.__super__ = hxd_snd_Data;
 hxd_snd_WavData.prototype = $extend(hxd_snd_Data.prototype,{
-	init: function(d) {
+	rawData: null
+	,init: function(d) {
 		var h = d.header;
 		this.samplingRate = h.samplingRate;
 		this.channels = h.channels;
@@ -48201,7 +52849,9 @@ hxsl_Error.t = function(msg,pos) {
 	throw new js__$Boot_HaxeError(new hxsl_Error(msg,pos));
 };
 hxsl_Error.prototype = {
-	toString: function() {
+	msg: null
+	,pos: null
+	,toString: function() {
 		return "Error(" + this.msg + ")@" + Std.string(this.pos);
 	}
 	,__class__: hxsl_Error
@@ -49157,7 +53807,9 @@ var hxsl_SearchMap = function() {
 $hxClasses["hxsl.SearchMap"] = hxsl_SearchMap;
 hxsl_SearchMap.__name__ = ["hxsl","SearchMap"];
 hxsl_SearchMap.prototype = {
-	__class__: hxsl_SearchMap
+	linked: null
+	,next: null
+	,__class__: hxsl_SearchMap
 };
 var hxsl_Cache = function() {
 	this.constsToGlobal = false;
@@ -49179,7 +53831,11 @@ hxsl_Cache.clear = function() {
 	hxsl_Cache.INST = null;
 };
 hxsl_Cache.prototype = {
-	getLinkShader: function(vars) {
+	linkCache: null
+	,linkShaders: null
+	,byID: null
+	,constsToGlobal: null
+	,getLinkShader: function(vars) {
 		var key = vars.join(",");
 		var _this = this.linkShaders;
 		var shader = __map_reserved[key] != null ? _this.getReserved(key) : _this.h[key];
@@ -49578,7 +54234,8 @@ hxsl_Clone.shaderData = function(s) {
 	return new hxsl_Clone().shader(s);
 };
 hxsl_Clone.prototype = {
-	tvar: function(v) {
+	varMap: null
+	,tvar: function(v) {
 		var v2 = this.varMap.h[v.id];
 		if(v2 != null) {
 			return v2;
@@ -49722,14 +54379,20 @@ var hxsl__$Dce_VarDeps = function(v) {
 $hxClasses["hxsl._Dce.VarDeps"] = hxsl__$Dce_VarDeps;
 hxsl__$Dce_VarDeps.__name__ = ["hxsl","_Dce","VarDeps"];
 hxsl__$Dce_VarDeps.prototype = {
-	__class__: hxsl__$Dce_VarDeps
+	v: null
+	,keep: null
+	,used: null
+	,deps: null
+	,__class__: hxsl__$Dce_VarDeps
 };
 var hxsl_Dce = function() {
 };
 $hxClasses["hxsl.Dce"] = hxsl_Dce;
 hxsl_Dce.__name__ = ["hxsl","Dce"];
 hxsl_Dce.prototype = {
-	dce: function(vertex,fragment) {
+	used: null
+	,channelVars: null
+	,dce: function(vertex,fragment) {
 		this.used = new haxe_ds_IntMap();
 		this.channelVars = [];
 		var inputs = [];
@@ -50242,7 +54905,10 @@ $hxClasses["hxsl.DynamicShader"] = hxsl_DynamicShader;
 hxsl_DynamicShader.__name__ = ["hxsl","DynamicShader"];
 hxsl_DynamicShader.__super__ = hxsl_Shader;
 hxsl_DynamicShader.prototype = $extend(hxsl_Shader.prototype,{
-	addVarIndex: function(v) {
+	params: null
+	,varIndexes: null
+	,varIndex: null
+	,addVarIndex: function(v) {
 		if(v.kind != hxsl_VarKind.Param) {
 			return;
 		}
@@ -50321,7 +54987,14 @@ var hxsl_Eval = function() {
 $hxClasses["hxsl.Eval"] = hxsl_Eval;
 hxsl_Eval.__name__ = ["hxsl","Eval"];
 hxsl_Eval.prototype = {
-	setConstant: function(v,c) {
+	varMap: null
+	,inlineCalls: null
+	,unrollLoops: null
+	,eliminateConditionals: null
+	,constants: null
+	,funMap: null
+	,curFun: null
+	,setConstant: function(v,c) {
 		this.constants.h[v.id] = hxsl_TExprDef.TConst(c);
 	}
 	,mapVar: function(v) {
@@ -50434,6 +55107,7 @@ hxsl_Eval.prototype = {
 		}
 		return { name : s1, vars : _g6, funs : funs};
 	}
+	,markReturn: null
 	,hasReturn: function(e) {
 		this.markReturn = false;
 		this.hasReturnLoop(e);
@@ -52010,7 +56684,12 @@ var hxsl__$Flatten_Alloc = function(g,t,pos,size) {
 $hxClasses["hxsl._Flatten.Alloc"] = hxsl__$Flatten_Alloc;
 hxsl__$Flatten_Alloc.__name__ = ["hxsl","_Flatten","Alloc"];
 hxsl__$Flatten_Alloc.prototype = {
-	__class__: hxsl__$Flatten_Alloc
+	t: null
+	,pos: null
+	,size: null
+	,g: null
+	,v: null
+	,__class__: hxsl__$Flatten_Alloc
 };
 var hxsl_ARead = $hxClasses["hxsl.ARead"] = { __ename__ : true, __constructs__ : ["AIndex","AOffset"] };
 hxsl_ARead.AIndex = function(a) { var $x = ["AIndex",0,a]; $x.__enum__ = hxsl_ARead; $x.toString = $estr; return $x; };
@@ -52021,7 +56700,14 @@ var hxsl_Flatten = function() {
 $hxClasses["hxsl.Flatten"] = hxsl_Flatten;
 hxsl_Flatten.__name__ = ["hxsl","Flatten"];
 hxsl_Flatten.prototype = {
-	flatten: function(s,kind,constsToGlobal) {
+	globals: null
+	,params: null
+	,outVars: null
+	,varMap: null
+	,econsts: null
+	,consts: null
+	,allocData: null
+	,flatten: function(s,kind,constsToGlobal) {
 		this.globals = [];
 		this.params = [];
 		this.outVars = [];
@@ -52862,7 +57548,10 @@ hxsl_Globals.allocID = function(path) {
 	return id;
 };
 hxsl_Globals.prototype = {
-	set: function(path,v) {
+	map: null
+	,channels: null
+	,maxChannels: null
+	,set: function(path,v) {
 		var this1 = this.map;
 		var key = hxsl_Globals.allocID(path);
 		this1.h[key] = v;
@@ -53109,7 +57798,19 @@ hxsl_GlslOut.toGlsl = function(s) {
 	return out.run(s);
 };
 hxsl_GlslOut.prototype = {
-	add: function(v) {
+	buf: null
+	,exprIds: null
+	,exprValues: null
+	,locals: null
+	,decls: null
+	,isVertex: null
+	,allNames: null
+	,outIndexes: null
+	,varNames: null
+	,flipY: null
+	,glES: null
+	,version: null
+	,add: function(v) {
 		this.buf.b += Std.string(v);
 	}
 	,ident: function(v) {
@@ -54399,7 +59100,14 @@ var hxsl__$Linker_AllocatedVar = function() {
 $hxClasses["hxsl._Linker.AllocatedVar"] = hxsl__$Linker_AllocatedVar;
 hxsl__$Linker_AllocatedVar.__name__ = ["hxsl","_Linker","AllocatedVar"];
 hxsl__$Linker_AllocatedVar.prototype = {
-	__class__: hxsl__$Linker_AllocatedVar
+	id: null
+	,v: null
+	,path: null
+	,merged: null
+	,kind: null
+	,parent: null
+	,instanceIndex: null
+	,__class__: hxsl__$Linker_AllocatedVar
 };
 var hxsl__$Linker_ShaderInfos = function(n,v) {
 	this.name = n;
@@ -54412,7 +59120,19 @@ var hxsl__$Linker_ShaderInfos = function(n,v) {
 $hxClasses["hxsl._Linker.ShaderInfos"] = hxsl__$Linker_ShaderInfos;
 hxsl__$Linker_ShaderInfos.__name__ = ["hxsl","_Linker","ShaderInfos"];
 hxsl__$Linker_ShaderInfos.prototype = {
-	__class__: hxsl__$Linker_ShaderInfos
+	name: null
+	,priority: null
+	,body: null
+	,usedFunctions: null
+	,deps: null
+	,read: null
+	,write: null
+	,processed: null
+	,vertex: null
+	,onStack: null
+	,hasDiscard: null
+	,marked: null
+	,__class__: hxsl__$Linker_ShaderInfos
 };
 var hxsl_Linker = function() {
 	this.debugDepth = 0;
@@ -54420,7 +59140,15 @@ var hxsl_Linker = function() {
 $hxClasses["hxsl.Linker"] = hxsl_Linker;
 hxsl_Linker.__name__ = ["hxsl","Linker"];
 hxsl_Linker.prototype = {
-	debug: function(msg,pos) {
+	allVars: null
+	,varMap: null
+	,curShader: null
+	,shaders: null
+	,varIdMap: null
+	,locals: null
+	,curInstance: null
+	,debugDepth: null
+	,debug: function(msg,pos) {
 	}
 	,error: function(msg,p) {
 		return hxsl_Error.t(msg,p);
@@ -55320,7 +60048,9 @@ hxsl_Printer.check = function(s,from) {
 	}
 };
 hxsl_Printer.prototype = {
-	add: function(v) {
+	buffer: null
+	,varId: null
+	,add: function(v) {
 		this.buffer.b += Std.string(v);
 	}
 	,shaderString: function(s) {
@@ -55809,7 +60539,14 @@ var hxsl_AllocParam = function(name,pos,instance,index,type) {
 $hxClasses["hxsl.AllocParam"] = hxsl_AllocParam;
 hxsl_AllocParam.__name__ = ["hxsl","AllocParam"];
 hxsl_AllocParam.prototype = {
-	__class__: hxsl_AllocParam
+	name: null
+	,pos: null
+	,instance: null
+	,index: null
+	,type: null
+	,perObjectGlobal: null
+	,next: null
+	,__class__: hxsl_AllocParam
 };
 var hxsl_AllocGlobal = function(pos,path,type) {
 	this.pos = pos;
@@ -55820,14 +60557,30 @@ var hxsl_AllocGlobal = function(pos,path,type) {
 $hxClasses["hxsl.AllocGlobal"] = hxsl_AllocGlobal;
 hxsl_AllocGlobal.__name__ = ["hxsl","AllocGlobal"];
 hxsl_AllocGlobal.prototype = {
-	__class__: hxsl_AllocGlobal
+	pos: null
+	,gid: null
+	,path: null
+	,type: null
+	,next: null
+	,__class__: hxsl_AllocGlobal
 };
 var hxsl_RuntimeShaderData = function() {
 };
 $hxClasses["hxsl.RuntimeShaderData"] = hxsl_RuntimeShaderData;
 hxsl_RuntimeShaderData.__name__ = ["hxsl","RuntimeShaderData"];
 hxsl_RuntimeShaderData.prototype = {
-	__class__: hxsl_RuntimeShaderData
+	vertex: null
+	,data: null
+	,params: null
+	,paramsSize: null
+	,globals: null
+	,globalsSize: null
+	,textures2D: null
+	,textures2DCount: null
+	,texturesCube: null
+	,texturesCubeCount: null
+	,consts: null
+	,__class__: hxsl_RuntimeShaderData
 };
 var hxsl_RuntimeShader = function() {
 	this.id = hxsl_RuntimeShader.UID++;
@@ -55835,7 +60588,12 @@ var hxsl_RuntimeShader = function() {
 $hxClasses["hxsl.RuntimeShader"] = hxsl_RuntimeShader;
 hxsl_RuntimeShader.__name__ = ["hxsl","RuntimeShader"];
 hxsl_RuntimeShader.prototype = {
-	hasGlobal: function(gid) {
+	id: null
+	,vertex: null
+	,fragment: null
+	,globals: null
+	,signature: null
+	,hasGlobal: function(gid) {
 		return this.globals.h.hasOwnProperty(gid);
 	}
 	,__class__: hxsl_RuntimeShader
@@ -55847,7 +60605,9 @@ var hxsl_ShaderList = function(s,n) {
 $hxClasses["hxsl.ShaderList"] = hxsl_ShaderList;
 hxsl_ShaderList.__name__ = ["hxsl","ShaderList"];
 hxsl_ShaderList.prototype = {
-	clone: function() {
+	s: null
+	,next: null
+	,clone: function() {
 		return new hxsl_ShaderList(this.s.clone(),this.next == null ? null : this.next.clone());
 	}
 	,iterator: function() {
@@ -55865,7 +60625,9 @@ var hxsl__$ShaderList_ShaderIterator = function(l,last) {
 $hxClasses["hxsl._ShaderList.ShaderIterator"] = hxsl__$ShaderList_ShaderIterator;
 hxsl__$ShaderList_ShaderIterator.__name__ = ["hxsl","_ShaderList","ShaderIterator"];
 hxsl__$ShaderList_ShaderIterator.prototype = {
-	hasNext: function() {
+	l: null
+	,last: null
+	,hasNext: function() {
 		return this.l != this.last;
 	}
 	,next: function() {
@@ -55883,7 +60645,10 @@ var hxsl_ShaderInstance = function(shader) {
 $hxClasses["hxsl.ShaderInstance"] = hxsl_ShaderInstance;
 hxsl_ShaderInstance.__name__ = ["hxsl","ShaderInstance"];
 hxsl_ShaderInstance.prototype = {
-	__class__: hxsl_ShaderInstance
+	id: null
+	,shader: null
+	,params: null
+	,__class__: hxsl_ShaderInstance
 };
 var hxsl_ShaderGlobal = function(v,gid) {
 	this.v = v;
@@ -55892,7 +60657,9 @@ var hxsl_ShaderGlobal = function(v,gid) {
 $hxClasses["hxsl.ShaderGlobal"] = hxsl_ShaderGlobal;
 hxsl_ShaderGlobal.__name__ = ["hxsl","ShaderGlobal"];
 hxsl_ShaderGlobal.prototype = {
-	__class__: hxsl_ShaderGlobal
+	v: null
+	,globalId: null
+	,__class__: hxsl_ShaderGlobal
 };
 var hxsl_ShaderConst = function(v,pos,bits) {
 	this.v = v;
@@ -55902,7 +60669,12 @@ var hxsl_ShaderConst = function(v,pos,bits) {
 $hxClasses["hxsl.ShaderConst"] = hxsl_ShaderConst;
 hxsl_ShaderConst.__name__ = ["hxsl","ShaderConst"];
 hxsl_ShaderConst.prototype = {
-	__class__: hxsl_ShaderConst
+	v: null
+	,pos: null
+	,bits: null
+	,globalId: null
+	,next: null
+	,__class__: hxsl_ShaderConst
 };
 var hxsl_SharedShader = function(src) {
 	this.instanceCache = new haxe_ds_IntMap();
@@ -55917,7 +60689,12 @@ var hxsl_SharedShader = function(src) {
 $hxClasses["hxsl.SharedShader"] = hxsl_SharedShader;
 hxsl_SharedShader.__name__ = ["hxsl","SharedShader"];
 hxsl_SharedShader.prototype = {
-	initialize: function() {
+	data: null
+	,globals: null
+	,consts: null
+	,instanceCache: null
+	,paramsCount: null
+	,initialize: function() {
 		var _g = 0;
 		var _g1 = this.data.vars;
 		while(_g < _g1.length) {
@@ -56043,14 +60820,22 @@ var hxsl__$Splitter_VarProps = function(v) {
 $hxClasses["hxsl._Splitter.VarProps"] = hxsl__$Splitter_VarProps;
 hxsl__$Splitter_VarProps.__name__ = ["hxsl","_Splitter","VarProps"];
 hxsl__$Splitter_VarProps.prototype = {
-	__class__: hxsl__$Splitter_VarProps
+	v: null
+	,read: null
+	,write: null
+	,local: null
+	,requireInit: null
+	,__class__: hxsl__$Splitter_VarProps
 };
 var hxsl_Splitter = function() {
 };
 $hxClasses["hxsl.Splitter"] = hxsl_Splitter;
 hxsl_Splitter.__name__ = ["hxsl","Splitter"];
 hxsl_Splitter.prototype = {
-	split: function(s) {
+	vars: null
+	,varNames: null
+	,varMap: null
+	,split: function(s) {
 		var vfun = null;
 		var vvars = new haxe_ds_IntMap();
 		var ffun = null;
@@ -56422,7 +61207,8 @@ js__$Boot_HaxeError.wrap = function(val) {
 };
 js__$Boot_HaxeError.__super__ = Error;
 js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
-	__class__: js__$Boot_HaxeError
+	val: null
+	,__class__: js__$Boot_HaxeError
 });
 var js_html__$CanvasElement_CanvasUtil = function() { };
 $hxClasses["js.html._CanvasElement.CanvasUtil"] = js_html__$CanvasElement_CanvasUtil;
@@ -56466,7 +61252,9 @@ js_html_compat_ArrayBuffer.sliceImpl = function(begin,end) {
 	return result;
 };
 js_html_compat_ArrayBuffer.prototype = {
-	slice: function(begin,end) {
+	byteLength: null
+	,a: null
+	,slice: function(begin,end) {
 		return new js_html_compat_ArrayBuffer(this.a.slice(begin,end));
 	}
 	,__class__: js_html_compat_ArrayBuffer
@@ -56485,7 +61273,13 @@ var js_html_compat_DataView = function(buffer,byteOffset,byteLength) {
 $hxClasses["js.html.compat.DataView"] = js_html_compat_DataView;
 js_html_compat_DataView.__name__ = ["js","html","compat","DataView"];
 js_html_compat_DataView.prototype = {
-	getInt8: function(byteOffset) {
+	buf: null
+	,offset: null
+	,length: null
+	,byteLength: null
+	,byteOffset: null
+	,buffer: null
+	,getInt8: function(byteOffset) {
 		var v = this.buf.a[this.offset + byteOffset];
 		if(v >= 128) {
 			return v - 256;
@@ -56779,7 +61573,6 @@ var Float = Number;
 var Bool = Boolean;
 var Class = { };
 var Enum = { };
-haxe_Resource.content = [{ name : "R_customFont_png", data : "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"},{ name : "R_hxlogo_png", data : "iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAIAAADTED8xAAAAB3RJTUUH3gseEzoXm+yA1QAAABd0RVh0U29mdHdhcmUAR0xEUE5HIHZlciAzLjRxhaThAAAACHRwTkdHTEQzAAAAAEqAKR8AAAAEZ0FNQQAAsY8L/GEFAAAABmJLR0QA/wD/AP+gvaeTAABLpUlEQVR4nO29WZwc1ZUnfO4SkZVVEiDA4JVFyAIEFjsNNrQxeKPpNsbYuN3d09PTM56e329e5m1e+2G+557pnvnNtI3dfN4aY2xjvrHBGMwuCUkIIQmBDAIkdiFUW24RcZfvnHMjQympqlQlZVUqM+NPUcqqyoyIG3HOPfs54EuUGGJAry+gRIleomSAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1BD4P/Qz3Nv/D7z532RaAZWB9CDwdxaEA+lwaU5K/BmXKfJVCsXvAC9p4fg2/BX+Av8q6R2JlEqk2iowI140jXI6ulRU/iT7+N9GY+f1ao3HiMZW2HeXf/9uYfeBjjKIpGzhOsHiPZF4R4Q0Agy90yu6C07yxwS0SYJ+EW4U/lbiTQThrfdW2DGbSjsF4q0xuPC/RNf/114t8fihe30BxwsZgQNrGha0ROrGR0Q0rDwoj49U+fBQHdO6Zyr39CNSQPi843+JB+iFskLgJxyykBZquZLTSbYV0tfjXT+EFbf7M/6tGLu0VytdAGovu/d/BFP3SPuqk9YorcBHvgUGCT0snzgfCdzBCP4rMwcKGcI5fB/dH+IP+tkb3A4kswHgFlMb9VOjWS3Oxk2atMDpeGok+nDc27UeJ/qeAWBEQIWerzBaWOe8MxK3M0dfUuN/LBaYAZQFi5RNe57l70Dbv+J/Jb8WKqsSH3h+p4+lGhmRTScmhKnBvv8FE792J98mVtwhVlzRq+UeBR9s9B/82jd+5FvvKJ+AGgGlFDQ1sncWe50I2sYV7e20FYQ9Q5pqJr0RNsM7xEDiF9YLZauiocxElEzEZkqJlsTfKpdUbCUWy+mmtYTM+luD6HsGcNrTLqYEMoD0uLEZb3Hz90To+LvEouyWuN3Ts5ZIDSAryAxKBgZoy3rhWCEEJadINijklrr3DXwFLpbMPT5ugX1F7PsnMfFLOHAznHIHnPaZHi78cBx4wn9wj23+2mV7Y+MgQkKXkGUqQW0wxuVbbYSIaYP3zouU1ZpUBM5PcbNAmUcsAa0RmBoV4xUxHdUOWNR3SCPykoQra4v4T6IzLzNpFe43CpJqj1d+XOh7BsAdScTGR6kzEem2JONJ0KOqips/7f/4/HA3d/jkHeo7nnQhFY1oj4QuDD1SaZkKWDFAceEii3SgSGgI70jrdfg6llkFdALVJmSv+Pf/p5/+FUx+CU77C3nyZ3t8C/Y/4Q/82DX+L/h9ykXajUBkndFOWKFbCtneRyAy1PiljXN9XkSetBxUeojzlTwZJlX2fpSNx64W+wxvF24crpKxYYQkL1khwreDcXhDaMtZhrzhUGh41ePlHx/6ngGIgCsexqxL0RbAjR+fnmR937KJS2A9X7KYUIJVnayRshVI1gJtbipoSiQCcH+kJ47GHxkGaDY4icIEtWSkftwKUzIffUU5v08euMtM3g/Lb4pP/Us49ealX7sffxL2/VA0fiPcPgUR6mweUCNBXSUSUQJxZjVkyOMGdX+SlBkaOJIJ1kpRj2F6xE+NJA2Ad4m6Ld4LTwq/wj/7TGTWKTaq8EagDcDWlBKaP06alG1aaHoypPsZfc8ARJRoB4+Q2q7I2CU1iBwWKAuQBdombu7o8aTkIlUjNTjaAbU3KBY0WoPBT6RGiF6UdsQlzrKXGGmd7GrWkpAvkM68TD3tjbGM/bg78DMz8bB870a54t/Ah5eIDcz+B93knb7xqLBNjVaPI+cMMjQuETV3Wg5u2klVN5DiDWjU97SxI5EzUK+k4yMJ7vRTWqYSfyvBCGRoXA3dOeCdnhgE1UT8XzDpS6Z+to7wxuCWkUhwJvNoOAhRMkCPIUELiOmJA5G387lHhxQfpFXy3xFtI1Og6Wfbn6LNjZRh0EQsqBvwRzIkJJ+hvSDp0ScizoQWpOgK41TkUZHwLRIsokKHc6lwaHhEEtmg+bM0e1TUro9WfBNOu33xVuvf+4Wf+LlqPKnN+7gTEz0KjfQqSJHzYCJScuKEqBQN3Ah384qf0NkBbScj837EhyDXJquGyDT4m4rCf0khBPZ4kpqIig1aS+wNQ75K8QYBu9I8vt9rS/daJg4ZDeknWrzFLgH6ngHwUfhIyJEUFSFvRoWNAfc8h0/pJBOPK1tpG7qCHji0FdawbYm2+xNyQS4tUQBuhY6eeIV8f2z8+aohZQntRFSvkCbwfWwzeJWR7gD0Tbv3nbsvbTwdvXsvLP+qOOub3V2p33d3duDnorUeT4QCjLQVun6RUy35fVGYJYBbd7LM16UZ13ZcuZqCFG1+0n1c22EjO44KvCkI/lt7M+dbRQTP7yUhoKEwgunUXjeVaqkErFFpX/tB+54BAqQWpAixfUcyGvdsVAP8MUrnQqx7l792LTIGyIWIx1cKFQvBNoMHdhFJKzxeQQzGONiXqPv15NP6xTvh1H8LZ/7V8a/OvvdTM/ET1XomsuOC9DK8KLwaYkUiZfzfRNCs+umqqVXSmk8mW8oqmWn8Ozmy2CFAtr49ZoP10DuJrIaqoyHT+Jhv8gmCgWAA3K0i4UfoQaPklyzEHVquC382R2q0IQ6qDBnQTPG85zL103uVI3tCkqrA5Kg0KiQu8elbkOyDZIebvFes+AvxoTuObWV23y/lxP8WzRfi7ABFbVH0CKZ5ZEEXQSJxg09Rt5nSvqFFinoQ6f/LzHJaCm/j5NEXlp1Z0K2tGpVKl1qXoWiQpQ1wYoCiAc6h8YrKq+MYJ1m2Crr0dIQPMdLcK4ibrw/eEeN8EpNzSWYgWyIyKItErpxo597zkw/Jiefhg3+FFV+HM/9y/mfM3vuprN3t6ptkth+1GicrgoRQJtOKnxprTsRmUuAJgUhbkFsm34xZfVMtOoRn05WYVbFJoIu4x/HeDZQ+GaVEkN0A7ugfOIExGAxAcSqogogsJJrltcgzWRZ4INKfjkiOophCkUskgi+EPKV8dNyVrXMxK0UVl2q8CGQDNBGRE6VaBroF6k2Y+gDqG+3kPXDyV9WZ/27ua/D7fuQnfihbO2Q2Lm0mTCySqmtU7ORYOukAd3oTIcnHGQX02pdFDIlCz4ElDV1UgdKg2BuMLzw7w5yc87QLAbuOhGN1s2sH7Q0GgwFY5YlAVD20SENxgh2YYsGPfMbUQM6LyX8fhIDnmAH/SQm6h+SBYoMUgheWbAVUiTSZpcgkKkpoK55+CmrPwv5fwUl/DZ/42gxnf/tHYvKnItsq0jpMSxhfBrVKq+ZR3xAZHqZi8SQO9fqMdXnJhjh5JoFd9ZLFDkm9nNbbV0lwyAckErsBlzmRSZKKUNoAJwI4nRMZQI4KPy45ydWRA5sdll05Q8EY7AnpfOY+hNiQvjjEZkPWHb3GLThFdSimgIM1ooFXZXxl3LUeVY3d0Pputuwb0Uf+Nj/Kvp+J/Xe5yf12/ziMA4Vj0xFnNNjMhWg1xyHIJld0IkpEyOmcSD9QYaB2ScGPlmMpRXFe0o0I3dv/waSGwmbkM/P9nk08KAzAKb1QCXshB6zoyUO3JLTMPYecZAQHj+uYxaSizGtSwslU4HcKpgyJRomRSP1osLoYjRLnU6NUpblXTh2Qy161k08re4k9sDN7ewOMT0KWQuohldaiRa9Y2uCxyWtPVohwyBCc6aRamiLX0rMTU6R8PZSwRIYHcO4ye4pyBym5NK3olgVAEsAqyrwiT1R/7/8DwgDBa629qmRQ1bZFyQ1+kYwz0TaE2z+yQsSu9EJLCpAUaALegvlHlARS2Ag50yIxi0RONWH/w8nEs2Y8gVoqE7QiYvyj9WzFAwUeOFPfM5dxPkL74ETgHnJjxBe2voDwXhB57A8KPehYtgKUoo5DYBQ2R7Uf5Y7XsoUKXUxZQdKQpO2Wn6FHGAgGCMAHETmoOEjIPOUoQBefzWHU3XlWgE414BBK4607L8KxQYCAzyizwgrXlK7e8tP7RRLxg3DACUi8cxcOJ/pt29PYFj9QmCR5PO9Qpsw/C11QTsJ5fJAewa3qDQhDrMjbf3/rPzA4DBAUXZT/VSsnI2DRLHwXxf7Cr4h0ouCPCtl4LsRWkfaVU74VmSmwDaFspCKwMqG8Vst6E4QqNk9CTMIxRDO6vBDBbgAgK1p6ZVPOke7zjb/AoDAAbZsCJYAYpbQWKwxvT6prRsAxXFH7W7BKQkCZVHmnbVPYaW8pdKVIt8DrjSwp/ZlzKSWiSlKYUMtwRHbIMj2kNrp4VoA8m+Jox2Q2aHw9u6Suoou+gV5CBE0XdQdUgTT5S4Le3cNLkodQPwMk6tTQrJgamLqTBnUjxcYKeWx9BDKSUqMtS3Vt7LjpsZf9kCAviybycmUC+t70PYgBkQDBC0jUVvFQNTDFJa09DtMHm5VryUmHIL0f9/hsSrpEg6GLpY2erpz2V7xeGVG5AlK/NZYykAWcAKEmuv6gzlGydepFRiZWr/WyrmEwGIBLV4KJiGbAGJoBFTYpe7hTUeJCMHwh1Nga5RJpm95MUwK3FEHLt7mPnvMsSBuKmY+F8xZ1biUpx6N3ZkwI+jEPUpTNQ5agdinZDdz35m/AYKhAeRDWc9sTGIVQ6trbh8QM0HafoAGcga2LZAooT5P9mx4Ule4TiVm2k6kcM4S0VUWGremE8LN3XILNDF5sv7s+OzEQEoC9hp40bLIx/YgRsYFELcVTCufIXfKBMrg5EUVtOUmN2FBBKjPS+wGtXillO3zKb/cuJG2wosFRLEXKBmfbUXq1ZE2OGzh5H7IsgiN08XUjqir2QpFHmQVsKqkiqN9jv4diIBiAOIBK3ZH8vbJUAVhNIavKpXtQxIAd+yK7+yVbi075VJuaympSpCKiDDUXfPn5+/LsCqDfB5uBsoy91JJK+ZWTLS7MFYHJQ5FD7hdabBHnpCV5JWQmDbKposqwiFmxvzNAOzEQKhCTUJ4X4Km9hxgVPqenRUYgSwhZYUSclKAmQqwIDdnItypmCqmfUxao4N7Mughu61U8ESrr4fICiHzo2sK2ggot7AI/LPrqwhLZlUU3NOOOEIO0/w+KBMi1UiI+T2aArzpHObuL37EjKD/tgJfPA14sAFAba2k7rW1N+swpilP4uTIHiMJVECa8JE+lBYHSkQEyz2Xq0geeE0EULK6WF5y3oX+s8iJNLVXBD5QJMCgSgBPROGrq2QAedT6yS6Ali5z3Drr82XvOVZlJZKaFqQkUBlQuwGQr5i4hz2k6HI2onPykEYiYdqpgBnBrN9KX3OJvxVz0xn5aymKSPoX+z/05HAMhAXxIioe8kw8lBVkYkTJdAnGdZ4nmSahcBkCmrwEzHdmm92jFeqrg5Xcpqi4X6ezLCAqHCKWXIfcGqD2DAkcbvzNO5NmoSxHi8JxN7UNbAFLrcB3KqcExAGBAGAByVYQJg0lROzkGYnIJqjUKN5APsV5htUuEbUI2TSo/9+C1rq3ce5i1jxSnlPIxfGjkItjWZMGhyDFqKTnCshdSytDSdJH5u51PyJVvqUFRRjkasHTmxxJgUBggpxjONaZWliCXLcVpfbv8kh353I46kaYu2OMpqVePIN9+3lZEsGiYVQtyYQlMcgereYKvlH4RkTBwGXUnCqrIYhOiOJiGSl1WtYtYv8zC7xb11EuGvrcBvBjzsDxvZZMn3fAUgLjdxiboJ9BpMh4D3chOn39xnGCSBg8m8WAqTNObunctr2ToME41LVy0zwmVYnYv0GFXRc07JROh5HIbA8rJGFREprI/vHqzrQV21TfKsYaQlipsxm1E84O3OSOuiHikW6frCdTf//3f9/oajgsskfdJ+xKXRGnOILP0LRXQou72SISWOl5qahgRiqWcAbEwB5H3ocGWYWMwNF4kpYUbB6KCk1GiWFo1U9VsUovUxxryFDjISyXZR4qW8KxGMCVK05tDyWX4YuXbhx5VTOJ4bu5TaLhMgEwOepMlCuXOwI7pVXar/hEFlsL9Xuh6DJN0dEvZcHgdMfXTg0ysuii++hb5kZXdOV0v0PcSQKlrpbrUilOpnzFl1VO/elIQYitGa4ITkKm7p6eW+I61Cb9A6ieQByTlPoE8eiCk+vDeTK0JoSrS2NScaWXk8Jfe2O5aim35w7s8Ur3WuWDgQmHUjGiJjs8pZZefKXWOpJaR0L4GwXsKbv9j0SevUJd/vrunW2IMgg0gxOdArXfu11xDKJyyjnriW78sRPEjchtSIIrezESycP1VZnlPZGqzI9sqANKao+4gNia9v+Zc0sXeIzk4OOB8UfzFOXPUCc9zwQDxtOKvMBGK3UP2KMdcwNk9FSVniXO89VOvAWIAizpZ/ImL9YXXde1MPULfSwAgCX2tjG6Q0XLqD00blQTqEAow4qmRK0iuH3c8PiNUGC5YAsi8KET5UO5Oh7LslZfSSDMFZlKKJFJeCVZNuPdul8CVKJJb9LP48pwogRwuKXWUOmIjK3CxAb6L9PWuCR9ibvJroeXtpC+2DaGs13GkP/VpddmN3TpXrzAIEgCIQFAQb/bybla7I0omcwoqXlYNJR9Ywf2NVci6aftYFgBKSOCO6O2JcayU4MtM2jpk0+ATpQHtXmNZLYHuuel9njAUaoVdnhIXuj9zXpxJwVnmc77SdjFQt8DxL0P1DF7a4JatGK9XXwhrrurmeXqEvjeCc8gPO3vAikeEM+R8lIbjUiAawtYjCt1IQ+KAhiVlCuRCg8Rsv+aaD1E/GaeS+pdMQ1ZDg5talsi8eoXVZd+9xvlc7SY6qu35B7Z+qSMLz270bAt4aHcA6s6pPQkY5HAHNaplc1yqQI2Ho1H92a/qG77VlbP0FoOgAgWI+HKlvsy9gVjRoWRG75dlRhmXuwjzMSfH0M7SiTBdz3LpMerA4FuCcjynI9eMqNoLTVCRGjAepDjCpXl8cFwwEHS7kJtAgWUrSKujxiWRUzH3DwoJQt0L/nnmLNPiQSNkZHO2NoBZdbG98I+6dZbeYoAYQF4J8EUS044CUjTcDmlmhNmA90br23rEwhnAUwmjIS8QtQn15IZsirQmfRJrP8K9T4yliK/jZCCUBt3VLX0eFS4WyyMqiDxxtcprVL8063eFr6Yb4KwmMMbwnJj22YUcu/zTlTUn0oDA48DgMABQb6w/BvVN75UVVsQp6Tsjsjo6TWEoowVqQXJKJadn0WzZOPiUxzx1nDUStXtuMMfRrsyLqnHK0SBdJdJRMzGajkeqpRSFbrOQ+6m9RlIUeSlw1yxRTovWaLizB5ZZmPyvwZKJnJCZcJSlPyIEcqJ2lowe0Y4PZCS4NLmBzeyZ2LMB93zbEnErAmg1YxdpEeFNPf9ycf613VpdzzFQDKDVGilv9NEoaSQmJo88UkKFY0kcvNI+AmXmyhDyLRqzR/MkZfD3s96hrEu0EhGqGolMp0zWcDx1TnVT01kgOGPCQ94iznEDLi9iZIpgKwPHBzQllPKsKLVwx1QCSmWoY+FR4tiYhBrDRSNXfUatvrL76+kRBooBgLbFP3L+T6gzLTUurxCZLEMGoAkRxAIODeRsrkJbmbDLI/f3cz244AE09ANSv6mRz8e1JDjZ2Xx56RE6weT9YKgg1IMGiQweexFZJ0PoStEgwNA69xgK5KJIjlMpQqIoCWMEZHzRJWb1gGj/AQPiBi0gozXg/8za+5VtgcrIATomfGSsQz3Zga3Y2CirZ9OTOYFThUGrrPXaEHBVEPsmZDXnakqZmKhKuDCERvRuEznYuJD/5UE1nJGNl5TRZSMf0DgnyQ0NKTi9sEutoDqVCLQvWsrQOIwIKld/QZ83CN7PAoMmAYDiYpeDuAV49C1NLqqgfuzak+Tk3IMiBMTgI8rBZ3+RpFx8IPMyic20Tqe0S2OavUhJYuwU6mnXHs404qloHJ7jukma9Y2amoolzbfMW+3OPPjjqJCNNFV4I7WmSLRVqy8S5w2O8hMwiAwgL1DyDieXO3ZdU1hgGcd/LTUdIafiXLliwVV6kPpJmUpUNu5tTUtD7UpIoXKUGaGE6GF9FI+EobbNwVvDwTHBXiFS+1UEUUVqGpeTOeo5Ko4h/t0wVhib4C3DbSSqVq+7VZ176WKspYcYNBUoR/x1sA8I933e8UGeItx7iopJpJFzDs4gfz85cNrTha10TWkbkvL7aSIQte4xQFPmKRZsIw6N9aZCyhUtJXz4yvtScCoQqj5OFn3TreWBvgvf7JoqdnGqVepT+8lL/cqB0v4DBlACBEh9u2ynPsBIO1NeUkB/LicQeTx5OjTlfZEX0TZEMo1ShLUe8rtbnsYuqD6FBlP2bAfxEC4xNEXiXCBQMihvgpttIdVrryMhiwnYC0R1HLf/GBettIhvuEWddeFiLKS3GJRUiCOAmkCK9lv2jJKaEtmmWhZOckYoZaWtOqjwEOBMUURVsY/HMfUvN9ZImsUSQ2s0HdemJiKrg5YR6gCQiXg8FnD7k+4lXi4QfCXtHg2i3R0PghhQniqTORlE8dRKD7yuoLU5qswU5DUiIecsWjU0CEPyIAyNGl9LgVY13apVR7KWUc2RT10XXf9X4qTTerXYxcPgSgB5fiyvF3oZGFJW5LIMTEvrphct9t50+vtDH34qJDO2WYlov3NNSKYy08JtNHb9dpdCsWQ+QobNYhF7WVHBTqblzBQfYCmRD1jDz2aGZg5bijCPRFffLD/+yZ6uabHQZ492QRD6axK+bnWGGgycFAmDW7emqmHdOsLfH1p5yiiMvUKrd9pn0wCpylsd9g9ER4jAh3GWNLsVNMXIkKYNE/oM8YF8EAbNOVMo5Uwrc2CcS6sX/BGsvqana1pEDDIDAPlH/hoqLOnHHM2Qt2PeVjw9YMeltdqFTY96LTh+9hWHSv+E9fVI20gRdRgnsz7qgxAKd2Xn0CTU05SDyMuYkiqonouWLaXkvZ+L17jWgFtVU3Glkmg2J05nmYxU9Me364+s6tl6FhkDzgBQvUH6f2PwmcZWVA1w5Qi4EWpQ5fWR/n5ojWTTuP2j8aA1ygNKK0VBYXoa8z0WkNdThIaRIT5AeaMqRjkgpZaHxQcOy9xGCeBRWma6mvnKxVe51Zf1aBFLgYE1ggs4s8ypXwqTikTZOrtIBI278qE+Bnzu77eU359OaNuQIosojOQt9WKQjmzHg10hTniI0CqP1H8ZlCBmX8dV97THK0XeLO9CP3mOoylHvVbIuxsGYWTTVAMAaiz62t+pNX1f9zgHBl0CIIuP3KT0zeQHOZlmTlhqCJG4ECSmZgrc+4xnNmZTiicXadQN0FA2IvU0jpoyq9uFBH0AXA/qL7mr13MPCTZvcF+34MgNrK2uoBnMIcLQxTQ0opO5NMDvWTPDXSJbczWsHqjEhyPRN8/1eKDMf6aq8WVGwBjFrWzE+f1B72dnegq48SfTSBuKbQJUlSwNmCEHYgSu0jfbP/A4jpATEToicT2xDBFuGjfvcNVKexXx4o6ID5AAQHGQZvjusZv+VJ7Rxy1P5oMBjQQfhur1rvltmd2pqg2Pwt2d5FVqXUITSyGGJM7GvalDREPY2215aOOMQmMe7ubZNzYAjYnyMh+S3ZEBytEwNHNcBk6hhItlaFlqMxN7V82qadT0uOtHUqYyTsGvvVKturp361giDL4NkIMmbv1ETBmZUFQr80Yr0gp8S2TTgiaWWt3Z+FvkxYdHdoPrAxQ98Y74vfS5dQB5DhFHCmwkrSF/L3WeMN62lGm40dv/kzr/+iW+8qXHUKhACFG5RYg/FyeRqw+oMxbu/VKkytR8Oo06rwyFtoONw+MDod9ohSqcKaUDbSMpkBdsvTm2+io5BNQPw8MAQHGxv4VTZEqqcKpE5Jsim/KupqShNio8oK5neQ1LhLx8rC3nkOVR6Yt8JVYx5dDVvY9Ra8oSHV33LXXa2b281KXCEDEARF+A6M9Q26U4aDqSTct0SkIWR4L8/SgFQC64arbv0Fk/QBECSX4hX7FAJT++6nUTbaFzrhAXfLrXV7pEGCYGQOj/UFmhwDTMpLR1DWksqIw9RLuc7O1c7cUHT52Bon4gTBqjCgmV2aqQlVHvGqkdq3zudnHmR3t9sUuEIWOA0ZulvMJNLadAT6YlVzYaSB2FwaRwca+vb3FB3SHZBM4H+kHeXEtbb7RDyhejfuyUj+g1g+/8KTBkDACQIMk3q9KI4Ch3wjhpKdTrI7D93er+qKDNPuSI0hgOqh+g6DA11EIxaFNt8Peq5aNTz+31lS4dhowB0t/I2is2qokYvHJAg6ClRMvPcc9jNeA2AO36ji3h0D9OUrzMUkxQUQSkJuy4dx/ss5vv7/WVLh2GjAGSu/T7LdBKVEHEjocecvULtX1GOmj1+voWF1w/mWcKITfwyG7Ho1gj0/DygHMt4W2ztf7BXl/p0mGIGMBnW339YdsA5StSg4pARKGO3PJcGeUG3Qsaht7RkqmnCwUDJGVFRNDUfsLZZko1ldokL24wu57s9cUuEYaIAUR2n5+aEglqPakXRkReVcgL7mVoON4udBxkhBp6snyo87PQ1CSgCcmErTSFhSpKQ6msau1PH7uv15e6RBgWBvDZDrB3w/SIItr3NHIUbV+KgwLxQMiKO4bRSX0GD+35emT8WOlbkE4aUXdU5y/GrE0zAZXKiNvyuH/58V5f7VJgWBjAmfvAvezHq1QO2+4R4XkO+0E5MOiRYO6HRGqQFhFu9JYGWjrX9BqsERVuLSQyGSvQvj5unhgKITAUDIDav7M/ggz8RETlLVQRy8W+PsgBT/009eAzAAs6qgzTRkNLmpqxTafxP2UiF6eirqiru3bSpVK0nn3Mvfh0ry950TEUDCCyB5TbBXVwaOZBJqwSTvG4tzDqlHWhERADHgfDpToaJOYE0n1WM7j38+wjnnzkjPfGWx9bm4xYiISYnMyeGXx/6OAzgM+2+ewH0kn4QDoU7lQNmOL3MFM7H/0sadapjKmhTj6Rl9DOhe63guAjkU/z5hCAz0RWt6j84EZA1Z7UOUW3ZLMKMd4QTQUDJorp19ObH7Evb+z1tS8uhqAeoPVPwt9P8y72xL5ZpXHCuk3ZeW/n0FCK2v3LECmiikLuEU2lVZZVZ9EvRWE+DIsPE5XCpAzKgKCuoSMw4pqQTTmHyo7RCpk+5MBSA2laLGWICxt7mgiWpVY3myqO1KU39XpNi4gBlwDebDfqN+T3sDatVbyRkdJ2doe/jATKAe6rTBSDhEHxAddHXVHaHeKAGxpJdvlzJXAEsWn4FPf+FnfHoGIx7pPl26MvQ6Y0ZwkJHrdhpK5v/H22+6lermeRMfAM8H+Nfw6ft20Km/C4yLl72UqLlCIrnppAi9A4RAF1lu2P7b8NTu2jaJflWLeSVkEismlnGx4VQJqvF2qfieB10Sz1oK4nhFRSeq8n3s02/LZHq1gKDDQDmK3C/ERb1nIntcRHrSzaeWL2YUFWWK+sYt8oRJ5K4ylxTPURA/hcAaJMZ8sdo7Wjys90wriGlBnNM0ba5oYAVoi8fDJYRGGoeBi1itaB9qkUETz1O7drYC2BQWYAZ38t3E7tqtQndmI5t0Uw1ss5anx53K5DglGRVCMsB6Tjdup9owPx1Axo+/sp1mtbYFDzaVhhKAOUVX9We2TB1UEqhv4o+N2Sh0wLrx111B3fbzYNrBAYWAbwyTbj7mE6SCDRYrpiqPDXkwlM4y1mBncL5JliitrCKtaFqJlu/zAAiJySldexjUSizLSxDaetVmTsipAC6nmAILUHtjaPDPqD48OZe1BAaK18JuP60/ebl9b1cE2Lh4FlALC/UmY75TmAEw2QdRrwbKjm1c0xJI8KxDg+QH1hFdkDHCfuIw2I9B8akIFajBGo8ZuaReqHDGh0ABjibSJ+1d7vQ4IofZe54yjYxOQnRkHo0XSSmZ54R2x6EPbv7e3SFgODyQDebDby52zy8tjchhOJ0RVU/2MLLQmzRry88aGpJlmI1DfOkS4U9xUDkGPHUgcUA2k9y+qZoIIfdmxRI1xufYRWjVCOPL4+0gd1wkIIBEcQigxqjqRaQsfJut829+3p5cIWB4MZBxDJD1XrX52OqeWlVWL3h0VLZGjfUunjqPQtN9uYMOk74gP8g6DoGXWSDgNigByjzB5IVjx+eI6BM4uJtrO/XdlIrd9CdYuv+ir7+/OeF4pEWOh5oUW+cF4ZW7v4B5qb47n7Y14xrMKcDfxFRoqjInGYWrVMwUfOkmMDNSZjACWAt095+InTbVWX2h4mNO1BhDZ4JNwXekw0HBTHB/JOojSEXjoXWKJHyKPVPvf347ocKnA68rFpurRuyN/vO/39C75UF+NxRyLfBBW1jJ3e/Hv7/qBpQQPIAGB+D3YbtTkEQ02gmiJt4dNXWkbOcbN8sfAWWJQ3Ko6oH9C92v7DNXG8CtjfT7FrCVoa9nhOOVt37O/3Hf7+aKEnMFpWNBpOmj6srNr3ttj4ULbvtcVYTK8waAzgzCPC3Ie7IxsAgIagn9TK5emf9CtrZmkcOOdhKT5gRNyuoQn1A3lWaa/QVtxRs6fAlsRluqbPJq1vUKZDhL+R4jB//4LgMgtxzYtRYdGuTpWM042PyTde6vZCeolBYwDIngCzQwgtHc27piSYA5oa/klUkDN2A7pZDYDZkccHpGc5AO36gV7GB8TBqXhSgYZMUn5/zVm0+NnfL2fw9y8MIypLI03zZb0weoS8ZxPjduvD6bt/6OpSeonBYgD7GNj7yOfnDFBrf4dS3E/H0tLoXOcMtwnH57ngntjEOVRO63yoH8jlgPE9GhJMEHnam/ZRZCNoCTNNGc7aFf5+OMzfv+BTKBOrmNzGUlJoUKhUwtTmx/2rLyzCenqDgWIAlz0g/LYw+i50wYGml80KUSlVALh8HNDCa38Fj0b1gj2Jsl1PXOnl/QsDXijpJwPU+M20zfP7yZUT/P1wpL9/QWhZ2v5lTMYDGlKJQBlqKlMT+vnH4c0Xu76inmBwGCC19zv3C8+pLB7Vfi77bdXRDIhCjgvqyNZR5x+38KkINFgm30rDCFInUReKe2kCOMpqQqVE2NSn9cw2rXSSB2UD+/shJPSAkB3+/oUhUiPTpEriqaAiAW+nxFtrYXrbU829AyIEBicOoBr/S9jHBWk+SKzk85etin75DFQLMp6FBT4mhzdt5y1YqBnQ1jc40YYSxkL9AIcC2MNIvlXNcSQeK6agWw4id1hyP2VyegNZJDRqPrYmzBT4Btk8lLQnQu833Z57d4i/f8Hn9k6DotNRkYyKTCX2yijrbC2SsT7jbDjljK6ssYcYEAngs/tAPAqk/UvOh8QdX4Mx0DIh+V8UWe80OL1rq5aK5ICMaBYL7rs8aEsDD2Hs1ik6kvuJvxzNdIIIjXGrsoZLG8amZO1wq8cQmeiyXU6CpN1NNDBRZmTzxa3Z3p3dPVFPMCASwGf/6OyDtPHTT5y9bA1M6uwNLgGT1ASTEpvxaap8gHpXzksatwweGXa2Qx5ChiNmjx4HyHJnT7/jpoa4Asrvt3Wf1ZxtoaGPNo2UImz+ortqGZeNCsoQ4VGxHPj2WsSiOUGnPPMcueLMLp5u6TEIEsAn94J5lAq3KB0A1WCNmzENfZkecWHsc3seMCX6UiuIrrluaK8nm9iqCsiYcqcdW9xy4VGn2eDzsmVW+mmom5JoitasmUYTX1HSqqD0fvZHuWPz988J5jol+d5yPoj3GlUjtKhe2uRf3tTVc/UAg8AAzj3s3G7y7YRhplzFi9/MlKYGyKEbDukn+Vxo3z0lwXMGAiklSJioC8WUlUCR5u7V0bMD1gXlStH8FmHI32/RkGFbQ8viIS7OfIOQGs2OAx6uDSLzlvrJ1A7Yl56G17ctxkmXDH3PANb8C8DvFUlox/JZUKtP3KSMcFOKnCCeLUNHA1BZnqO+0LXZmGxRKO65YCGiUextOdC9RtPkxkTCl5HX1L+HM5xFwoqQkCLk9zvu+i84X6978q3NxY5ap3IZZci7I4ea8hZ08+Xnk5c3d+t0PUHfj0kV7i2wr7Hrn+v/KDylaJNqKGhqrnUKic1BUc/L/7olBDhxkrykRB/IeZodkcgPmYAuddkKCczU1sVQPx/a+xNP4+tJGzHsnAp6v+coxwyjf4/z7GTZqOAE9uEGIvFbyqGO4MCEm/igW+fqCfqeAaSNyOWv2D7jZGVQllo81bSmLcx2zD6FoP0wuXSHPDkblKQANdii1EuULjKo4b5LDGCdiSS1sTYti1avSEjzkVSp6Yk6IRTwSt77bUiB6H6KKp2ETWDOIySb3AgjUc7KyPa3EtH3DEApD9KFfVCSBUoauU61OrDckbV78PG09y/213QNoddsu78QyRoHEYcKkHQzDwY3T53bHoIIlBy1Mx5IGhpW6ahDc+hTRG0bhatA7FOR1b2dBkh4oAtngPI+307up8w8oNHvJO66ZwmE2Zm0tVDgz6SWemn50E0Iz+hyvaif0eeXD2H4bbvtcfHsM+p7fJia42d8ebxnD+csOsm1A2ZIyxVKQKbmWtxagr2J3s2+OVOang08Gya5MC8DNXKjLLcmlbbJoIiEBOeO0xfrD0zYRRTOXJJyIh8wEMYN85l8P7VMmgn9LwGANXtO/gnPSqFm0ATbQlrTvcrWp6oq3PpjReIm894a8iOygjbbBu3RrvRsrUvS7KUNHcyVqYNpetdyyuLnJdv5Io91LDKCpRTEpsRzo/jJumphnAAYCAZg5dS3dRzcKf20oMGn3dP1FwpSgGjYhBQVUtYNKejAc+lm9Y8SuSPBU+WmpfAad7NyCWo+JARIG2JJx8ZG1539s6wCzyRlnk/BPGDZoSZ6WQbUZfS/ChQQdAHH3zMJNa2cXhoqmQWUQeakE8rLWCg0YnNDZY4P0HcmOOrVy9QPad24FpDt4FWINvNwiyVUO/ILpig62fdK+i4rWT3GQEgAVko5Ss+ZCS3ppzWFwmD2/ieLDpI/nmtoZKQku6Jcijxh5SypCkRY1IoOYlCCqZ8M3waoMNe6PddFyPy1Xzr+9uRlcnxqVsEGoF12gcGQAOR94Uae0lnhW0I0NevKvRx4ESp22UFD/YV0JMiZOcf95sJ21C+UUT4RWc2i6g+WzZi89p77NQAHMbxfAjHQDph4Dq+QZd9XTSLnhYGQAEwLjh+QRQMyAZVy23voqcFGdVTUhSuo/zqKOFhFGaszwtPILprbhYIiq5msCSLT3NEk5TxsGYLaaFCTPiJF1x0+R0JQgp0L6UV5PI567g6UCjQQEkCEzYqrwFpKTCxzFCxyvF/2Euz85GwFtImV9RULo0YqyzX1SEqRoICuJf3CiZSntbZ7OIPEN3IxL0diZc7lofBAhITTpVgCKz2ch01OWduWAMyJ7ZZES3Edi4aBYIC8Ow6FZXQqxXRsQ2pwT50VLs9e5m4llIzNjh7c0EdTatPmNW2tijuY046uKl75OmSTVN2irCaPKRIcebEOcfaHXs5L4373wd/kQowdrLRkkchD2qgv/lUsLgZCBSIwgaF4RkOz5ZhKer39Q1540N4xZUisbFZdBajlJpXtStpXBQos6aJmnEx6W6MZfiBTTuLwMJfR0AuI3CQfGC3oBLu/x4rcRsxoE7XG5+HSHrZt46CXEKGGi/r2hPlcFMoF7bRVI5nmZhUCKigIbNJsTuisyclswhjaeyNBnSd613Wio6gzxN7yREJysA0OBwyIBAiKAaQSpjVvUpp6mjvZQxEtQp9Z5gE0cNkeUKjwxDYywsoKqfw2IQVDJl5NqTpSP4oDxXq+R1VJU3Lb4fkcS4xA+IHiRXAyC05H6mE7mO5iQBggz8NJJNS1QkqzwAnE0vUoEszNlSkOHZLzgu9ccM0kRcZ8ioSexBp5IJ5KYcL7+kgkmtTHwkc0s46NTYvbvzrKSKdFRZv3RCj3zDtmUyws/2u/JwLBgDBA6OiNNmcC0NDstYB8v+oRAxCEaPtJkP6V4rbS5FSxTZ9RfxYP1crJq/XYGZl/JxWvUwZQKiQKC7KKU6Yz40JFcI8EmQ+JbxxS8aHumW6ql0o449sJeP3NAwPBACF5GE3Kpqc8UKvCgxNdTQ1e2PUE6oG8IxHlMqRooCuke2fjLFOqeqY/bS188mb1iUvUgZ3ilQfdW7uSA++5dFpmiaL51XHofNtbTwsH8wL1h7Rv+p8q0YQfjHDwQDBAMAAy6eqR5DgNVTC5eWTCFR3Gi5xHXzgcQ2JdnuvcDruG7IODNqAI+yArOaJovha0BQveSGGUSMFn0Gp616RZFW70U/6Mj46u/Xz16m/ml/Ghcyvn32JfuMu+sR32bZHTe2WzidLMNDWYvLmz54Yn4SThGrzIx+G1mzU45ndOGQrtrw8hUHHED4V14WfzhRTDMjzkBk24BaSgqeDa6vs4wCAwQFBGZTMWU8uR5J0ynLQVC2jO5gwVeVa7Dxl0HESg7HttFXTovjnhs+TPKYapLGSfUosSJkIj8k5Z5Lg3nMtvAA1cVwdZ17IBVKAcVfzJp1Y+9vHWJX958h/dcuQlqYv+ZtlFYHfcm77+kD+wHRr7FWtKIlNUWJOicKMzsVeemUJw97fgRVU8GoPWIWnJorMiWRS0G7ibKxvD97AgN1ubsNBHrO31D4Mz+G7H3hrjjKCS/D7PDB0EBgDgpv9NZxPjfKRknjY8R7aYI92C0o8psx5tBstKFBMq07rivCLe3EPFmY+YWnjGpOA2ED7s/kh7WjtpjbC40yfC1zzUpUt0ZpxWGTUSlVF80inVj1+YXfKl+Jq/nHU8E0Nd/PXqxV93L/wi2X2/PPC8btXTmKp7uANdbDNlEudS42yKbK6yCqXc0bAjx9o5nstQva7jFg55E4BgvxYFNOyPJZbWkE9ExR8XVsKf7wEHq3D6GIPAAPRUkXJb0ma0aVHeJRKBCONN5wh0OJ83u3HstZdaCGIAOhwXuXOHOe81Vx626KF7ibTFPbaAuguh2YEU2UTVy/lpvAANlICBOyPyU1rF/2FEjpwiP7bSXn5TfPW/n/+9lhd9rXrR19zOu6dfvX/kgxegroRpSZHa2LuRWIOOkGJT5ATrUu8yZyx7UL2mQmRHRmpo/uLyBPGw4eP9MO0hwHnuOJu5C97DBUc0iHOc63dTYBAYgJ5vS0KNGjhDu4CDyFrOmjFZpGWS6hxKcLnNp3Qpb+2SN0xFKg7uqRJkppkpcIdFuva+KWxT2UT5RKKqg3+qUGZPK8E3QlSxIpayvuL06PRzKld8WV3zN8e2LLnmz09e8+du5z3N3Y/YfdvjbFxktcg2haokSvlRUKPUFEkZUo0MyR/vU2RRmbokb2MaEodIvaOsNqVlGKFXTNPmEku8SwskA8GTBKVvtxnoYwwEA+CWn0hf0+w+x13JkmrDCeyzMQB5ZlB5loY1d+63SZW7gmq4WMkOpR+kV3OhrkoUniJr+qwJrkV9AmVgHAjd6HDX14mr4oEjpcSyUXHGymWX3a4+c8fxL06uuWNszR3pKz9LX7o/2veSSqcz0+IuJcixlDGHXKtjEY1Jas6CsgDtkJbEq7aoKdGYBEudIhR+4UtW74LhKl2e6rxwZz43Bqbdxome+dm6hYFgACTCJPKNSFI/KvKYKJLOwnglZwkjIU2EDIV2foIMRX+ZN6jfoFotM3Ir+bq0dZUhxTciTw1vHXuXeB4XGYiKtGdKEUOeoUoXNXoKfGKNv+IL6qpvdXeJ8apv4Jd75afmxfvl2y8o0wAOJUherw0DjjUyRIpsqatVZANvI8iEz3B3cCZDoLEwkqeVhuqzY09pow6ULGD6fP8fEAYwDlAvSCN2/nO7DuqI2B6TMeMnaL/nZomeClCUj8h7Y5X2Imu5Vp17D6ZkUqJijZusN47CWELnfj9SnGi/FRB7X6VODqMj6qwL1VW3xpd1YdefDXLVN+NV34RXf5Vt/0X2/ksuq6EJElMhARhysSJjVpAorc9Is4k8FTFWyYZXtF17U6e+cTZD4UAhchqmjXvE7IribGCDOxTn9Pn+PwAMQBUmqIU3ZORw43ahNQ5pQUA7NMzWopCMXWQWRXGDRGQNk9WcaVk1tZzYRthIFNotJdc5TTakDB3CQ5d1Ghej8fNuJHLnXFm56lZ92VeWaM0rb41W3qpe/VXy4v/Xeu+lrPVeBAm1g+QewCEEyJs63gXy7VKnMPbgx9pwWnO75DJxJBysU45b+c674YPPc4TYgurzrKC+ZwCrMlGvyqmxVqXljNYUQI05gmo0ajAyeP1IaPOcCJ5wDS6aPsm2aJZoq+Z8Qn5zHiOKhNOiVsgyRv2I+qkr1CDwFIriAyKyNotFpqVJ0SyQcRSPmpU3qKu/vuySG5Z+4XLlrdWVt468+nC66+fZ2+t0MqGpCREyvxFolHAhC/dhoZyoiJQkZWRCwUHU2ZDgR0C1oyRuHK0Fb1OLKpPCTQGoUgd4gjbvAjxiRganKt9zDs35WBqUmT3OOj9e9D0D6HQM6lVfi2IKBOFzbnAStOQWJLqJWgC3wyWLtildw7fqzjSdbE3RFm7RbODO38BdGVAvknHm2MuHtqzxkQOaEQe+QYOWmhENWRKcyHC6vuAz0TW3qwtv6O3yxcrPV1Z+Pt7zVLbrntYbD+nmhIxH67iqLNFo+CILZ4lVcapj72raj814kOjUCNBoRrrOSH8yqTEJakpGOzJ1yeGZt5gPjYd9lbQm5BiJd0PZ/iah/r56AgrxejMjB4fQkkvILeevO6qvraaoJLtmzZoaRalwI0fFOAaVkAakuHl6KHjKeK68Ww4jaBukaAALhx+NJLdbdLDco74QGVEFNHPXfFpdc0d83md6vfKDEGdfF599XbT3qfQP9zZf/93y+getaJT2c8hUPIbKYWpdPVqxLG3O+PEENSiFJrwQMZXjKC8r5CmtuIZzeGdTl6UoJMnbpAG1PtSokFksdcVWaF7MUuPcJ+h/Bsga9KD1MvL7oLqTUVcI25CtBmr2vlKXobd4hTs5h/ZsZLNq5cNIidBuhGwBOljabOpoRAttTIbPm4KkKCJk1FTCxWMja/84+sw3xNnX9HrNM0OcdV3lrOvUW1vFjrvFW4/Z2lsCqtLR9Dwtq6fVm0llZn095k4tIcEiTFgiNz/QTSUKwc3CCp+iTPBZq5WkNvJRTNWctE0c6wziEwVdaxTeK6Rv/IN//h/02z5Fiq/h41aCkoqR6FOeaLqcfiDdJm+jbzmvLPL5KKHwXbbvg5MZ5VUYCvJora2HJqoBY2Mjl904eu2fyo//cY9XO3+8t82/+LPk1Z9njQMxVJVXLYpgz+IUZo9AeM3dZfK3SckjVn3YRPJbRIHjBtWdpk6YVFQ/++1lf/pfl2RJi4K+lwA+usav+E8o62OaXU3FV9Ce6YaU7CiNh/PDONjJv8zIiWnbWRLcuIEkAw1YgmYllVLHTtFgaY88JCqnnr7svE/KD3++x+tcKM5cK85cK9f++/jNJ6FO8xOW0diEmR+3VznFBzZwoc8wgirSLOS2L1E+T1r2SsR4d2KUFsbBxy9fqiUtDnyJEkOMkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONkgFKDDVKBigx1CgZoMRQo2SAEkONvmeA55577nvf+/53v/u9I7/uuusHjz/+5Gwf3LNn77/8y1133vm973znzu9971++853v0nf84J309atf/WqeF7Bjxwt4IjzdnXd+H4+A3/H1d7575//55+9+987v3/3Tnx31CDt37vwuAY9AX/girAi/47X983fuxOM8u+W52T7+wgs7f/jDH+N5wxcu5J//+Tv8cVwU4cc//nHx5l//+jfhFGHV/P47Z7x7c3wVd+lf774bL36eN+rERN9PiHnzzTfXrVu3YSZs3Lhx165ds31wamr6qaeeXrduPb4Tj7B+/Yann356Pf6z4Rn82rnzxXlewPPPb3vyySf5g3SEp556Co+2adPmTZs24S/XrXsajzb3ES688MI9e/ZsWP/M+nXPbHxmM35i3dPP4I/hOx4Wj/Ob3zyw9403jvzsa6+9/thjjyPWt/HMMxvx7OF6nnlm0/PPP+/cwTIA5Bb8C94ZvEi82nCXZrx7c2F9fvitW59///3987xRJyb6ngGMMY1Goz7LV5qms33QA+AbWknSaDbr9Xp40Wq18HWtVmu1kvmc/flt219+5RX8IH5N12rNZjPNMjxIbRp/oh/Hxyc2btx01ON88YtfVFpOTk3WGrVmq1HHK2rS92ariavD4/zhD39ATjvygy/t2rV9xw46Wb1OC6F3t/D9+O/09DT+e8opp3z6058u3o9vm5qezheO76nV8Gu2uzfbF94m/CwtsNG0tpfDmI8ffc8Aot26/kjwmNJZK/byOWK+PYI61EYeetijYu+ePW+//XbxI5XlU/+s/ICO8eqrrx71ONdff/3lV1xRHa0iP4detvlXe2XIyRvWb9i586XOT7362p5du/4wOTkZLti1e71RzwrqDwPLl590442fX7lyZfERyQhvoKm/NPpXHoPmcPA29XlroL5ngPAwxEwAMVfBp6P5jKL4ePgRybcgiPmc/Y033sCNMHw20FxxVeEa8E/4hkceefSoh/q7//gfPvqxj0gq0+dm62HGHjju7UBHQ2UP9ZnOj2zd+tyLL77Y1nDyll0+L1z01Wr1sssuu/HGG448V8H84cWMd28OFDdtnnfpREbfM8DcvZzmnrJYEEGhJYfXYY886ok3btr89jvv0pY/E8NIqbiTusuMQXvgqEdD3P6128dGx3DfV1JxO6NQuJxLJ2Pts1u2PLc1V4R2vLATFfqpqamCKAPLM/MIrfXZZ5/9uc997sglFwuHDqFXcMIhPxZcdehX5+FcT0dxHj8GgAFgNh7g+URzsYfokOCd21uQHkc96+uv73n33XcLLaKQA0EbKSgDtZc9e/e+8ebbcx8NcdWVV9zw2RsqlREe8Moztn0ulAJP4um2b98e3rxt27a9e/fCQSI+2K0f34mq/w033LB69aqjnhQ6BGAhEwolarb3Q1vKzX2HT3wMBgPMjKDdz/WG9vavlApPff4Hfx2Jeu9etJhFh/3QuaFCm6nwl2gWP/fcc/M57F/91V+cd955THw+UKDg8S3h8hDPPvvs+g3PrFu/Abd/VK6gg3WLVS1btuyyyy797Gevn+dawsIL3e+Qo82CwhTodyVokBkA6NHO+nyOVGrn2POOxJ49e9555x1oE71iBDLF7ywGRDg7vsiybPPmzfM88pe+9KWTTz45bPls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"},{ name : "R_normalmap_png", data : "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"},{ name : "R_customFont_fnt", data : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxGb250IHNpemU9IjEyIiBmYW1pbHk9IjgtYml0IE9wZXJhdG9yKyA4IiBoZWlnaHQ9IjE0IiBzdHlsZT0iUmVndWxhciI+DQogPENoYXIgd2lkdGg9IjQiIG9mZnNldD0iMCA4IiByZWN0PSIxIDggMCAwIiBjb2RlPSIgIi8+DQogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMSAxIiByZWN0PSIyIDEgMSA3IiBjb2RlPSIhIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI0IDEgNSAzIiBjb2RlPSImcXVvdDsiLz4NCiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjEwIDIgNiA2IiBjb2RlPSIjIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxNyAxIDUgNyIgY29kZT0iJCIvPg0KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgMiIgcmVjdD0iMjMgMiA2IDYiIGNvZGU9IiUiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjMwIDEgNSA3IiBjb2RlPSImYW1wOyIvPg0KIDxDaGFyIHdpZHRoPSI0IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMzYgMSAyIDMiIGNvZGU9IiciLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM5IDEgMyA3IiBjb2RlPSIoIi8+DQogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMSAxIiByZWN0PSI0MyAxIDMgNyIgY29kZT0iKSIvPg0KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9IjEgMiIgcmVjdD0iNDcgMiA3IDUiIGNvZGU9IioiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjU1IDIgNSA1IiBjb2RlPSIrIi8+DQogPENoYXIgd2lkdGg9IjQiIG9mZnNldD0iMSA2IiByZWN0PSI2MSA2IDIgMyIgY29kZT0iLCIvPg0KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNjQgNCA0IDEiIGNvZGU9Ii0iLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDciIHJlY3Q9IjY5IDcgMSAxIiBjb2RlPSIuIi8+DQogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSAxIiByZWN0PSI3MSAxIDQgOCIgY29kZT0iLyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNzYgMSA1IDciIGNvZGU9IjAiLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjgyIDEgMyA3IiBjb2RlPSIxIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI4NiAxIDUgNyIgY29kZT0iMiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iOTIgMSA1IDciIGNvZGU9IjMiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijk4IDEgNSA3IiBjb2RlPSI0Ii8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMDQgMSA1IDciIGNvZGU9IjUiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExMCAxIDUgNyIgY29kZT0iNiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjAgMSIgcmVjdD0iMTE2IDEgNiA3IiBjb2RlPSI3Ii8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxIDEwIDUgNyIgY29kZT0iOCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNyAxMCA1IDciIGNvZGU9IjkiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjEzIDEyIDEgNSIgY29kZT0iOiIvPg0KIDxDaGFyIHdpZHRoPSI0IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMTUgMTIgMiA2IiBjb2RlPSI7Ii8+DQogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSAxIiByZWN0PSIxOCAxMCA0IDciIGNvZGU9IiZsdDsiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjIzIDEyIDUgMyIgY29kZT0iPSIvPg0KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMjkgMTAgNCA3IiBjb2RlPSI+Ii8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIzNCAxMCA1IDciIGNvZGU9Ij8iLz4NCiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQwIDEwIDYgOCIgY29kZT0iQCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDcgMTAgNSA3IiBjb2RlPSJBIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI1MyAxMCA1IDciIGNvZGU9IkIiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjU5IDEwIDUgNyIgY29kZT0iQyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNjUgMTAgNSA3IiBjb2RlPSJEIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI3MSAxMCA2IDciIGNvZGU9IkUiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijc4IDEwIDYgNyIgY29kZT0iRiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iODUgMTAgNSA3IiBjb2RlPSJHIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI5MSAxMCA1IDciIGNvZGU9IkgiLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijk3IDEwIDMgNyIgY29kZT0iSSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTAxIDEwIDUgNyIgY29kZT0iSiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTA3IDEwIDUgNyIgY29kZT0iSyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTEzIDEwIDYgNyIgY29kZT0iTCIvPg0KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMSAxOSA3IDciIGNvZGU9Ik0iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjkgMTkgNSA3IiBjb2RlPSJOIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxNSAxOSA1IDciIGNvZGU9Ik8iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjIxIDE5IDUgNyIgY29kZT0iUCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMjcgMTkgNiA4IiBjb2RlPSJRIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIzNCAxOSA1IDciIGNvZGU9IlIiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQwIDE5IDUgNyIgY29kZT0iUyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDYgMTkgNSA3IiBjb2RlPSJUIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI1MiAxOSA1IDciIGNvZGU9IlUiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjU4IDE5IDUgNyIgY29kZT0iViIvPg0KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNjQgMTkgNyA3IiBjb2RlPSJXIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI3MiAxOSA1IDciIGNvZGU9IlgiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijc4IDE5IDUgNyIgY29kZT0iWSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iODQgMTkgNSA3IiBjb2RlPSJaIi8+DQogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMSAxIiByZWN0PSI5MCAxOSA0IDciIGNvZGU9IlsiLz4NCiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijk1IDE5IDQgOCIgY29kZT0iXCIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgMSIgcmVjdD0iMTAwIDE5IDQgNyIgY29kZT0iXSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTA1IDE5IDUgMyIgY29kZT0iXiIvPg0KIDxDaGFyIHdpZHRoPSI0IiBvZmZzZXQ9IjAgOCIgcmVjdD0iMTExIDI2IDQgMSIgY29kZT0iXyIvPg0KIDxDaGFyIHdpZHRoPSI0IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTE2IDE5IDIgMiIgY29kZT0iYCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMTE5IDIxIDUgNSIgY29kZT0iYSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMSAyOCA1IDciIGNvZGU9ImIiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjcgMzAgNSA1IiBjb2RlPSJjIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMyAyOCA1IDciIGNvZGU9ImQiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjE5IDMwIDUgNSIgY29kZT0iZSIvPg0KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMjUgMjggNCA3IiBjb2RlPSJmIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIzMCAzMCA1IDYiIGNvZGU9ImciLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM2IDI4IDUgNyIgY29kZT0iaCIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDIgMjggMyA3IiBjb2RlPSJpIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI0NiAyOCA1IDgiIGNvZGU9ImoiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjUyIDI4IDUgNyIgY29kZT0iayIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNTggMjggMyA3IiBjb2RlPSJsIi8+DQogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSAzIiByZWN0PSI2MiAzMCA3IDUiIGNvZGU9Im0iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjcwIDMwIDUgNSIgY29kZT0ibiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iNzYgMzAgNSA1IiBjb2RlPSJvIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSI4MiAzMCA1IDYiIGNvZGU9InAiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9Ijg4IDMwIDUgNiIgY29kZT0icSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iOTQgMzAgNSA1IiBjb2RlPSJyIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIxMDAgMzAgNSA1IiBjb2RlPSJzIi8+DQogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSAxIiByZWN0PSIxMDYgMjggNCA3IiBjb2RlPSJ0Ii8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIxMTEgMzAgNSA1IiBjb2RlPSJ1Ii8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIxMTcgMzAgNSA1IiBjb2RlPSJ2Ii8+DQogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSAzIiByZWN0PSIxIDM5IDcgNSIgY29kZT0idyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iOSAzOSA1IDUiIGNvZGU9IngiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjE1IDM5IDUgNiIgY29kZT0ieSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMjEgMzkgNSA1IiBjb2RlPSJ6Ii8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIyNyAzNyA1IDciIGNvZGU9InsiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjMzIDM3IDEgNyIgY29kZT0ifCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMzUgMzcgNSA3IiBjb2RlPSJ9Ii8+DQogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMSAzIiByZWN0PSI0MSAzOSA2IDIiIGNvZGU9In4iLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjQ4IDM4IDEgNyIgY29kZT0iwqEiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjUwIDM3IDUgNyIgY29kZT0iwqIiLz4NCiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjU2IDM3IDYgNyIgY29kZT0iwqMiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjYzIDM3IDUgOCIgY29kZT0iwqUiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjY5IDM3IDEgNyIgY29kZT0iwqYiLz4NCiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjcxIDM3IDQgMSIgY29kZT0iwqgiLz4NCiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMSAxIiByZWN0PSI3NiAzNyA4IDgiIGNvZGU9IsKpIi8+DQogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMSAyIiByZWN0PSI4NSAzOCA2IDUiIGNvZGU9IsKrIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMCA0IiByZWN0PSI5MiA0MCA2IDMiIGNvZGU9IsKsIi8+DQogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9IjEgMSIgcmVjdD0iOTkgMzcgOCA4IiBjb2RlPSLCriIvPg0KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTA4IDM3IDQgNCIgY29kZT0iwrAiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExMyAzNyA1IDciIGNvZGU9IsKxIi8+DQogPENoYXIgd2lkdGg9IjQiIG9mZnNldD0iMSAxIiByZWN0PSIxMTkgMzcgMiAyIiBjb2RlPSLCtCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMSA0OCA1IDYiIGNvZGU9IsK1Ii8+DQogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMSAxIiByZWN0PSI3IDQ2IDYgNyIgY29kZT0iwrYiLz4NCiA8Q2hhciB3aWR0aD0iMyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjE0IDQ5IDEgMSIgY29kZT0iwrciLz4NCiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDYiIHJlY3Q9IjE2IDUxIDQgMyIgY29kZT0iwrgiLz4NCiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjIxIDQ3IDYgNSIgY29kZT0iwrsiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjI4IDQ3IDUgNyIgY29kZT0iwr8iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM0IDQ2IDUgNyIgY29kZT0iw4AiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQwIDQ2IDUgNyIgY29kZT0iw4EiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQ2IDQ2IDUgNyIgY29kZT0iw4IiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjUyIDQ2IDYgNyIgY29kZT0iw4MiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjU5IDQ2IDUgNyIgY29kZT0iw4QiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjY1IDQ2IDUgNyIgY29kZT0iw4UiLz4NCiA8Q2hhciB3aWR0aD0iOSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjcxIDQ2IDcgNyIgY29kZT0iw4YiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijc5IDQ2IDUgOCIgY29kZT0iw4ciLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijg1IDQ2IDYgNyIgY29kZT0iw4giLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIC0xIiByZWN0PSI5MiA0NCA2IDkiIGNvZGU9IsOJIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI5OSA0NiA2IDciIGNvZGU9IsOKIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMDYgNDYgNSA3IiBjb2RlPSLDiyIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTEyIDQ2IDMgNyIgY29kZT0iw4wiLz4NCiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExNiA0NiAzIDciIGNvZGU9IsONIi8+DQogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMCAxIiByZWN0PSIxMjAgNDYgNSA3IiBjb2RlPSLDjiIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgMSIgcmVjdD0iMSA1NSA1IDciIGNvZGU9IsOPIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMCAxIiByZWN0PSI3IDU1IDYgNyIgY29kZT0iw5AiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjE0IDU1IDYgNyIgY29kZT0iw5EiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjIxIDU1IDUgNyIgY29kZT0iw5IiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjI3IDU1IDUgNyIgY29kZT0iw5MiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjMzIDU1IDUgNyIgY29kZT0iw5QiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM5IDU1IDYgNyIgY29kZT0iw5UiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQ2IDU1IDUgNyIgY29kZT0iw5YiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjUyIDU2IDUgNSIgY29kZT0iw5ciLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIwIDEiIHJlY3Q9IjU4IDU1IDcgNyIgY29kZT0iw5giLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjY2IDU1IDUgNyIgY29kZT0iw5kiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjcyIDU1IDUgNyIgY29kZT0iw5oiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijc4IDU1IDUgNyIgY29kZT0iw5siLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijg0IDU1IDUgNyIgY29kZT0iw5wiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjkwIDU1IDUgNyIgY29kZT0iw50iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijk2IDU1IDUgNyIgY29kZT0iw54iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEwMiA1NSA1IDciIGNvZGU9IsOfIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMDggNTUgNSA3IiBjb2RlPSLDoCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTE0IDU1IDUgNyIgY29kZT0iw6EiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEyMCA1NSA1IDciIGNvZGU9IsOiIi8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxIDYzIDYgNyIgY29kZT0iw6MiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjggNjMgNSA3IiBjb2RlPSLDpCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTQgNjMgNSA3IiBjb2RlPSLDpSIvPg0KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMjAgNjUgNyA1IiBjb2RlPSLDpiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjAgMyIgcmVjdD0iMjggNjQgNiA3IiBjb2RlPSLDpyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMzUgNjMgNSA3IiBjb2RlPSLDqCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDEgNjMgNSA3IiBjb2RlPSLDqSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDcgNjMgNSA3IiBjb2RlPSLDqiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNTMgNjMgNSA3IiBjb2RlPSLDqyIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNTkgNjMgMyA3IiBjb2RlPSLDrCIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNjMgNjMgMyA3IiBjb2RlPSLDrSIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgMSIgcmVjdD0iNjcgNjMgNSA3IiBjb2RlPSLDriIvPg0KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgMSIgcmVjdD0iNzMgNjMgNSA3IiBjb2RlPSLDryIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNzkgNjMgNiA3IiBjb2RlPSLDsCIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iODYgNjMgNiA3IiBjb2RlPSLDsSIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iOTMgNjMgNSA3IiBjb2RlPSLDsiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iOTkgNjMgNSA3IiBjb2RlPSLDsyIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTA1IDYzIDUgNyIgY29kZT0iw7QiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExMSA2MyA2IDciIGNvZGU9IsO1Ii8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMTggNjMgNSA3IiBjb2RlPSLDtiIvPg0KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iMSA3MyA1IDUiIGNvZGU9IsO3Ii8+DQogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAyIiByZWN0PSI3IDczIDUgNyIgY29kZT0iw7giLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEzIDcyIDUgNyIgY29kZT0iw7kiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjE5IDcyIDUgNyIgY29kZT0iw7oiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjI1IDcyIDUgNyIgY29kZT0iw7siLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjMxIDcyIDUgNyIgY29kZT0iw7wiLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM3IDcyIDUgOCIgY29kZT0iw70iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQzIDcyIDUgOCIgY29kZT0iw74iLz4NCiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQ5IDcyIDUgOCIgY29kZT0iw78iLz4NCjwvRm9udD4NCg"}];
 var __map_reserved = {};
 var hx__registerFont;
 hx__registerFont = function(name,data) {
@@ -56799,7 +61592,6 @@ hx__registerFont = function(name,data) {
 	div.className = "hx__loadFont";
 	window.document.body.appendChild(div);
 };
-hx__registerFont("R_trueTypeFont_ttf","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iooD8f4TAWz+lAHt/p0FnP0yAs764nsBorF7/l+yAAAAAwBk//0FlAWcAAMADQAZAAApAQEhAREzETMRMxEjEQE1IREhNSE1ITUhNQG0/uwDqgEU/kmK4oGB+1EB7f4TAWz+lAFsBZz7jgGh/tQBLP0yAS0D93v9MnuydbEAAAAAAgBkAAAEPgWcAAkADQAAAREhESEVIREhPQERIREEPv0pAtf8JgLGARQEJ/4y/p32A0PkcwEC/v4AAAD//wBkAAAEPgaTACIAJAAAAAMAQwFdAAD//wBkAAAEPgaTACIAJAAAAAMAdAGTAAD//wBkAAAEPgaUACIAJAAAAAMAwQEUAAD//wBkAAAEPga2ACIAJAAAAAMAyADYAAD//wBkAAAEPgarACIAJAAAAAMAaQCiAAD//wBkAAAEPgafACIAJAAAAAMAxgFXAAAAAgBkAAAHDwWcAA8AEwAAASERIREhFSERIRUhESEVIRkBIREDNf5D/uwGq/06Asb9OgLG/Cb+QwJZ/acFnPb+ner+nfYDQwFj/p0A//8AZP7IBD4FnAAiACYAAAADAHgBewAA//8AZAAABD4GkwAiACgAAAADAEMBbwAA//8AZAAABD4GkwAiACgAAAADAHQBkwAA//8AZAAABD4GlAAiACgAAAADAMEBIAAA//8AZAAABD4GqwAiACgAAAADAGkAnAAA//8AZAAAAXgGkwAiACwAAAACAEMAAAAA//8AZAAAAX8GkwAiACwAAAACAHQeAAAA//8AZAAAAgkGlAAiACxCAAACAMEAAAAA//8AZAAAAxEGqwAjACwAxgAAAAIAaQAAAAIAZAAABMIFnAAHABEAAAERIREhETMVJREhFxEHIREjNQH8AcP+PYP+aQNyaGf8jYQCWf6dA7D+nerqAll++2B+AlnqAAAA//8AZAAABD4GtgAiADEAAAADAMgA6gAA//8AZAAABD4GkwAiADIAAAADAEMBPwAA//8AZAAABD4GkwAiADIAAAADAHQBhwAA//8AZAAABD4GlAAiADIAAAADAMEBGgAA//8AZAAABD4GtgAiADIAAAADAMgAzAAA//8AZAAABD4GqwAiADIAAAADAGkAkAAAAAEAZAHsAxMEjAALAAABFwcnByc3JzcXNxcCX7Sms7GlsJ2mnaClA0a0prSwpbGdpZ2hpgADAGT/QATI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");
 var ArrayBuffer = $global.ArrayBuffer || js_html_compat_ArrayBuffer;
 if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_html_compat_ArrayBuffer.sliceImpl;
@@ -56951,28 +61743,33 @@ h3d_mat_Texture.UID = 0;
 h3d_mat_Texture.nativeFormat = hxd_PixelFormat.RGBA;
 h3d_mat_Texture.nativeFlip = false;
 h3d_mat_Texture.noiseTextures = new haxe_ds_IntMap();
+h3d_scene_Object.ROT2RAD = -0.017453292519943295769236907684886;
+h3d_scene_Object.__clid = hxbit_Serializer.registerClass(h3d_scene_Object);
+h3d_scene_Mesh.__clid = hxbit_Serializer.registerClass(h3d_scene_Mesh);
+h3d_scene_MultiMaterial.__clid = hxbit_Serializer.registerClass(h3d_scene_MultiMaterial);
+h3d_parts_GpuParticles.VERSION = 2;
+h3d_parts_GpuParticles.STRIDE = 14;
+h3d_parts_GpuParticles.PUVS = [new h3d_prim_UV(0,0),new h3d_prim_UV(1,0),new h3d_prim_UV(0,1),new h3d_prim_UV(1,1)];
+h3d_parts_GpuParticles.__clid = hxbit_Serializer.registerClass(h3d_parts_GpuParticles);
 h3d_pass_Blur.__meta__ = { obj : { ignore : ["shader"]}, fields : { quality : { range : [1,4,1], inspect : null}, sigma : { range : [0,2], inspect : null}, passes : { range : [0,5,1], inspect : null}}};
 h3d_pass__$Border_BorderShader.SRC = "oy4:namey29:h3d.pass._Border.BorderShadery4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-269R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini274y3:maxi330y4:filey64:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fpass%2FBorder.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i280R16i324R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i280R16i295R17R18gR19r17R20jR21:1:1oR0y8:positionR9i-267R5jR10:4:0R11r17y6:parentoR0y6:outputR9i-266R5r22R11jR4:12:1ar21oR0y5:colorR9i-268R5r22R11jR4:5:2i4r16R25r23ghgggoR14oR15i298R16i324R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i298R16i302R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i303R16i317R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0R24R9i-265R5jR10:1:0R11r41R25oR0y5:inputR9i-264R5r43R11jR4:12:1ar42hgggoR14oR15i319R16i320R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1zgoR14oR15i322R16i323R17R18gR19r50R20jR21:0:1jR30:3:1i1ghgghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-270R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i356R16i388R17R18gR19r3R20jR21:4:1aoR14oR15i362R16i382R17R18gR19r26R20jR21:5:3r18oR14oR15i362R16i374R17R18gR19r26R20jR21:1:1r25goR14oR15i377R16i382R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0R27R9i-263R5jR10:2:0R11r78ggghgR12ahghy4:varsar79r44r23r5r63hg";
 h3d_shader_ScreenShader.SRC = "oy4:namey23:h3d.shader.ScreenShadery4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-221R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini241y3:maxi297y4:filey72:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FScreenShader.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i247R16i291R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i247R16i262R17R18gR19r17R20jR21:1:1oR0y8:positionR9i-219R5jR10:4:0R11r17y6:parentoR0y6:outputR9i-218R5r22R11jR4:12:1ar21oR0y5:colorR9i-220R5r22R11jR4:5:2i4r16R25r23ghgggoR14oR15i265R16i291R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i265R16i269R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i270R16i284R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0R24R9i-216R5jR10:1:0R11r41R25oR0y5:inputR9i-215R5r43R11jR4:12:1ar42oR0y2:uvR9i-217R5r43R11jR4:5:2i2r16R25r44ghgggoR14oR15i286R16i287R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1zgoR14oR15i289R16i290R17R18gR19r52R20jR21:0:1jR31:3:1i1ghgghgR12ahghy4:varsar44r23r5hg";
-h3d_pass__$Copy_CopyShader.SRC = "oy4:namey25:h3d.pass._Copy.CopyShadery4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-312R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini241y3:maxi297y4:filey72:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FScreenShader.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i247R16i291R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i247R16i262R17R18gR19r17R20jR21:1:1oR0y8:positionR9i-307R5jR10:4:0R11r17y6:parentoR0y6:outputR9i-306R5r22R11jR4:12:1ar21oR0y5:colorR9i-308R5r22R11jR4:5:2i4r16R25r23ghgggoR14oR15i265R16i291R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i265R16i269R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i270R16i284R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0R24R9i-304R5jR10:1:0R11r41R25oR0y5:inputR9i-303R5r43R11jR4:12:1ar42oR0y2:uvR9i-305R5r43R11jR4:5:2i2r16R25r44ghgggoR14oR15i286R16i287R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1zgoR14oR15i289R16i290R17R18gR19r52R20jR21:0:1jR31:3:1i1ghgghgR12ahgoR3r3R5jR6:2:0R7oR0y8:__init__R9i-313R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i219R16i254R17y62:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fpass%2FCopy.hxgR19r3R20jR21:4:1aoR14oR15i225R16i248R17R33gR19jR4:5:2i2r16R20jR21:5:3r18oR14oR15i225R16i237R17R33gR19r75R20jR21:1:1oR0y12:calculatedUVR9i-311R5r22R11r75ggoR14oR15i240R16i248R17R33gR19r47R20jR21:1:1r46gghgR12ahgoR3r3R5r64R7oR0y16:__init__fragmentR9i-314R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i288R16i338R17R33gR19r3R20jR21:4:1aoR14oR15i294R16i332R17R33gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i294R16i304R17R33gR19r97R20jR21:1:1oR0y10:pixelColorR9i-310R5r22R11r97ggoR14oR15i307R16i332R17R33gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i307R16i314R17R33gR19jR4:13:1aoR3r104R12aoR0y1:_R11jR4:10:0goR0R30R11jR4:5:2i2r16ghghR20jR21:2:1jR28:33:0gaoR14oR15i307R16i314R17R33gR19r111R20jR21:1:1oR0y7:textureR9i-309R5jR10:2:0R11r111ggoR14oR15i319R16i331R17R33gR19r75R20jR21:1:1r78ghgghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-315R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i364R16i401R17R33gR19r3R20jR21:4:1aoR14oR15i370R16i395R17R33gR19r26R20jR21:5:3r18oR14oR15i370R16i382R17R33gR19r26R20jR21:1:1r25goR14oR15i385R16i395R17R33gR19r97R20jR21:1:1r100gghgR12ahghy4:varsar44r23r120r100r78r5r65r87r132hg";
+h3d_pass__$Copy_CopyShader.SRC = "oy4:namey25:h3d.pass._Copy.CopyShadery4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-390R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini241y3:maxi297y4:filey72:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FScreenShader.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i247R16i291R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i247R16i262R17R18gR19r17R20jR21:1:1oR0y8:positionR9i-385R5jR10:4:0R11r17y6:parentoR0y6:outputR9i-384R5r22R11jR4:12:1ar21oR0y5:colorR9i-386R5r22R11jR4:5:2i4r16R25r23ghgggoR14oR15i265R16i291R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i265R16i269R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i270R16i284R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0R24R9i-382R5jR10:1:0R11r41R25oR0y5:inputR9i-381R5r43R11jR4:12:1ar42oR0y2:uvR9i-383R5r43R11jR4:5:2i2r16R25r44ghgggoR14oR15i286R16i287R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1zgoR14oR15i289R16i290R17R18gR19r52R20jR21:0:1jR31:3:1i1ghgghgR12ahgoR3r3R5jR6:2:0R7oR0y8:__init__R9i-391R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i219R16i254R17y62:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fpass%2FCopy.hxgR19r3R20jR21:4:1aoR14oR15i225R16i248R17R33gR19jR4:5:2i2r16R20jR21:5:3r18oR14oR15i225R16i237R17R33gR19r75R20jR21:1:1oR0y12:calculatedUVR9i-389R5r22R11r75ggoR14oR15i240R16i248R17R33gR19r47R20jR21:1:1r46gghgR12ahgoR3r3R5r64R7oR0y16:__init__fragmentR9i-392R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i288R16i338R17R33gR19r3R20jR21:4:1aoR14oR15i294R16i332R17R33gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i294R16i304R17R33gR19r97R20jR21:1:1oR0y10:pixelColorR9i-388R5r22R11r97ggoR14oR15i307R16i332R17R33gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i307R16i314R17R33gR19jR4:13:1aoR3r104R12aoR0y1:_R11jR4:10:0goR0R30R11jR4:5:2i2r16ghghR20jR21:2:1jR28:33:0gaoR14oR15i307R16i314R17R33gR19r111R20jR21:1:1oR0y7:textureR9i-387R5jR10:2:0R11r111ggoR14oR15i319R16i331R17R33gR19r75R20jR21:1:1r78ghgghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-393R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i364R16i401R17R33gR19r3R20jR21:4:1aoR14oR15i370R16i395R17R33gR19r26R20jR21:5:3r18oR14oR15i370R16i382R17R33gR19r26R20jR21:1:1r25goR14oR15i385R16i395R17R33gR19r97R20jR21:1:1r100gghgR12ahghy4:varsar44r23r120r100r78r5r65r87r132hg";
 h3d_pass_Default.__meta__ = { fields : { cameraView : { global : ["camera.view"]}, cameraNear : { global : ["camera.zNear"]}, cameraFar : { global : ["camera.zFar"]}, cameraProj : { global : ["camera.proj"]}, cameraPos : { global : ["camera.position"]}, cameraProjDiag : { global : ["camera.projDiag"]}, cameraViewProj : { global : ["camera.viewProj"]}, cameraInverseViewProj : { global : ["camera.inverseViewProj"]}, globalTime : { global : ["global.time"]}, pixelSize : { global : ["global.pixelSize"]}, globalModelView : { global : ["global.modelView"]}, globalModelViewInverse : { global : ["global.modelViewInverse"]}}};
 h3d_pass__$HardwarePick_FixedColor.SRC = "oy4:namey33:h3d.pass._HardwarePick.FixedColory4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-146R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini237y3:maxi360y4:filey70:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fpass%2FHardwarePick.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i243R16i354R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i243R16i258R17R18gR19r17R20jR21:1:1oR0y8:positionR9i-144R5jR10:4:0R11r17y6:parentoR0y6:outputR9i-143R5r22R11jR4:12:1ar21oR0y7:colorIDR9i-145R5r22R11jR4:5:2i4r16R25r23ghgggoR14oR15i261R16i354R17R18gR19jR4:5:2i4r16R20jR21:5:3jR23:1:0oR14oR15i261R16i326R17R18gR19jR4:5:2i4r16R20jR21:3:1oR14oR15i262R16i325R17R18gR19r35R20jR21:5:3jR23:0:0oR14oR15i262R16i277R17R18gR19r17R20jR21:1:1r21goR14oR15i280R16i325R17R18gR19jR4:5:2i4r16R20jR21:5:3r32oR14oR15i280R16i305R17R18gR19r44R20jR21:8:2oR14oR15i280R16i284R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i285R16i296R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i285R16i293R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0y8:viewportR9i-142R5jR10:2:0R11r59ggajy14:hxsl.Component:0:0jR30:1:0hgoR14oR15i298R16i300R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1d0goR14oR15i302R16i304R17R18gR19r69R20jR21:0:1jR31:3:1d0ghgoR14oR15i308R16i325R17R18gR19r69R20jR21:9:2oR14oR15i308R16i323R17R18gR19r17R20jR21:1:1r21gajR30:3:0hggggoR14oR15i329R16i354R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i329R16i333R17R18gR19r50R20jR21:2:1r51gaoR14oR15i334R16i345R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i334R16i342R17R18gR19r59R20jR21:1:1r60gajR30:2:0r83hgoR14oR15i347R16i349R17R18gR19r69R20jR21:0:1jR31:3:1d1goR14oR15i351R16i353R17R18gR19r69R20jR21:0:1jR31:3:1d1ghggghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-147R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i384R16i420R17R18gR19r3R20jR21:4:1aoR14oR15i390R16i414R17R18gR19r26R20jR21:5:3r18oR14oR15i390R16i404R17R18gR19r26R20jR21:1:1r25goR14oR15i407R16i414R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0R27R9i-141R5r61R11r134ggghgR12ahghy4:varsar135r60r23r5r119hg";
 h3d_pass_ShadowMap.__meta__ = { fields : { border : { ignore : null}}};
 h3d_prim_BigPrimitive.__clid = hxbit_Serializer.registerClass(h3d_prim_BigPrimitive);
-h3d_prim_Polygon.__clid = hxbit_Serializer.registerClass(h3d_prim_Polygon);
-h3d_prim_Cube.__clid = hxbit_Serializer.registerClass(h3d_prim_Cube);
 h3d_prim_MeshPrimitive.__clid = hxbit_Serializer.registerClass(h3d_prim_MeshPrimitive);
 h3d_prim_HMDModel.__clid = hxbit_Serializer.registerClass(h3d_prim_HMDModel);
 h3d_prim_Plan2D.__clid = hxbit_Serializer.registerClass(h3d_prim_Plan2D);
+h3d_prim_Polygon.__clid = hxbit_Serializer.registerClass(h3d_prim_Polygon);
 h3d_prim_RawPrimitive.__clid = hxbit_Serializer.registerClass(h3d_prim_RawPrimitive);
-h3d_scene_Object.ROT2RAD = -0.017453292519943295769236907684886;
-h3d_scene_Object.__clid = hxbit_Serializer.registerClass(h3d_scene_Object);
+h3d_scene_Graphics.__clid = hxbit_Serializer.registerClass(h3d_scene_Graphics);
+h3d_scene_Box.__clid = hxbit_Serializer.registerClass(h3d_scene_Box);
+h3d_scene_CameraController.__clid = hxbit_Serializer.registerClass(h3d_scene_CameraController);
 h3d_scene_Light.__clid = hxbit_Serializer.registerClass(h3d_scene_Light);
 h3d_scene_DirLight.__clid = hxbit_Serializer.registerClass(h3d_scene_DirLight);
-h3d_scene_Mesh.__clid = hxbit_Serializer.registerClass(h3d_scene_Mesh);
-h3d_scene_Graphics.__clid = hxbit_Serializer.registerClass(h3d_scene_Graphics);
 h3d_scene_Interactive.__clid = hxbit_Serializer.registerClass(h3d_scene_Interactive);
-h3d_scene_MultiMaterial.__clid = hxbit_Serializer.registerClass(h3d_scene_MultiMaterial);
 h3d_scene__$Object_ObjectFlags_$Impl_$.FPosChanged = 1;
 h3d_scene__$Object_ObjectFlags_$Impl_$.FVisible = 2;
 h3d_scene__$Object_ObjectFlags_$Impl_$.FCulled = 4;
@@ -56990,24 +61787,26 @@ h3d_shader_AmbientLight.SRC = "oy4:namey23:h3d.shader.AmbientLighty4:funsaoy3:re
 h3d_shader_Base2d.SRC = "oy4:namey17:h3d.shader.Base2dy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:2:0y3:refoR0y8:__init__y2:idi-137R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini963y3:maxi1507y4:filey66:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FBase2d.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i969R16i1017R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i969R16i983R17R18gR19r17R20jR21:1:1oR0y14:spritePositionR9i-119R5jR10:4:0R11r17ggoR14oR15i986R16i1017R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i986R16i990R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i991R16i1005R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0y8:positionR9i-110R5jR10:1:0R11r36y6:parentoR0y5:inputR9i-109R5r38R11jR4:12:1ar37oR0y2:uvR9i-111R5r38R11jR4:5:2i2r16R27r39goR0y5:colorR9i-112R5r38R11jR4:5:2i4r16R27r39ghgggoR14oR15i1007R16i1013R17R18gR19jR4:3:0R20jR21:1:1oR0y6:zValueR9i-117R5jR10:2:0R11r49ggoR14oR15i1015R16i1016R17R18gR19r49R20jR21:0:1jy10:hxsl.Const:3:1i1ghggoR14oR15i1023R16i1285R17R18gR19r3R20jR21:10:3oR14oR15i1027R16i1037R17R18gR19jR4:2:0R20jR21:1:1oR0y10:isRelativeR9i-124R5r51R11r63y10:qualifiersajy17:hxsl.VarQualifier:0:1nhggoR14oR15i1040R16i1241R17R18gR19r3R20jR21:4:1aoR14oR15i1047R16i1114R17R18gR19r49R20jR21:5:3r18oR14oR15i1047R16i1065R17R18gR19r49R20jR21:9:2oR14oR15i1047R16i1063R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0y16:absolutePositionR9i-120R5r22R11r77ggajy14:hxsl.Component:0:0hgoR14oR15i1068R16i1114R17R18gR19r49R20jR21:8:2oR14oR15i1068R16i1093R17R18gR19jR4:13:1aoR3r49R12aoR0y1:_R11jR4:5:2i3r16goR0y1:bR11jR4:5:2i3r16ghghR20jR21:2:1jR25:29:0gaoR14oR15i1068R16i1093R17R18gR19r91R20jR21:8:2oR14oR15i1068R16i1072R17R18gR19jR4:13:1ahR20jR21:2:1jR25:39:0gaoR14oR15i1073R16i1090R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1073R16i1087R17R18gR19r17R20jR21:1:1r21gar81jR37:1:0hgoR14oR15i1091R16i1092R17R18gR19r49R20jR21:0:1jR32:3:1i1ghgoR14oR15i1098R16i1113R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y15:absoluteMatrixAR9i-126R5r51R11r123gghggoR14oR15i1121R16i1188R17R18gR19r49R20jR21:5:3r18oR14oR15i1121R16i1139R17R18gR19r49R20jR21:9:2oR14oR15i1121R16i1137R17R18gR19r77R20jR21:1:1r78gar114hgoR14oR15i1142R16i1188R17R18gR19r49R20jR21:8:2oR14oR15i1142R16i1167R17R18gR19jR4:13:1aoR3r49R12aoR0R38R11jR4:5:2i3r16gr92hghR20jR21:2:1r95gaoR14oR15i1142R16i1167R17R18gR19r145R20jR21:8:2oR14oR15i1142R16i1146R17R18gR19r103R20jR21:2:1r104gaoR14oR15i1147R16i1164R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1147R16i1161R17R18gR19r17R20jR21:1:1r21gar81r114hgoR14oR15i1165R16i1166R17R18gR19r49R20jR21:0:1jR32:3:1i1ghgoR14oR15i1172R16i1187R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y15:absoluteMatrixBR9i-127R5r51R11r170gghggoR14oR15i1195R16i1234R17R18gR19jR4:5:2i2r16R20jR21:5:3r18oR14oR15i1195R16i1214R17R18gR19r177R20jR21:9:2oR14oR15i1195R16i1211R17R18gR19r77R20jR21:1:1r78gajR37:2:0jR37:3:0hgoR14oR15i1217R16i1234R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1217R16i1231R17R18gR19r17R20jR21:1:1r21gar184r185hgghgoR14oR15i1252R16i1285R17R18gR19r77R20jR21:5:3r18oR14oR15i1252R16i1268R17R18gR19r77R20jR21:1:1r78goR14oR15i1271R16i1285R17R18gR19r17R20jR21:1:1r21gggoR14oR15i1291R16i1358R17R18gR19jR4:5:2i2r16R20jR21:5:3r18oR14oR15i1291R16i1303R17R18gR19r209R20jR21:1:1oR0y12:calculatedUVR9i-123R5jR10:3:0R11r209ggoR14oR15i1306R16i1358R17R18gR19jR4:5:2i2r16R20jR21:10:3oR14oR15i1306R16i1314R17R18gR19r63R20jR21:1:1oR0y8:hasUVPosR9i-130R5r51R11r63R34ajR35:0:1nhggoR14oR15i1317R16i1347R17R18gR19r217R20jR21:5:3jR23:0:0oR14oR15i1317R16i1336R17R18gR19jR4:5:2i2r16R20jR21:5:3jR23:1:0oR14oR15i1317R16i1325R17R18gR19r42R20jR21:1:1r41goR14oR15i1328R16i1336R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1328R16i1333R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0y5:uvPosR9i-131R5r51R11r239ggar184r185hggoR14oR15i1339R16i1347R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1339R16i1344R17R18gR19r239R20jR21:1:1r240gar81r114hggoR14oR15i1350R16i1358R17R18gR19r42R20jR21:1:1r41gggoR14oR15i1364R16i1423R17R18gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i1364R16i1374R17R18gR19r261R20jR21:1:1oR0y10:pixelColorR9i-121R5r22R11r261ggoR14oR15i1377R16i1423R17R18gR19jR4:5:2i4r16R20jR21:10:3oR14oR15i1377R16i1387R17R18gR19r63R20jR21:1:1r64goR14oR15i1390R16i1409R17R18gR19r268R20jR21:5:3r230oR14oR15i1390R16i1395R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0R30R9i-125R5r51R11r276ggoR14oR15i1398R16i1409R17R18gR19r44R20jR21:1:1r43ggoR14oR15i1412R16i1423R17R18gR19r44R20jR21:1:1r43gggoR14oR15i1429R16i1469R17R18gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i1429R16i1441R17R18gR19r290R20jR21:1:1oR0y12:textureColorR9i-122R5r22R11r290ggoR14oR15i1444R16i1469R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i1444R16i1451R17R18gR19jR4:13:1aoR3r297R12aoR0R38R11jR4:10:0goR0R29R11jR4:5:2i2r16ghghR20jR21:2:1jR25:33:0gaoR14oR15i1444R16i1451R17R18gR19r304R20jR21:1:1oR0y7:textureR9i-118R5r51R11r304ggoR14oR15i1456R16i1468R17R18gR19r209R20jR21:1:1r212ghggoR14oR15i1475R16i1501R17R18gR19r261R20jR21:5:3jR23:20:1r230oR14oR15i1475R16i1485R17R18gR19r261R20jR21:1:1r264goR14oR15i1489R16i1501R17R18gR19r290R20jR21:1:1r293gghgR12ahgoR3r3R5jR6:0:0R7oR0y6:vertexR9i-138R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i1531R16i2043R17R18gR19r3R20jR21:4:1aoR14oR15i1596R16i1635R17R18gR19r3R20jR21:7:2oR0y3:tmpR9i-140R5r22R11jR4:5:2i3r16goR14oR15i1606R16i1634R17R18gR19r345R20jR21:8:2oR14oR15i1606R16i1610R17R18gR19r103R20jR21:2:1r104gaoR14oR15i1611R16i1630R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1611R16i1627R17R18gR19r77R20jR21:1:1r78gar81r114hgoR14oR15i1632R16i1633R17R18gR19r49R20jR21:0:1jR32:3:1i1ghggoR14oR15i1640R16i1751R17R18gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i1640R16i1654R17R18gR19r368R20jR21:1:1oR0y14:outputPositionR9i-136R5r22R11r368ggoR14oR15i1657R16i1751R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i1657R16i1661R17R18gR19r30R20jR21:2:1r31gaoR14oR15i1668R16i1690R17R18gR19r49R20jR21:8:2oR14oR15i1668R16i1671R17R18gR19jR4:13:1aoR3r49R12aoR0R38R11r345gr92hghR20jR21:2:1r95gaoR14oR15i1668R16i1671R17R18gR19r345R20jR21:1:1r344goR14oR15i1676R16i1689R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y13:filterMatrixAR9i-128R5r51R11r396gghgoR14oR15i1697R16i1719R17R18gR19r49R20jR21:8:2oR14oR15i1697R16i1700R17R18gR19jR4:13:1aoR3r49R12aoR0R38R11r345gr92hghR20jR21:2:1r95gaoR14oR15i1697R16i1700R17R18gR19r345R20jR21:1:1r344goR14oR15i1705R16i1718R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y13:filterMatrixBR9i-129R5r51R11r416gghgoR14oR15i1726R16i1745R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1726R16i1742R17R18gR19r77R20jR21:1:1r78gar184r185hghggoR14oR15i1786R16i1853R17R18gR19jR4:5:2i2r16R20jR21:5:3r18oR14oR15i1786R16i1803R17R18gR19r432R20jR21:9:2oR14oR15i1786R16i1800R17R18gR19r368R20jR21:1:1r371gar81r114hgoR14oR15i1806R16i1853R17R18gR19jR4:5:2i2r16R20jR21:5:3r230oR14oR15i1806R16i1839R17R18gR19jR4:5:2i2r16R20jR21:3:1oR14oR15i1807R16i1838R17R18gR19r445R20jR21:5:3r226oR14oR15i1807R16i1824R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1807R16i1821R17R18gR19r368R20jR21:1:1r371gar81r114hgoR14oR15i1827R16i1838R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1827R16i1835R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0y8:viewportR9i-135R5r51R11r461ggar81r114hgggoR14oR15i1842R16i1853R17R18gR19jR4:5:2i2r16R20jR21:9:2oR14oR15i1842R16i1850R17R18gR19r461R20jR21:1:1r462gar184r185hgggoR14oR15i1945R16i1999R17R18gR19r3R20jR21:10:3oR14oR15i1949R16i1959R17R18gR19r63R20jR21:1:1oR0y10:pixelAlignR9i-133R5r51R11r63R34ajR35:0:1nhggoR14oR15i1962R16i1999R17R18gR19jR4:5:2i2r16R20jR21:5:3jR23:20:1jR23:3:0oR14oR15i1962R16i1979R17R18gR19r488R20jR21:9:2oR14oR15i1962R16i1976R17R18gR19r368R20jR21:1:1r371gar81r114hgoR14oR15i1983R16i1999R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0y16:halfPixelInverseR9i-134R5r51R11r500gggngoR14oR15i2005R16i2037R17R18gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i2005R16i2020R17R18gR19r507R20jR21:1:1oR0R26R9i-114R5r22R11r507R27oR0y6:outputR9i-113R5r22R11jR4:12:1ar510oR0R30R9i-115R5r22R11jR4:5:2i4r16R27r511ghgggoR14oR15i2023R16i2037R17R18gR19r368R20jR21:1:1r371gghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-139R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i2069R16i2159R17R18gR19r3R20jR21:4:1aoR14oR15i2075R16i2122R17R18gR19r3R20jR21:10:3oR14oR15i2079R16i2112R17R18gR19r63R20jR21:5:3jR23:14:0oR14oR15i2079R16i2088R17R18gR19r63R20jR21:1:1oR0y9:killAlphaR9i-132R5r51R11r63R34ajR35:0:1nhggoR14oR15i2092R16i2112R17R18gR19r63R20jR21:5:3jR23:9:0oR14oR15i2092R16i2104R17R18gR19r49R20jR21:9:2oR14oR15i2092R16i2102R17R18gR19r261R20jR21:1:1r264gar185hgoR14oR15i2107R16i2112R17R18gR19r49R20jR21:0:1jR32:3:1d0.001gggoR14oR15i2115R16i2122R17R18gR19r3R20jR21:11:0gngoR14oR15i2128R16i2153R17R18gR19r514R20jR21:5:3r18oR14oR15i2128R16i2140R17R18gR19r514R20jR21:1:1r513goR14oR15i2143R16i2153R17R18gR19r261R20jR21:1:1r264gghgR12ahghy4:varsar39r511oR0y4:timeR9i-116R5jR10:0:0R11r49gr50r313r21r78r264r293r212r64r277r124r171r397r417r220r240r540r482r501r462r371r5r334r525hg";
 h3d_shader_BaseMesh.SRC = "oy4:namey19:h3d.shader.BaseMeshy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:2:0y3:refoR0y8:__init__y2:idi-72R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini1247y3:maxi1827y4:filey68:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FBaseMesh.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i1253R16i1286R17R18gR19jR4:5:2i3jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i1253R16i1269R17R18gR19r17R20jR21:1:1oR0y16:relativePositionR9i-58R5jR10:4:0R11r17ggoR14oR15i1272R16i1286R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y8:positionR9i-51R5jR10:1:0R11r26y6:parentoR0y5:inputR9i-50R5r28R11jR4:12:1ar27oR0y6:normalR9i-52R5r28R11jR4:5:2i3r16R26r29ghggggoR14oR15i1292R16i1358R17R18gR19jR4:5:2i3r16R20jR21:5:3r18oR14oR15i1292R16i1311R17R18gR19r38R20jR21:1:1oR0y19:transformedPositionR9i-59R5r22R11r38ggoR14oR15i1314R16i1358R17R18gR19jR4:5:2i3r16R20jR21:5:3jR23:1:0oR14oR15i1314R16i1330R17R18gR19r17R20jR21:1:1r21goR14oR15i1333R16i1358R17R18gR19jR4:8:0R20jR21:8:2oR14oR15i1333R16i1349R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:50:0gaoR14oR15i1333R16i1349R17R18gR19jR4:7:0R20jR21:1:1oR0y9:modelViewR9i-48R5jR10:0:0R11r62y10:qualifiersajy17:hxsl.VarQualifier:3:0hR26oR0y6:globalR9i-45R5r64R11jR4:12:1aoR0y4:timeR9i-46R5r64R11jR4:3:0R26r67goR0y9:pixelSizeR9i-47R5r64R11jR4:5:2i2r16R26r67gr63oR0y16:modelViewInverseR9i-49R5r64R11r62R32ar66hR26r67ghggghgggoR14oR15i1364R16i1430R17R18gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i1364R16i1381R17R18gR19r82R20jR21:1:1oR0y17:projectedPositionR9i-62R5r22R11r82ggoR14oR15i1384R16i1430R17R18gR19jR4:5:2i4r16R20jR21:5:3r46oR14oR15i1384R16i1412R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i1384R16i1388R17R18gR19jR4:13:1ahR20jR21:2:1jR30:40:0gaoR14oR15i1389R16i1408R17R18gR19r38R20jR21:1:1r41goR14oR15i1410R16i1411R17R18gR19r70R20jR21:0:1jy10:hxsl.Const:3:1i1ghgoR14oR15i1415R16i1430R17R18gR19r62R20jR21:1:1oR0y8:viewProjR9i-40R5r64R11r62R26oR0y6:cameraR9i-35R5r64R11jR4:12:1aoR0y4:viewR9i-36R5r64R11r62R26r111goR0y4:projR9i-37R5r64R11r62R26r111goR0R25R9i-38R5r64R11jR4:5:2i3r16R26r111goR0y8:projDiagR9i-39R5r64R11jR4:5:2i3r16R26r111gr110oR0y15:inverseViewProjR9i-41R5r64R11r62R26r111goR0y5:zNearR9i-42R5r64R11r70R26r111goR0y4:zFarR9i-43R5r64R11r70R26r111goR0y3:dirR9i-44R5jR10:3:0R11jR4:5:2i3r16R26r111ghgggggoR14oR15i1436R16i1508R17R18gR19jR4:5:2i3r16R20jR21:5:3r18oR14oR15i1436R16i1453R17R18gR19r131R20jR21:1:1oR0y17:transformedNormalR9i-61R5r22R11r131ggoR14oR15i1456R16i1508R17R18gR19r45R20jR21:8:2oR14oR15i1456R16i1496R17R18gR19jR4:13:1aoR3r45R12aoR0y1:_R11r45ghghR20jR21:2:1jR30:31:0gaoR14oR15i1456R16i1496R17R18gR19r45R20jR21:3:1oR14oR15i1457R16i1495R17R18gR19r45R20jR21:5:3r46oR14oR15i1457R16i1469R17R18gR19r32R20jR21:1:1r31goR14oR15i1472R16i1495R17R18gR19jR4:6:0R20jR21:8:2oR14oR15i1472R16i1488R17R18gR19jR4:13:1ahR20jR21:2:1jR30:48:0gaoR14oR15i1472R16i1488R17R18gR19r62R20jR21:1:1r63ghggghggoR14oR15i1514R16i1578R17R18gR19r124R20jR21:5:3r18oR14oR15i1514R16i1524R17R18gR19r124R20jR21:1:1r122goR14oR15i1527R16i1578R17R18gR19r45R20jR21:8:2oR14oR15i1527R16i1566R17R18gR19jR4:13:1aoR3r45R12aoR0R50R11jR4:5:2i3r16ghghR20jR21:2:1r145gaoR14oR15i1527R16i1566R17R18gR19r186R20jR21:3:1oR14oR15i1528R16i1565R17R18gR19r186R20jR21:5:3jR23:3:0oR14oR15i1528R16i1543R17R18gR19r116R20jR21:1:1r115goR14oR15i1546R16i1565R17R18gR19r38R20jR21:1:1r41ggghggoR14oR15i1584R16i1602R17R18gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i1584R16i1594R17R18gR19r207R20jR21:1:1oR0y10:pixelColorR9i-63R5r22R11r207ggoR14oR15i1597R16i1602R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0y5:colorR9i-68R5jR10:2:0R11r214gggoR14oR15i1608R16i1633R17R18gR19r70R20jR21:5:3r18oR14oR15i1608R16i1617R17R18gR19r70R20jR21:1:1oR0y9:specPowerR9i-66R5r22R11r70ggoR14oR15i1620R16i1633R17R18gR19r70R20jR21:1:1oR0y13:specularPowerR9i-69R5r216R11r70R32ajR33:7:2d0d100hgggoR14oR15i1639R16i1681R17R18gR19jR4:5:2i3r16R20jR21:5:3r18oR14oR15i1639R16i1648R17R18gR19r234R20jR21:1:1oR0y9:specColorR9i-67R5r22R11r234ggoR14oR15i1651R16i1681R17R18gR19jR4:5:2i3r16R20jR21:5:3r46oR14oR15i1651R16i1664R17R18gR19r241R20jR21:1:1oR0y13:specularColorR9i-71R5r216R11r241ggoR14oR15i1667R16i1681R17R18gR19r70R20jR21:1:1oR0y14:specularAmountR9i-70R5r216R11r70R32ajR33:7:2d0d10hggggoR14oR15i1687R16i1766R17R18gR19jR4:5:2i2r16R20jR21:5:3r18oR14oR15i1687R16i1695R17R18gR19r256R20jR21:1:1oR0y8:screenUVR9i-65R5r22R11r256ggoR14oR15i1698R16i1766R17R18gR19jR4:5:2i2r16R20jR21:5:3jR23:0:0oR14oR15i1698R16i1760R17R18gR19r263R20jR21:5:3r46oR14oR15i1698R16i1742R17R18gR19jR4:5:2i2r16R20jR21:3:1oR14oR15i1699R16i1741R17R18gR19r269R20jR21:5:3jR23:2:0oR14oR15i1699R16i1719R17R18gR19r269R20jR21:9:2oR14oR15i1699R16i1716R17R18gR19r82R20jR21:1:1r85gajy14:hxsl.Component:0:0jR59:1:0hgoR14oR15i1722R16i1741R17R18gR19r70R20jR21:9:2oR14oR15i1722R16i1739R17R18gR19r82R20jR21:1:1r85gajR59:3:0hgggoR14oR15i1745R16i1760R17R18gR19jR4:5:2i2r16R20jR21:8:2oR14oR15i1745R16i1749R17R18gR19jR4:13:1ahR20jR21:2:1jR30:38:0gaoR14oR15i1750R16i1753R17R18gR19r70R20jR21:0:1jR39:3:1d0.5goR14oR15i1755R16i1759R17R18gR19r70R20jR21:0:1jR39:3:1d-0.5ghggoR14oR15i1763R16i1766R17R18gR19r70R20jR21:0:1jR39:3:1d0.5gggoR14oR15i1772R16i1821R17R18gR19r70R20jR21:5:3r18oR14oR15i1772R16i1777R17R18gR19r70R20jR21:1:1oR0y5:depthR9i-64R5r22R11r70ggoR14oR15i1780R16i1821R17R18gR19r70R20jR21:5:3r272oR14oR15i1780R16i1799R17R18gR19r70R20jR21:9:2oR14oR15i1780R16i1797R17R18gR19r82R20jR21:1:1r85gajR59:2:0hgoR14oR15i1802R16i1821R17R18gR19r70R20jR21:9:2oR14oR15i1802R16i1819R17R18gR19r82R20jR21:1:1r85gar288hggghgR12ahgoR3r3R5r4R7oR0y16:__init__fragmentR9i-73R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i1861R16i2314R17R18gR19r3R20jR21:4:1aoR14oR15i1867R16i1916R17R18gR19r131R20jR21:5:3r18oR14oR15i1867R16i1884R17R18gR19r131R20jR21:1:1r134goR14oR15i1887R16i1916R17R18gR19r45R20jR21:8:2oR14oR15i1887R16i1904R17R18gR19jR4:13:1aoR3r45R12aoR0R50R11r131ghghR20jR21:2:1r145gaoR14oR15i1887R16i1904R17R18gR19r131R20jR21:1:1r134ghggoR14oR15i2017R16i2096R17R18gR19r256R20jR21:5:3r18oR14oR15i2017R16i2025R17R18gR19r256R20jR21:1:1r259goR14oR15i2028R16i2096R17R18gR19jR4:5:2i2r16R20jR21:5:3r264oR14oR15i2028R16i2090R17R18gR19r382R20jR21:5:3r46oR14oR15i2028R16i2072R17R18gR19jR4:5:2i2r16R20jR21:3:1oR14oR15i2029R16i2071R17R18gR19r387R20jR21:5:3r272oR14oR15i2029R16i2049R17R18gR19r387R20jR21:9:2oR14oR15i2029R16i2046R17R18gR19r82R20jR21:1:1r85gar279r280hgoR14oR15i2052R16i2071R17R18gR19r70R20jR21:9:2oR14oR15i2052R16i2069R17R18gR19r82R20jR21:1:1r85gar288hgggoR14oR15i2075R16i2090R17R18gR19jR4:5:2i2r16R20jR21:8:2oR14oR15i2075R16i2079R17R18gR19r298R20jR21:2:1r299gaoR14oR15i2080R16i2083R17R18gR19r70R20jR21:0:1jR39:3:1d0.5goR14oR15i2085R16i2089R17R18gR19r70R20jR21:0:1jR39:3:1d-0.5ghggoR14oR15i2093R16i2096R17R18gR19r70R20jR21:0:1jR39:3:1d0.5gggoR14oR15i2102R16i2151R17R18gR19r70R20jR21:5:3r18oR14oR15i2102R16i2107R17R18gR19r70R20jR21:1:1r322goR14oR15i2110R16i2151R17R18gR19r70R20jR21:5:3r272oR14oR15i2110R16i2129R17R18gR19r70R20jR21:9:2oR14oR15i2110R16i2127R17R18gR19r82R20jR21:1:1r85gar332hgoR14oR15i2132R16i2151R17R18gR19r70R20jR21:9:2oR14oR15i2132R16i2149R17R18gR19r82R20jR21:1:1r85gar288hgggoR14oR15i2235R16i2260R17R18gR19r70R20jR21:5:3r18oR14oR15i2235R16i2244R17R18gR19r70R20jR21:1:1r223goR14oR15i2247R16i2260R17R18gR19r70R20jR21:1:1r227ggoR14oR15i2266R16i2308R17R18gR19r234R20jR21:5:3r18oR14oR15i2266R16i2275R17R18gR19r234R20jR21:1:1r237goR14oR15i2278R16i2308R17R18gR19r241R20jR21:5:3r46oR14oR15i2278R16i2291R17R18gR19r241R20jR21:1:1r244goR14oR15i2294R16i2308R17R18gR19r70R20jR21:1:1r248ggghgR12ahgoR3r3R5jR6:0:0R7oR0y6:vertexR9i-74R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i2338R16i2437R17R18gR19r3R20jR21:4:1aoR14oR15i2344R16i2379R17R18gR19jR4:5:2i4r16R20jR21:5:3r18oR14oR15i2344R16i2359R17R18gR19r490R20jR21:1:1oR0R25R9i-54R5r22R11r490R26oR0y6:outputR9i-53R5r22R11jR4:12:1ar493oR0R52R9i-55R5r22R11jR4:5:2i4r16R26r494goR0R60R9i-56R5r22R11r70R26r494goR0R28R9i-57R5r22R11jR4:5:2i3r16R26r494ghgggoR14oR15i2362R16i2379R17R18gR19r82R20jR21:1:1r85ggoR14oR15i2385R16i2431R17R18gR19jR4:5:2i3r16R20jR21:5:3r18oR14oR15i2385R16i2409R17R18gR19r509R20jR21:1:1oR0y24:pixelTransformedPositionR9i-60R5r22R11r509ggoR14oR15i2412R16i2431R17R18gR19r38R20jR21:1:1r41gghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-75R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i2463R16i2565R17R18gR19r3R20jR21:4:1aoR14oR15i2469R16i2494R17R18gR19r497R20jR21:5:3r18oR14oR15i2469R16i2481R17R18gR19r497R20jR21:1:1r496goR14oR15i2484R16i2494R17R18gR19r207R20jR21:1:1r210ggoR14oR15i2500R16i2520R17R18gR19r70R20jR21:5:3r18oR14oR15i2500R16i2512R17R18gR19r70R20jR21:1:1r498goR14oR15i2515R16i2520R17R18gR19r70R20jR21:1:1r322ggoR14oR15i2526R16i2559R17R18gR19r500R20jR21:5:3r18oR14oR15i2526R16i2539R17R18gR19r500R20jR21:1:1r499goR14oR15i2542R16i2559R17R18gR19r131R20jR21:1:1r134gghgR12ahghy4:varsar111r67r29r494r21r41r512r134r85r210r322r259r223r237r215r227r248r244r5r346r480r522hg";
 h3d_shader_Blur.SRC = "oy4:namey15:h3d.shader.Blury4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-241R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini241y3:maxi297y4:filey72:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FScreenShader.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i247R16i291R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i247R16i262R17R18gR19r17R20jR21:1:1oR0y8:positionR9i-226R5jR10:4:0R11r17y6:parentoR0y6:outputR9i-225R5r22R11jR4:12:1ar21oR0y5:colorR9i-227R5r22R11jR4:5:2i4r16R25r23ghgggoR14oR15i265R16i291R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i265R16i269R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i270R16i284R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0R24R9i-223R5jR10:1:0R11r41R25oR0y5:inputR9i-222R5r43R11jR4:12:1ar42oR0y2:uvR9i-224R5r43R11jR4:5:2i2r16R25r44ghgggoR14oR15i286R16i287R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1zgoR14oR15i289R16i290R17R18gR19r52R20jR21:0:1jR31:3:1i1ghgghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-242R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i612R16i1902R17y64:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FBlur.hxgR19r3R20jR21:4:1aoR14oR15i618R16i1684R17R33gR19r3R20jR21:10:3oR14oR15i622R16i638R17R33gR19jR4:2:0R20jR21:1:1oR0y16:isDepthDependantR9i-238R5jR10:2:0R11r77y10:qualifiersajy17:hxsl.VarQualifier:0:1nhggoR14oR15i641R16i1247R17R33gR19r3R20jR21:4:1aoR14oR15i648R16i681R17R33gR19r3R20jR21:7:2oR0y4:pcurR9i-245R5r22R11jR4:5:2i3r16goR14oR15i659R16i680R17R33gR19r89R20jR21:8:2oR14oR15i659R16i670R17R33gR19jR4:13:1aoR3r89R12aoR0R30R11jR4:5:2i2r16ghghR20jR21:1:1oR0y11:getPositionR9i-244R5r6R11r99ggaoR14oR15i671R16i679R17R33gR19r47R20jR21:1:1r46ghggoR14oR15i687R16i720R17R33gR19r3R20jR21:7:2oR0y4:ccurR9i-246R5r22R11jR4:5:2i4r16goR14oR15i698R16i719R17R33gR19r111R20jR21:8:2oR14oR15i698R16i705R17R33gR19jR4:13:1aoR3r111R12aoR0y1:_R11jR4:10:0goR0R30R11jR4:5:2i2r16ghghR20jR21:2:1jR28:33:0gaoR14oR15i698R16i705R17R33gR19r120R20jR21:1:1oR0y7:textureR9i-229R5r79R11r120ggoR14oR15i710R16i718R17R33gR19r47R20jR21:1:1r46ghggoR14oR15i726R16i755R17R33gR19r3R20jR21:7:2oR0R27R9i-247R5r22R11jR4:5:2i4r16goR14oR15i738R16i754R17R33gR19r139R20jR21:8:2oR14oR15i738R16i742R17R33gR19r35R20jR21:2:1r36gaoR14oR15i743R16i744R17R33gR19r52R20jR21:0:1jR31:3:1zgoR14oR15i746R16i747R17R33gR19r52R20jR21:0:1jR31:3:1zgoR14oR15i749R16i750R17R33gR19r52R20jR21:0:1jR31:3:1zgoR14oR15i752R16i753R17R33gR19r52R20jR21:0:1jR31:3:1zghggoR14oR15i761R16i814R17R33gR19r3R20jR21:7:2oR0y4:ncurR9i-248R5r22R11jR4:5:2i3r16goR14oR15i772R16i813R17R33gR19r167R20jR21:8:2oR14oR15i772R16i784R17R33gR19jR4:13:1aoR3r167R12aoR0y5:valueR11jR4:5:2i4r16ghghR20jR21:2:1jR28:55:0gaoR14oR15i785R16i812R17R33gR19r111R20jR21:8:2oR14oR15i785R16i798R17R33gR19jR4:13:1aoR3r111R12aoR0R40R11r120gr121hghR20jR21:2:1r124gaoR14oR15i785R16i798R17R33gR19r120R20jR21:1:1oR0y13:normalTextureR9i-240R5r79R11r120ggoR14oR15i803R16i811R17R33gR19r47R20jR21:1:1r46ghghggoR14oR15i821R16i1214R17R33gR19r3R20jR21:20:3y6:unrollahoR14oR15i828R16i1214R17R33gR19r3R20jR21:13:3oR0y1:iR9i-249R5r22R11jR4:1:0goR14oR15i838R16i860R17R33gR19jR4:14:2r208jy13:hxsl.SizeDecl:0:1zR20jR21:5:3jR23:21:0oR14oR15i838R16i853R17R33gR19r208R20jR21:5:3jR23:0:0oR14oR15i838R16i846R17R33gR19r208R20jR21:6:2jy15:haxe.macro.Unop:3:0oR14oR15i839R16i846R17R33gR19r208R20jR21:1:1oR0y7:QualityR9i-231R5r79R11r208R35ajR36:0:1nhgggoR14oR15i849R16i853R17R33gR19r208R20jR21:0:1jR31:2:1i1ggoR14oR15i853R16i860R17R33gR19r208R20jR21:1:1r222ggoR14oR15i863R16i1214R17R33gR19r3R20jR21:4:1aoR14oR15i871R16i908R17R33gR19r3R20jR21:7:2oR0R30R9i-250R5r22R11jR4:5:2i2r16goR14oR15i880R16i907R17R33gR19r242R20jR21:5:3r216oR14oR15i880R16i888R17R33gR19r47R20jR21:1:1r46goR14oR15i891R16i907R17R33gR19jR4:5:2i2r16R20jR21:5:3jR23:1:0oR14oR15i891R16i896R17R33gR19r250R20jR21:1:1oR0y5:pixelR9i-234R5r79R11r250ggoR14oR15i899R16i907R17R33gR19r52R20jR21:8:2oR14oR15i899R16i904R17R33gR19jR4:13:1aoR3r52R12aoR0R43R11r208ghghR20jR21:2:1jR28:36:0gaoR14oR15i905R16i906R17R33gR19r208R20jR21:1:1r207ghggggoR14oR15i915R16i939R17R33gR19r3R20jR21:7:2oR0y1:cR9i-251R5r22R11r111goR14oR15i923R16i938R17R33gR19r111R20jR21:8:2oR14oR15i923R16i930R17R33gR19jR4:13:1aoR3r111R12aoR0R40R11r120gr121hghR20jR21:2:1r124gaoR14oR15i923R16i930R17R33gR19r120R20jR21:1:1r129goR14oR15i935R16i937R17R33gR19r242R20jR21:1:1r241ghggoR14oR15i946R16i970R17R33gR19r3R20jR21:7:2oR0R14R9i-252R5r22R11r89goR14oR15i954R16i969R17R33gR19r89R20jR21:8:2oR14oR15i954R16i965R17R33gR19r99R20jR21:1:1r100gaoR14oR15i966R16i968R17R33gR19r242R20jR21:1:1r241ghggoR14oR15i977R16i1010R17R33gR19r3R20jR21:7:2oR0y1:dR9i-253R5r22R11r52goR14oR15i985R16i1009R17R33gR19r52R20jR21:8:2oR14oR15i985R16i995R17R33gR19jR4:13:1aoR3r52R12aoR0R40R11jR4:5:2i3r16goR0y1:bR11jR4:5:2i3r16ghghR20jR21:2:1jR28:29:0gaoR14oR15i985R16i995R17R33gR19r322R20jR21:3:1oR14oR15i986R16i994R17R33gR19r322R20jR21:5:3jR23:3:0oR14oR15i986R16i987R17R33gR19r89R20jR21:1:1r299goR14oR15i990R16i994R17R33gR19r89R20jR21:1:1r88gggoR14oR15i1000R16i1008R17R33gR19jR4:5:2i3r16R20jR21:5:3r333oR14oR15i1000R16i1001R17R33gR19r89R20jR21:1:1r299goR14oR15i1004R16i1008R17R33gR19r89R20jR21:1:1r88gghggoR14oR15i1017R16i1061R17R33gR19r3R20jR21:7:2oR0y1:nR9i-254R5r22R11r167goR14oR15i1025R16i1060R17R33gR19r167R20jR21:8:2oR14oR15i1025R16i1037R17R33gR19r177R20jR21:2:1r178gaoR14oR15i1038R16i1059R17R33gR19r111R20jR21:8:2oR14oR15i1038R16i1051R17R33gR19jR4:13:1aoR3r111R12aoR0R40R11r120gr121hghR20jR21:2:1r124gaoR14oR15i1038R16i1051R17R33gR19r120R20jR21:1:1r194goR14oR15i1056R16i1058R17R33gR19r242R20jR21:1:1r241ghghggoR14oR15i1070R16i1099R17R33gR19r111R20jR21:5:3r18oR14oR15i1070R16i1071R17R33gR19r111R20jR21:1:1r277goR14oR15i1074R16i1099R17R33gR19r111R20jR21:8:2oR14oR15i1074R16i1077R17R33gR19jR4:13:1aoR3r111R12aoR0y1:xR11r111goR0y1:yR11r111goR0y1:aR11r52ghghR20jR21:2:1jR28:24:0gaoR14oR15i1078R16i1082R17R33gR19r111R20jR21:1:1r110goR14oR15i1084R16i1085R17R33gR19r111R20jR21:1:1r277goR14oR15i1087R16i1098R17R33gR19r52R20jR21:8:2oR14oR15i1087R16i1091R17R33gR19jR4:13:1aoR3r52R12aoR0R40R11r167gr323hghR20jR21:2:1r326gaoR14oR15i1087R16i1091R17R33gR19r167R20jR21:1:1r166goR14oR15i1096R16i1097R17R33gR19r167R20jR21:1:1r356ghghggoR14oR15i1107R16i1163R17R33gR19r111R20jR21:5:3r18oR14oR15i1107R16i1108R17R33gR19r111R20jR21:1:1r277goR14oR15i1111R16i1163R17R33gR19r111R20jR21:8:2oR14oR15i1111R16i1114R17R33gR19jR4:13:1ar393hR20jR21:2:1r399gaoR14oR15i1115R16i1116R17R33gR19r111R20jR21:1:1r277goR14oR15i1118R16i1122R17R33gR19r111R20jR21:1:1r110goR14oR15i1124R16i1162R17R33gR19r52R20jR21:8:2oR14oR15i1124R16i1154R17R33gR19jR4:13:1aoR3r52R12aoR0R40R11r52goR0R53R11r52ghghR20jR21:2:1jR28:21:0gaoR14oR15i1124R16i1154R17R33gR19r52R20jR21:3:1oR14oR15i1125R16i1153R17R33gR19r52R20jR21:5:3r251oR14oR15i1125R16i1144R17R33gR19r52R20jR21:8:2oR14oR15i1125R16i1136R17R33gR19jR4:13:1aoR3r52R12aoR0R40R11r52gr455hghR20jR21:2:1jR28:22:0gaoR14oR15i1125R16i1136R17R33gR19r52R20jR21:3:1oR14oR15i1126R16i1135R17R33gR19r52R20jR21:5:3r333oR14oR15i1126R16i1127R17R33gR19r52R20jR21:1:1r313goR14oR15i1130R16i1135R17R33gR19r52R20jR21:0:1jR31:3:1d0.001gggoR14oR15i1141R16i1143R17R33gR19r52R20jR21:0:1jR31:3:1d0ghgoR14oR15i1147R16i1153R17R33gR19r52R20jR21:0:1jR31:3:1i100000gggoR14oR15i1159R16i1161R17R33gR19r52R20jR21:0:1jR31:3:1d1ghghggoR14oR15i1171R16i1206R17R33gR19r139R20jR21:5:3jR23:20:1r216oR14oR15i1171R16i1176R17R33gR19r139R20jR21:1:1r138goR14oR15i1180R16i1206R17R33gR19r111R20jR21:5:3r251oR14oR15i1180R16i1181R17R33gR19r111R20jR21:1:1r277goR14oR15i1184R16i1206R17R33gR19r52R20jR21:16:2oR14oR15i1184R16i1190R17R33gR19jR4:14:2r52jR47:1:1r222R20jR21:1:1oR0y6:valuesR9i-233R5r79R11r523ggoR14oR15i1191R16i1205R17R33gR19r208R20jR21:10:3oR14oR15i1191R16i1196R17R33gR19r77R20jR21:5:3jR23:9:0oR14oR15i1191R16i1192R17R33gR19r208R20jR21:1:1r207goR14oR15i1195R16i1196R17R33gR19r208R20jR21:0:1jR31:2:1zggoR14oR15i1199R16i1201R17R33gR19r208R20jR21:6:2r219oR14oR15i1200R16i1201R17R33gR19r208R20jR21:1:1r207ggoR14oR15i1204R16i1205R17R33gR19r208R20jR21:1:1r207ggggghgggoR14oR15i1220R16i1240R17R33gR19r26R20jR21:5:3r18oR14oR15i1220R16i1232R17R33gR19r26R20jR21:1:1r25goR14oR15i1235R16i1240R17R33gR19r139R20jR21:1:1r138gghgoR14oR15i1257R16i1684R17R33gR19r3R20jR21:10:3oR14oR15i1261R16i1268R17R33gR19r77R20jR21:1:1oR0y7:isDepthR9i-232R5r79R11r77R35ajR36:0:1nhggoR14oR15i1271R16i1479R17R33gR19r3R20jR21:4:1aoR14oR15i1278R16i1291R17R33gR19r3R20jR21:7:2oR0y3:valR9i-255R5r22R11r52goR14oR15i1288R16i1290R17R33gR19r52R20jR21:0:1jR31:3:1d0ggoR14oR15i1298R16i1426R17R33gR19r3R20jR21:20:3R45ahoR14oR15i1305R16i1426R17R33gR19r3R20jR21:13:3oR0R46R9i-256R5r22R11r208goR14oR15i1315R16i1337R17R33gR19jR4:14:2r208jR47:0:1zR20jR21:5:3r213oR14oR15i1315R16i1330R17R33gR19r208R20jR21:5:3r216oR14oR15i1315R16i1323R17R33gR19r208R20jR21:6:2r219oR14oR15i1316R16i1323R17R33gR19r208R20jR21:1:1r222ggoR14oR15i1326R16i1330R17R33gR19r208R20jR21:0:1jR31:2:1i1ggoR14oR15i1330R16i1337R17R33gR19r208R20jR21:1:1r222ggoR14oR15i1346R16i1426R17R33gR19r52R20jR21:5:3jR23:20:1r216oR14oR15i1346R16i1349R17R33gR19r52R20jR21:1:1r578goR14oR15i1353R16i1426R17R33gR19r52R20jR21:5:3r251oR14oR15i1353R16i1401R17R33gR19r52R20jR21:8:2oR14oR15i1353R16i1359R17R33gR19jR4:13:1aoR3r52R12aoR0R43R11jR4:5:2i4r16ghghR20jR21:2:1jR28:53:0gaoR14oR15i1360R16i1400R17R33gR19r111R20jR21:8:2oR14oR15i1360R16i1367R17R33gR19jR4:13:1aoR3r111R12aoR0R40R11r120gr121hghR20jR21:2:1r124gaoR14oR15i1360R16i1367R17R33gR19r120R20jR21:1:1r129goR14oR15i1372R16i1399R17R33gR19jR4:5:2i2r16R20jR21:5:3r216oR14oR15i1372R16i1380R17R33gR19r47R20jR21:1:1r46goR14oR15i1383R16i1399R17R33gR19r250R20jR21:5:3r251oR14oR15i1383R16i1388R17R33gR19r250R20jR21:1:1r254goR14oR15i1391R16i1399R17R33gR19r52R20jR21:8:2oR14oR15i1391R16i1396R17R33gR19jR4:13:1ar261hR20jR21:2:1r265gaoR14oR15i1397R16i1398R17R33gR19r208R20jR21:1:1r589ghggghghgoR14oR15i1404R16i1426R17R33gR19r52R20jR21:16:2oR14oR15i1404R16i1410R17R33gR19r523R20jR21:1:1r524goR14oR15i1411R16i1425R17R33gR19r208R20jR21:10:3oR14oR15i1411R16i1416R17R33gR19r77R20jR21:5:3r530oR14oR15i1411R16i1412R17R33gR19r208R20jR21:1:1r589goR14oR15i1415R16i1416R17R33gR19r208R20jR21:0:1jR31:2:1zggoR14oR15i1419R16i1421R17R33gR19r208R20jR21:6:2r219oR14oR15i1420R16i1421R17R33gR19r208R20jR21:1:1r589ggoR14oR15i1424R16i1425R17R33gR19r208R20jR21:1:1r589gggggggoR14oR15i1433R16i1472R17R33gR19r26R20jR21:5:3r18oR14oR15i1433R16i1445R17R33gR19r26R20jR21:1:1r25goR14oR15i1448R16i1472R17R33gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i1448R16i1452R17R33gR19jR4:13:1aoR3r712R12aoR0R43R11r52ghghR20jR21:2:1jR28:52:0gaoR14oR15i1453R16i1471R17R33gR19r52R20jR21:8:2oR14oR15i1453R16i1456R17R33gR19jR4:13:1aoR3r52R12aoR0R40R11r52gr455hghR20jR21:2:1r457gaoR14oR15i1453R16i1456R17R33gR19r52R20jR21:1:1r578goR14oR15i1461R16i1470R17R33gR19r52R20jR21:0:1jR31:3:1d0.9999999ghghgghgoR14oR15i1485R16i1684R17R33gR19r3R20jR21:4:1aoR14oR15i1492R16i1521R17R33gR19r3R20jR21:7:2oR0R27R9i-257R5r22R11jR4:5:2i4r16goR14oR15i1504R16i1520R17R33gR19r751R20jR21:8:2oR14oR15i1504R16i1508R17R33gR19r35R20jR21:2:1r36gaoR14oR15i1509R16i1510R17R33gR19r52R20jR21:0:1jR31:3:1zgoR14oR15i1512R16i1513R17R33gR19r52R20jR21:0:1jR31:3:1zgoR14oR15i1515R16i1516R17R33gR19r52R20jR21:0:1jR31:3:1zgoR14oR15i1518R16i1519R17R33gR19r52R20jR21:0:1jR31:3:1zghggoR14oR15i1528R16i1650R17R33gR19r3R20jR21:20:3R45ahoR14oR15i1535R16i1650R17R33gR19r3R20jR21:13:3oR0R46R9i-258R5r22R11r208goR14oR15i1545R16i1567R17R33gR19jR4:14:2r208jR47:0:1zR20jR21:5:3r213oR14oR15i1545R16i1560R17R33gR19r208R20jR21:5:3r216oR14oR15i1545R16i1553R17R33gR19r208R20jR21:6:2r219oR14oR15i1546R16i1553R17R33gR19r208R20jR21:1:1r222ggoR14oR15i1556R16i1560R17R33gR19r208R20jR21:0:1jR31:2:1i1ggoR14oR15i1560R16i1567R17R33gR19r208R20jR21:1:1r222ggoR14oR15i1576R16i1650R17R33gR19r751R20jR21:5:3jR23:20:1r216oR14oR15i1576R16i1581R17R33gR19r751R20jR21:1:1r750goR14oR15i1585R16i1650R17R33gR19r111R20jR21:5:3r251oR14oR15i1585R16i1625R17R33gR19r111R20jR21:8:2oR14oR15i1585R16i1592R17R33gR19jR4:13:1aoR3r111R12aoR0R40R11r120gr121hghR20jR21:2:1r124gaoR14oR15i1585R16i1592R17R33gR19r120R20jR21:1:1r129goR14oR15i1597R16i1624R17R33gR19jR4:5:2i2r16R20jR21:5:3r216oR14oR15i1597R16i1605R17R33gR19r47R20jR21:1:1r46goR14oR15i1608R16i1624R17R33gR19r250R20jR21:5:3r251oR14oR15i1608R16i1613R17R33gR19r250R20jR21:1:1r254goR14oR15i1616R16i1624R17R33gR19r52R20jR21:8:2oR14oR15i1616R16i1621R17R33gR19jR4:13:1ar261hR20jR21:2:1r265gaoR14oR15i1622R16i1623R17R33gR19r208R20jR21:1:1r781ghggghgoR14oR15i1628R16i1650R17R33gR19r52R20jR21:16:2oR14oR15i1628R16i1634R17R33gR19r523R20jR21:1:1r524goR14oR15i1635R16i1649R17R33gR19r208R20jR21:10:3oR14oR15i1635R16i1640R17R33gR19r77R20jR21:5:3r530oR14oR15i1635R16i1636R17R33gR19r208R20jR21:1:1r781goR14oR15i1639R16i1640R17R33gR19r208R20jR21:0:1jR31:2:1zggoR14oR15i1643R16i1645R17R33gR19r208R20jR21:6:2r219oR14oR15i1644R16i1645R17R33gR19r208R20jR21:1:1r781ggoR14oR15i1648R16i1649R17R33gR19r208R20jR21:1:1r781gggggggoR14oR15i1657R16i1677R17R33gR19r26R20jR21:5:3r18oR14oR15i1657R16i1669R17R33gR19r26R20jR21:1:1r25goR14oR15i1672R16i1677R17R33gR19r751R20jR21:1:1r750gghgggoR14oR15i1689R16i1897R17R33gR19r3R20jR21:10:3oR14oR15i1693R16i1706R17R33gR19r77R20jR21:1:1oR0y13:hasFixedColorR9i-235R5r79R11r77R35ajR36:0:1nhggoR14oR15i1709R16i1897R17R33gR19r3R20jR21:4:1aoR14oR15i1716R16i1749R17R33gR19jR4:5:2i3r16R20jR21:5:3r18oR14oR15i1716R16i1732R17R33gR19r908R20jR21:9:2oR14oR15i1716R16i1728R17R33gR19r26R20jR21:1:1r25gajy14:hxsl.Component:0:0jR62:1:0jR62:2:0hgoR14oR15i1735R16i1749R17R33gR19jR4:5:2i3r16R20jR21:9:2oR14oR15i1735R16i1745R17R33gR19jR4:5:2i4r16R20jR21:1:1oR0y10:fixedColorR9i-237R5r79R11r924ggar915r916r917hggoR14oR15i1756R16i1890R17R33gR19r3R20jR21:10:3oR14oR15i1760R16i1776R17R33gR19r77R20jR21:1:1oR0y16:smoothFixedColorR9i-236R5r79R11r77R35ajR36:0:1nhggoR14oR15i1785R16i1815R17R33gR19r52R20jR21:5:3jR23:20:1r251oR14oR15i1785R16i1799R17R33gR19r52R20jR21:9:2oR14oR15i1785R16i1797R17R33gR19r26R20jR21:1:1r25gajR62:3:0hgoR14oR15i1803R16i1815R17R33gR19r52R20jR21:9:2oR14oR15i1803R16i1813R17R33gR19r924R20jR21:1:1r925gar947hggoR14oR15i1833R16i1890R17R33gR19r52R20jR21:5:3r18oR14oR15i1833R16i1847R17R33gR19r52R20jR21:9:2oR14oR15i1833R16i1845R17R33gR19r26R20jR21:1:1r25gar947hgoR14oR15i1850R16i1890R17R33gR19r52R20jR21:5:3r251oR14oR15i1850R16i1862R17R33gR19r52R20jR21:9:2oR14oR15i1850R16i1860R17R33gR19r924R20jR21:1:1r925gar947hgoR14oR15i1865R16i1890R17R33gR19r52R20jR21:8:2oR14oR15i1865R16i1870R17R33gR19jR4:13:1aoR3r52R12aoR0R43R11r77ghghR20jR21:2:1r265gaoR14oR15i1871R16i1889R17R33gR19r77R20jR21:5:3jR23:7:0oR14oR15i1871R16i1885R17R33gR19r52R20jR21:9:2oR14oR15i1871R16i1883R17R33gR19r26R20jR21:1:1r25gar947hgoR14oR15i1888R16i1889R17R33gR19r52R20jR21:0:1jR31:3:1zgghgggghgnghgR12ahgoR3r89R5jR6:3:0R7r100R13oR14oR15i1949R16i2160R17R33gR19r3R20jR21:4:1aoR14oR15i1955R16i1996R17R33gR19r3R20jR21:7:2oR0y5:depthR9i-259R5r22R11r52goR14oR15i1967R16i1995R17R33gR19r52R20jR21:8:2oR14oR15i1967R16i1973R17R33gR19r628R20jR21:2:1r629gaoR14oR15i1974R16i1994R17R33gR19r111R20jR21:8:2oR14oR15i1974R16i1986R17R33gR19jR4:13:1aoR3r111R12aoR0R40R11r120gr121hghR20jR21:2:1r124gaoR14oR15i1974R16i1986R17R33gR19r120R20jR21:1:1oR0y12:depthTextureR9i-230R5r79R11r120ggoR14oR15i1991R16i1993R17R33gR19r98R20jR21:1:1oR0R30R9i-243R5r22R11r98gghghggoR14oR15i2001R16i2036R17R33gR19r3R20jR21:7:2oR0y3:uv2R9i-260R5r22R11jR4:5:2i2r16goR14oR15i2011R16i2035R17R33gR19r1048R20jR21:5:3r251oR14oR15i2011R16i2021R17R33gR19r98R20jR21:3:1oR14oR15i2012R16i2020R17R33gR19r98R20jR21:5:3r333oR14oR15i2012R16i2014R17R33gR19r98R20jR21:1:1r1040goR14oR15i2017R16i2020R17R33gR19r52R20jR21:0:1jR31:3:1d0.5gggoR14oR15i2024R16i2035R17R33gR19jR4:5:2i2r16R20jR21:8:2oR14oR15i2024R16i2028R17R33gR19jR4:13:1ahR20jR21:2:1jR28:38:0gaoR14oR15i2029R16i2030R17R33gR19r52R20jR21:0:1jR31:3:1i2goR14oR15i2032R16i2034R17R33gR19r52R20jR21:0:1jR31:3:1i-2ghgggoR14oR15i2041R16i2096R17R33gR19r3R20jR21:7:2oR0y4:tempR9i-261R5r22R11r111goR14oR15i2052R16i2095R17R33gR19r111R20jR21:5:3r251oR14oR15i2052R16i2071R17R33gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i2052R16i2056R17R33gR19r35R20jR21:2:1r36gaoR14oR15i2057R16i2060R17R33gR19r1048R20jR21:1:1r1047goR14oR15i2062R16i2067R17R33gR19r52R20jR21:1:1r1016goR14oR15i2069R16i2070R17R33gR19r52R20jR21:0:1jR31:3:1i1ghgoR14oR15i2074R16i2095R17R33gR19jR4:7:0R20jR21:1:1oR0y21:cameraInverseViewProjR9i-228R5r79R11r1110ggggoR14oR15i2101R16i2134R17R33gR19r3R20jR21:7:2oR0y8:originWSR9i-262R5r22R11jR4:5:2i3r16goR14oR15i2116R16i2133R17R33gR19r1118R20jR21:5:3jR23:2:0oR14oR15i2116R16i2124R17R33gR19r1118R20jR21:9:2oR14oR15i2116R16i2120R17R33gR19r111R20jR21:1:1r1087gar915r916r917hgoR14oR15i2127R16i2133R17R33gR19r52R20jR21:9:2oR14oR15i2127R16i2131R17R33gR19r111R20jR21:1:1r1087gar947hgggoR14oR15i2139R16i2154R17R33gR19r3R20jR21:12:1oR14oR15i2146R16i2154R17R33gR19r1118R20jR21:1:1r1117gghgR12ar1040hghy4:varsar44r23r1111r129r1036r222r569r524r254r899r934r925r78oR0y9:hasNormalR9i-239R5r79R11r77R35ajR36:0:1nhgr194r5r65r100hg";
-h3d_shader_ColorAdd.SRC = "oy4:namey19:h3d.shader.ColorAddy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-290R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini164y3:maxi199y4:filey68:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FColorAdd.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i170R16i193R17R18gR19jR4:5:2i3jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:20:1jR23:0:0oR14oR15i170R16i184R17R18gR19r17R20jR21:9:2oR14oR15i170R16i180R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0y10:pixelColorR9i-288R5jR10:4:0R11r24ggajy14:hxsl.Component:0:0jR25:1:0jR25:2:0hgoR14oR15i188R16i193R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y5:colorR9i-289R5jR10:2:0R11r35ggghgR12ahghy4:varsar25r36r5hg";
-h3d_shader_ColorKey.SRC = "oy4:namey19:h3d.shader.ColorKeyy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-293R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini167y3:maxi260y4:filey68:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FColorKey.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i173R16i209R17R18gR19r3R20jR21:7:2oR0y5:cdiffR9i-294R5jR10:4:0R11jR4:5:2i4jy12:hxsl.VecType:1:0goR14oR15i185R16i208R17R18gR19r19R20jR21:5:3jy16:haxe.macro.Binop:3:0oR14oR15i185R16i197R17R18gR19jR4:5:2i4r18R20jR21:1:1oR0y12:textureColorR9i-292R5r17R11r25ggoR14oR15i200R16i208R17R18gR19jR4:5:2i4r18R20jR21:1:1oR0y8:colorKeyR9i-291R5jR10:2:0R11r30ggggoR14oR15i214R16i254R17R18gR19r3R20jR21:10:3oR14oR15i218R16i244R17R18gR19jR4:2:0R20jR21:5:3jR24:9:0oR14oR15i218R16i234R17R18gR19jR4:3:0R20jR21:8:2oR14oR15i218R16i223R17R18gR19jR4:13:1aoR3r44R12aoR0y1:_R11r19goR0y1:bR11jR4:5:2i4r18ghghR20jR21:2:1jy12:hxsl.TGlobal:29:0gaoR14oR15i218R16i223R17R18gR19r19R20jR21:1:1r16goR14oR15i228R16i233R17R18gR19r19R20jR21:1:1r16ghgoR14oR15i237R16i244R17R18gR19r44R20jR21:0:1jy10:hxsl.Const:3:1d1e-005ggoR14oR15i247R16i254R17R18gR19r3R20jR21:11:0gnghgR12ahghy4:varsar31r26r5hg";
-h3d_shader_ColorMatrix.SRC = "oy4:namey22:h3d.shader.ColorMatrixy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-297R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini168y3:maxi263y4:filey71:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FColorMatrix.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i174R16i257R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i174R16i184R17R18gR19r17R20jR21:1:1oR0y10:pixelColorR9i-295R5jR10:4:0R11r17ggoR14oR15i187R16i257R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i187R16i191R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i193R16i231R17R18gR19jR4:5:2i3r16R20jR21:9:2oR14oR15i193R16i227R17R18gR19jR4:5:2i4r16R20jR21:3:1oR14oR15i194R16i226R17R18gR19r39R20jR21:5:3jR23:1:0oR14oR15i194R16i217R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i194R16i198R17R18gR19r30R20jR21:2:1r31gaoR14oR15i199R16i213R17R18gR19jR4:5:2i3r16R20jR21:9:2oR14oR15i199R16i209R17R18gR19r17R20jR21:1:1r21gajy14:hxsl.Component:0:0jR26:1:0jR26:2:0hgoR14oR15i214R16i216R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1d1ghgoR14oR15i220R16i226R17R18gR19jR4:7:0R20jR21:1:1oR0y6:matrixR9i-296R5jR10:2:0R11r69ggggar57r58r59hgoR14oR15i233R16i256R17R18gR19r63R20jR21:9:2oR14oR15i233R16i254R17R18gR19r39R20jR21:3:1oR14oR15i234R16i253R17R18gR19r39R20jR21:5:3r42oR14oR15i234R16i244R17R18gR19r17R20jR21:1:1r21goR14oR15i247R16i253R17R18gR19r69R20jR21:1:1r70gggajR26:3:0hghgghgR12ahghy4:varsar21r70r5hg";
+h3d_shader_ColorAdd.SRC = "oy4:namey19:h3d.shader.ColorAddy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-396R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini164y3:maxi199y4:filey68:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FColorAdd.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i170R16i193R17R18gR19jR4:5:2i3jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:20:1jR23:0:0oR14oR15i170R16i184R17R18gR19r17R20jR21:9:2oR14oR15i170R16i180R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0y10:pixelColorR9i-394R5jR10:4:0R11r24ggajy14:hxsl.Component:0:0jR25:1:0jR25:2:0hgoR14oR15i188R16i193R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y5:colorR9i-395R5jR10:2:0R11r35ggghgR12ahghy4:varsar25r36r5hg";
+h3d_shader_ColorKey.SRC = "oy4:namey19:h3d.shader.ColorKeyy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-399R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini167y3:maxi260y4:filey68:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FColorKey.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i173R16i209R17R18gR19r3R20jR21:7:2oR0y5:cdiffR9i-400R5jR10:4:0R11jR4:5:2i4jy12:hxsl.VecType:1:0goR14oR15i185R16i208R17R18gR19r19R20jR21:5:3jy16:haxe.macro.Binop:3:0oR14oR15i185R16i197R17R18gR19jR4:5:2i4r18R20jR21:1:1oR0y12:textureColorR9i-398R5r17R11r25ggoR14oR15i200R16i208R17R18gR19jR4:5:2i4r18R20jR21:1:1oR0y8:colorKeyR9i-397R5jR10:2:0R11r30ggggoR14oR15i214R16i254R17R18gR19r3R20jR21:10:3oR14oR15i218R16i244R17R18gR19jR4:2:0R20jR21:5:3jR24:9:0oR14oR15i218R16i234R17R18gR19jR4:3:0R20jR21:8:2oR14oR15i218R16i223R17R18gR19jR4:13:1aoR3r44R12aoR0y1:_R11r19goR0y1:bR11jR4:5:2i4r18ghghR20jR21:2:1jy12:hxsl.TGlobal:29:0gaoR14oR15i218R16i223R17R18gR19r19R20jR21:1:1r16goR14oR15i228R16i233R17R18gR19r19R20jR21:1:1r16ghgoR14oR15i237R16i244R17R18gR19r44R20jR21:0:1jy10:hxsl.Const:3:1d1e-005ggoR14oR15i247R16i254R17R18gR19r3R20jR21:11:0gnghgR12ahghy4:varsar31r26r5hg";
+h3d_shader_ColorMatrix.SRC = "oy4:namey22:h3d.shader.ColorMatrixy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-403R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini168y3:maxi263y4:filey71:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FColorMatrix.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i174R16i257R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i174R16i184R17R18gR19r17R20jR21:1:1oR0y10:pixelColorR9i-401R5jR10:4:0R11r17ggoR14oR15i187R16i257R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i187R16i191R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:40:0gaoR14oR15i193R16i231R17R18gR19jR4:5:2i3r16R20jR21:9:2oR14oR15i193R16i227R17R18gR19jR4:5:2i4r16R20jR21:3:1oR14oR15i194R16i226R17R18gR19r39R20jR21:5:3jR23:1:0oR14oR15i194R16i217R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i194R16i198R17R18gR19r30R20jR21:2:1r31gaoR14oR15i199R16i213R17R18gR19jR4:5:2i3r16R20jR21:9:2oR14oR15i199R16i209R17R18gR19r17R20jR21:1:1r21gajy14:hxsl.Component:0:0jR26:1:0jR26:2:0hgoR14oR15i214R16i216R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1d1ghgoR14oR15i220R16i226R17R18gR19jR4:7:0R20jR21:1:1oR0y6:matrixR9i-402R5jR10:2:0R11r69ggggar57r58r59hgoR14oR15i233R16i256R17R18gR19r63R20jR21:9:2oR14oR15i233R16i254R17R18gR19r39R20jR21:3:1oR14oR15i234R16i253R17R18gR19r39R20jR21:5:3r42oR14oR15i234R16i244R17R18gR19r17R20jR21:1:1r21goR14oR15i247R16i253R17R18gR19r69R20jR21:1:1r70gggajR26:3:0hghgghgR12ahghy4:varsar21r70r5hg";
 h3d_shader_DirLight.SRC = "oy4:namey19:h3d.shader.DirLighty4:funsaoy3:retjy9:hxsl.Type:5:2i3jy12:hxsl.VecType:1:0y4:kindjy17:hxsl.FunctionKind:3:0y3:refoR0y12:calcLightingy2:idi-12R6jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r4y4:argsahghgy4:exproy1:poy3:mini451y3:maxi785y4:filey68:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FDirLight.hxgy1:tjR4:0:0y1:ejy13:hxsl.TExprDef:4:1aoR15oR16i457R17i510R18R19gR20r14R21jR22:7:2oR0y4:diffR10i-15R6jR11:4:0R12jR4:3:0goR15oR16i468R17i509R18R19gR20r20R21jR22:8:2oR15oR16i468R17i501R18R19gR20jR4:13:1aoR3r20R13aoR0y1:_R12r20goR0y1:bR12r20ghghR21jR22:2:1jy12:hxsl.TGlobal:22:0gaoR15oR16i468R17i501R18R19gR20r20R21jR22:8:2oR15oR16i468R17i485R18R19gR20jR4:13:1aoR3r20R13aoR0R24R12jR4:5:2i3r3goR0R25R12jR4:5:2i3r3ghghR21jR22:2:1jR26:29:0gaoR15oR16i468R17i485R18R19gR20r42R21jR22:1:1oR0y17:transformedNormalR10i-8R6r19R12r42ggoR15oR16i490R17i500R18R19gR20jR4:5:2i3r3R21jR22:6:2jy15:haxe.macro.Unop:3:0oR15oR16i491R17i500R18R19gR20r55R21jR22:1:1oR0y9:directionR10i-2R6jR11:2:0R12r55ggghgoR15oR16i506R17i508R18R19gR20r20R21jR22:0:1jy10:hxsl.Const:3:1d0ghggoR15oR16i515R17i561R18R19gR20r14R21jR22:10:3oR15oR16i519R17i534R18R19gR20jR4:2:0R21jR22:6:2jR28:2:0oR15oR16i520R17i534R18R19gR20r74R21jR22:1:1oR0y14:enableSpecularR10i-3R6r60R12r74y10:qualifiersajy17:hxsl.VarQualifier:0:1nhgggoR15oR16i542R17i561R18R19gR20r14R21jR22:12:1oR15oR16i549R17i561R18R19gR20jR4:5:2i3r3R21jR22:5:3jy16:haxe.macro.Binop:1:0oR15oR16i549R17i554R18R19gR20r87R21jR22:1:1oR0y5:colorR10i-1R6r60R12r87ggoR15oR16i557R17i561R18R19gR20r20R21jR22:1:1r18gggngoR15oR16i567R17i625R18R19gR20r14R21jR22:7:2oR0y1:rR10i-16R6r19R12r44goR15oR16i575R17i624R18R19gR20r44R21jR22:8:2oR15oR16i575R17i612R18R19gR20jR4:13:1aoR3r44R13aoR0R24R12r44ghghR21jR22:2:1jR26:31:0gaoR15oR16i575R17i612R18R19gR20r44R21jR22:8:2oR15oR16i575R17i582R18R19gR20jR4:13:1aoR3r44R13aoR0y1:aR12r44goR0R25R12r44ghghR21jR22:2:1jR26:32:0gaoR15oR16i583R17i592R18R19gR20r55R21jR22:1:1r59goR15oR16i594R17i611R18R19gR20r42R21jR22:1:1r51ghghggoR15oR16i630R17i713R18R19gR20r14R21jR22:7:2oR0y9:specValueR10i-17R6r19R12r20goR15oR16i646R17i712R18R19gR20r20R21jR22:8:2oR15oR16i646R17i704R18R19gR20jR4:13:1aoR3r20R13aoR0R24R12r20gr29hghR21jR22:2:1r31gaoR15oR16i646R17i704R18R19gR20r20R21jR22:8:2oR15oR16i646R17i647R18R19gR20jR4:13:1aoR3r20R13aoR0R24R12r44gr43hghR21jR22:2:1r46gaoR15oR16i646R17i647R18R19gR20r44R21jR22:1:1r101goR15oR16i652R17i703R18R19gR20r44R21jR22:8:2oR15oR16i652R17i691R18R19gR20jR4:13:1aoR3r44R13aoR0R24R12jR4:5:2i3r3ghghR21jR22:2:1r111gaoR15oR16i652R17i691R18R19gR20r172R21jR22:3:1oR15oR16i653R17i690R18R19gR20r172R21jR22:5:3jR34:3:0oR15oR16i653R17i668R18R19gR20jR4:5:2i3r3R21jR22:1:1oR0y8:positionR10i-5R6jR11:0:0R12r183y6:parentoR0y6:cameraR10i-4R6r185R12jR4:12:1ar184hgggoR15oR16i671R17i690R18R19gR20jR4:5:2i3r3R21jR22:1:1oR0y19:transformedPositionR10i-9R6r19R12r192gggghghgoR15oR16i709R17i711R18R19gR20r20R21jR22:0:1jR30:3:1d0ghggoR15oR16i718R17i779R18R19gR20r14R21jR22:12:1oR15oR16i725R17i779R18R19gR20jR4:5:2i3r3R21jR22:5:3r88oR15oR16i725R17i730R18R19gR20r87R21jR22:1:1r91goR15oR16i733R17i779R18R19gR20jR4:5:2i3r3R21jR22:3:1oR15oR16i734R17i778R18R19gR20r215R21jR22:5:3jR34:0:0oR15oR16i734R17i738R18R19gR20r20R21jR22:1:1r18goR15oR16i741R17i778R18R19gR20r215R21jR22:5:3r88oR15oR16i741R17i750R18R19gR20r215R21jR22:1:1oR0y9:specColorR10i-11R6r19R12r215ggoR15oR16i753R17i778R18R19gR20r20R21jR22:8:2oR15oR16i753R17i756R18R19gR20jR4:13:1aoR3r20R13aoR0R37R12r20gr29hghR21jR22:2:1jR26:8:0gaoR15oR16i757R17i766R18R19gR20r20R21jR22:1:1r138goR15oR16i768R17i777R18R19gR20r20R21jR22:1:1oR0y9:specPowerR10i-10R6r19R12r20gghgggggghgR13ahgoR3r14R6jR7:0:0R8oR0y6:vertexR10i-13R6r7R12jR4:13:1aoR3r14R13ahghgR14oR15oR16i809R17i853R18R19gR20r14R21jR22:4:1aoR15oR16i815R17i847R18R19gR20jR4:5:2i3r3R21jR22:5:3jR34:20:1r218oR15oR16i815R17i829R18R19gR20r267R21jR22:9:2oR15oR16i815R17i825R18R19gR20jR4:5:2i3r3R21jR22:1:1oR0y10:lightColorR10i-6R6r19R12r273ggajy14:hxsl.Component:0:0jR47:1:0jR47:2:0hgoR15oR16i833R17i847R18R19gR20r4R21jR22:8:2oR15oR16i833R17i845R18R19gR20r11R21jR22:1:1r6gahgghgR13ahgoR3r14R6jR7:1:0R8oR0y8:fragmentR10i-14R6r7R12jR4:13:1aoR3r14R13ahghgR14oR15oR16i879R17i928R18R19gR20r14R21jR22:4:1aoR15oR16i885R17i922R18R19gR20jR4:5:2i3r3R21jR22:5:3jR34:20:1r218oR15oR16i885R17i904R18R19gR20r303R21jR22:9:2oR15oR16i885R17i900R18R19gR20jR4:5:2i3r3R21jR22:1:1oR0y15:lightPixelColorR10i-7R6r19R12r309ggar277r278r279hgoR15oR16i908R17i922R18R19gR20r4R21jR22:8:2oR15oR16i908R17i920R18R19gR20r11R21jR22:1:1r6gahgghgR13ahghy4:varsar91r59r78r186r274r310r51r193r245r226r6r257r293hg";
+h3d_shader_GpuParticle.SRC = "oy4:namey22:h3d.shader.GpuParticley4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:2:0y3:refoR0y8:__init__y2:idi-363R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini1306y3:maxi2483y4:filey71:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FGpuParticle.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i1312R16i1487R17R18gR19r3R20jR21:4:1aoR14oR15i1319R16i1351R17R18gR19r3R20jR21:7:2oR0y7:totTimeR9i-366R5jR10:4:0R11jR4:3:0goR14oR15i1333R16i1350R17R18gR19r21R20jR21:5:3jy16:haxe.macro.Binop:0:0oR14oR15i1333R16i1343R17R18gR19r21R20jR21:1:1oR0y4:timeR9i-327R5jR10:1:0R11r21y6:parentoR0y5:propsR9i-325R5r28R11jR4:12:1aoR0y2:uvR9i-326R5r28R11jR4:5:2i2jy12:hxsl.VecType:1:0R25r29gr27oR0y4:lifeR9i-328R5r28R11r21R25r29goR0y4:initR9i-329R5r28R11jR4:5:2i2r32R25r29goR0y5:deltaR9i-330R5r28R11jR4:5:2i2r32R25r29ghgggoR14oR15i1346R16i1350R17R18gR19r21R20jR21:1:1oR0R24R9i-338R5jR10:2:0R11r21ggggoR14oR15i1357R16i1397R17R18gR19r21R20jR21:5:3jR23:4:0oR14oR15i1357R16i1358R17R18gR19r21R20jR21:1:1oR0R19R9i-353R5r20R11r21ggoR14oR15i1361R16i1397R17R18gR19r21R20jR21:5:3jR23:19:0oR14oR15i1361R16i1368R17R18gR19r21R20jR21:1:1r19goR14oR15i1371R16i1397R17R18gR19r21R20jR21:3:1oR14oR15i1372R16i1396R17R18gR19r21R20jR21:5:3jR23:1:0oR14oR15i1372R16i1382R17R18gR19r21R20jR21:1:1r34goR14oR15i1385R16i1396R17R18gR19r21R20jR21:1:1oR0y11:loopCounterR9i-340R5r44R11r21ggggggoR14oR15i1404R16i1480R17R18gR19r21R20jR21:5:3r50oR14oR15i1404R16i1414R17R18gR19r21R20jR21:1:1oR0y10:visibilityR9i-362R5r20R11r21ggoR14oR15i1417R16i1480R17R18gR19r21R20jR21:5:3r65oR14oR15i1417R16i1436R17R18gR19r21R20jR21:8:2oR14oR15i1417R16i1422R17R18gR19jR4:13:1aoR3r21R12aoR0y5:valueR11jR4:2:0ghghR20jR21:2:1jy12:hxsl.TGlobal:36:0gaoR14oR15i1423R16i1435R17R18gR19r93R20jR21:5:3jR23:8:0oR14oR15i1423R16i1430R17R18gR19r21R20jR21:1:1r19goR14oR15i1434R16i1435R17R18gR19r21R20jR21:0:1jy10:hxsl.Const:3:1zgghgoR14oR15i1439R16i1480R17R18gR19r21R20jR21:8:2oR14oR15i1439R16i1444R17R18gR19jR4:13:1ar90hR20jR21:2:1r95gaoR14oR15i1445R16i1479R17R18gR19r93R20jR21:5:3jR23:9:0oR14oR15i1445R16i1456R17R18gR19r21R20jR21:5:3jR23:3:0oR14oR15i1445R16i1452R17R18gR19r21R20jR21:1:1r19goR14oR15i1455R16i1456R17R18gR19r21R20jR21:1:1r53ggoR14oR15i1459R16i1479R17R18gR19r21R20jR21:5:3r24oR14oR15i1459R16i1469R17R18gR19r21R20jR21:1:1r27goR14oR15i1472R16i1479R17R18gR19r21R20jR21:1:1oR0y7:maxTimeR9i-339R5r44R11r21gggghggghgoR14oR15i1492R16i1514R17R18gR19r21R20jR21:5:3r50oR14oR15i1492R16i1497R17R18gR19r21R20jR21:1:1oR0y5:normTR9i-354R5r20R11r21ggoR14oR15i1500R16i1514R17R18gR19r21R20jR21:5:3jR23:2:0oR14oR15i1500R16i1501R17R18gR19r21R20jR21:1:1r53goR14oR15i1504R16i1514R17R18gR19r21R20jR21:1:1r34gggoR14oR15i1520R16i1555R17R18gR19r21R20jR21:5:3r50oR14oR15i1520R16i1528R17R18gR19r21R20jR21:1:1oR0y8:randPropR9i-355R5r20R11r21ggoR14oR15i1531R16i1555R17R18gR19r21R20jR21:5:3r154oR14oR15i1531R16i1542R17R18gR19r21R20jR21:6:2jy15:haxe.macro.Unop:3:0oR14oR15i1532R16i1542R17R18gR19r21R20jR21:1:1r27ggoR14oR15i1545R16i1555R17R18gR19r21R20jR21:1:1r34gggoR14oR15i1561R16i1651R17R18gR19jR4:5:2i3r32R20jR21:5:3r50oR14oR15i1561R16i1580R17R18gR19r185R20jR21:1:1oR0y19:transformedPositionR9i-312R5r20R11r185ggoR14oR15i1583R16i1651R17R18gR19jR4:5:2i3r32R20jR21:5:3r24oR14oR15i1583R16i1642R17R18gR19jR4:5:2i3r32R20jR21:5:3r24oR14oR15i1583R16i1599R17R18gR19jR4:5:2i3r32R20jR21:1:1oR0y16:relativePositionR9i-311R5r20R11r198ggoR14oR15i1602R16i1642R17R18gR19jR4:5:2i3r32R20jR21:5:3r65oR14oR15i1602R16i1638R17R18gR19r203R20jR21:3:1oR14oR15i1603R16i1637R17R18gR19r203R20jR21:5:3r65oR14oR15i1603R16i1615R17R18gR19r203R20jR21:1:1oR0y6:normalR9i-305R5r28R11r203R25oR0y5:inputR9i-303R5r28R11jR4:12:1aoR0y8:positionR9i-304R5r28R11jR4:5:2i3r32R25r211gr210hgggoR14oR15i1618R16i1637R17R18gR19r21R20jR21:3:1oR14oR15i1619R16i1636R17R18gR19r21R20jR21:5:3r24oR14oR15i1619R16i1620R17R18gR19r21R20jR21:0:1jR36:3:1i1goR14oR15i1623R16i1636R17R18gR19r21R20jR21:5:3r65oR14oR15i1623R16i1632R17R18gR19r21R20jR21:1:1oR0y9:speedIncrR9i-334R5r44R11r21ggoR14oR15i1635R16i1636R17R18gR19r21R20jR21:1:1r53ggggggoR14oR15i1641R16i1642R17R18gR19r21R20jR21:1:1r53gggoR14oR15i1645R16i1651R17R18gR19jR4:5:2i3r32R20jR21:1:1oR0y6:offsetR9i-350R5r44R11r246ggggoR14oR15i1657R16i1759R17R18gR19r3R20jR21:10:3oR14oR15i1661R16i1671R17R18gR19r93R20jR21:1:1oR0y10:clipBoundsR9i-347R5r44R11r93y10:qualifiersajy17:hxsl.VarQualifier:0:1nhggoR14oR15i1679R16i1759R17R18gR19r185R20jR21:5:3r50oR14oR15i1679R16i1698R17R18gR19r185R20jR21:1:1r188goR14oR15i1701R16i1759R17R18gR19jR4:5:2i3r32R20jR21:5:3r24oR14oR15i1701R16i1747R17R18gR19jR4:5:2i3r32R20jR21:5:3r57oR14oR15i1701R16i1734R17R18gR19jR4:5:2i3r32R20jR21:3:1oR14oR15i1702R16i1733R17R18gR19r272R20jR21:5:3r123oR14oR15i1702R16i1721R17R18gR19r185R20jR21:1:1r188goR14oR15i1724R16i1733R17R18gR19jR4:5:2i3r32R20jR21:1:1oR0y9:volumeMinR9i-348R5r44R11r280ggggoR14oR15i1737R16i1747R17R18gR19jR4:5:2i3r32R20jR21:1:1oR0y10:volumeSizeR9i-349R5r44R11r287gggoR14oR15i1750R16i1759R17R18gR19r280R20jR21:1:1r281gggngoR14oR15i1765R16i1797R17R18gR19r185R20jR21:5:3jR23:20:1r65oR14oR15i1765R16i1784R17R18gR19r185R20jR21:1:1r188goR14oR15i1788R16i1797R17R18gR19jR4:8:0R20jR21:1:1oR0y9:transformR9i-346R5r44R11r305gggoR14oR15i1803R16i1843R17R18gR19r21R20jR21:5:3jR23:20:1r123oR14oR15i1803R16i1824R17R18gR19r21R20jR21:9:2oR14oR15i1803R16i1822R17R18gR19r185R20jR21:1:1r188gajy14:hxsl.Component:2:0hgoR14oR15i1828R16i1843R17R18gR19r21R20jR21:5:3r65oR14oR15i1828R16i1839R17R18gR19r21R20jR21:5:3r65oR14oR15i1828R16i1835R17R18gR19r21R20jR21:1:1oR0y7:gravityR9i-335R5r44R11r21ggoR14oR15i1838R16i1839R17R18gR19r21R20jR21:1:1r53ggoR14oR15i1842R16i1843R17R18gR19r21R20jR21:1:1r53gggoR14oR15i1849R16i1879R17R18gR19jR4:5:2i3r32R20jR21:5:3r50oR14oR15i1849R16i1866R17R18gR19r339R20jR21:1:1oR0y17:transformedNormalR9i-314R5r20R11r339ggoR14oR15i1869R16i1879R17R18gR19jR4:5:2i3r32R20jR21:1:1oR0y3:dirR9i-297R5jR10:3:0R11r346R25oR0y6:cameraR9i-288R5jR10:0:0R11jR4:12:1aoR0y4:viewR9i-289R5r350R11jR4:7:0R25r349goR0y4:projR9i-290R5r350R11r353R25r349goR0R45R9i-291R5r350R11jR4:5:2i3r32R25r349goR0y8:projDiagR9i-292R5r350R11jR4:5:2i3r32R25r349goR0y8:viewProjR9i-293R5r350R11r353R25r349goR0y15:inverseViewProjR9i-294R5r350R11r353R25r349goR0y5:zNearR9i-295R5r350R11r21R25r349goR0y4:zFarR9i-296R5r350R11r21R25r349gr347hggggoR14oR15i1885R16i1932R17R18gR19jR4:5:2i2r32R20jR21:5:3r50oR14oR15i1885R16i1897R17R18gR19r368R20jR21:1:1oR0y12:calculatedUVR9i-358R5r20R11r368ggoR14oR15i1900R16i1932R17R18gR19jR4:5:2i2r32R20jR21:8:2oR14oR15i1900R16i1904R17R18gR19jR4:13:1ahR20jR21:2:1jR35:38:0gaoR14oR15i1905R16i1915R17R18gR19r21R20jR21:9:2oR14oR15i1905R16i1913R17R18gR19r33R20jR21:1:1r31gajR54:0:0hgoR14oR15i1917R16i1931R17R18gR19r21R20jR21:5:3r123oR14oR15i1917R16i1918R17R18gR19r21R20jR21:0:1jR36:3:1i1goR14oR15i1921R16i1931R17R18gR19r21R20jR21:9:2oR14oR15i1921R16i1929R17R18gR19r33R20jR21:1:1r31gajR54:1:0hgghggoR14oR15i1938R16i2478R17R18gR19r3R20jR21:4:1aoR14oR15i1945R16i2032R17R18gR19r21R20jR21:5:3r50oR14oR15i1945R16i1950R17R18gR19r21R20jR21:1:1oR0y5:frameR9i-356R5r20R11r21ggoR14oR15i1953R16i2032R17R18gR19r21R20jR21:5:3r24oR14oR15i1953R16i1987R17R18gR19r21R20jR21:5:3r65oR14oR15i1953R16i1969R17R18gR19r21R20jR21:3:1oR14oR15i1954R16i1968R17R18gR19r21R20jR21:5:3r154oR14oR15i1954R16i1955R17R18gR19r21R20jR21:1:1r53goR14oR15i1958R16i1968R17R18gR19r21R20jR21:1:1r34gggoR14oR15i1972R16i1987R17R18gR19r21R20jR21:1:1oR0y15:animationRepeatR9i-341R5r44R11r21gggoR14oR15i1990R16i2032R17R18gR19r21R20jR21:8:2oR14oR15i1990R16i1995R17R18gR19jR4:13:1aoR3r21R12aoR0R34R11jR4:1:0ghghR20jR21:2:1r95gaoR14oR15i1996R16i2031R17R18gR19r446R20jR21:8:2oR14oR15i1996R16i1999R17R18gR19jR4:13:1aoR3r446R12aoR0R34R11r21ghghR20jR21:2:1jR35:35:0gaoR14oR15i2000R16i2030R17R18gR19r21R20jR21:5:3r65oR14oR15i2000R16i2019R17R18gR19r21R20jR21:1:1oR0y19:animationFixedFrameR9i-342R5r44R11r21ggoR14oR15i2022R16i2030R17R18gR19r21R20jR21:1:1r167gghghgggoR14oR15i2039R16i2068R17R18gR19r21R20jR21:5:3r50oR14oR15i2039R16i2052R17R18gR19r21R20jR21:1:1oR0y13:frameBlendingR9i-357R5r20R11r21ggoR14oR15i2055R16i2068R17R18gR19r21R20jR21:8:2oR14oR15i2055R16i2060R17R18gR19jR4:13:1aoR3r21R12aoR0y1:_R11r21ghghR20jR21:2:1jR35:19:0gaoR14oR15i2055R16i2060R17R18gR19r21R20jR21:1:1r415ghggoR14oR15i2075R16i2097R17R18gR19r21R20jR21:5:3jR23:20:1r123oR14oR15i2075R16i2080R17R18gR19r21R20jR21:1:1r415goR14oR15i2084R16i2097R17R18gR19r21R20jR21:1:1r480ggoR14oR15i2104R16i2124R17R18gR19r21R20jR21:5:3jR23:20:1r57oR14oR15i2104R16i2109R17R18gR19r21R20jR21:1:1r415goR14oR15i2113R16i2124R17R18gR19r21R20jR21:1:1oR0y11:totalFramesR9i-343R5r44R11r21gggoR14oR15i2131R16i2173R17R18gR19r3R20jR21:7:2oR0y9:nextFrameR9i-367R5r20R11r21goR14oR15i2147R16i2172R17R18gR19r21R20jR21:5:3r57oR14oR15i2147R16i2158R17R18gR19r21R20jR21:3:1oR14oR15i2148R16i2157R17R18gR19r21R20jR21:5:3r24oR14oR15i2148R16i2153R17R18gR19r21R20jR21:1:1r415goR14oR15i2156R16i2157R17R18gR19r21R20jR21:0:1jR36:3:1i1gggoR14oR15i2161R16i2172R17R18gR19r21R20jR21:1:1r517gggoR14oR15i2179R16i2260R17R18gR19r3R20jR21:7:2oR0R31R9i-368R5r20R11jR4:5:2i2r32goR14oR15i2191R16i2259R17R18gR19r546R20jR21:8:2oR14oR15i2191R16i2195R17R18gR19r379R20jR21:2:1r380gaoR14oR15i2197R16i2220R17R18gR19r21R20jR21:5:3r57oR14oR15i2197R16i2202R17R18gR19r21R20jR21:1:1r415goR14oR15i2205R16i2220R17R18gR19r21R20jR21:9:2oR14oR15i2205R16i2218R17R18gR19jR4:5:2i3r32R20jR21:1:1oR0y13:frameDivisionR9i-345R5r44R11r562ggar389hggoR14oR15i2222R16i2257R17R18gR19r21R20jR21:8:2oR14oR15i2222R16i2227R17R18gR19jR4:13:1ar443hR20jR21:2:1r95gaoR14oR15i2228R16i2256R17R18gR19r446R20jR21:8:2oR14oR15i2228R16i2231R17R18gR19jR4:13:1ar455hR20jR21:2:1r459gaoR14oR15i2232R16i2255R17R18gR19r21R20jR21:5:3r154oR14oR15i2232R16i2237R17R18gR19r21R20jR21:1:1r415goR14oR15i2240R16i2255R17R18gR19r21R20jR21:9:2oR14oR15i2240R16i2253R17R18gR19r562R20jR21:1:1r563gar389hgghghghggoR14oR15i2266R16i2317R17R18gR19jR4:5:2i2r32R20jR21:5:3r50oR14oR15i2266R16i2273R17R18gR19r603R20jR21:1:1oR0y7:frameUVR9i-360R5r20R11r603ggoR14oR15i2276R16i2317R17R18gR19jR4:5:2i2r32R20jR21:5:3r65oR14oR15i2276R16i2298R17R18gR19jR4:5:2i2r32R20jR21:3:1oR14oR15i2277R16i2297R17R18gR19r613R20jR21:5:3r24oR14oR15i2277R16i2289R17R18gR19r368R20jR21:1:1r371goR14oR15i2292R16i2297R17R18gR19r546R20jR21:1:1r545gggoR14oR15i2301R16i2317R17R18gR19jR4:5:2i2r32R20jR21:9:2oR14oR15i2301R16i2314R17R18gR19r562R20jR21:1:1r563gar403r318hgggoR14oR15i2324R16i2413R17R18gR19r3R20jR21:7:2oR0R31R9i-369R5r20R11jR4:5:2i2r32goR14oR15i2336R16i2412R17R18gR19r637R20jR21:8:2oR14oR15i2336R16i2340R17R18gR19r379R20jR21:2:1r380gaoR14oR15i2342R16i2369R17R18gR19r21R20jR21:5:3r57oR14oR15i2342R16i2351R17R18gR19r21R20jR21:1:1r522goR14oR15i2354R16i2369R17R18gR19r21R20jR21:9:2oR14oR15i2354R16i2367R17R18gR19r562R20jR21:1:1r563gar389hggoR14oR15i2371R16i2410R17R18gR19r21R20jR21:8:2oR14oR15i2371R16i2376R17R18gR19jR4:13:1ar443hR20jR21:2:1r95gaoR14oR15i2377R16i2409R17R18gR19r446R20jR21:8:2oR14oR15i2377R16i2380R17R18gR19jR4:13:1ar455hR20jR21:2:1r459gaoR14oR15i2381R16i2408R17R18gR19r21R20jR21:5:3r154oR14oR15i2381R16i2390R17R18gR19r21R20jR21:1:1r522goR14oR15i2393R16i2408R17R18gR19r21R20jR21:9:2oR14oR15i2393R16i2406R17R18gR19r562R20jR21:1:1r563gar389hgghghghggoR14oR15i2419R16i2471R17R18gR19jR4:5:2i2r32R20jR21:5:3r50oR14oR15i2419R16i2427R17R18gR19r692R20jR21:1:1oR0y8:frameUV2R9i-361R5r20R11r692ggoR14oR15i2430R16i2471R17R18gR19jR4:5:2i2r32R20jR21:5:3r65oR14oR15i2430R16i2452R17R18gR19jR4:5:2i2r32R20jR21:3:1oR14oR15i2431R16i2451R17R18gR19r702R20jR21:5:3r24oR14oR15i2431R16i2443R17R18gR19r368R20jR21:1:1r371goR14oR15i2446R16i2451R17R18gR19r637R20jR21:1:1r636gggoR14oR15i2455R16i2471R17R18gR19jR4:5:2i2r32R20jR21:9:2oR14oR15i2455R16i2468R17R18gR19r562R20jR21:1:1r563gar403r318hggghghgR12ahgoR3r3R5jR6:0:0R7oR0y6:vertexR9i-364R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i2507R16i3360R17R18gR19r3R20jR21:4:1aoR14oR15i2513R16i2556R17R18gR19r3R20jR21:7:2oR0y7:currentR9i-370R5r20R11jR4:5:2i2r32goR14oR15i2527R16i2555R17R18gR19r739R20jR21:5:3r24oR14oR15i2527R16i2537R17R18gR19r36R20jR21:1:1r35goR14oR15i2540R16i2555R17R18gR19r38R20jR21:5:3r65oR14oR15i2540R16i2551R17R18gR19r38R20jR21:1:1r37goR14oR15i2554R16i2555R17R18gR19r21R20jR21:1:1r53ggggoR14oR15i2561R16i2609R17R18gR19r3R20jR21:7:2oR0y4:sizeR9i-371R5r20R11r33goR14oR15i2572R16i2608R17R18gR19r33R20jR21:5:3r65oR14oR15i2572R16i2588R17R18gR19r33R20jR21:3:1oR14oR15i2573R16i2587R17R18gR19r33R20jR21:5:3r123oR14oR15i2573R16i2581R17R18gR19r33R20jR21:1:1r31goR14oR15i2584R16i2587R17R18gR19r21R20jR21:0:1jR36:3:1d0.5gggoR14oR15i2591R16i2608R17R18gR19r21R20jR21:8:2oR14oR15i2591R16i2600R17R18gR19jR4:13:1aoR3r21R12aoR0R71R11r21goR0y1:bR11r21ghghR20jR21:2:1jR35:22:0gaoR14oR15i2591R16i2600R17R18gR19r21R20jR21:9:2oR14oR15i2591R16i2598R17R18gR19r739R20jR21:1:1r738gar403hgoR14oR15i2605R16i2607R17R18gR19r21R20jR21:0:1jR36:3:1d0ghgggoR14oR15i2614R16i2634R17R18gR19r3R20jR21:7:2oR0y3:rotR9i-372R5r20R11r21goR14oR15i2624R16i2633R17R18gR19r21R20jR21:9:2oR14oR15i2624R16i2631R17R18gR19r739R20jR21:1:1r738gar389hggoR14oR15i2639R16i2676R17R18gR19r3R20jR21:7:2oR0y4:crotR9i-373R5r20R11r21goR14oR15i2650R16i2658R17R18gR19r21R20jR21:8:2oR14oR15i2650R16i2653R17R18gR19jR4:13:1aoR3r21R12aoR0R34R11r21ghghR20jR21:2:1jR35:3:0gaoR14oR15i2654R16i2657R17R18gR19r21R20jR21:1:1r803ghggoR14oR15i2639R16i2676R17R18gR19r3R20jR21:7:2oR0y4:srotR9i-374R5r20R11r21goR14oR15i2667R16i2675R17R18gR19r21R20jR21:8:2oR14oR15i2667R16i2670R17R18gR19jR4:13:1ar820hR20jR21:2:1jR35:2:0gaoR14oR15i2671R16i2674R17R18gR19r21R20jR21:1:1r803ghggoR14oR15i2681R16i2810R17R18gR19r3R20jR21:7:2oR0y4:distR9i-375R5r20R11jR4:5:2i2r32goR14oR15i2692R16i2809R17R18gR19r852R20jR21:5:3r65oR14oR15i2692R16i2758R17R18gR19jR4:5:2i2r32R20jR21:8:2oR14oR15i2692R16i2696R17R18gR19r379R20jR21:2:1r380gaoR14oR15i2697R16i2726R17R18gR19r21R20jR21:5:3r123oR14oR15i2697R16i2710R17R18gR19r21R20jR21:5:3r65oR14oR15i2697R16i2703R17R18gR19r21R20jR21:9:2oR14oR15i2697R16i2701R17R18gR19r33R20jR21:1:1r758gar389hgoR14oR15i2706R16i2710R17R18gR19r21R20jR21:1:1r814ggoR14oR15i2713R16i2726R17R18gR19r21R20jR21:5:3r65oR14oR15i2713R16i2719R17R18gR19r21R20jR21:9:2oR14oR15i2713R16i2717R17R18gR19r33R20jR21:1:1r758gar403hgoR14oR15i2722R16i2726R17R18gR19r21R20jR21:1:1r834gggoR14oR15i2728R16i2757R17R18gR19r21R20jR21:5:3r24oR14oR15i2728R16i2741R17R18gR19r21R20jR21:5:3r65oR14oR15i2728R16i2734R17R18gR19r21R20jR21:9:2oR14oR15i2728R16i2732R17R18gR19r33R20jR21:1:1r758gar389hgoR14oR15i2737R16i2741R17R18gR19r21R20jR21:1:1r834ggoR14oR15i2744R16i2757R17R18gR19r21R20jR21:5:3r65oR14oR15i2744R16i2750R17R18gR19r21R20jR21:9:2oR14oR15i2744R16i2748R17R18gR19r33R20jR21:1:1r758gar403hgoR14oR15i2753R16i2757R17R18gR19r21R20jR21:1:1r814ggghgoR14oR15i2761R16i2809R17R18gR19jR4:5:2i2r32R20jR21:8:2oR14oR15i2761R16i2765R17R18gR19r379R20jR21:2:1r380gaoR14oR15i2766R16i2805R17R18gR19r21R20jR21:5:3r154oR14oR15i2766R16i2784R17R18gR19r21R20jR21:9:2oR14oR15i2766R16i2782R17R18gR19jR4:5:2i2r32R20jR21:1:1oR0y9:pixelSizeR9i-300R5r350R11r934R25oR0y6:globalR9i-298R5r350R11jR4:12:1aoR0R24R9i-299R5r350R11r21R25r936gr935oR0y9:modelViewR9i-301R5r350R11r353R49ajR50:3:0hR25r936goR0y16:modelViewInverseR9i-302R5r350R11r353R49ar941hR25r936ghgggar389hgoR14oR15i2787R16i2805R17R18gR19r21R20jR21:9:2oR14oR15i2787R16i2803R17R18gR19r934R20jR21:1:1r935gar403hggoR14oR15i2807R16i2808R17R18gR19r21R20jR21:0:1jR36:3:1i1ghgggoR14oR15i2815R16i3105R17R18gR19r3R20jR21:10:3oR14oR15i2819R16i2830R17R18gR19r93R20jR21:1:1oR0y11:transform3DR9i-352R5r44R11r93R49ajR50:0:1nhggoR14oR15i2833R16i2984R17R18gR19r3R20jR21:4:1aoR14oR15i2840R16i2904R17R18gR19r185R20jR21:5:3jR23:20:1r24oR14oR15i2840R16i2859R17R18gR19r185R20jR21:1:1r188goR14oR15i2863R16i2904R17R18gR19jR4:5:2i3r32R20jR21:5:3r65oR14oR15i2863R16i2887R17R18gR19jR4:5:2i3r32R20jR21:8:2oR14oR15i2863R16i2867R17R18gR19jR4:13:1ahR20jR21:2:1jR35:39:0gaoR14oR15i2868R16i2870R17R18gR19r21R20jR21:0:1jR36:3:1d0goR14oR15i2872R16i2878R17R18gR19r21R20jR21:9:2oR14oR15i2872R16i2876R17R18gR19r852R20jR21:1:1r851gar389hgoR14oR15i2880R16i2886R17R18gR19r21R20jR21:9:2oR14oR15i2880R16i2884R17R18gR19r852R20jR21:1:1r851gar403hghgoR14oR15i2890R16i2904R17R18gR19jR4:6:0R20jR21:1:1oR0y14:cameraRotationR9i-351R5r44R11r1014ggggoR14oR15i2911R16i2977R17R18gR19jR4:5:2i4r32R20jR21:5:3r50oR14oR15i2911R16i2928R17R18gR19r1021R20jR21:1:1oR0y17:projectedPositionR9i-315R5r20R11r1021ggoR14oR15i2931R16i2977R17R18gR19jR4:5:2i4r32R20jR21:5:3r65oR14oR15i2931R16i2959R17R18gR19jR4:5:2i4r32R20jR21:8:2oR14oR15i2931R16i2935R17R18gR19jR4:13:1ahR20jR21:2:1jR35:40:0gaoR14oR15i2936R16i2955R17R18gR19r185R20jR21:1:1r188goR14oR15i2957R16i2958R17R18gR19r21R20jR21:0:1jR36:3:1i1ghgoR14oR15i2962R16i2977R17R18gR19r353R20jR21:1:1r359ggghgoR14oR15i2990R16i3105R17R18gR19r3R20jR21:4:1aoR14oR15i2997R16i3063R17R18gR19r1021R20jR21:5:3r50oR14oR15i2997R16i3014R17R18gR19r1021R20jR21:1:1r1024goR14oR15i3017R16i3063R17R18gR19r1028R20jR21:5:3r65oR14oR15i3017R16i3045R17R18gR19jR4:5:2i4r32R20jR21:8:2oR14oR15i3017R16i3021R17R18gR19r1035R20jR21:2:1r1036gaoR14oR15i3022R16i3041R17R18gR19r185R20jR21:1:1r188goR14oR15i3043R16i3044R17R18gR19r21R20jR21:0:1jR36:3:1i1ghgoR14oR15i3048R16i3063R17R18gR19r353R20jR21:1:1r359gggoR14oR15i3070R16i3098R17R18gR19jR4:5:2i2r32R20jR21:5:3jR23:20:1r24oR14oR15i3070R16i3090R17R18gR19r1085R20jR21:9:2oR14oR15i3070R16i3087R17R18gR19r1021R20jR21:1:1r1024gar389r403hgoR14oR15i3094R16i3098R17R18gR19r852R20jR21:1:1r851gghggoR14oR15i3110R16i3141R17R18gR19r1021R20jR21:5:3jR23:20:1r65oR14oR15i3110R16i3127R17R18gR19r1021R20jR21:1:1r1024goR14oR15i3131R16i3141R17R18gR19r21R20jR21:1:1r81ggoR14oR15i3147R16i3317R17R18gR19r3R20jR21:10:3oR14oR15i3151R16i3165R17R18gR19r93R20jR21:5:3r120oR14oR15i3151R16i3156R17R18gR19r21R20jR21:1:1r150goR14oR15i3159R16i3165R17R18gR19r21R20jR21:1:1oR0y6:fadeInR9i-331R5r44R11r21gggoR14oR15i3173R16i3220R17R18gR19r21R20jR21:5:3jR23:20:1r65oR14oR15i3173R16i3185R17R18gR19r21R20jR21:9:2oR14oR15i3173R16i3183R17R18gR19jR4:5:2i4r32R20jR21:1:1oR0y10:pixelColorR9i-316R5r20R11r1129ggajR54:3:0hgoR14oR15i3189R16i3220R17R18gR19r21R20jR21:8:2oR14oR15i3189R16i3205R17R18gR19jR4:13:1aoR3r21R12aoR0R71R11r21gr782hghR20jR21:2:1jR35:8:0gaoR14oR15i3189R16i3205R17R18gR19r21R20jR21:3:1oR14oR15i3190R16i3204R17R18gR19r21R20jR21:5:3r154oR14oR15i3190R16i3195R17R18gR19r21R20jR21:1:1r150goR14oR15i3198R16i3204R17R18gR19r21R20jR21:1:1r1119gggoR14oR15i3210R16i3219R17R18gR19r21R20jR21:1:1oR0y9:fadePowerR9i-333R5r44R11r21gghggoR14oR15i3230R16i3317R17R18gR19r3R20jR21:10:3oR14oR15i3234R16i3249R17R18gR19r93R20jR21:5:3jR23:7:0oR14oR15i3234R16i3239R17R18gR19r21R20jR21:1:1r150goR14oR15i3242R16i3249R17R18gR19r21R20jR21:1:1oR0y7:fadeOutR9i-332R5r44R11r21gggoR14oR15i3257R16i3317R17R18gR19r21R20jR21:5:3jR23:20:1r65oR14oR15i3257R16i3269R17R18gR19r21R20jR21:9:2oR14oR15i3257R16i3267R17R18gR19r1129R20jR21:1:1r1130gar1133hgoR14oR15i3273R16i3317R17R18gR19r21R20jR21:8:2oR14oR15i3273R16i3302R17R18gR19jR4:13:1aoR3r21R12aoR0R71R11r21gr782hghR20jR21:2:1r1144gaoR14oR15i3273R16i3302R17R18gR19r21R20jR21:3:1oR14oR15i3274R16i3301R17R18gR19r21R20jR21:5:3r154oR14oR15i3274R16i3285R17R18gR19r21R20jR21:3:1oR14oR15i3275R16i3284R17R18gR19r21R20jR21:5:3r123oR14oR15i3275R16i3276R17R18gR19r21R20jR21:0:1jR36:3:1i1goR14oR15i3279R16i3284R17R18gR19r21R20jR21:1:1r150gggoR14oR15i3288R16i3301R17R18gR19r21R20jR21:3:1oR14oR15i3289R16i3300R17R18gR19r21R20jR21:5:3r123oR14oR15i3289R16i3290R17R18gR19r21R20jR21:0:1jR36:3:1i1goR14oR15i3293R16i3300R17R18gR19r21R20jR21:1:1r1175gggggoR14oR15i3307R16i3316R17R18gR19r21R20jR21:1:1r1161ghggnggoR14oR15i3323R16i3354R17R18gR19jR4:5:2i2r32R20jR21:5:3r50oR14oR15i3323R16i3330R17R18gR19r1240R20jR21:1:1oR0y7:colorUVR9i-359R5r20R11r1240ggoR14oR15i3333R16i3354R17R18gR19jR4:5:2i2r32R20jR21:8:2oR14oR15i3333R16i3337R17R18gR19r379R20jR21:2:1r380gaoR14oR15i3338R16i3343R17R18gR19r21R20jR21:1:1r150goR14oR15i3345R16i3353R17R18gR19r21R20jR21:1:1r167ghgghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-365R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i3386R16i3516R17R18gR19r3R20jR21:4:1aoR14oR15i3392R16i3424R17R18gR19r1129R20jR21:5:3jR23:20:1r65oR14oR15i3392R16i3402R17R18gR19r1129R20jR21:1:1r1130goR14oR15i3406R16i3424R17R18gR19r1028R20jR21:8:2oR14oR15i3406R16i3411R17R18gR19jR4:13:1aoR3r1028R12aoR0R71R11jR4:10:0goR0R27R11jR4:5:2i2r32ghghR20jR21:2:1jR35:33:0gaoR14oR15i3406R16i3411R17R18gR19r1286R20jR21:1:1oR0y5:colorR9i-336R5r44R11r1286ggoR14oR15i3416R16i3423R17R18gR19r1240R20jR21:1:1r1243ghggoR14oR15i3430R16i3510R17R18gR19r1129R20jR21:5:3jR23:20:1r65oR14oR15i3430R16i3440R17R18gR19r1129R20jR21:1:1r1130goR14oR15i3444R16i3510R17R18gR19r1028R20jR21:8:2oR14oR15i3444R16i3447R17R18gR19jR4:13:1aoR3r1028R12aoR0y1:xR11r1028goR0y1:yR11r1028goR0y1:aR11r21ghghR20jR21:2:1jR35:24:0gaoR14oR15i3449R16i3469R17R18gR19r1028R20jR21:8:2oR14oR15i3449R16i3456R17R18gR19jR4:13:1aoR3r1028R12aoR0R71R11r1286gr1287hghR20jR21:2:1r1290gaoR14oR15i3449R16i3456R17R18gR19r1286R20jR21:1:1oR0y7:textureR9i-337R5r44R11r1286ggoR14oR15i3461R16i3468R17R18gR19r603R20jR21:1:1r606ghgoR14oR15i3472R16i3493R17R18gR19r1028R20jR21:8:2oR14oR15i3472R16i3479R17R18gR19jR4:13:1aoR3r1028R12aoR0R71R11r1286gr1287hghR20jR21:2:1r1290gaoR14oR15i3472R16i3479R17R18gR19r1286R20jR21:1:1r1335goR14oR15i3484R16i3492R17R18gR19r692R20jR21:1:1r695ghgoR14oR15i3495R16i3508R17R18gR19r21R20jR21:1:1r480ghgghgR12ahghy4:varsar349r936r211oR0y6:outputR9i-306R5r20R11jR4:12:1aoR0R45R9i-307R5r20R11jR4:5:2i4r32R25r1367goR0R98R9i-308R5r20R11jR4:5:2i4r32R25r1367goR0y5:depthR9i-309R5r20R11r21R25r1367goR0R43R9i-310R5r20R11jR4:5:2i3r32R25r1367ghgr199r188oR0y24:pixelTransformedPositionR9i-313R5r20R11jR4:5:2i3r32gr342r1024r1130oR0R105R9i-317R5r20R11r21goR0y8:screenUVR9i-318R5r20R11jR4:5:2i2r32goR0y9:specPowerR9i-319R5r20R11r21goR0y9:specColorR9i-320R5r20R11jR4:5:2i3r32gr29r1119r1175r1161r229r326r1295r1335r43r138r71r435r466r517oR0y9:frameSizeR9i-344R5r44R11jR4:5:2i2r32gr563r306r255r281r288r247r1015r967r53r150r167r415r480r371r1243r606r695r81r5r728r1264hg";
 h3d_shader_LineShader.SRC = "oy4:namey21:h3d.shader.LineShadery4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:2:0y3:refoR0y8:__init__y2:idi-95R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini648y3:maxi958y4:filey70:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FLineShader.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i654R16i953R17R18gR19r3R20jR21:4:1aoR14oR15i661R16i710R17R18gR19r3R20jR21:7:2oR0y3:dirR9i-97R5jR10:4:0R11jR4:5:2i3jy12:hxsl.VecType:1:0goR14oR15i671R16i709R17R18gR19r22R20jR21:5:3jy16:haxe.macro.Binop:1:0oR14oR15i671R16i683R17R18gR19jR4:5:2i3r21R20jR21:1:1oR0y6:normalR9i-85R5jR10:1:0R11r28y6:parentoR0y5:inputR9i-83R5r30R11jR4:12:1aoR0y8:positionR9i-84R5r30R11jR4:5:2i3r21R26r31gr29oR0y2:uvR9i-86R5r30R11jR4:5:2i2r21R26r31ghgggoR14oR15i686R16i709R17R18gR19jR4:6:0R20jR21:8:2oR14oR15i686R16i702R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:48:0gaoR14oR15i686R16i702R17R18gR19jR4:7:0R20jR21:1:1oR0y9:modelViewR9i-82R5jR10:0:0R11r51y10:qualifiersajy17:hxsl.VarQualifier:3:0hR26oR0y6:globalR9i-80R5r53R11jR4:12:1aoR0y9:pixelSizeR9i-81R5r53R11jR4:5:2i2r21R26r56gr52hggghgggoR14oR15i730R16i783R17R18gR19jR4:5:2i4r21R20jR21:5:3jR24:4:0oR14oR15i730R16i734R17R18gR19r67R20jR21:1:1oR0y4:pdirR9i-94R5r20R11r67ggoR14oR15i737R16i783R17R18gR19jR4:5:2i4r21R20jR21:5:3r25oR14oR15i737R16i769R17R18gR19jR4:5:2i4r21R20jR21:8:2oR14oR15i737R16i741R17R18gR19jR4:13:1ahR20jR21:2:1jR30:40:0gaoR14oR15i742R16i765R17R18gR19r22R20jR21:5:3r25oR14oR15i742R16i745R17R18gR19r22R20jR21:1:1r19goR14oR15i748R16i765R17R18gR19r41R20jR21:8:2oR14oR15i748R16i752R17R18gR19jR4:13:1ahR20jR21:2:1r46gaoR14oR15i753R16i764R17R18gR19r51R20jR21:1:1oR0y4:viewR9i-77R5r53R11r51R26oR0y6:cameraR9i-76R5r53R11jR4:12:1ar101oR0y4:projR9i-78R5r53R11r51R26r102goR0y8:viewProjR9i-79R5r53R11r51R26r102ghggghggoR14oR15i767R16i768R17R18gR19jR4:3:0R20jR21:0:1jy10:hxsl.Const:3:1i1ghgoR14oR15i772R16i783R17R18gR19r51R20jR21:1:1r104gggoR14oR15i790R16i844R17R18gR19jR4:5:2i2r21R20jR21:5:3jR24:20:1r25oR14oR15i790R16i797R17R18gR19r123R20jR21:9:2oR14oR15i790R16i794R17R18gR19r67R20jR21:1:1r71gajy14:hxsl.Component:0:0jR42:1:0hgoR14oR15i801R16i844R17R18gR19r112R20jR21:5:3jR24:2:0oR14oR15i801R16i802R17R18gR19r112R20jR21:0:1jR41:3:1i1goR14oR15i805R16i844R17R18gR19r112R20jR21:8:2oR14oR15i805R16i809R17R18gR19jR4:13:1aoR3r112R12aoR0y5:valueR11r112ghghR20jR21:2:1jR30:13:0gaoR14oR15i810R16i843R17R18gR19r112R20jR21:5:3jR24:0:0oR14oR15i810R16i825R17R18gR19r112R20jR21:5:3r25oR14oR15i810R16i816R17R18gR19r112R20jR21:9:2oR14oR15i810R16i814R17R18gR19r67R20jR21:1:1r71gar131hgoR14oR15i819R16i825R17R18gR19r112R20jR21:9:2oR14oR15i819R16i823R17R18gR19r67R20jR21:1:1r71gar131hggoR14oR15i828R16i843R17R18gR19r112R20jR21:5:3r25oR14oR15i828R16i834R17R18gR19r112R20jR21:9:2oR14oR15i828R16i832R17R18gR19r67R20jR21:1:1r71gar132hgoR14oR15i837R16i843R17R18gR19r112R20jR21:9:2oR14oR15i837R16i841R17R18gR19r67R20jR21:1:1r71gar132hggghgggoR14oR15i851R16i904R17R18gR19jR4:5:2i3r21R20jR21:5:3jR24:20:1r155oR14oR15i851R16i870R17R18gR19r196R20jR21:1:1oR0y19:transformedPositionR9i-90R5r20R11r196ggoR14oR15i874R16i904R17R18gR19r22R20jR21:5:3r25oR14oR15i874R16i890R17R18gR19r22R20jR21:5:3r25oR14oR15i874R16i877R17R18gR19r22R20jR21:1:1r19goR14oR15i880R16i890R17R18gR19r112R20jR21:9:2oR14oR15i880R16i888R17R18gR19r36R20jR21:1:1r35gar131hggoR14oR15i893R16i904R17R18gR19r112R20jR21:1:1oR0y11:lengthScaleR9i-92R5jR10:2:0R11r112ggggoR14oR15i911R16i946R17R18gR19jR4:5:2i3r21R20jR21:5:3r68oR14oR15i911R16i928R17R18gR19r226R20jR21:1:1oR0y17:transformedNormalR9i-89R5r20R11r226ggoR14oR15i931R16i946R17R18gR19r22R20jR21:8:2oR14oR15i931R16i934R17R18gR19jR4:13:1aoR3r22R12aoR0y1:_R11r22ghghR20jR21:2:1jR30:31:0gaoR14oR15i931R16i934R17R18gR19r22R20jR21:1:1r19ghgghghgR12ahgoR3r3R5jR6:0:0R7oR0y6:vertexR9i-96R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i982R16i1110R17R18gR19r3R20jR21:4:1aoR14oR15i988R16i1104R17R18gR19jR4:5:2i2r21R20jR21:5:3jR24:20:1r155oR14oR15i988R16i1008R17R18gR19r263R20jR21:9:2oR14oR15i988R16i1005R17R18gR19jR4:5:2i4r21R20jR21:1:1oR0y17:projectedPositionR9i-91R5r20R11r269ggar131r132hgoR14oR15i1012R16i1104R17R18gR19jR4:5:2i2r21R20jR21:5:3r25oR14oR15i1012R16i1096R17R18gR19r276R20jR21:5:3r25oR14oR15i1012R16i1077R17R18gR19jR4:5:2i2r21R20jR21:5:3r25oR14oR15i1012R16i1055R17R18gR19r281R20jR21:5:3r25oR14oR15i1012R16i1034R17R18gR19r281R20jR21:3:1oR14oR15i1013R16i1033R17R18gR19r281R20jR21:5:3r25oR14oR15i1013R16i1020R17R18gR19jR4:5:2i2r21R20jR21:9:2oR14oR15i1013R16i1017R17R18gR19r67R20jR21:1:1r71gar132r131hgoR14oR15i1023R16i1033R17R18gR19jR4:5:2i2r21R20jR21:8:2oR14oR15i1023R16i1027R17R18gR19jR4:13:1ahR20jR21:2:1jR30:38:0gaoR14oR15i1028R16i1029R17R18gR19r112R20jR21:0:1jR41:3:1i1goR14oR15i1030R16i1032R17R18gR19r112R20jR21:0:1jR41:3:1i-1ghgggoR14oR15i1037R16i1055R17R18gR19r112R20jR21:3:1oR14oR15i1038R16i1054R17R18gR19r112R20jR21:5:3jR24:3:0oR14oR15i1038R16i1048R17R18gR19r112R20jR21:9:2oR14oR15i1038R16i1046R17R18gR19r36R20jR21:1:1r35gar132hgoR14oR15i1051R16i1054R17R18gR19r112R20jR21:0:1jR41:3:1d0.5ggggoR14oR15i1058R16i1077R17R18gR19r112R20jR21:9:2oR14oR15i1058R16i1075R17R18gR19r269R20jR21:1:1r270gajR42:2:0hggoR14oR15i1080R16i1096R17R18gR19r59R20jR21:1:1r58ggoR14oR15i1099R16i1104R17R18gR19r112R20jR21:1:1oR0y5:widthR9i-93R5r220R11r112gggghgR12ahghy4:varsar102r56r31oR0y6:outputR9i-87R5r20R11jR4:12:1aoR0R28R9i-88R5r20R11jR4:5:2i4r21R26r358ghgr229r200r270r219r351r71r5r253hg";
 h3d_shader_Shadow.SRC = "oy4:namey17:h3d.shader.Shadowy4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-159R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini395y3:maxi509y4:filey66:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FShadow.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i401R16i503R17R18gR19r3R20jR21:10:3oR14oR15i405R16i414R17R18gR19jR4:2:0R20jR21:6:2jy15:haxe.macro.Unop:2:0oR14oR15i406R16i414R17R18gR19r18R20jR21:1:1oR0y8:perPixelR9i-158R5jR10:2:0R11r18y10:qualifiersajy17:hxsl.VarQualifier:0:1nhgggoR14oR15i417R16i503R17R18gR19jR4:5:2i3jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i417R16i426R17R18gR19r31R20jR21:1:1oR0y9:shadowPosR9i-157R5jR10:3:0R11r31R24ajR25:1:0hggoR14oR15i429R16i503R17R18gR19jR4:5:2i3r30R20jR21:5:3jR27:0:0oR14oR15i429R16i483R17R18gR19jR4:5:2i3r30R20jR21:5:3jR27:1:0oR14oR15i429R16i462R17R18gR19jR4:5:2i3r30R20jR21:5:3r47oR14oR15i429R16i448R17R18gR19jR4:5:2i3r30R20jR21:1:1oR0y19:transformedPositionR9i-155R5jR10:4:0R11r53ggoR14oR15i451R16i462R17R18gR19jR4:8:0R20jR21:1:1oR0y4:projR9i-150R5jR10:0:0R11r59y6:parentoR0y6:shadowR9i-148R5r61R11jR4:12:1aoR0y3:mapR9i-149R5r61R11jR4:15:1i1R31r62gr60oR0y5:colorR9i-151R5r61R11jR4:5:2i3r30R31r62goR0y5:powerR9i-152R5r61R11jR4:3:0R31r62goR0y4:biasR9i-153R5r61R11r69R31r62ghggggoR14oR15i465R16i483R17R18gR19jR4:5:2i3r30R20jR21:8:2oR14oR15i465R16i469R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:39:0gaoR14oR15i470R16i473R17R18gR19r69R20jR21:0:1jy10:hxsl.Const:3:1d0.5goR14oR15i475R16i479R17R18gR19r69R20jR21:0:1jR38:3:1d-0.5goR14oR15i481R16i482R17R18gR19r69R20jR21:0:1jR38:3:1i1ghggoR14oR15i486R16i503R17R18gR19jR4:5:2i3r30R20jR21:8:2oR14oR15i486R16i490R17R18gR19r80R20jR21:2:1r81gaoR14oR15i491R16i494R17R18gR19r69R20jR21:0:1jR38:3:1d0.5goR14oR15i496R16i499R17R18gR19r69R20jR21:0:1jR38:3:1d0.5goR14oR15i501R16i502R17R18gR19r69R20jR21:0:1jR38:3:1zghgggnghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-160R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i535R16i1101R17R18gR19r3R20jR21:4:1aoR14oR15i543R16i669R17R18gR19r3R20jR21:7:2oR0R28R9i-161R5r55R11jR4:5:2i3r30goR14oR15i559R16i668R17R18gR19r136R20jR21:10:3oR14oR15i563R16i571R17R18gR19r18R20jR21:1:1r22goR14oR15i574R16i653R17R18gR19r136R20jR21:5:3r43oR14oR15i574R16i633R17R18gR19jR4:5:2i3r30R20jR21:5:3r47oR14oR15i574R16i612R17R18gR19r50R20jR21:5:3r47oR14oR15i574R16i598R17R18gR19jR4:5:2i3r30R20jR21:1:1oR0y24:pixelTransformedPositionR9i-156R5r55R11r151ggoR14oR15i601R16i612R17R18gR19r59R20jR21:1:1r60ggoR14oR15i615R16i633R17R18gR19jR4:5:2i3r30R20jR21:8:2oR14oR15i615R16i619R17R18gR19r80R20jR21:2:1r81gaoR14oR15i620R16i623R17R18gR19r69R20jR21:0:1jR38:3:1d0.5goR14oR15i625R16i629R17R18gR19r69R20jR21:0:1jR38:3:1d-0.5goR14oR15i631R16i632R17R18gR19r69R20jR21:0:1jR38:3:1i1ghggoR14oR15i636R16i653R17R18gR19jR4:5:2i3r30R20jR21:8:2oR14oR15i636R16i640R17R18gR19r80R20jR21:2:1r81gaoR14oR15i641R16i644R17R18gR19r69R20jR21:0:1jR38:3:1d0.5goR14oR15i646R16i649R17R18gR19r69R20jR21:0:1jR38:3:1d0.5goR14oR15i651R16i652R17R18gR19r69R20jR21:0:1jR38:3:1zghggoR14oR15i659R16i668R17R18gR19r31R20jR21:1:1r35gggoR14oR15i676R16i717R17R18gR19r3R20jR21:7:2oR0y5:depthR9i-162R5r55R11r69goR14oR15i688R16i716R17R18gR19r69R20jR21:8:2oR14oR15i688R16i698R17R18gR19jR4:13:1aoR3r69R12aoR0y1:_R11r65goR0y2:uvR11jR4:5:2i2r30ghghR20jR21:2:1jR37:61:0gaoR14oR15i688R16i698R17R18gR19r65R20jR21:1:1r64goR14oR15i703R16i715R17R18gR19jR4:5:2i2r30R20jR21:9:2oR14oR15i703R16i712R17R18gR19r136R20jR21:1:1r135gajy14:hxsl.Component:0:0jR44:1:0hghggoR14oR15i887R16i921R17R18gR19r3R20jR21:7:2oR0y4:zMaxR9i-163R5r55R11r69goR14oR15i898R16i920R17R18gR19r69R20jR21:8:2oR14oR15i898R16i909R17R18gR19jR4:13:1aoR3r69R12aoR0R42R11r69ghghR20jR21:2:1jR37:51:0gaoR14oR15i898R16i909R17R18gR19r69R20jR21:9:2oR14oR15i898R16i907R17R18gR19r136R20jR21:1:1r135gajR44:2:0hghggoR14oR15i926R16i977R17R18gR19r3R20jR21:7:2oR0y5:deltaR9i-164R5r55R11r69goR14oR15i938R16i976R17R18gR19r69R20jR21:5:3jR27:3:0oR14oR15i938R16i969R17R18gR19r69R20jR21:8:2oR14oR15i938R16i959R17R18gR19jR4:13:1aoR3r69R12aoR0R42R11r69goR0y1:bR11r69ghghR20jR21:2:1jR37:21:0gaoR14oR15i938R16i959R17R18gR19r69R20jR21:3:1oR14oR15i939R16i958R17R18gR19r69R20jR21:5:3r43oR14oR15i939R16i944R17R18gR19r69R20jR21:1:1r207goR14oR15i947R16i958R17R18gR19r69R20jR21:1:1r70gggoR14oR15i964R16i968R17R18gR19r69R20jR21:1:1r239ghgoR14oR15i972R16i976R17R18gR19r69R20jR21:1:1r239gggoR14oR15i982R16i1034R17R18gR19r3R20jR21:7:2oR0y5:shadeR9i-165R5r55R11r69goR14oR15i994R16i1033R17R18gR19r69R20jR21:8:2oR14oR15i994R16i1022R17R18gR19jR4:13:1aoR3r69R12aoR0R42R11r69ghghR20jR21:2:1r249gaoR14oR15i994R16i1022R17R18gR19r69R20jR21:8:2oR14oR15i994R16i997R17R18gR19jR4:13:1aoR3r69R12aoR0y5:valueR11r69ghghR20jR21:2:1jR37:9:0gaoR14oR15i999R16i1019R17R18gR19r69R20jR21:5:3r47oR14oR15i999R16i1011R17R18gR19r69R20jR21:1:1r68goR14oR15i1014R16i1019R17R18gR19r69R20jR21:1:1r264gghghggoR14oR15i1039R16i1095R17R18gR19jR4:5:2i3r30R20jR21:5:3jR27:20:1r47oR14oR15i1039R16i1053R17R18gR19r342R20jR21:9:2oR14oR15i1039R16i1049R17R18gR19jR4:5:2i4r30R20jR21:1:1oR0y10:pixelColorR9i-154R5r55R11r348ggar232r233r258hgoR14oR15i1057R16i1095R17R18gR19jR4:5:2i3r30R20jR21:5:3r43oR14oR15i1057R16i1087R17R18gR19r355R20jR21:5:3r47oR14oR15i1057R16i1068R17R18gR19r69R20jR21:3:1oR14oR15i1058R16i1067R17R18gR19r69R20jR21:5:3r267oR14oR15i1058R16i1059R17R18gR19r69R20jR21:0:1jR38:3:1i1goR14oR15i1062R16i1067R17R18gR19r69R20jR21:1:1r304gggoR14oR15i1071R16i1087R17R18gR19r355R20jR21:9:2oR14oR15i1071R16i1083R17R18gR19r67R20jR21:1:1r66gar232r233r258hggoR14oR15i1090R16i1095R17R18gR19r69R20jR21:1:1r304ggghgR12ahghy4:varsar62r349r54r152r35r22r5r125hg";
 h3d_shader_Skin.SRC = "oy4:namey15:h3d.shader.Skiny4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-108R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini428y3:maxi1064y4:filey64:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FSkin.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i527R16i777R17R18gR19jR4:5:2i3jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i527R16i546R17R18gR19r17R20jR21:1:1oR0y19:transformedPositionR9i-104R5jR10:4:0R11r17ggoR14oR15i554R16i777R17R18gR19jR4:5:2i3r16R20jR21:5:3jR23:0:0oR14oR15i554R16i700R17R18gR19jR4:5:2i3r16R20jR21:5:3r27oR14oR15i554R16i623R17R18gR19jR4:5:2i3r16R20jR21:5:3jR23:1:0oR14oR15i554R16i605R17R18gR19r33R20jR21:3:1oR14oR15i555R16i604R17R18gR19r33R20jR21:5:3r34oR14oR15i555R16i571R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y16:relativePositionR9i-103R5r22R11r41ggoR14oR15i574R16i604R17R18gR19jR4:8:0R20jR21:16:2oR14oR15i574R16i587R17R18gR19jR4:14:2r46jy13:hxsl.SizeDecl:1:1oR0y8:MaxBonesR9i-106R5jR10:2:0R11jR4:1:0y10:qualifiersajy17:hxsl.VarQualifier:0:1nhgR20jR21:1:1oR0y13:bonesMatrixesR9i-107R5r50R11r55R28ajR29:8:0hggoR14oR15i588R16i603R17R18gR19r51R20jR21:9:2oR14oR15i588R16i601R17R18gR19jR4:9:1i4R20jR21:1:1oR0y7:indexesR9i-102R5jR10:1:0R11r64y6:parentoR0y5:inputR9i-98R5r66R11jR4:12:1aoR0y8:positionR9i-99R5r66R11jR4:5:2i3r16R32r67goR0y6:normalR9i-100R5r66R11jR4:5:2i3r16R32r67goR0y7:weightsR9i-101R5r66R11jR4:5:2i3r16R32r67gr65hgggajy14:hxsl.Component:0:0hggggoR14oR15i608R16i623R17R18gR19jR4:3:0R20jR21:9:2oR14oR15i608R16i621R17R18gR19r74R20jR21:1:1r73gar78hggoR14oR15i631R16i700R17R18gR19r33R20jR21:5:3r34oR14oR15i631R16i682R17R18gR19r33R20jR21:3:1oR14oR15i632R16i681R17R18gR19r33R20jR21:5:3r34oR14oR15i632R16i648R17R18gR19r41R20jR21:1:1r42goR14oR15i651R16i681R17R18gR19r46R20jR21:16:2oR14oR15i651R16i664R17R18gR19r55R20jR21:1:1r56goR14oR15i665R16i680R17R18gR19r51R20jR21:9:2oR14oR15i665R16i678R17R18gR19r64R20jR21:1:1r65gajR37:1:0hggggoR14oR15i685R16i700R17R18gR19r85R20jR21:9:2oR14oR15i685R16i698R17R18gR19r74R20jR21:1:1r73gar112hgggoR14oR15i708R16i777R17R18gR19r33R20jR21:5:3r34oR14oR15i708R16i759R17R18gR19r33R20jR21:3:1oR14oR15i709R16i758R17R18gR19r33R20jR21:5:3r34oR14oR15i709R16i725R17R18gR19r41R20jR21:1:1r42goR14oR15i728R16i758R17R18gR19r46R20jR21:16:2oR14oR15i728R16i741R17R18gR19r55R20jR21:1:1r56goR14oR15i742R16i757R17R18gR19r51R20jR21:9:2oR14oR15i742R16i755R17R18gR19r64R20jR21:1:1r65gajR37:2:0hggggoR14oR15i762R16i777R17R18gR19r85R20jR21:9:2oR14oR15i762R16i775R17R18gR19r74R20jR21:1:1r73gar146hggggoR14oR15i783R16i1049R17R18gR19jR4:5:2i3r16R20jR21:5:3r18oR14oR15i783R16i800R17R18gR19r163R20jR21:1:1oR0y17:transformedNormalR9i-105R5r22R11r163ggoR14oR15i803R16i1049R17R18gR19r33R20jR21:8:2oR14oR15i803R16i812R17R18gR19jR4:13:1aoR3r33R12aoR0y5:valueR11r33ghghR20jR21:2:1jy12:hxsl.TGlobal:31:0gaoR14oR15i819R16i1048R17R18gR19jR4:5:2i3r16R20jR21:5:3r27oR14oR15i819R16i969R17R18gR19jR4:5:2i3r16R20jR21:5:3r27oR14oR15i819R16i890R17R18gR19r33R20jR21:5:3r34oR14oR15i819R16i872R17R18gR19r33R20jR21:3:1oR14oR15i820R16i871R17R18gR19r33R20jR21:5:3r34oR14oR15i820R16i832R17R18gR19r72R20jR21:1:1r71goR14oR15i835R16i871R17R18gR19jR4:6:0R20jR21:8:2oR14oR15i835R16i839R17R18gR19jR4:13:1ahR20jR21:2:1jR40:48:0gaoR14oR15i840R16i870R17R18gR19r46R20jR21:16:2oR14oR15i840R16i853R17R18gR19r55R20jR21:1:1r56goR14oR15i854R16i869R17R18gR19r51R20jR21:9:2oR14oR15i854R16i867R17R18gR19r64R20jR21:1:1r65gar78hgghgggoR14oR15i875R16i890R17R18gR19r85R20jR21:9:2oR14oR15i875R16i888R17R18gR19r74R20jR21:1:1r73gar78hggoR14oR15i898R16i969R17R18gR19r33R20jR21:5:3r34oR14oR15i898R16i951R17R18gR19r33R20jR21:3:1oR14oR15i899R16i950R17R18gR19r33R20jR21:5:3r34oR14oR15i899R16i911R17R18gR19r72R20jR21:1:1r71goR14oR15i914R16i950R17R18gR19r197R20jR21:8:2oR14oR15i914R16i918R17R18gR19r201R20jR21:2:1r202gaoR14oR15i919R16i949R17R18gR19r46R20jR21:16:2oR14oR15i919R16i932R17R18gR19r55R20jR21:1:1r56goR14oR15i933R16i948R17R18gR19r51R20jR21:9:2oR14oR15i933R16i946R17R18gR19r64R20jR21:1:1r65gar112hgghgggoR14oR15i954R16i969R17R18gR19r85R20jR21:9:2oR14oR15i954R16i967R17R18gR19r74R20jR21:1:1r73gar112hgggoR14oR15i977R16i1048R17R18gR19r33R20jR21:5:3r34oR14oR15i977R16i1030R17R18gR19r33R20jR21:3:1oR14oR15i978R16i1029R17R18gR19r33R20jR21:5:3r34oR14oR15i978R16i990R17R18gR19r72R20jR21:1:1r71goR14oR15i993R16i1029R17R18gR19r197R20jR21:8:2oR14oR15i993R16i997R17R18gR19r201R20jR21:2:1r202gaoR14oR15i998R16i1028R17R18gR19r46R20jR21:16:2oR14oR15i998R16i1011R17R18gR19r55R20jR21:1:1r56goR14oR15i1012R16i1027R17R18gR19r51R20jR21:9:2oR14oR15i1012R16i1025R17R18gR19r64R20jR21:1:1r65gar146hgghgggoR14oR15i1033R16i1048R17R18gR19r85R20jR21:9:2oR14oR15i1033R16i1046R17R18gR19r74R20jR21:1:1r73gar146hggghgghgR12ahghy4:varsar67r42r21r166r49r56r5hg";
 h3d_shader_SpecularTexture.SRC = "oy4:namey26:h3d.shader.SpecularTexturey4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-21R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini203y3:maxi257y4:filey75:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FSpecularTexture.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i209R16i251R17R18gR19jR4:5:2i3jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:20:1jR23:1:0oR14oR15i209R16i218R17R18gR19r17R20jR21:1:1oR0y9:specColorR9i-20R5jR10:4:0R11r17ggoR14oR15i222R16i251R17R18gR19jR4:5:2i3r16R20jR21:9:2oR14oR15i222R16i247R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i222R16i229R17R18gR19jR4:13:1aoR3r30R12aoR0y1:_R11jR4:10:0goR0y2:uvR11jR4:5:2i2r16ghghR20jR21:2:1jy12:hxsl.TGlobal:33:0gaoR14oR15i222R16i229R17R18gR19r37R20jR21:1:1oR0y7:textureR9i-18R5jR10:2:0R11r37ggoR14oR15i234R16i246R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0y12:calculatedUVR9i-19R5r23R11r51gghgajy14:hxsl.Component:0:0jR30:1:0jR30:2:0hgghgR12ahghy4:varsar46r52r22r5hg";
 h3d_shader_Texture.SRC = "oy4:namey18:h3d.shader.Texturey4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-32R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini425y3:maxi460y4:filey67:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FTexture.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i431R16i454R17R18gR19jR4:5:2i2jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i431R16i443R17R18gR19r17R20jR21:1:1oR0y12:calculatedUVR9i-29R5jR10:4:0R11r17ggoR14oR15i446R16i454R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0y2:uvR9i-23R5jR10:1:0R11r26y6:parentoR0y5:inputR9i-22R5r28R11jR4:12:1ar27hgggghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-33R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i486R16i713R17R18gR19r3R20jR21:4:1aoR14oR15i492R16i526R17R18gR19r3R20jR21:7:2oR0y1:cR9i-34R5r22R11jR4:5:2i4r16goR14oR15i500R16i525R17R18gR19r49R20jR21:8:2oR14oR15i500R16i507R17R18gR19jR4:13:1aoR3r49R12aoR0y1:_R11jR4:10:0goR0R25R11jR4:5:2i2r16ghghR20jR21:2:1jy12:hxsl.TGlobal:33:0gaoR14oR15i500R16i507R17R18gR19r58R20jR21:1:1oR0y7:textureR9i-28R5jR10:2:0R11r58ggoR14oR15i512R16i524R17R18gR19r17R20jR21:1:1r21ghggoR14oR15i531R16i586R17R18gR19r3R20jR21:10:3oR14oR15i535R16i576R17R18gR19jR4:2:0R20jR21:5:3jR23:14:0oR14oR15i535R16i544R17R18gR19r79R20jR21:1:1oR0y9:killAlphaR9i-25R5r68R11r79y10:qualifiersajy17:hxsl.VarQualifier:0:1nhggoR14oR15i548R16i576R17R18gR19r79R20jR21:5:3jR23:9:0oR14oR15i548R16i572R17R18gR19jR4:3:0R20jR21:5:3jR23:3:0oR14oR15i548R16i551R17R18gR19r92R20jR21:9:2oR14oR15i548R16i549R17R18gR19r49R20jR21:1:1r48gajy14:hxsl.Component:3:0hgoR14oR15i554R16i572R17R18gR19r92R20jR21:1:1oR0y18:killAlphaThresholdR9i-27R5r68R11r92R34ajR35:7:2d0d1hgggoR14oR15i575R16i576R17R18gR19r92R20jR21:0:1jy10:hxsl.Const:3:1zgggoR14oR15i579R16i586R17R18gR19r3R20jR21:11:0gngoR14oR15i592R16i658R17R18gR19r3R20jR21:10:3oR14oR15i596R16i604R17R18gR19r79R20jR21:1:1oR0y8:additiveR9i-24R5r68R11r79R34ajR35:0:1nhggoR14oR15i612R16i627R17R18gR19jR4:5:2i4r16R20jR21:5:3jR23:20:1jR23:0:0oR14oR15i612R16i622R17R18gR19r129R20jR21:1:1oR0y10:pixelColorR9i-30R5r22R11r129ggoR14oR15i626R16i627R17R18gR19r49R20jR21:1:1r48ggoR14oR15i643R16i658R17R18gR19r129R20jR21:5:3jR23:20:1jR23:1:0oR14oR15i643R16i653R17R18gR19r129R20jR21:1:1r134goR14oR15i657R16i658R17R18gR19r49R20jR21:1:1r48gggoR14oR15i664R16i707R17R18gR19r3R20jR21:10:3oR14oR15i668R16i681R17R18gR19r79R20jR21:1:1oR0y13:specularAlphaR9i-26R5r68R11r79R34ajR35:0:1nhggoR14oR15i689R16i707R17R18gR19jR4:5:2i3r16R20jR21:5:3jR23:20:1r142oR14oR15i689R16i698R17R18gR19r162R20jR21:1:1oR0y9:specColorR9i-31R5r22R11r162ggoR14oR15i702R16i707R17R18gR19jR4:5:2i3r16R20jR21:9:2oR14oR15i702R16i703R17R18gR19r49R20jR21:1:1r48gar100r100r100hggnghgR12ahghy4:varsar29r123r83r156r104r67r21r134r166r5r38hg";
 h3d_shader_UVDelta.SRC = "oy4:namey18:h3d.shader.UVDeltay4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-287R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini191y3:maxi250y4:filey67:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FUVDelta.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i197R16i244R17R18gR19jR4:5:2i2jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i197R16i209R17R18gR19r17R20jR21:1:1oR0y12:calculatedUVR9i-286R5jR10:4:0R11r17ggoR14oR15i212R16i244R17R18gR19jR4:5:2i2r16R20jR21:5:3jR23:0:0oR14oR15i212R16i234R17R18gR19jR4:5:2i2r16R20jR21:5:3jR23:1:0oR14oR15i212R16i224R17R18gR19r17R20jR21:1:1r21goR14oR15i227R16i234R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0y7:uvScaleR9i-285R5jR10:2:0R11r37gggoR14oR15i237R16i244R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0y7:uvDeltaR9i-284R5r39R11r44gggghgR12ahghy4:varsar45r38r21r5hg";
-h3d_shader_VertexColorAlpha.SRC = "oy4:namey27:h3d.shader.VertexColorAlphay4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-302R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini227y3:maxi325y4:filey76:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FVertexColorAlpha.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i233R16i319R17R18gR19r3R20jR21:10:3oR14oR15i237R16i245R17R18gR19jR4:2:0R20jR21:1:1oR0y8:additiveR9i-301R5jR10:2:0R11r18y10:qualifiersajy17:hxsl.VarQualifier:0:1nhggoR14oR15i253R16i278R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:20:1jR26:0:0oR14oR15i253R16i263R17R18gR19r27R20jR21:1:1oR0y10:pixelColorR9i-300R5jR10:4:0R11r27ggoR14oR15i267R16i278R17R18gR19jR4:5:2i4r26R20jR21:1:1oR0y5:colorR9i-299R5jR10:1:0R11r37y6:parentoR0y5:inputR9i-298R5r39R11jR4:12:1ar38hggggoR14oR15i294R16i319R17R18gR19r27R20jR21:5:3jR26:20:1jR26:1:0oR14oR15i294R16i304R17R18gR19r27R20jR21:1:1r32goR14oR15i308R16i319R17R18gR19r37R20jR21:1:1r38ggghgR12ahghy4:varsar40r32r19r5hg";
+h3d_shader_VertexColorAlpha.SRC = "oy4:namey27:h3d.shader.VertexColorAlphay4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:1:0y3:refoR0y8:fragmenty2:idi-380R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini227y3:maxi325y4:filey76:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FVertexColorAlpha.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i233R16i319R17R18gR19r3R20jR21:10:3oR14oR15i237R16i245R17R18gR19jR4:2:0R20jR21:1:1oR0y8:additiveR9i-379R5jR10:2:0R11r18y10:qualifiersajy17:hxsl.VarQualifier:0:1nhggoR14oR15i253R16i278R17R18gR19jR4:5:2i4jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:20:1jR26:0:0oR14oR15i253R16i263R17R18gR19r27R20jR21:1:1oR0y10:pixelColorR9i-378R5jR10:4:0R11r27ggoR14oR15i267R16i278R17R18gR19jR4:5:2i4r26R20jR21:1:1oR0y5:colorR9i-377R5jR10:1:0R11r37y6:parentoR0y5:inputR9i-376R5r39R11jR4:12:1ar38hggggoR14oR15i294R16i319R17R18gR19r27R20jR21:5:3jR26:20:1jR26:1:0oR14oR15i294R16i304R17R18gR19r27R20jR21:1:1r32goR14oR15i308R16i319R17R18gR19r37R20jR21:1:1r38ggghgR12ahghy4:varsar40r32r19r5hg";
 h3d_shader_VolumeDecal.SRC = "oy4:namey22:h3d.shader.VolumeDecaly4:funsaoy3:retjy9:hxsl.Type:0:0y4:kindjy17:hxsl.FunctionKind:0:0y3:refoR0y6:vertexy2:idi-207R5jy12:hxsl.VarKind:6:0y4:typejR4:13:1aoR3r3y4:argsahghgy4:exproy1:poy3:mini259y3:maxi297y4:filey71:C%3A%5CHaxeToolkit%5Clibs%5Cheaps%2Fgit%2Fh3d%2Fshader%2FVolumeDecal.hxgy1:tr3y1:ejy13:hxsl.TExprDef:4:1aoR14oR15i265R16i291R17R18gR19jR4:5:2i3jy12:hxsl.VecType:1:0R20jR21:5:3jy16:haxe.macro.Binop:4:0oR14oR15i265R16i282R17R18gR19r17R20jR21:1:1oR0y17:transformedNormalR9i-192R5jR10:4:0R11r17ggoR14oR15i285R16i291R17R18gR19jR4:5:2i3r16R20jR21:1:1oR0y6:normalR9i-205R5jR10:2:0R11r26ggghgR12ahgoR3r3R5jR6:1:0R7oR0y8:fragmentR9i-208R5r6R11jR4:13:1aoR3r3R12ahghgR13oR14oR15i323R16i888R17R18gR19r3R20jR21:4:1aoR14oR15i329R16i391R17R18gR19r3R20jR21:7:2oR0y6:matrixR9i-209R5r22R11jR4:7:0goR14oR15i342R16i390R17R18gR19r46R20jR21:5:3jR23:1:0oR14oR15i342R16i364R17R18gR19r46R20jR21:1:1oR0y15:inverseViewProjR9i-172R5jR10:0:0R11r46y6:parentoR0y6:cameraR9i-166R5r53R11jR4:12:1aoR0y4:viewR9i-167R5r53R11r46R29r54goR0y4:projR9i-168R5r53R11r46R29r54goR0y8:positionR9i-169R5r53R11jR4:5:2i3r16R29r54goR0y8:projDiagR9i-170R5r53R11jR4:5:2i3r16R29r54goR0y8:viewProjR9i-171R5r53R11r46R29r54gr52oR0y5:zNearR9i-173R5r53R11jR4:3:0R29r54goR0y4:zFarR9i-174R5r53R11r64R29r54goR0y3:dirR9i-175R5jR10:3:0R11jR4:5:2i3r16R29r54ghgggoR14oR15i367R16i390R17R18gR19r46R20jR21:1:1oR0y16:modelViewInverseR9i-180R5r53R11r46y10:qualifiersajy17:hxsl.VarQualifier:3:0hR29oR0y6:globalR9i-176R5r53R11jR4:12:1aoR0y4:timeR9i-177R5r53R11r64R29r76goR0y9:pixelSizeR9i-178R5r53R11jR4:5:2i2r16R29r76goR0y9:modelViewR9i-179R5r53R11r46R40ar75hR29r76gr73hgggggoR14oR15i396R16i455R17R18gR19r3R20jR21:7:2oR0y9:screenPosR9i-210R5r22R11jR4:5:2i2r16goR14oR15i412R16i454R17R18gR19r90R20jR21:5:3jR23:2:0oR14oR15i412R16i432R17R18gR19r90R20jR21:9:2oR14oR15i412R16i429R17R18gR19jR4:5:2i4r16R20jR21:1:1oR0y17:projectedPositionR9i-193R5r22R11r98ggajy14:hxsl.Component:0:0jR48:1:0hgoR14oR15i435R16i454R17R18gR19r64R20jR21:9:2oR14oR15i435R16i452R17R18gR19r98R20jR21:1:1r99gajR48:3:0hgggoR14oR15i460R16i515R17R18gR19r3R20jR21:7:2oR0y3:tuvR9i-211R5r22R11jR4:5:2i2r16goR14oR15i470R16i514R17R18gR19r118R20jR21:5:3jR23:0:0oR14oR15i470R16i497R17R18gR19jR4:5:2i2r16R20jR21:5:3r49oR14oR15i470R16i479R17R18gR19r90R20jR21:1:1r89goR14oR15i482R16i497R17R18gR19jR4:5:2i2r16R20jR21:8:2oR14oR15i482R16i486R17R18gR19jR4:13:1ahR20jR21:2:1jy12:hxsl.TGlobal:38:0gaoR14oR15i487R16i490R17R18gR19r64R20jR21:0:1jy10:hxsl.Const:3:1d0.5goR14oR15i492R16i496R17R18gR19r64R20jR21:0:1jR51:3:1d-0.5ghggoR14oR15i500R16i514R17R18gR19jR4:5:2i2r16R20jR21:8:2oR14oR15i500R16i504R17R18gR19r134R20jR21:2:1r135gaoR14oR15i505R16i508R17R18gR19r64R20jR21:0:1jR51:3:1d0.5goR14oR15i510R16i513R17R18gR19r64R20jR21:0:1jR51:3:1d0.5ghgggoR14oR15i520R16i597R17R18gR19r3R20jR21:7:2oR0y3:ruvR9i-212R5r22R11jR4:5:2i4r16goR14oR15i530R16i596R17R18gR19r169R20jR21:8:2oR14oR15i530R16i534R17R18gR19jR4:13:1ahR20jR21:2:1jR50:40:0gaoR14oR15i541R16i550R17R18gR19r90R20jR21:1:1r89goR14oR15i557R16i582R17R18gR19r64R20jR21:8:2oR14oR15i557R16i563R17R18gR19jR4:13:1aoR3r64R12aoR0y5:valueR11jR4:5:2i4r16ghghR20jR21:2:1jR50:53:0gaoR14oR15i564R16i581R17R18gR19jR4:5:2i4r16R20jR21:8:2oR14oR15i564R16i572R17R18gR19jR4:13:1aoR3r197R12aoR0y1:_R11jR4:10:0goR0y2:uvR11jR4:5:2i2r16ghghR20jR21:2:1jR50:33:0gaoR14oR15i564R16i572R17R18gR19r204R20jR21:1:1oR0y8:depthMapR9i-203R5r53R11r204ggoR14oR15i577R16i580R17R18gR19r118R20jR21:1:1r117ghghgoR14oR15i589R16i590R17R18gR19r64R20jR21:0:1jR51:3:1i1ghggoR14oR15i602R16i626R17R18gR19r3R20jR21:7:2oR0y4:wposR9i-213R5r22R11r197goR14oR15i613R16i625R17R18gR19r197R20jR21:5:3r49oR14oR15i613R16i616R17R18gR19r169R20jR21:1:1r168goR14oR15i619R16i625R17R18gR19r46R20jR21:1:1r45gggoR14oR15i631R16i671R17R18gR19r3R20jR21:7:2oR0y4:pposR9i-214R5r22R11r197goR14oR15i642R16i670R17R18gR19r197R20jR21:5:3r49oR14oR15i642R16i645R17R18gR19r169R20jR21:1:1r168goR14oR15i648R16i670R17R18gR19r46R20jR21:1:1r52gggoR14oR15i676R16i720R17R18gR19jR4:5:2i3r16R20jR21:5:3r18oR14oR15i676R16i700R17R18gR19r254R20jR21:1:1oR0y24:pixelTransformedPositionR9i-191R5r22R11r254ggoR14oR15i703R16i720R17R18gR19jR4:5:2i3r16R20jR21:5:3r93oR14oR15i703R16i711R17R18gR19r261R20jR21:9:2oR14oR15i703R16i707R17R18gR19r197R20jR21:1:1r241gar102r103jR48:2:0hgoR14oR15i714R16i720R17R18gR19r64R20jR21:9:2oR14oR15i714R16i718R17R18gR19r197R20jR21:1:1r241gar111hgggoR14oR15i726R16i773R17R18gR19jR4:5:2i2r16R20jR21:5:3r18oR14oR15i726R16i738R17R18gR19r281R20jR21:1:1oR0y12:calculatedUVR9i-206R5r22R11r281ggoR14oR15i741R16i773R17R18gR19jR4:5:2i2r16R20jR21:5:3r121oR14oR15i741R16i767R17R18gR19r288R20jR21:5:3r49oR14oR15i741R16i746R17R18gR19jR4:5:2i2r16R20jR21:1:1oR0y5:scaleR9i-204R5r28R11r293ggoR14oR15i749R16i767R17R18gR19jR4:5:2i2r16R20jR21:3:1oR14oR15i750R16i766R17R18gR19r298R20jR21:5:3r93oR14oR15i750R16i757R17R18gR19r298R20jR21:9:2oR14oR15i750R16i754R17R18gR19r197R20jR21:1:1r228gar102r103hgoR14oR15i760R16i766R17R18gR19r64R20jR21:9:2oR14oR15i760R16i764R17R18gR19r197R20jR21:1:1r228gar111hggggoR14oR15i770R16i773R17R18gR19r64R20jR21:0:1jR51:3:1d0.5gggoR14oR15i779R16i882R17R18gR19r3R20jR21:10:3oR14oR15i783R16i872R17R18gR19jR4:2:0R20jR21:5:3jR23:9:0oR14oR15i783R16i868R17R18gR19r64R20jR21:8:2oR14oR15i783R16i786R17R18gR19jR4:13:1aoR3r64R12aoR0y1:aR11r64goR0y1:bR11r64ghghR20jR21:2:1jR50:21:0gaoR14oR15i787R16i822R17R18gR19r64R20jR21:8:2oR14oR15i787R16i790R17R18gR19jR4:13:1ar335hR20jR21:2:1r340gaoR14oR15i791R16i805R17R18gR19r64R20jR21:9:2oR14oR15i791R16i803R17R18gR19r281R20jR21:1:1r284gar102hgoR14oR15i807R16i821R17R18gR19r64R20jR21:9:2oR14oR15i807R16i819R17R18gR19r281R20jR21:1:1r284gar103hghgoR14oR15i824R16i867R17R18gR19r64R20jR21:8:2oR14oR15i824R16i827R17R18gR19jR4:13:1ar335hR20jR21:2:1r340gaoR14oR15i828R16i846R17R18gR19r64R20jR21:5:3jR23:3:0oR14oR15i828R16i829R17R18gR19r64R20jR21:0:1jR51:3:1i1goR14oR15i832R16i846R17R18gR19r64R20jR21:9:2oR14oR15i832R16i844R17R18gR19r281R20jR21:1:1r284gar102hggoR14oR15i848R16i866R17R18gR19r64R20jR21:5:3r376oR14oR15i848R16i849R17R18gR19r64R20jR21:0:1jR51:3:1i1goR14oR15i852R16i866R17R18gR19r64R20jR21:9:2oR14oR15i852R16i864R17R18gR19r281R20jR21:1:1r284gar103hgghghgoR14oR15i871R16i872R17R18gR19r64R20jR21:0:1jR51:3:1zggoR14oR15i875R16i882R17R18gR19r3R20jR21:11:0gnghgR12ahghy4:varsar54r76oR0y5:inputR9i-181R5jR10:1:0R11jR4:12:1aoR0R33R9i-182R5r418R11jR4:5:2i3r16R29r417goR0R25R9i-183R5r418R11jR4:5:2i3r16R29r417ghgoR0y6:outputR9i-184R5r22R11jR4:12:1aoR0R33R9i-185R5r22R11jR4:5:2i4r16R29r425goR0y5:colorR9i-186R5r22R11jR4:5:2i4r16R29r425goR0y5:depthR9i-187R5r22R11r64R29r425goR0R25R9i-188R5r22R11jR4:5:2i3r16R29r425ghgoR0y16:relativePositionR9i-189R5r22R11jR4:5:2i3r16goR0y19:transformedPositionR9i-190R5r22R11jR4:5:2i3r16gr257r21r99oR0y10:pixelColorR9i-194R5r22R11jR4:5:2i4r16goR0R68R9i-195R5r22R11r64goR0y8:screenUVR9i-196R5r22R11jR4:5:2i2r16goR0y9:specPowerR9i-197R5r22R11r64goR0y9:specColorR9i-198R5r22R11jR4:5:2i3r16gr213r294r27r284r5r35hg";
 haxe_EntryPoint.pending = [];
 haxe_EntryPoint.threadCount = 0;
+haxe__$Int32_Int32_$Impl_$._mul = Math.imul != null ? Math.imul : function(a,b) {
+	return a * (b & 65535) + (a * (b >>> 16) << 16 | 0) | 0;
+};
 haxe_Unserializer.DEFAULT_RESOLVER = new haxe__$Unserializer_DefaultResolver();
 haxe_Unserializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
-haxe_crypto_Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-haxe_crypto_Base64.BYTES = haxe_io_Bytes.ofString(haxe_crypto_Base64.CHARS);
 haxe_ds_ObjectMap.count = 0;
 haxe_io_FPHelper.i64tmp = (function($this) {
 	var $r;
@@ -57194,7 +61993,6 @@ hxd_fmt_hmd_Material.DEFAULT_FLAGS = (function($this) {
 hxd_fmt_hmd_Data.CURRENT_VERSION = 2;
 hxd_fmt_hmd_Reader.BLEND = h2d_BlendMode.__empty_constructs__;
 hxd_fmt_hmd_Reader.CULLING = h3d_mat_Face.__empty_constructs__;
-hxd_fs_EmbedFileSystem.invalidChars = new EReg("[^A-Za-z0-9_]","g");
 hxd_impl_Memory.stack = [];
 hxd_impl_Memory.inst = new hxd_impl_MemoryReader();
 hxd_impl_Tmp.bytes = [];
@@ -57397,7 +62195,7 @@ hxsl_RuntimeShader.UID = 0;
 js_html_compat_Float32Array.BYTES_PER_ELEMENT = 4;
 js_html_compat_Uint8Array.BYTES_PER_ELEMENT = 1;
 {
-	Stencil.main();
+	GpuParticles.main();
 	haxe_EntryPoint.run();
 }
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

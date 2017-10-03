@@ -23,7 +23,7 @@ class Generator {
 	public var repositoryBranch = "";
 	public var basePath = "";
 	public var titlePostFix = "";
-	public var samplesFolder = "samples/";
+	public var samplesFolder = "assets/includes/samples/";
 	public var documentationFolder = "documentation/";
 	public var assetsFolderName = "assets";
 	
@@ -278,24 +278,26 @@ class Generator {
 	private function addSamplesPages(samplesPath:String) {
 		var prev:Page = null;
 		var samples:Array<Page> = [];
-		for (file in FileSystem.readDirectory(contentPath + samplesPath)) {
-			var outputPathReplace = 'samples/';
-			if (!file.endsWith(".hx")) continue; // skip this index page, its used for landingspages of series
-			
-			var sampleName = file.split(".hx").shift();
-			
-			var pageOutputPath = samplesPath.replace(documentationFolder, outputPathReplace);
-			pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
-			var page = new Page("layout-page-samples.mtt", samplesPath + file, pageOutputPath)
+		
+		trace(contentPath + "samples/samples.json");
+		var data:{ samples:Array<{ name:String, description:String}> } = Json.parse(File.getContent(contentPath + "samples/samples.json"));
+		
+		for (sample in data.samples) {
+			var outFolder = 'samples/';
+			var sampleName = sample.name;
+			var sampleFolderName = sampleName.substr(0, 1).toLowerCase() + sampleName.substr(1); // starts with lowercase
+			var pageOutputPath = sampleName.toLowerCase().replace(" ", "-").toLowerCase() + ".html";
+			trace(samplesPath + sampleName + ".hx");
+			var page = new Page("layout-page-samples.mtt", samplesPath + sampleName, '$outFolder$pageOutputPath')
 				.setTitle(sampleName)
 				.setDescription('Heaps $sampleName example with source and live demo')
 				.setCustomData({
-					source:getContent(contentPath + samplesPath + file, null).replace("\t", "  ").replace("<", "&lt;").replace(">","&gt;"),
-					file: samplesPath + sampleName.substr(0,1).toLowerCase() + sampleName.substr(1),
+					source: getContent(samplesPath + sampleName + ".hx", null).replace("\t", "  ").replace("<", "&lt;").replace(">","&gt;"),
+					file: '$outFolder' + sampleFolderName + "/",
 					prev: prev,
 					samples: samples,
 				});
-				
+			page.pageContent = sample.description;
 			if (prev != null) prev.customData.next = page;
 			
 			addPage(page, 'samples');

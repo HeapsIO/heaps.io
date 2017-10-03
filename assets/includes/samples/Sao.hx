@@ -20,7 +20,7 @@ class CustomRenderer extends h3d.scene.Renderer {
 		sao.shader.sampleRadius	= 0.2;
 		hasMRT = h3d.Engine.getCurrent().driver.hasFeature(MultipleRenderTargets);
 		if( hasMRT )
-			def = new h3d.pass.MRT(["color", "depth", "normal"], 0, true);
+			def = new h3d.pass.MRT([Value("output.color"), PackFloat(Value("output.depth")), PackNormal(Value("output.normal"))], 0, true);
 	}
 
 	override function renderPass(name, p:h3d.pass.Base, passes) {
@@ -54,7 +54,7 @@ class Sao extends SampleApp {
 	var wscale = 1.;
 	var renderer : CustomRenderer;
 
-	function initMaterial( m : h3d.mat.MeshMaterial ) {
+	function initMaterial( m : h3d.mat.Material ) {
 		m.mainPass.enableLights = true;
 		if( !Std.instance(s3d.renderer,CustomRenderer).hasMRT ) {
 			m.addPass(new h3d.mat.Pass("depth", m.mainPass));
@@ -111,10 +111,10 @@ class Sao extends SampleApp {
 		new h3d.scene.CameraController(s3d).loadFromCamera();
 
 		var c = renderer;
-		addSlider("Bias", 0, 0.3, function() return c.sao.shader.bias, function(v) c.sao.shader.bias = v);
-		addSlider("Intensity", 0, 10, function() return c.sao.shader.intensity, function(v) c.sao.shader.intensity = v);
-		addSlider("Radius", 0, 1, function() return c.sao.shader.sampleRadius, function(v) c.sao.shader.sampleRadius = v);
-		addSlider("Blur", 0, 3, function() return c.saoBlur.sigma, function(v) c.saoBlur.sigma = v);
+		addSlider("Bias", function() return c.sao.shader.bias, function(v) c.sao.shader.bias = v, 0, 0.3);
+		addSlider("Intensity", function() return c.sao.shader.intensity, function(v) c.sao.shader.intensity = v, 0, 10);
+		addSlider("Radius", function() return c.sao.shader.sampleRadius, function(v) c.sao.shader.sampleRadius = v);
+		addSlider("Blur", function() return c.saoBlur.sigma, function(v) c.saoBlur.sigma = v, 0, 3);
 
 		onResize();
 	}
@@ -146,7 +146,7 @@ class Sao extends SampleApp {
 			r.saoBlur.passes = r.saoBlur.passes == 0 ? 3 : 0;
 		#if hl
 		if( K.isPressed("V".code) )
-			@:privateAccess hxd.System.win.vsync = !hxd.System.win.vsync;
+			@:privateAccess hxd.Stage.getInstance().window.vsync = !hxd.Stage.getInstance().window.vsync;
 		#end
 	}
 

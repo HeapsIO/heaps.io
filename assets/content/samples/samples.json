@@ -1,0 +1,31 @@
+{
+	"samples": [
+		{ "name":"Base2D", "description": "Very cool 2d example" },
+		{ "name":"Base3D", "description": "Very cool 3d example" },
+		{ "name":"AdjustColor", "description": "" },
+		{ "name":"Bounds", "description": "" },
+		{ "name":"CollideCheck", "description": "" },
+		{ "name":"CubeTexture", "description": "" },
+		{ "name":"Cursor", "description": "" },
+		{ "name":"Filters", "description": "" },
+		{ "name":"Fullscreen", "description": "" },
+		{ "name":"GpuParticles", "description": "" },
+		{ "name":"GraphicsDraw", "description": "" },
+		{ "name":"Input", "description": "" },
+		{ "name":"Interactive", "description": "" },
+		{ "name":"Lights", "description": "" },
+		{ "name":"Mask", "description": "" },
+		{ "name":"Network", "description": "" },
+		{ "name":"Pad", "description": "" },
+		{ "name":"Pbr", "description": "" },
+		{ "name":"Quaternion", "description": "" },
+		{ "name":"SampleApp", "description": "" },
+		{ "name":"Sao", "description": "" },
+		{ "name":"Shadows", "description": "" },
+		{ "name":"Skin", "description": "" },
+		{ "name":"Sound", "description": "" },
+		{ "name":"Stencil", "description": "" },
+		{ "name":"Video", "description": "" },
+		{ "name":"World", "description": "" }
+	]
+}

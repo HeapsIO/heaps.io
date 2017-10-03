@@ -4,7 +4,6 @@ class Base2D extends hxd.App {
 	var tf : h2d.Text;
 
 	override function init() {
-
 		// creates a new sprite and put it at the center of the sceen
 		spr = new h2d.Sprite(s2d);
 		spr.x = Std.int(s2d.width / 2);
@@ -70,6 +69,8 @@ class Base2D extends hxd.App {
 	// if we the window has been resized
 	override function onResize() {
 
+		if( spr == null ) return;
+
 		// center our sprite
 		spr.x = Std.int(s2d.width / 2);
 		spr.y = Std.int(s2d.height / 2);
@@ -80,7 +81,7 @@ class Base2D extends hxd.App {
 
 	override function update(dt:Float) {
 		// rotate our sprite every frame
-		spr.rotation += 0.01 * dt;
+		if( spr != null ) spr.rotation += 0.01 * dt;
 	}
 
 	static function main() {

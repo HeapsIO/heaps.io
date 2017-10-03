@@ -10,19 +10,20 @@ class Interactive extends hxd.App {
 	function initInteract( i : h3d.scene.Interactive, m : h3d.scene.Mesh ) {
 		var beacon = null;
 		var color = m.material.color.clone();
+		i.bestMatch = true;
 		i.onOver = function(e : hxd.Event) {
 			m.material.color.set(0, 1, 0);
 			var s = new h3d.prim.Sphere(1, 32, 32);
 			s.addNormals();
-			beacon = new h3d.scene.Mesh(s, m);
+			beacon = new h3d.scene.Mesh(s, s3d);
 			beacon.material.mainPass.enableLights = true;
 			beacon.material.color.set(1, 0, 0);
-			beacon.scale(0.05 / m.parent.scaleX);
+			beacon.scale(0.01);
 			beacon.x = e.relX;
 			beacon.y = e.relY;
 			beacon.z = e.relZ;
 		};
-		i.onMove = function(e:hxd.Event) {
+		i.onMove = i.onCheck = function(e:hxd.Event) {
 			if( beacon == null ) return;
 			beacon.x = e.relX;
 			beacon.y = e.relY;
@@ -57,7 +58,7 @@ class Interactive extends hxd.App {
 			var color = new h3d.Vector(c, c * 0.6, c * 0.6);
 			m.material.color.load(color);
 
-			var interact = new h3d.scene.Interactive(m.primitive.getCollider(), m);
+			var interact = new h3d.scene.Interactive(m.getCollider(), s3d);
 			initInteract(interact, m);
 		}
 
@@ -66,16 +67,14 @@ class Interactive extends hxd.App {
 		obj.scale(1 / 20);
 		obj.rotate(0,0,Math.PI / 2);
 		obj.y = 0.2;
-		obj.z = -0.2;
-
-		// disable skinning (not supported for picking)
-		var pass = obj.getChildAt(1).toMesh().material.mainPass;
-		pass.removeShader(pass.getShader(h3d.shader.Skin));
+		obj.z = 0.2;
 		s3d.addChild(obj);
+
+		obj.playAnimation(cache.loadAnimation(hxd.Res.Model)).speed = 0.1;
 
 		for( o in obj ) {
 			var m = o.toMesh();
-			var i = new h3d.scene.Interactive(m.primitive.getCollider(), o);
+			var i = new h3d.scene.Interactive(m.getCollider(), s3d);
 			initInteract(i, m);
 		}
 
@@ -102,17 +101,17 @@ class Interactive extends hxd.App {
 			pix.remove();
 			pix = null;
 		};
-		
+
 		onResize();
 	}
-	
+
 	override function onResize() {
 		b.x = (s2d.width >> 1) - 200;
 		b.y = 150;
 	}
 
 	override function update(dt:Float) {
-		obj.rotate(0, 0, 0.01 * dt);
+		obj.rotate(0, 0, 0.002 * dt);
 	}
 
 
