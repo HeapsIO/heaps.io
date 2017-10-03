@@ -2,6 +2,8 @@ package;
 
 import data.Category;
 import data.Page;
+import haxe.Http;
+import haxe.Json;
 import haxe.ds.StringMap;
 import haxe.io.Path;
 import markdown.AST.ElementNode;
@@ -225,6 +227,14 @@ class Generator {
 		
 		var aboutPage = new Page("layout-page.mtt", "about.mtt", "about.html")
 													.hidden()
+													.setCustomData({
+														games: [
+															Json.parse(Http.requestUrl("http://steamspy.com/api.php?request=appdetails&appid=588650")), //deadcells
+															Json.parse(Http.requestUrl("http://steamspy.com/api.php?request=appdetails&appid=466560")), //northgard
+															Json.parse(Http.requestUrl("http://steamspy.com/api.php?request=appdetails&appid=359310")), //evoland2
+															Json.parse(Http.requestUrl("http://steamspy.com/api.php?request=appdetails&appid=233470")), // evoland1
+														]
+													})
 													.setTitle("About - Haxe game enine")
 													.setDescription('Heaps.io delivers fast iterations, real development power and multi-platform compilation with native access and minimal overhead. The toolkit is versatile, open-source and completely free.');
 		

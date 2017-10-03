@@ -22,9 +22,20 @@
 	<div class="container">
 		<h1>Showcase</h1>
 		
-		<h2>Dead-cells by Motion-Twin</h2>
-		<h2>Evoland by Shiro Games</h2>
-		<h2>Northgard by Shiro Games</h2>
+		<div class="showcase">
+		::foreach game currentPage.customData.games::
+			<div class="row">
+				<div class="col-6">
+					<img src="http://cdn.akamai.steamstatic.com/steam/apps/::game.appid::/header.jpg" alt="::game.name::" />
+				</div>
+				<div class="col-6">
+					<h3>::game.name:: by ::game.developer::</h3>
+					<p><a href="http://store.steampowered.com/app/::game.appid::" class="button">Play ::game.name::</a></p>
+					<p><a href="http://steamcommunity.com/app/::game.appid::">Community</a> | <a href="https://steamdb.info/app/::game.appid::/">SteamDB</a></p>
+				</div>
+			</div>
+		::end::
+		</div>
 	</div>
 </section>
 	
