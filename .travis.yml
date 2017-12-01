@@ -1,0 +1,20 @@
+language: haxe
+
+os: linux
+dist: trusty
+
+haxe:
+  - "3.4.4"
+  - development
+
+matrix:
+  allow_failures:
+    - haxe: development
+
+install:
+  - haxelib install all --always
+  - haxelib list
+
+script:
+  - haxe build-run-dox.hxml
+  - haxe heaps.io.hxml
