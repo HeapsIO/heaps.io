@@ -1,1 +1,0 @@
-Getting started with heaps is easy. Just add `-lib heaps` to your project and start building great games.

@@ -1,1 +1,0 @@
-<p class="lead">Heap's 3D API (H3d) defines a collection of classes for 3D graphics. The following sections covers its usage.</p>

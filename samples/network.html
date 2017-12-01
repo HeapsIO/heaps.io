@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" id="page"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width"/><title>Network  - Heaps.io Game Engine</title><base href="./.."/>
+<link href="css/styles.css" rel="stylesheet" type="text/css"/><link rel="canonical" href="http://heaps.io/samples/network.html"/><meta name="description" content="Heaps Network example with source and live demo"/>
+<meta name="twitter:creator" content="@ncanasse"/>
+<meta property="og:title" content="Network  - Heaps.io Game Engine"/><meta property="og:description" content="Heaps Network example with source and live demo"/><meta property="og:type" content="website"/><meta property="og:url" content="http://heaps.io/samples/network.html"/><meta property="og:image" content="http://heaps.io//img/share.png"/>    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/></head><body><main><header class="header-page"><nav class="top-nav"><a href="./" class="button ">Home</a><a href="about.html" class="button ">About</a><a href="samples/" class="button disabled">Samples</a><a href="documentation/" class="button ">Online handbook</a><a href="api/" class="button">API</a><a href="https://github.com/HeapsIO/heaps/" class="button"><svg aria-hidden="true" width="20" height="20" version="1.1" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg> Source</a></nav><div class="logo small"><a href="./"><img src="img/logo.svg"/></a></div></header><br/><div class="container sample"><h1>Example <span>Network</span></h1><table class="table top-nav top-nav-small"><tr><td class="align-center"><a href="samples/mask.html" class="button" title="Mask">&laquo;</a> &nbsp;</td><td class="align-center"><select onchange="location.href=this.options[this.selectedIndex].value"><option value="samples/adjustcolor.html">AdjustColor</option><option value="samples/base2d.html">Base2D</option><option value="samples/base3d.html">Base3D</option><option value="samples/bounds.html">Bounds</option><option value="samples/collidecheck.html">CollideCheck</option><option value="samples/cursor.html">Cursor</option><option value="samples/filters.html">Filters</option><option value="samples/graphicsdraw.html">GraphicsDraw</option><option value="samples/input.html">Input</option><option value="samples/interactive.html">Interactive</option><option value="samples/lights.html">Lights</option><option value="samples/mask.html">Mask</option><option value="samples/network.html" selected="true">Network</option><option value="samples/pad.html">Pad</option><option value="samples/pbr.html">Pbr</option><option value="samples/quaternion.html">Quaternion</option><option value="samples/sao.html">Sao</option><option value="samples/shadows.html">Shadows</option><option value="samples/skin.html">Skin</option><option value="samples/sound.html">Sound</option><option value="samples/stencil.html">Stencil</option><option value="samples/visualcomponents.html">VisualComponents</option><option value="samples/world.html">World</option></select></td><td class="align-center">&nbsp; <a href="samples/pad.html" class="button" title="Pad">&raquo; </a></td></tr></table><div class="row"><div class="col-6"><pre style="margin-top:0"><code class="prettyprint haxe">
+class Cursor implements hxbit.NetworkSerializable {
+
+  @:s var color : Int;
+  @:s public var uid : Int;
+  @:s public var x(default, set) : Float;
+  @:s public var y(default, set) : Float;
+
+  var net : Network;
+  var bmp : h2d.Graphics;
+
+  public function new( color, uid=0 ) {
+    this.color = color;
+    this.uid = uid;
+    init();
+    x = 0;
+    y = 0;
+  }
+
+  public function networkGetOwner() {
+    return this;
+  }
+
+  function set_x( v : Float ) {
+    if( v == x ) return v;
+    if( bmp != null ) bmp.x = v;
+    return this.x = v;
+  }
+
+  function set_y( v : Float ) {
+    if( bmp != null ) bmp.y = v;
+    return this.y = v;
+  }
+
+  public function toString() {
+    return "Cursor " + StringTools.hex(color, 6)+(enableReplication?":ALIVE":"");
+  }
+
+  function init() {
+    net = Network.inst;
+    net.log("Init "+this);
+    bmp = new h2d.Graphics(net.s2d);
+    bmp.beginFill(color, 0.5);
+    bmp.drawCircle(0, 0, 10);
+    bmp.beginFill(color);
+    bmp.drawCircle(0, 0, 5);
+
+    enableReplication = true;
+
+    var i = new h2d.Interactive(10, 10, bmp);
+    i.x = i.y = -5;
+    i.isEllipse = true;
+    i.onClick = function(_) blink( 2 + Math.random() * 2 );
+  }
+
+  @:rpc function blink( s : Float ) {
+    bmp.scale(s);
+    net.event.waitUntil(function(dt) {
+      bmp.scaleX *= Math.pow(0.9, dt);
+      bmp.scaleY *= Math.pow(0.9, dt);
+      if( bmp.scaleX &lt; 1 ) {
+        bmp.scaleX = bmp.scaleY = 1;
+        return true;
+      }
+      return false;
+    });
+  }
+
+  public function alive() {
+    init();
+    // refresh bmp
+    this.x = x;
+    this.y = y;
+    if( uid == net.uid ) {
+      net.cursor = this;
+      net.host.self.ownerObject = this;
+    }
+  }
+
+}
+
+//PARAM=-lib hxbit
+class Network extends hxd.App {
+
+  static var HOST = "127.0.0.1";
+  static var PORT = 6676;
+
+  public var host : hxd.net.SocketHost;
+  public var event : hxd.WaitEvent;
+  public var uid : Int;
+  public var cursor : Cursor;
+
+  override function init() {
+    event = new hxd.WaitEvent();
+    host = new hxd.net.SocketHost();
+    host.setLogger(function(msg) log(msg));
+
+    if( !hxd.net.Socket.ALLOW_BIND ) {
+      #if flash
+      log("Using network with flash requires compiling with -lib air3 and running through AIR");
+      #else
+      log("Server not allowed on this platform");
+      #end
+    }
+
+    try {
+      host.wait(HOST, PORT, function(c) {
+        log("Client Connected");
+      });
+      host.onMessage = function(c,uid:Int) {
+        log("Client identified ("+uid+")");
+        var cursorClient = new Cursor(0x0000FF, uid);
+        c.ownerObject = cursorClient;
+        c.sync();
+      };
+      log("Server Started");
+
+      start();
+
+      // force a new window to open, which will connect the client
+      hxd.net.SocketHost.openNewWindow();
+    } catch( e : Dynamic ) {
+
+      // we could not start the server
+      log("Connecting");
+
+      uid = 1 + Std.random(1000);
+      host.connect(HOST, PORT, function(b) {
+        if( !b ) {
+          log("Failed to connect to server");
+          return;
+        }
+        log("Connected to server");
+        host.sendMessage(uid);
+      });
+    }
+  }
+
+  public function log( s : String, ?pos : haxe.PosInfos ) {
+    pos.fileName = (host.isAuth ? "[S]" : "[C]") + " " + pos.fileName;
+    haxe.Log.trace(s, pos);
+  }
+
+  function start() {
+    cursor = new Cursor(0xFF0000);
+    log("Live");
+    host.makeAlive();
+  }
+
+  override function update(dt:Float) {
+    event.update(dt);
+    if( cursor != null ) {
+      cursor.x = s2d.mouseX;
+      cursor.y = s2d.mouseY;
+    }
+    host.flush();
+  }
+
+  public static var inst : Network;
+  static function main() {
+    #if air3
+    @:privateAccess hxd.Stage.getInstance().multipleWindowsSupport = true;
+    #end
+    inst = new Network();
+  }
+
+}</code></pre><p><a class="btn" href="https://github.com/HeapsIO/heaps/tree/master/samples/Network.hx">View source on Github</a></p></div><div class="col-6"><iframe src="samples/network/" frameborder="0"></iframe></div></div></div><br/></main><footer><div class="container"><div class="lead"><p>Follow <a href="https://github.com/HeapsIO/">Heaps.io on Github</a>: <br/><a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-style="mega" data-count-api="/repos/HeapsIO/heaps#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp; <a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p></div></div></footer><script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" type="text/css" href="http://code.haxe.org/css/highlighter.min.css"/><script defer="defer" src="http://code.haxe.org/js/highlighter.js"></script></body></html>

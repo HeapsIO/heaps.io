@@ -1,3 +1,0 @@
-<script>
-location.href = "::currentPage.customData.samples[0].outputPath::";
-</script>

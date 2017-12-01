@@ -1,3 +1,0 @@
-# Lights 
-
-Lights starts here.

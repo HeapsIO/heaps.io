@@ -1,1 +1,0 @@
-<p class="lead">HXD takes care of various cross platform services, such as events, sound and resource management etc.</p>
