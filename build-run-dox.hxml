@@ -2,12 +2,12 @@
 -lib castle
 -lib hxbit
 -lib stb_ogg_sound
--neko dummy.n
+-js dummy.js
 --no-output
 -xml heaps.xml
 --macro include('h3d')
---macro include('h2d')
+--macro include('h2d',true,['h2d.comp','h2d.css'])
 --macro include('hxsl',true,['hxsl.Macros'])
---macro include('hxd',true,['hxd.res.FileTree','hxd.Res','hxd.impl.BitsBuilder','hxd.impl.Air3File','hxd.fmt.pak.Build','hxd.fmt.hmd.MakeAll','hxd.impl.LimeStage','hxd.fs.LimeFileSystem','hxd.net.SteamHost','hxd.snd.efx'])
+--macro include('hxd',true,['hxd.res.FileTree','hxd.Res','hxd.impl.BitsBuilder','hxd.impl.Air3File','hxd.fmt.pak.Build','hxd.fmt.hmd.MakeAll','hxd.impl.LimeStage','hxd.fs.LimeFileSystem','hxd.net.SteamHost','hxd.snd.efx','hxd.inspect'])
 
 run-dox.hxml
