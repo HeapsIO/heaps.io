@@ -7,7 +7,7 @@ You can assign a filter to a `h2d.Sprite`.
 mySprite.filter = new Glow();
 ```
 
-### Build-in filters
+## Build-in filters
 
 Heaps provides several filters like Ambient, Bloom, Blur, ColorMatrix, Displacement, DropShadow, Glob, Mask. 
 They can be found in the `h2d.filter` package.
@@ -18,7 +18,7 @@ To create a shader that works as filter, you need a screen shader.
 
 As you can see in `h3d.shader.ScreenShader`, screen shaders only provides you `input.position` and `input.uv`, and you can alter the `output.position` or `output.color`.
 
-```
+```haxe
 @input var input : {
 	position : Vec2,
 	uv : Vec2,
@@ -31,7 +31,7 @@ var output : {
 
 Let's create a simple shader that changes the red channel based on a parameter:
 
-```
+```haxe
 class MyFilterShader extends h3d.shader.ScreenShader {
 	static var SRC = {
 		@param var red : Float;
