@@ -1,6 +1,6 @@
 # Hxsl
 
-> Haxe Shader Language
+## Haxe Shader Language
 
 Today hardware accelerated 3D rendering is using "shaders" in order to perform many tasks :
 
@@ -12,11 +12,10 @@ Thanks to [macros](https://haxe.org/manual/macro.html), we were able to develop 
 
 The syntax of the shader follows the syntax of Haxe language, however only a subset of the language is supported. Here's a HxSL shader expression example:
 
-```
+```haxe
 package h3d.shader;
 
 class SinusDeform extends hxsl.Shader {
-
 	static var SRC = {
 		@global var time : Float;
 		@param var speed : Float;
