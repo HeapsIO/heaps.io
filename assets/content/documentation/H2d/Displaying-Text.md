@@ -38,7 +38,7 @@ In the BMFont-tool, use these settings:
   
 ### Be creative with bitmapfonts
 
-If you add some 'padding' (not 'spacing') in the export options, you can decorate the outputted .png-file in your image-editing software with some colors/effects/gradients. For example, Flambe does not natively support filters like a shadows, glows or gradients. You can bake this inside your bitmap.
+If you add some 'padding' (not 'spacing') in the export options, you can decorate the outputted .png-file in your image-editing software with some colors/effects/gradients. You can bake this inside your bitmap.
 
 Want gradients? Its not simple to add them with image-editing software if cells are uneven. Use the "equalize the cell heights" in the export options. Then all chars have the same height and is a bit easier to add the gradients. Of course, the texture will be a bit bigger in that case, since there is a bit more whitespace.
 
