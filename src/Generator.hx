@@ -297,7 +297,8 @@ class Generator {
 					prev: prev,
 					samples: samples,
 				});
-			page.pageContent = sample.description;
+			var markdown  = new Markdown.Document();
+			page.pageContent =  Markdown.renderHtml(markdown.parseInline(sample.description)); 
 			if (prev != null) prev.customData.next = page;
 			
 			addPage(page, 'samples');
