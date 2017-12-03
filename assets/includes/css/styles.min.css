@@ -95,4 +95,5 @@ iframe{width:100%;height:700px;}
 .fa{display:inline-block;width:14px;height:14px;margin-top:1px;line-height:14px;vertical-align:text-top;background-image:url(../api/bootstrap/img/glyphicons-halflings.png);background-position:14px 14px;background-repeat:no-repeat;opacity:.3;}
 .fa-arrow-circle-right{background-position:-408px -96px;}
 .fa-arrow-circle-down{background-position:-433px -96px;}
+.showcase img{max-width:100%;}
 
