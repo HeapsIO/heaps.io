@@ -18,3 +18,11 @@ install:
 script:
   - haxe build-run-dox.hxml
   - haxe heaps.io.hxml
+
+deploy:
+  provider: script
+  script: haxe deploy.hxml
+  on:
+    branch: master
+    haxe: "3.4.4"
+  skip_cleanup: true
