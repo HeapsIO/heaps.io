@@ -1,7 +1,8 @@
--lib heaps:git:https://github.com/HeapsIO/heaps.git#1.0.0
+-lib heaps:1.1.0
 -lib castle
 -lib hxbit
 -lib stb_ogg_sound
+-lib dox
 -js dummy.js
 --no-output
 -xml heaps.xml
@@ -9,5 +10,7 @@
 --macro include('h2d',true,['h2d.comp','h2d.css'])
 --macro include('hxsl',true,['hxsl.Macros'])
 --macro include('hxd',true,['hxd.res.FileTree','hxd.Res','hxd.impl.BitsBuilder','hxd.impl.Air3File','hxd.fmt.pak.Build','hxd.fmt.hmd.MakeAll','hxd.impl.LimeStage','hxd.fs.LimeFileSystem','hxd.net.SteamHost','hxd.snd.efx','hxd.inspect'])
+
+--next
 
 run-dox.hxml
