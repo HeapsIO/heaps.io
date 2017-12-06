@@ -2,6 +2,7 @@
 -lib castle
 -lib hxbit
 -lib stb_ogg_sound
+-lib dox
 -js dummy.js
 --no-output
 -xml heaps.xml
