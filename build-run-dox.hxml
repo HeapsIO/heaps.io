@@ -1,4 +1,4 @@
--lib heaps:git:https://github.com/HeapsIO/heaps.git#1.0.0
+-lib heaps:1.0.0
 -lib castle
 -lib hxbit
 -lib stb_ogg_sound
