@@ -17,7 +17,7 @@ install:
 
 script:
   - haxe build-run-dox.hxml
-  - haxe -cp src -x BuildSamples
+  - haxe build-samples.hxml
   - haxe heaps.io.hxml
 
 deploy:
