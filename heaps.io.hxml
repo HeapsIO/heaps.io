@@ -1,6 +1,7 @@
 -lib markdown:1.0.0
 -lib hxtemplo:3.2.0
--lib heaps:git:https://github.com/HeapsIO/heaps.git#1.0.0
+-lib heaps:1.0.0
+-lib hscript:2.1.1
 -cp src
 --interp
 -main Main
