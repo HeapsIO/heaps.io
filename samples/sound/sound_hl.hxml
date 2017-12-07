@@ -1,0 +1,7 @@
+-lib heaps
+-cp ../..
+-hl sound.hl
+-main Sound
+-D windowSize=1024x768
+-D resourcesPath=../../sound_res
+-lib hxbit

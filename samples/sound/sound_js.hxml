@@ -1,0 +1,6 @@
+-lib heaps
+-cp ../..
+-js sound.js
+-main Sound
+-D resourcesPath=../../sound_res
+-lib hxbit
