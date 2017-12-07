@@ -27,7 +27,8 @@ class BuildSamples
 		Sys.command('haxe',["all.hxml"]);
 		
 		trace( "** Copy the samples");
-		Sys.setCwd("./");
+		Sys.setCwd("../../");
+		trace(sampleBuildDir, "assets/includes/samples/");
 		copyDirectory(sampleBuildDir, "assets/includes/samples/");
 		
 		trace( "** Samples done!");
