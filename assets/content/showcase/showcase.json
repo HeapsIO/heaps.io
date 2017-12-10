@@ -1,0 +1,49 @@
+{
+	"steam": [
+		{
+			"image": "img/deadcells/deadcells.jpg",
+			"title": "Dead Cells",
+			"author":  "Motion Twin",
+			"url": "http://store.steampowered.com/app/588650"
+		},
+		{
+			"image": "img/northgard/northgard.png",
+			"title": "Northgard",
+			"author":  "Shiro Games",
+			"url": "http://store.steampowered.com/app/466560"
+		},
+		{
+			"image": "img/evoland2/evoland2.jpg",
+			"title": "Evoland 2",
+			"author":  "Shiro Games",
+			"url": "http://store.steampowered.com/app/359310"
+		},
+		{
+			"image": "img/evoland2/evoland1.jpg",
+			"title": "Evoland",
+			"author":  "Shiro Games",
+			"url": "http://store.steampowered.com/app/233470"
+		}
+		
+	],
+	"web": [
+		{
+			"image": "img/web/aaf6.png",
+			"title": "Jonathan The Sorcerer",
+			"author":  "ncannasse",
+			"url": "https://ldjam.com/events/ludum-dare/40/jonathan-the-sorcerer"
+		},
+		{
+			"image": "img/web/c6a5.png",
+			"title": "Cats are assholes",
+			"author":  "deepnight",
+			"url": "https://ldjam.com/events/ludum-dare/40/cats-are-assholes"
+		},
+		{
+			"image": "img/web/c29d.jpg",
+			"title": "For Better or For Worse",
+			"author":  "Kiuun (@kiuun), valandre (@valandre) *, emak (@emak), MrBulldops (@mrbulldops), and looping (@looping)",
+			"url": "https://ldjam.com/events/ludum-dare/40/for-better-or-for-worse"
+		}
+	]
+}

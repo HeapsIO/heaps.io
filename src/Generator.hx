@@ -225,15 +225,11 @@ class Generator {
 													.setTitle("Heaps - Haxe Game Engine")
 													.setDescription('Cross platform graphics for high performance games.');
 		
+		var json:{ web:Array<GameDef>, steam:Array<GameDef>} = Json.parse(File.getContent("assets/content/showcase/showcase.json"));
 		var aboutPage = new Page("layout-page.mtt", "about.mtt", "about.html")
 													.hidden()
 													.setCustomData({
-														games: [
-															Json.parse(Http.requestUrl("http://steamspy.com/api.php?request=appdetails&appid=588650")), //deadcells
-															Json.parse(Http.requestUrl("http://steamspy.com/api.php?request=appdetails&appid=466560")), //northgard
-															Json.parse(Http.requestUrl("http://steamspy.com/api.php?request=appdetails&appid=359310")), //evoland2
-															Json.parse(Http.requestUrl("http://steamspy.com/api.php?request=appdetails&appid=233470")), // evoland1
-														]
+														games: json
 													})
 													.setTitle("About - Haxe game enine")
 													.setDescription('Heaps.io delivers fast iterations, real development power and multi-platform compilation with native access and minimal overhead. The toolkit is versatile, open-source and completely free.');
@@ -529,3 +525,4 @@ class Generator {
 	
 	static inline private function min(a:Int, b:Int) return Std.int(Math.min(a, b));
 }
+typedef GameDef = { image: String, title: String, author:String, url: String }

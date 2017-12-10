@@ -1,7 +1,7 @@
 {
 	"samples": [
-		{ "name":"Base2D", "description": "2d applications can be created by extending `hxd.App` and then you can attach drawables to `s2d`, which is the root for 2d." },
-		{ "name":"Base3D", "description": "3d applications can be created by extending `hxd.App` and then you can attach object to `s3d`, which is the root for 3d." },
+		{ "name":"Base2D", "description": "2d applications can be created by extending `hxd.App` and then you can attach drawables to `s2d`, which is the root scene for 2d." },
+		{ "name":"Base3D", "description": "3d applications can be created by extending `hxd.App` and then you can attach meshes to `s3d`, which is the root scene for 3d." },
 		{ "name":"AdjustColor", "description": "" },
 		{ "name":"Bounds", "description": "" },
 		{ "name":"CollideCheck", "description": "" },

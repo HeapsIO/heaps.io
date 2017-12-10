@@ -469,5 +469,21 @@ iframe {
   background-position: -433px -96px;
 }
 .showcase img {
-  max-width: 100%;
+  width: 100%;
+}
+.showcase .button {
+  background: rgba(255, 255, 255, 0.7);
+}
+.showcase-web .showcase-item {
+  min-height: 200px;
+  margin-bottom: 5px;
+}
+.showcase-web p {
+  margin: 20px;
+}
+.showcase-web .author {
+  margin-top: 10px;
+  display: block;
+  color: #fff;
+  text-shadow: 2px 2px 2px #000000;
 }

@@ -20,18 +20,32 @@
 
 <section>
 	<div class="container">
-		<h1>Showcase</h1>
+		<h1>Showcase Steam Games</h1>
 		
-		<div class="showcase">
-		::foreach game currentPage.customData.games::
+		
+		<div class="showcase showcase-steam">
+		::foreach game currentPage.customData.games.steam::
 			<div class="row">
 				<div class="col-6">
-					<img src="http://cdn.akamai.steamstatic.com/steam/apps/::game.appid::/header.jpg" alt="::game.name::" />
+					<img src="::game.image::" alt="::game.title::" />
 				</div>
 				<div class="col-6">
-					<h3>::game.name:: by ::game.developer::</h3>
-					<p><a href="http://store.steampowered.com/app/::game.appid::" class="button">Play ::game.name::</a></p>
-					<p><a href="http://steamcommunity.com/app/::game.appid::">Community</a> | <a href="https://steamdb.info/app/::game.appid::/">SteamDB</a></p>
+					<div style="margin-left:20px" >
+						<h3>::game.title:: by ::game.author::</h3>
+						<p><a href="::game.url::" class="button">Play ::game.title::</a></p>
+					</div>
+				</div>
+			</div>
+		::end::
+		</div>
+		
+		<h1>Showcase Web Games</h1>
+		
+		<div class="showcase showcase-web">
+		::foreach game currentPage.customData.games.web::
+			<div class="row">
+				<div class="col-12 showcase-item" style="background:url('::game.image::') center center;background-size:cover">
+					<p><a href="::game.url::" class="button">Play ::game.title::</a> <span class="author">by ::game.author::</span></p>
 				</div>
 			</div>
 		::end::
