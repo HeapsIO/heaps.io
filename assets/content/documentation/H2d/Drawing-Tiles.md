@@ -5,18 +5,14 @@ This example draws tile layers from a [Tiled](http://www.mapeditor.org/) file (j
 The example uses a _tiles.json_ and _tiles.png_ file, that should be put in the resources (`/res`) folder.
 
 ```haxe
-class Main extends hxd.App
-{
-	static function main() 
-	{
+class Main extends hxd.App {
+	static function main() 	{
 		// embed the resources
 		hxd.Res.initEmbed();
-		
 		new Main();
 	}
 	
-	override private function init() 
-	{
+	override private function init() {
 		super.init();
 		
 		// parse Tiled json file
@@ -41,11 +37,9 @@ class Main extends hxd.App
 		];
 		
 		// iterate on all layers
-		for(layer in mapData.layers)
-		{
+		for(layer in mapData.layers) {
 			// iterate on x and y
-			for(y in 0 ... mh) for (x in 0 ... mw)
-			{
+			for(y in 0 ... mh) for (x in 0 ... mw) {
 				// get the tile id at the current position 
 				var tid = layer.data[x + y * mw];
 				if (tid != 0) { // skip transparent tiles
@@ -56,5 +50,7 @@ class Main extends hxd.App
 		}
 	}
 }
+
+// simple type definition for Tile map 
 typedef TiledMapData = { layers:Array<{ data:Array<Int>}>, tilewidth:Int, tileheight:Int, width:Int, height:Int };
 ```
