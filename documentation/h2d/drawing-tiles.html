@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" id="page"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width"/><title>Drawing tiles - H2d  - Heaps.io Game Engine</title><base href="./../.."/>
+<link href="css/styles.css" rel="stylesheet" type="text/css"/><link rel="canonical" href="http://heaps.io/documentation/h2d/drawing-tiles.html"/><meta name="description" content="This example draws tile layers from a Tiled file (json), it can be used for fast tile rendering."/>
+<meta name="twitter:creator" content="@ncanasse"/>
+<meta property="og:title" content="Drawing tiles - H2d  - Heaps.io Game Engine"/><meta property="og:description" content="This example draws tile layers from a Tiled file (json), it can be used for fast tile rendering."/><meta property="og:type" content="website"/><meta property="og:url" content="http://heaps.io/documentation/h2d/drawing-tiles.html"/><meta property="og:image" content="http://heaps.io//img/share.png"/>    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/></head><body><main><header class="header-documentation"><nav class="top-nav"><a href="./" class="button ">Home</a><a href="about.html" class="button ">About</a><a href="samples/" class="button ">Samples</a><a href="documentation/getting-started/" class="button disabled">Online handbook</a><a href="api/" class="button">API</a><a href="https://gitter.im/heapsio/Lobby" class="button" target="_blank">Community</a><a href="https://github.com/HeapsIO/heaps/" class="button" target="_blank"><svg aria-hidden="true" width="20" height="20" version="1.1" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg> Source</a></nav></header> <div class="row container"><nav class="col-4 sidebar"><ul class="unstyled"><li><a href="documentation/getting-started/">Getting started</a></li><li class="active"><a href="documentation/h2d/">H2d</a><ul><li><a href="documentation/h2d/animation.html">Animation</a></li><li><a href="documentation/h2d/displaying-text.html">Displaying text</a></li><li><a href="documentation/h2d/drawable.html">Drawable</a></li><li class="current"><a href="documentation/h2d/drawing-tiles.html">Drawing tiles</a></li><li><a href="documentation/h2d/events-and-interactivity.html">Events and interaction</a></li><li><a href="documentation/h2d/filters.html">Filters</a></li><li><a href="documentation/h2d/layers.html">Layers</a></li><li><a href="documentation/h2d/optimizing-bitmap-usage.html">Optimizing bitmaps</a></li><li><a href="documentation/h2d/shaders.html">Shaders</a></li><li><a href="documentation/h2d/sprite-properties.html">Sprites</a></li></ul></li><li><a href="documentation/h3d/">H3d</a></li><li><a href="documentation/hxd/">Hxd</a></li><li><a href="documentation/other/">Other</a></li><li><a href="documentation/shaders/">Shaders</a></li><li><a href="documentation/tools/">Tools</a></li></ul></nav><article class="col-8 documentation"><div class="content"><h1><span>H2d</span> Drawing tiles </h1><p>This example draws tile layers from a <a href="http://www.mapeditor.org/">Tiled</a> file (json), it can be used for fast tile rendering.</p>
+<p>The example uses a <em>tiles.json</em> and <em>tiles.png</em> file, that should be put in the resources (<code>/res</code>) folder.</p>
+<pre><code class="prettyprint haxe">class Main extends hxd.App
+{
+	static function main() 
+	{
+		// embed the resources
+		hxd.Res.initEmbed();
+		
+		new Main();
+	}
+	
+	override private function init() 
+	{
+		super.init();
+		
+		// parse Tiled json file
+		var mapData:TiledMapData = haxe.Json.parse(Res.tiles_json.entry.getText());
+		
+		// get tile image (tiles.png) from resources
+		var tileImage  = hxd.Res.tiles_png.toTile();
+		
+		// create a TileGroup for fast tile rendering, attach to 2d scene
+		var group = new h2d.TileGroup(tileImage, s2d);
+		
+		var tw = mapData.tilewidth;
+		var th = mapData.tileheight;
+		var mw = mapData.width;
+		var mh = mapData.height;
+		
+		// make sub tiles from tile
+		var tiles = [
+			 for(y in 0 ... Std.int(tileImage.height / th))
+			 for(x in 0 ... Std.int(tileImage.width / tw))
+			 tileImage.sub(x * tw, y * th, tw, th)
+		];
+		
+		// iterate on all layers
+		for(layer in mapData.layers)
+		{
+			// iterate on x and y
+			for(y in 0 ... mh) for (x in 0 ... mw)
+			{
+				// get the tile id at the current position 
+				var tid = layer.data[x + y * mw];
+				if (tid != 0) { // skip transparent tiles
+					// add a tile to the TileGroup
+					group.add(x * tw, y * mapData.tilewidth, tiles[tid - 1]);
+				}
+			}
+		}
+	}
+}
+typedef TiledMapData = { layers:Array&lt;{ data:Array&lt;Int&gt;}&gt;, tilewidth:Int, tileheight:Int, width:Int, height:Int };</code></pre></div></article> </div></main><footer><div class="container"><div class="lead"><p>Follow <a href="https://github.com/HeapsIO/">Heaps.io on Github</a>: <br/><a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-style="mega" data-count-api="/repos/HeapsIO/heaps#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp; <a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p></div></div></footer><script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" type="text/css" href="https://code.haxe.org/css/highlighter.min.css"/><script defer="defer" src="https://code.haxe.org/js/highlighter.js"></script></body></html>
