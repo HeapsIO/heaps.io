@@ -426,7 +426,7 @@ class Generator {
 	}
 	
 	public function getAddLinkUrl(category:Category = null, page:Page = null) {
-		var fileNameHint = "/snippet-name.md/?filename=snippet-name.md";
+		var fileNameHint = "/page-name.md/?filename=page-name.md";
 		var directory = if (category != null) {
 			category.pages[0].contentPath.dir;
 		} else {
