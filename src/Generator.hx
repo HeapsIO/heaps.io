@@ -120,8 +120,12 @@ class Generator {
 			{
 				page.addLinkUrl = (category != null) ? getAddLinkUrl(category) : getAddLinkUrl(page);
 				data.pageContent = page.pageContent != null ? page.pageContent : getContent(contentPath + page.contentPath, data);
-			} else {
-				page.contentPath = new Path(category.folder + "index.md");
+			}
+			
+			// fix edit links category listing
+			if (!page.visible && page.category != null)
+			{ 
+				page.contentPath = new Path(page.category.folder + "index.md");
 				page.editUrl = getEditUrl(page);
 			}
 			
