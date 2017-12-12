@@ -9,7 +9,7 @@ class Main {
       var generator = new Generator();
       generator.titlePostFix = " - Heaps.io Game Engine";
       generator.basePath = "http://heaps.io/";
-      generator.repositoryUrl = "https://github.com/HeapsIO/heaps/";
+      generator.repositoryUrl = "https://github.com/HeapsIO/heaps.io/";
       generator.repositoryBranch = "master";
     
       generator.build();

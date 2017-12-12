@@ -185,6 +185,10 @@ class Generator {
 			
 			category.content = parseMarkdownContent(page, contentPath + category.folder + "index.md");
 			addPage(page, category.folder);
+			
+			//overwrite 
+			page.contentPath = new Path(category.folder + "index.md");
+			page.editUrl = getEditUrl(page);
 		}
 		
 		var documentationLandingPage = new Page("layout-page-documentation.mtt",  documentationFolder + "index.md", 'documentation/index.html')

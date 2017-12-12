@@ -111,7 +111,7 @@ hr {
 	border:0;
 	background:transparent;
 	outline:none;
-	border-bottom:4px solid #ddd;
+	border-bottom:2px solid #ddd;
 	margin: 2em 0;
 }
 
@@ -492,5 +492,17 @@ iframe {
 		display:block;
 		color:#fff;
 		text-shadow:2px 2px 2px rgb(0,0,0,.5);
+	}
+}
+
+.contribution {
+	color:#999;
+	
+	.contribution-link:not(:first-child) {
+		padding: 0 10px;
+		border-left:2px solid #ddd;
+	}
+	.contribution-link:first-child {
+		padding-right:10px;
 	}
 }

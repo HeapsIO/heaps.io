@@ -20,7 +20,7 @@ h5{font-size:21px;margin:0;}
 .documentation{margin-bottom:2em;}
 .documentation h2{font-size:24px;}
 .documentation h3{font-size:24px;}
-hr{border:0;background:transparent;outline:none;border-bottom:4px solid #ddd;margin:2em 0;}
+hr{border:0;background:transparent;outline:none;border-bottom:2px solid #ddd;margin:2em 0;}
 .row:before,.row:after{content:"";display:table;height:0;clear:both;}
 .col-1,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-10,.col-11,.col-12{float:left;}
 .col-1{width:8.33%;}
@@ -100,4 +100,7 @@ iframe{width:100%;height:700px;}
 .showcase-web .showcase-item{min-height:200px;margin-bottom:5px;}
 .showcase-web p{margin:20px;}
 .showcase-web .author{margin-top:10px;display:block;color:#fff;text-shadow:2px 2px 2px #000000;}
+.contribution{color:#999;}
+.contribution .contribution-link:not(:first-child){padding:0 10px;border-left:2px solid #ddd;}
+.contribution .contribution-link:first-child{padding-right:10px;}
 
