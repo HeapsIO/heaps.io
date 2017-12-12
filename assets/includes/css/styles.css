@@ -298,6 +298,17 @@ section.light h3 {
 .sidebar ul li .current {
   font-weight: bold;
 }
+ul li.page-list-item {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+}
+ul li.page-list-item:not(:last-child) {
+  margin-bottom: 10px;
+}
+ul li.page-list-item .button {
+  background: #fff;
+}
 .lead {
   font-style: italic;
   font-size: 150%;
@@ -393,6 +404,10 @@ footer .lead {
 }
 .button:hover:not(.disabled) {
   text-decoration: underline;
+}
+.button.small-button {
+  font-size: 18px;
+  padding: 5px 20px;
 }
 .sample-button {
   display: block;

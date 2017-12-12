@@ -286,6 +286,20 @@ section {
 	}
 }
 
+// documentation category listing
+ul li.page-list-item {
+	padding: 10px 20px;
+	border: 1px solid #ddd;
+	background: #f9f9f9;
+	
+	&:not(:last-child) {
+		margin-bottom: 10px;
+	}
+	
+	.button {
+		background: #fff;
+	}
+}
 
 .lead {
 	font-style:italic;
@@ -388,6 +402,11 @@ footer {
 	
 	&:hover:not(.disabled) {
 		text-decoration:underline;
+	}
+	
+	&.small-button {
+		font-size: 18px;
+		padding: 5px 20px;
 	}
 }
 

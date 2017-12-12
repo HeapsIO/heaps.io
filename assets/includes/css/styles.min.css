@@ -60,6 +60,9 @@ section.light h3{color:#8ad0b6;text-shadow:0 0 8px rgba(0,0,0,0.45);}
 .sidebar ul li{padding-left:10px;border-left:2px solid #eee;padding-bottom:5px;}
 .sidebar ul li.active{padding-left:10px;border-color:#265669;padding-bottom:5px;}
 .sidebar ul li .current{font-weight:bold;}
+ul li.page-list-item{padding:10px 20px;border:1px solid #ddd;background:#f9f9f9;}
+ul li.page-list-item:not(:last-child){margin-bottom:10px;}
+ul li.page-list-item .button{background:#fff;}
 .lead{font-style:italic;font-size:150%;line-height:150%;margin-left:20px;padding-left:20px;border-left:4px solid #ddd;}
 header{margin:0;padding:0;min-height:265px;}
 header.header-main{background:url(../img/header-a.jpg) no-repeat center center;background-size:cover;}
@@ -81,6 +84,7 @@ footer .lead{border-color:#222;}
 .button-download{position:fixed;display:block;right:0;bottom:0;margin-right:40px;margin-bottom:40px;z-index:900;}
 .button{box-shadow:0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12);padding:10px 20px;border-radius:3px;font-size:21px;text-decoration:none;display:inline-block;}
 .button:hover:not(.disabled){text-decoration:underline;}
+.button.small-button{font-size:18px;padding:5px 20px;}
 .sample-button{display:block;width:270px;padding:30px;margin-right:20px;margin-bottom:20px;float:left;color:#000;font-size:21px;font-weight:bold;text-decoration:underline;box-shadow:0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12);}
 .box{padding:30px;margin:15px;box-shadow:0 3px 4px 0 rgba(0,0,0,0.14),0 3px 3px -2px rgba(0,0,0,0.2),0 1px 8px 0 rgba(0,0,0,0.12);}
 @media (min-width:640px){.boxes{display:flex;}
