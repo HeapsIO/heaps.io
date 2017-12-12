@@ -6,7 +6,7 @@ The example uses a _tiles.json_ and _tiles.png_ file, that should be put in the 
 
 ```haxe
 class Main extends hxd.App {
-	static function main() 	{
+	static function main() {
 		// embed the resources
 		hxd.Res.initEmbed();
 		new Main();
