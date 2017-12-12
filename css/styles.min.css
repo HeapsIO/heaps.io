@@ -57,8 +57,8 @@ section.light h3{color:#8ad0b6;text-shadow:0 0 8px rgba(0,0,0,0.45);}
 .top-nav.top-nav-small .button{padding:8px 15px;background:#FDFDFD;color:#111;}
 .sidebar ul{margin-bottom:4em;margin-top:2.5em;}
 .sidebar ul ul{margin-top:0.5em;margin-bottom:0.5em;padding-left:0.5em;}
-.sidebar ul li{padding-left:10px;border-left:2px solid #eee;padding-bottom:5px;}
-.sidebar ul li.active{padding-left:10px;border-color:#265669;padding-bottom:5px;}
+.sidebar ul li{padding-left:10px;border-left:4px solid #eee;padding-bottom:5px;}
+.sidebar ul li.active{padding-left:10px;border-left:4px solid #265669;padding-bottom:5px;}
 .sidebar ul li .current{font-weight:bold;}
 .lead{font-style:italic;font-size:150%;line-height:150%;margin-left:20px;padding-left:20px;border-left:4px solid #ddd;}
 header{margin:0;padding:0;min-height:265px;}
