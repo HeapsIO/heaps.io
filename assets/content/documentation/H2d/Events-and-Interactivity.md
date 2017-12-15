@@ -25,7 +25,7 @@ interaction.onClick = function(event : hxd.Event) {
 
 You can listen to global events (keyboard, touch, mouse, window) by adding event listener to the [`hxd.Stage`](api/hxd/Stage.html) instance.
 
-``` 
+```haxe
 function onEvent(event : hxd.Event) {
 	trace(event.toString());
 }
@@ -37,7 +37,7 @@ Don't forget to remove the event using removeEventTarget when disposing your obj
 
 Keyboard events can be observerd using the global event, check if the `event.kind` is `EKeyDown` or `EKeyUp`.
 
-``` 
+```haxe
 function onEvent(event) {
 	switch(event.kind) {
 		case EKeyDown: trace('DOWN keyCode: ${event.keyCode}, charCode: ${event.charCode}');
@@ -50,7 +50,7 @@ hxd.Stage.getInstance().addEventTarget(onEvent);
 
 You can use the static functions `hxd.Key.isPressed`, `hxd.Key.isDown` and `hxd.Key.isReleased`.
 
-```
+```haxe
 if (Key.isPressed(Key.SPACE)) {
 	trace("shoot!");
 }
@@ -60,7 +60,7 @@ if (Key.isPressed(Key.SPACE)) {
 
 You can listen to resize events by adding `addResizeEvent` listener to the [`hxd.Stage`](api/hxd/Stage.html) instance.
 
-``` 
+```haxe
 function onResize() {
 	var stage = hxd.Stage.getInstance();
 	trace("Resized to ${stage.width}px * ${stage.height}px');
