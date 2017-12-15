@@ -21,14 +21,14 @@ interaction.onClick = function(event : hxd.Event) {
 }</code></pre>
 <h2>Global events</h2>
 <p>You can listen to global events (keyboard, touch, mouse, window) by adding event listener to the <a href="api/hxd/Stage.html"><code>hxd.Stage</code></a> instance.</p>
-<pre><code>function onEvent(event : hxd.Event) {
+<pre><code class="prettyprint haxe">function onEvent(event : hxd.Event) {
 	trace(event.toString());
 }
 hxd.Stage.getInstance().addEventTarget(onEvent);</code></pre>
 <p>Don't forget to remove the event using removeEventTarget when disposing your objects.</p>
 <h2>Keyboard events</h2>
 <p>Keyboard events can be observerd using the global event, check if the <code>event.kind</code> is <code>EKeyDown</code> or <code>EKeyUp</code>.</p>
-<pre><code>function onEvent(event) {
+<pre><code class="prettyprint haxe">function onEvent(event) {
 	switch(event.kind) {
 		case EKeyDown: trace('DOWN keyCode: ${event.keyCode}, charCode: ${event.charCode}');
 		case EKeyUp: trace('UP keyCode: ${event.keyCode}, charCode: ${event.charCode}');
@@ -37,12 +37,12 @@ hxd.Stage.getInstance().addEventTarget(onEvent);</code></pre>
 }
 hxd.Stage.getInstance().addEventTarget(onEvent);</code></pre>
 <p>You can use the static functions <code>hxd.Key.isPressed</code>, <code>hxd.Key.isDown</code> and <code>hxd.Key.isReleased</code>.</p>
-<pre><code>if (Key.isPressed(Key.SPACE)) {
+<pre><code class="prettyprint haxe">if (Key.isPressed(Key.SPACE)) {
 	trace("shoot!");
 }</code></pre>
 <h2>Resize events</h2>
 <p>You can listen to resize events by adding <code>addResizeEvent</code> listener to the <a href="api/hxd/Stage.html"><code>hxd.Stage</code></a> instance.</p>
-<pre><code>function onResize() {
+<pre><code class="prettyprint haxe">function onResize() {
 	var stage = hxd.Stage.getInstance();
 	trace("Resized to ${stage.width}px * ${stage.height}px');
 }
