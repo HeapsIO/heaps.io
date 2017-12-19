@@ -1,3 +1,9 @@
+
+@bodyText: #222;
+@darkText: #03245b;
+@midText: #245795;
+@lightText: #569a7b;
+
 body, html { 
 	padding:0;
 	margin:0;
@@ -8,7 +14,7 @@ body {
 	font-weight: 400;
 	font-size: 17px;
 	line-height: 1.5;
-	color: #222;
+	color: @bodyText;
 }
 
 * {
@@ -16,7 +22,7 @@ body {
 }
 
 a, a:hover {
-	color: #245795;
+	color: @midText;
 }
 
 .homepage h1, .homepage h2, .homepage h3, .sample h1, .sample h2, .documentation h1, .documentation h2{
@@ -28,11 +34,11 @@ h1 {
 	color:#333;
 }
 .sample h1, .documentation h1 {
-	color:#03245b;
+	color: @darkText;
 }
 
 .sample h1 span, .documentation h1 span {
-	color:#569a7b;
+	color: @lightText;
 	font-weight:normal;
 }
 
@@ -41,28 +47,28 @@ h2 {
 	margin:1em 0;
 	font-weight:bold;
 	padding:15px 0;
-	color:#569a7b;
+	color: @lightText;
 }
 
 h3 {
 	font-size:36px;
 	margin:0.5em 0;
 	font-weight:normal;
-	color:#03245b;
+	color: @darkText;
 }
 
 .homepage {
 	h2 {
-		color:#03245b;
+		color: @darkText;
 	}
 	
 	h3 a {
-		color:#3a3a3a;
+		color:@bodyText;
 		padding:10px;
 		background:#FE9F44;
 		
 		&:hover {
-			color:#3a3a3a;
+			color:@bodyText;
 			background:#FE9F44;
 			&:before {
 				content: "» ";
@@ -71,12 +77,12 @@ h3 {
 	}
 	
 	h4 a {
-		color:#3a3a3a;
+		color:@bodyText;
 		padding:10px;
 		background:#edc31c;
 
 		&:hover {
-			color:#3a3a3a;
+			color:@bodyText;
 			background:#FE9F44; 
 			&:before {
 				content: "» ";
@@ -90,7 +96,6 @@ h4 {
 	margin:0.5em 0;
 	font-weight:normal;
 }
-
 
 h5 {
 	font-size:21px;
@@ -199,7 +204,7 @@ section {
 			text-shadow:0 0 8px rgba(0,0,0,.45);
 		}
 		.button {
-			color:#03245b;
+			color: @darkText;
 		}
 	}
 }
@@ -258,7 +263,7 @@ section {
 		.button {
 			padding:8px 15px;
 			background:#FDFDFD;
-			color:#111;
+			color:@bodyText;
 		}
 	}
 }
@@ -376,14 +381,14 @@ footer {
 	
 	a {
 		text-decoration:none;
-		color:#333;
+		color:@bodyText;
 		&:hover {
-			color:#000;
+			color:darken(@bodyText, 20%);
 		}
 	}
 	
 	.lead {
-		border-color:#222;
+		border-color:fade(@bodyText, 75%);
 	}
 }
 
@@ -423,7 +428,7 @@ footer {
 	margin-right:20px;
 	margin-bottom:20px;
 	float:left;
-	color:#000;
+	color:@bodyText;
 	font-size: 21px;
     font-weight: bold;
 	text-decoration:underline;
@@ -449,7 +454,7 @@ footer {
 pre {
 	padding:30px;
 	background: #eee;
-	color:#111;
+	color:@bodyText;
 	overflow: auto;
 	font-size:16px;
 }
@@ -521,7 +526,7 @@ iframe {
 }
 
 .contribution {
-	color:#999;
+	color:lighten(@bodyText, 20%);
 	
 	.contribution-link:not(:first-child) {
 		padding: 0 10px;
