@@ -19,7 +19,8 @@ using StringTools;
 class Generator {
 	public var contentPath = "./assets/content/";
 	public var outputPath = "./output/";
-	public var repositoryUrl = "";
+	public var websiteRepositoryUrl = "";
+	public var projectRepositoryUrl = "";
 	public var repositoryBranch = "";
 	public var basePath = "";
 	public var titlePostFix = "";
@@ -101,7 +102,8 @@ class Generator {
 				tags: tags,
 				pageContent: null,
 				DateTools: DateTools,
-				repositoryUrl:repositoryUrl,
+				websiteRepositoryUrl:websiteRepositoryUrl,
+				projectRepositoryUrl:projectRepositoryUrl,
 				isPage: isPage.bind(page),
 				isCategory: if (category!=null) category.isCategory else function(_) return false,
 				convertDate:function(date:Date) {
@@ -418,11 +420,11 @@ class Generator {
 	}
 	
 	public inline function getEditUrl(page:Page) {
-		return '${repositoryUrl}edit/${repositoryBranch}/${contentPath}${page.contentPath}';
+		return '${websiteRepositoryUrl}edit/${repositoryBranch}/${contentPath}${page.contentPath}';
 	}
 	
 	public inline function getContributionUrl(page:Page) {
-		return '${repositoryUrl}tree/${repositoryBranch}/${contentPath}${page.contentPath}';
+		return '${websiteRepositoryUrl}tree/${repositoryBranch}/${contentPath}${page.contentPath}';
 	}
 	
 	public function getAddLinkUrl(category:Category = null, page:Page = null) {
@@ -432,7 +434,7 @@ class Generator {
 		} else {
 			page.contentPath.dir;
 		}
-		return '${repositoryUrl}new/master/${contentPath}${directory}${fileNameHint}';
+		return '${websiteRepositoryUrl}new/master/${contentPath}${directory}${fileNameHint}';
 	}
 	
 	public inline function getAbsoluteUrl(page:Page) {
