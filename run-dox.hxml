@@ -1,1 +1,1 @@
--cmd haxelib run dox -i heaps.xml -o assets/includes/api -theme dox_theme/heaps.io -in h2d -in h3d -in hxd -in hxs
+-cmd haxelib run dox -i heaps.xml -o assets/includes/api --title "Heaps.io Game Engine" -theme dox_theme/heaps.io -D version "1.1.0" -in h2d -in h3d -in hxd -in hxs
