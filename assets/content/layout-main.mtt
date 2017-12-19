@@ -9,7 +9,7 @@
 	<base href="::currentPage.baseHref::" />
 
 	<!-- general css -->
-	<link href="css/styles.css" rel="stylesheet" type="text/css" />
+	<link href="css/styles.min.css" rel="stylesheet" type="text/css" />
 	<link rel="canonical" href="::currentPage.absoluteUrl::" ::cond currentPage.absoluteUrl != null:: />
 	
 	<meta name="description" content="::currentPage.description::" ::cond currentPage.description != null:: />

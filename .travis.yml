@@ -12,6 +12,8 @@ matrix:
     - haxe: development
 
 install:
+  - npm install -g less@2.7
+  - npm install -g less-plugin-clean-css@1.5
   - haxelib install all --always
   - haxelib list
 
