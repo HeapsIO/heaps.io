@@ -21,15 +21,16 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-5">
-				<h3>Installation</h3>
+				<h3>Getting started</h3>
 				<p>To use Heaps.io, you need to install <a href="https://haxe.org">Haxe</a> 3.4+</p>
 				<div class="cmd"><code>haxelib install heaps</code></div>
+				<br/><a href="documentation/getting-started/" class="button small-button">Learn more</a>
 				
 			</div>
 			<div class="col-2">&nbsp;</div>
 			<div class="col-5">
 				<h3>Open Source</h3>
-				<p>Heaps.io is free and open Source, with a large and supportive community pushing its growth and evolution. 
+				<p>Heaps.io is free and open source, with a large and supportive community pushing its growth and evolution. 
 				Feel free to contribute, test the latest build and don't forget to star us on Github!</p>
 				
 				<p><a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p>
