@@ -17,6 +17,8 @@ bmp.addShader(shader);
 To create a custom shader, extend `hxsl.Shader` and write the shader source in static `SRC`.
 You also need to add `@:import h3d.shader.Base2d;`, which exposes helpful parameters (see next section).
 
+`@:import` will import definitions and thus assume you have this shader as part of your pipeline.
+
 ```haxe
 class SineDeformShader extends hxsl.Shader {
 	static var SRC = {
@@ -35,46 +37,17 @@ class SineDeformShader extends hxsl.Shader {
 }
 ```
 
-### Base 2D values 
+#### Base 2D values 
 
-For 2D shaders, the following parameters are available. 
+For 2D shaders, the following parameters are available in the custom shader. 
 When in doubt, can look these up in `h3d.shader.Base2d` (which you have to import).
 
 ```haxe
-@input var input : {
-	var position : Vec2;
-	var uv : Vec2;
-	var color : Vec4;
-};
-
-var output : {
-	var position : Vec4;
-	var color : Vec4;
-};
-
-@global var time : Float;
-@param var zValue : Float;
-@param var texture : Sampler2D;
-
 var spritePosition : Vec4;
 var absolutePosition : Vec4;
 var pixelColor : Vec4;
 var textureColor : Vec4;
 @var var calculatedUV : Vec2;
-
-@const var isRelative : Bool;
-@param var color : Vec4;
-@param var absoluteMatrixA : Vec3;
-@param var absoluteMatrixB : Vec3;
-@param var filterMatrixA : Vec3;
-@param var filterMatrixB : Vec3;
-@const var hasUVPos : Bool;
-@param var uvPos : Vec4;
-
-@const var killAlpha : Bool;
-@const var pixelAlign : Bool;
-@param var halfPixelInverse : Vec2;
-@param var viewport : Vec4;
 
 var outputPosition : Vec4;
 ```
