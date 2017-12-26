@@ -42,7 +42,7 @@
 
 <section class="">
 	<div class="container">
-		<h2>2D and 3D accelerated graphics</h2>
+		<h3>2D and 3D accelerated graphics</h3>
 		
 		<div class="screenshots row">
 			<img src="img/northgard/02.gif" class="screenshot col-4" />
