@@ -6,6 +6,11 @@ using StringTools;
 class DeployGhPages {
     static function main():Void {
         var root = getCwd();
+
+        // TravisCI by default clones repositories to a depth of 50 commits.
+        // We need a full clone inorder to do git operations.
+        runCommand("git", ["fetch", "--unshallow"]);
+
         var sha = commandOutput("git", ["rev-parse", "HEAD"]).trim();
 
         setCwd(htmlDir);
