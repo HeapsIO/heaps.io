@@ -6,15 +6,18 @@
 			Heaps.io is a mature cross platform graphics engine designed for high performance games. 
 			It is designed to leverage modern GPUs that are commonly available on both desktop and mobile devices. 
 		</p>
-		<center>
-			<img src="img/logo/html5.svg" height="50" /> &nbsp; 
-			<img src="img/logo/opengl.svg" height="50" /> &nbsp; 
-			<img src="img/logo/directx.svg" height="50" /> &nbsp; 
-			<img src="img/logo/nintendo-switch.svg" height="50" /> &nbsp; 
-			<img src="img/logo/playstation4.svg" height="35" /> &nbsp; 
-			<img src="img/logo/xbox.svg" height="35" /> 
-		</center>
 	</div>
+</section>
+	
+<section class="logos">
+	<center>
+		<img src="img/logo/html5.svg" height="50" /> &nbsp; 
+		<img src="img/logo/opengl.svg" height="50" /> &nbsp; 
+		<img src="img/logo/directx.svg" height="50" /> &nbsp; 
+		<img src="img/logo/nintendo-switch.svg" height="50" /> &nbsp; 
+		<img src="img/logo/playstation4.svg" height="35" /> &nbsp; 
+		<img src="img/logo/xbox.svg" height="35" /> 
+	</center>
 </section>
 
 <section class="light">
@@ -33,7 +36,7 @@
 				<p>Heaps.io is free and open source, with a large and supportive community pushing its growth and evolution. 
 				Feel free to contribute, test the latest build and don't forget to star us on Github!</p>
 				
-				<p><a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p>
+				<p><a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p>
 			</div>
 		</div>
 	</div>

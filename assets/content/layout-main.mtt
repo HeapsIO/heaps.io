@@ -36,8 +36,9 @@
 	<div class="container">
 		<div class="lead">
 			<p>Follow <a href="https://github.com/HeapsIO/">Heaps.io on Github</a>: <br/>
-				<a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-style="mega" data-count-api="/repos/HeapsIO/heaps#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp; 
-				<a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a>
+				<a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-size="large" data-show-count="true" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp; 
+				<a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star HeapsIO/heaps on GitHub">Star</a>
+				
 			</p>
 		</div>
 	</div>
