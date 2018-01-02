@@ -5,7 +5,7 @@ Making objects interactive is done creating a `h3d.scene.Interactive` instance. 
 ## Interation in H3D
 
 ```haxe
-var interaction = new h3d.scene.Interactive(mySprite, s3d);
+var interaction = new h3d.scene.Interactive(collider, s3d);
 interaction.onOver = function(event) {
 	trace("over");
 }
