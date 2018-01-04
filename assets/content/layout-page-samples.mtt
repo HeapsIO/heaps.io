@@ -4,12 +4,11 @@
 	<nav class="top-nav">
 		<a href="./" class="button ::if isPage("index.html")::disabled::end::">Home</a>
 		<a href="about.html" class="button ::if isPage("about.html")::disabled::end::">About</a>
-		<a href="samples/" class="button disabled">Samples</a>
+		<a href="samples/" class="button ::if isCategory("samples")::disabled::end::">Samples</a>
 		<a href="documentation/getting-started/" class="button ::if isCategory("documentation")::disabled::end::">Online handbook</a>
 		<a href="api/" class="button">API</a>
 		<a href="https://gitter.im/heapsio/Lobby" class="button" target="_blank">Community</a>
 	</nav>
-	
 	<div class="logo small"><a href="./"><img src="img/logo.svg" /></a></div>
 </header>
 	

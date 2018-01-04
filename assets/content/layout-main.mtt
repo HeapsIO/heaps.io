@@ -28,6 +28,8 @@
 </head>
 <body>
 
+<a href="https://heapsio.github.io/heaps" class="fork-button"><img src="img/fork-on-github.png" alt="Fork Heaps on GitHub"/></a>
+
 <main>
 ::raw __content__::
 </main>
@@ -44,9 +46,8 @@
 	</div>
 </footer>
 
-
 <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
-	
+
 <link rel="stylesheet" type="text/css" href="https://code.haxe.org/css/highlighter.min.css"/>
 <script defer="defer" src="https://code.haxe.org/js/highlighter.js"></script>
 </body>
