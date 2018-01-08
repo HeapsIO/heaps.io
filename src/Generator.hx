@@ -39,7 +39,7 @@ class Generator {
 	 * @param doMinify minifies the HTML output.
 	 */
 	public function build (doMinify:Bool = false) {
-		deleteDirectory(outputPath);
+		//deleteDirectory(outputPath);
 		
 		initTemplate();
 		
@@ -520,6 +520,14 @@ class Generator {
 				FileSystem.createDirectory(dstPath);
 				includeDirectory(srcPath, dstPath);
 			} else {
+				if (FileSystem.exists(dstPath)) {
+					var statFrom = FileSystem.stat(srcPath);
+					var statTo = FileSystem.stat(dstPath);
+					if (statFrom.mtime.getTime() < statTo.mtime.getTime()) {
+						// only copy files with newer modified time
+						continue;
+					}
+				}
 				File.copy(srcPath, dstPath);
 			}
 		}
