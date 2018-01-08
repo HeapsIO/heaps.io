@@ -193,6 +193,7 @@ section {
 		background: -webkit-radial-gradient(0% 100%, circle, #B6D9E0, #B9D8E3);
 		background: url(../img/header-a.jpg) no-repeat center center;
 		background-size:cover;
+		background-attachment: fixed;
 		.pixelart();
 		color:rgba(255,255,255,.8);
 		a {
@@ -331,16 +332,15 @@ header {
 	 &.header-main {
 		background: url(../img/header-a.jpg) no-repeat center top;
 		background-size:cover;
+		background-attachment: fixed;
 		.pixelart();
 	}
 
 	&.header-page, &.header-documentation {
 		background: url(../img/header-a.jpg) no-repeat center top;
 		background-size:cover;
+		background-attachment: fixed;
 		.pixelart();
-	}
-	&.header-documentation {
-		min-height: auto;
 	}
 }
 
@@ -381,8 +381,10 @@ header.header-main .logo img {
 
 footer {
 	background:#edc31c;
+	background-attachment: fixed;
 	background: url(../img/header-a.jpg) no-repeat center bottom;
 	background-size:cover;
+	background-attachment: fixed;
 	.pixelart();
 	padding:30px 0;
 	color:fade(#fff, 70%);
@@ -426,6 +428,19 @@ footer {
 	&.small-button {
 		font-size: 18px;
 		padding: 5px 20px;
+	}
+}
+
+.fork-button {
+	@media (max-width: 900px) {
+		display:none;
+	}
+	img {
+		z-index:20;
+		position:absolute;
+		top:0; 
+		right:0; 
+		border:0;
 	}
 }
 
