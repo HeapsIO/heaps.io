@@ -1,7 +1,7 @@
 
--cmd lessc assets/includes/css/styles.less assets/includes/css/styles.min.css --clean-css="--s1 --advanced"
+-cmd lessc assets/includes/css/styles.less assets/includes/css/styles.min.css
 
---next 
+--next
 
 -lib markdown:1.0.0
 -lib hxtemplo:3.2.0
