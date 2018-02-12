@@ -5,13 +5,16 @@
 	<meta name="viewport" content="width=device-width" />
 
 	<title>::title::</title>
-	
+
 	<base href="::currentPage.baseHref::" />
 
 	<!-- general css -->
 	<link href="css/styles.min.css" rel="stylesheet" type="text/css" />
 	<link rel="canonical" href="::currentPage.absoluteUrl::" ::cond currentPage.absoluteUrl != null:: />
-	
+	<link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed:300" rel="stylesheet" />
+	<script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
+	<script src="js/JsTools.js" type="text/javascript"></script>
+
 	<meta name="description" content="::currentPage.description::" ::cond currentPage.description != null:: />
 
 	<!-- Twitter Card data -->
@@ -23,7 +26,7 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="::currentPage.absoluteUrl::" />
 	<meta property="og:image" content="::basePath::/img/share.png" />
-	
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/>
 </head>
 <body>
@@ -31,6 +34,18 @@
 <a href="https://github.com/HeapsIO/" class="fork-button"><img src="img/fork-on-github.png" alt="Fork Heaps on GitHub"/></a>
 
 <main>
+<header class="header-page::if isPage('index.html'):: main::end::">
+	<a class="mobileMenu" href="#"><img src="img/menu.png" alt="Menu" /> </a>
+	<nav class="top-nav">
+		<a href="index.html" class="button ::if isPage("index.html")::disabled::end::">Home</a>
+		<a href="about.html" class="button ::if isPage("about.html")::disabled::end::">About</a>
+		<a href="samples/" class="button ::if isCategory("samples")::disabled::end::">Samples</a>
+		<a href="documentation/getting-started/" class="button ::if isCategory("documentation")::disabled::end::">Online handbook</a>
+		<a href="api/" class="button">API</a>
+		<a href="https://gitter.im/heapsio/Lobby" class="button" target="_blank">Community</a>
+	</nav>
+	<div class="logo"><a href="./"><img src="img/logo.svg" /></a></div>
+</header>
 ::raw __content__::
 </main>
 
@@ -38,9 +53,9 @@
 	<div class="container">
 		<div class="lead">
 			<p>Follow <a href="https://github.com/HeapsIO/">Heaps.io on Github</a>: <br/>
-				<a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-size="large" data-show-count="true" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp; 
+				<a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-size="large" data-show-count="true" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp;
 				<a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star HeapsIO/heaps on GitHub">Star</a>
-				
+
 			</p>
 		</div>
 	</div>

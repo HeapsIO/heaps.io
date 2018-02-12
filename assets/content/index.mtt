@@ -3,21 +3,19 @@
 	<div class="container">
 		<h1>Cross platform graphics<br/>for high performance games</h1>
 		<p class="lead">
-			Heaps.io is a mature cross platform graphics engine designed for high performance games. 
-			It is designed to leverage modern GPUs that are commonly available on both desktop and mobile devices. 
+			Heaps.io is a mature cross platform graphics engine designed for high performance games.
+			It is designed to leverage modern GPUs that are commonly available on both desktop and mobile devices.
 		</p>
 	</div>
 </section>
-	
+
 <section class="logos">
-	<center>
-		<img src="img/logo/html5.svg" height="50" /> &nbsp; 
-		<img src="img/logo/opengl.svg" height="50" /> &nbsp; 
-		<img src="img/logo/directx.svg" height="50" /> &nbsp; 
-		<img src="img/logo/nintendo-switch.svg" height="50" /> &nbsp; 
-		<img src="img/logo/playstation4.svg" height="35" /> &nbsp; 
-		<img src="img/logo/xbox.svg" height="35" /> 
-	</center>
+	<img src="img/logo/html5.svg" />
+	<img src="img/logo/opengl.svg" />
+	<img src="img/logo/directx.svg" />
+	<img src="img/logo/nintendo-switch.svg" />
+	<img src="img/logo/playstation4.svg" />
+	<img src="img/logo/xbox.svg" />
 </section>
 
 <section class="light">
@@ -28,14 +26,14 @@
 				<p>To use Heaps.io, you need to install <a href="https://haxe.org">Haxe</a> 3.4+</p>
 				<div class="cmd"><code>haxelib install heaps</code></div>
 				<br/><a href="documentation/getting-started/" class="button small-button">Learn more</a>
-				
+
 			</div>
 			<div class="col-2">&nbsp;</div>
 			<div class="col-5">
 				<h3>Open Source</h3>
-				<p>Heaps.io is free and open source, with a large and supportive community pushing its growth and evolution. 
+				<p>Heaps.io is free and open source, with a large and supportive community pushing its growth and evolution.
 				Feel free to contribute, test the latest build and don't forget to star us on Github!</p>
-				
+
 				<p><a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p>
 			</div>
 		</div>
@@ -46,13 +44,13 @@
 <section class="">
 	<div class="container">
 		<h3>2D and 3D accelerated graphics</h3>
-		
+
 		<div class="screenshots row">
-			
+
 			<div class="screenshot col-4"><div style="width:100%;height:0;padding-bottom:79%;position:relative;"><iframe src="https://giphy.com/embed/xULW8olwBI2qs8I6Z2" width="100%" height="100%" style="position:absolute" frameBorder="0"></iframe></div></div>
-			
+
 			<div class="screenshot col-4"><div style="width:100%;height:0;padding-bottom:79%;position:relative;"><iframe src="https://giphy.com/embed/3ohc0Vr9fx0u4FyXPW" width="100%" height="100%" style="position:absolute" frameBorder="0"></iframe></div></div>
-			
+
 			<div class="screenshot col-4"><div style="width:100%;height:0;padding-bottom:79%;position:relative;"><iframe src="https://giphy.com/embed/xULW8LyJQTBDqyFYhq" width="100%" height="100%" style="position:absolute" frameBorder="0"></iframe></div></div>
 		</div>
 		<div class="screenshots row">
@@ -101,16 +99,16 @@
 			<div class="box box-raised">
 				<h3>Publish anywhere</h3>
 				<p><em>With Haxe, you can easily build cross-platform tools targeting all the mainstream platforms natively.</em></p>
-				
+
 				<h5>Desktop</h5>
 				<p>Real native builds; Windows, OSX, Linux.</p>
-				
+
 				<h5>Consoles</h5>
 				<p>Playstation 4, Nintendo Switch, XBox.</p>
-				
+
 				<h5>Mobile</h5>
 				<p>iOS, Android.<br/>Using fast natively compiled code.</p>
-				
+
 				<h5>Web</h5>
 				<p>The excellent JavaScript target is used to get the most out of HTML5/WebGL.</p>
 			</div>
