@@ -13,8 +13,6 @@ class JsTools {
 
 	public function new() {
 		j(".mobileMenu").click( function(e) {
-			//j(".header-page").toggleClass("open");
-			//j(".top-nav").stop(true,false).slideToggle(70);
 			j(".top-nav").toggleClass("open");
 			e.preventDefault();
 		});
