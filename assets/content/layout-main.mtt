@@ -51,11 +51,12 @@
 
 <footer>
 	<div class="container row">
-		<div class="col-7">
+		<div class="col-5">
 			<a href="./"><img src="img/logo.svg" /></a>
 		</div>
-		<div class="col-2 links">
+		<div class="col-3 links">
 			<h3>Heaps.io</h3>
+			<p>Heaps is an open source and multi-platform toolkit to create 2D and 3D games.</p>
 			<a href="documentation/getting-started">Download</a>
 			<a href="about.html">About</a>
 			<a href="api">API</a>
@@ -63,8 +64,9 @@
 			<a href="https://gitter.im/heapsio/Lobby">Community</a>
 		</div>
 		<div class="col-1">&nbsp;</div>
-		<div class="col-2 links">
+		<div class="col-3 links">
 			<h3>Haxe</h3>
+			<p>Haxe is an open source and cross-platform language and toolkit.</p>
 			<a href="https://www.haxe.org">About</a>
 			<a href="https://www.haxe.org/use-cases">Use cases</a>
 			<a href="https://haxe.org/documentation/introduction/">Learn</a>
@@ -81,6 +83,7 @@
 	<div class="copyright">
 		&copy; 2018 <a href="https://haxe.org/foundation/">Haxe Foundation</a>
 		| <a href="https://github.com/HeapsIO/heaps.io">Contribute to this page</a>
+		| <a href="https://feathericons.com/">Feather open source icons</a>
 	</div>
 
 </footer>

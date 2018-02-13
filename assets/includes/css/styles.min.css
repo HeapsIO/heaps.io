@@ -399,6 +399,9 @@ footer .links h3 {
   font-size: 34px;
   border-bottom: 1px solid white;
 }
+footer .links p {
+  font-size: 13px;
+}
 footer .links a {
   display: block;
   margin-bottom: 5px;
@@ -415,6 +418,9 @@ footer .copyright {
   text-align: center;
 }
 footer .copyright a {
+  display: inline-block;
+  padding-left: 8px;
+  padding-right: 8px;
   color: white;
 }
 footer .copyright a:hover {
@@ -552,24 +558,69 @@ iframe.sample-frame {
   height: 150px;
   opacity: 0.2;
 }
-.showcase img {
+.showcase {
+  margin-bottom: 30px;
+}
+.showcase .row > div {
+  padding-right: 10px;
+  margin-bottom: 10px;
+  font-size: 0pt;
+}
+.showcase .banner {
+  background: #181918;
+  color: white;
+  padding: 10px 10px;
+}
+.showcase .banner .title a {
+  color: #FFDC71;
+  font-size: 38px;
+  line-height: 0.9em;
+  font-family: "Roboto Condensed", "Roboto", "Helvetica", "Arial", sans-serif;
+  text-decoration: none;
+}
+.showcase .banner .author {
+  font-size: 16px;
+}
+.showcase .banner .author em {
+  font-style: normal;
+  opacity: 0.6;
+}
+.showcase .platforms {
+  background: #181918;
+  padding: 8px;
+  text-align: right;
+}
+.showcase .platforms img {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 50px;
+  max-height: 30px;
+  opacity: 0.5;
+}
+.showcase .platforms img + img {
+  margin-left: 15px;
+}
+.showcase .pic a {
+  display: block;
+}
+.showcase .pic img {
   width: 100%;
 }
-.showcase .button {
-  background: rgba(255, 255, 255, 0.7);
+.showcase-web .banner .title a {
+  font-size: 24px;
 }
-.showcase-web .showcase-item {
-  min-height: 200px;
-  margin-bottom: 5px;
+.showcase-web a.bgImg {
+  text-decoration: none;
+  background-size: cover;
+  background-position: center center;
+  height: 200px;
 }
-.showcase-web p {
-  margin: 20px;
-}
-.showcase-web .author {
-  margin-top: 10px;
+.showcase-web a.bgImg .webAuthors {
   display: block;
-  color: #fff;
-  text-shadow: 2px 2px 2px #000000;
+  font-size: 13px;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
 }
 .contribution {
   color: #555555;
