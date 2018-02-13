@@ -50,15 +50,39 @@
 </main>
 
 <footer>
-	<div class="container">
-		<div class="lead">
+	<div class="container row">
+		<div class="col-7">
+			<a href="./"><img src="img/logo.svg" /></a>
+		</div>
+		<div class="col-2 links">
+			<h3>Heaps.io</h3>
+			<a href="documentation/getting-started">Download</a>
+			<a href="about.html">About</a>
+			<a href="api">API</a>
+			<a href="https://github.com/HeapsIO/">Contribute</a>
+			<a href="https://gitter.im/heapsio/Lobby">Community</a>
+		</div>
+		<div class="col-1">&nbsp;</div>
+		<div class="col-2 links">
+			<h3>Haxe</h3>
+			<a href="https://www.haxe.org">About</a>
+			<a href="https://www.haxe.org/use-cases">Use cases</a>
+			<a href="https://haxe.org/documentation/introduction/">Learn</a>
+			<a href="https://www.haxe.org/foundation">Haxe foundation</a>
+		</div>
+		<div class="lead" ::cond false::>
 			<p>Follow <a href="https://github.com/HeapsIO/">Heaps.io on Github</a>: <br/>
 				<a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-size="large" data-show-count="true" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp;
 				<a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star HeapsIO/heaps on GitHub">Star</a>
-
 			</p>
 		</div>
 	</div>
+
+	<div class="copyright">
+		&copy; 2018 <a href="https://haxe.org/foundation/">Haxe Foundation</a>
+		| <a href="https://github.com/HeapsIO/heaps.io">Contribute to this page</a>
+	</div>
+
 </footer>
 
 <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
