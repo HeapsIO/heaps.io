@@ -18,3 +18,4 @@ assets/includes/samples/*/*.hxml
 .Trashes
 ehthumbs.db
 Thumbs.db
+/assets/includes/css/styles.css
