@@ -589,12 +589,13 @@ iframe.sample-frame {
   background: #181918;
   padding: 8px;
   text-align: right;
+  vertical-align: middle;
 }
 .showcase .platforms img {
   display: inline-block;
   vertical-align: middle;
   max-width: 50px;
-  max-height: 30px;
+  max-height: 40px;
   opacity: 0.5;
 }
 .showcase .platforms img + img {
@@ -606,8 +607,26 @@ iframe.sample-frame {
 .showcase .pic img {
   width: 100%;
 }
+.showcase-web .banner a.button {
+  float: right;
+  padding: 2px 8px;
+  background: #D64C63;
+  font-size: 14px;
+  border-radius: 0px;
+  color: white;
+  margin-left: 10px;
+}
+.showcase-web .banner a.button:hover {
+  background: #FC6763;
+}
+.showcase-web .banner a.button.source {
+  background-color: #5C8930;
+}
+.showcase-web .banner a.button.source:hover {
+  background-color: #83BF46;
+}
 .showcase-web .banner .title a {
-  font-size: 24px;
+  font-size: 28px;
 }
 .showcase-web a.bgImg {
   text-decoration: none;
