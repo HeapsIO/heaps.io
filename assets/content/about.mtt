@@ -43,7 +43,7 @@
 							::elseif p=="ps4":: <img src="img/logo/playstation4.svg"/>
 							::elseif p=="xbox":: <img src="img/logo/xbox.svg"/>
 							::elseif p=="android":: <img src="img/logo/android.svg"/>
-							::elseif p=="ios":: <img src="img/logo/ios.svg"/>
+							::elseif p=="ios":: <img src="img/logo/ios.png"/>
 							::end::
 						::end::
 					</div>
