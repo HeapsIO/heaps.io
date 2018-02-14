@@ -35,11 +35,15 @@
 						<a href="::game.url::" target="blank"><img src="::game.image::"/></a>
 					</div>
 					<div class="platforms">
-						<img src="img/logo/windows.svg"/>
-						<img src="img/logo/apple.svg"/>
-						<img src="img/logo/nintendo-switch.svg"/>
-						<img src="img/logo/playstation4.svg"/>
-						<img src="img/logo/xbox.svg"/>
+						::foreach p game.platforms::
+							::if p=="win":: <img src="img/logo/windows.svg"/>
+							::elseif p=="mac":: <img src="img/logo/apple.svg"/>
+							::elseif p=="linux":: <img src="img/logo/linux.svg"/>
+							::elseif p=="switch":: <img src="img/logo/nintendo-switch.svg"/>
+							::elseif p=="ps4":: <img src="img/logo/playstation4.svg"/>
+							::elseif p=="xbox":: <img src="img/logo/xbox.svg"/>
+							::end::
+						::end::
 					</div>
 				</div>
 			::end::
@@ -54,6 +58,8 @@
 			::foreach game currentPage.customData.games.web::
 				<div class="col-6">
 					<div class="banner">
+						<a class="button" href="::game.url::">Play</a>
+						<a class="button source" href="::game.sourceUrl::">Source code</a>
 						<div class="title"><a href="::game.url::">::game.title::</a></div>
 					</div>
 					<div class="pic">

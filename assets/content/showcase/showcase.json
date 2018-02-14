@@ -4,46 +4,53 @@
 			"image": "img/deadcells/deadcells.jpg",
 			"title": "Dead Cells",
 			"author":  "Motion Twin",
+			"platforms": ["win","mac","linux","switch","xbox","ps4"],
 			"url": "http://store.steampowered.com/app/588650"
 		},
 		{
 			"image": "img/northgard/northgard.png",
 			"title": "Northgard",
 			"author":  "Shiro Games",
+			"platforms": ["win","mac","linux"],
 			"url": "http://store.steampowered.com/app/466560"
 		},
 		{
 			"image": "img/evoland2/evoland2.jpg",
 			"title": "Evoland 2",
 			"author":  "Shiro Games",
+			"platforms": ["win","mac","linux","xbox","ps4"],
 			"url": "http://store.steampowered.com/app/359310"
 		},
 		{
 			"image": "img/evoland2/evoland1.jpg",
 			"title": "Evoland",
 			"author":  "Shiro Games",
+			"platforms": ["win","mac","linux","xbox","ps4"],
 			"url": "http://store.steampowered.com/app/233470"
 		}
-		
+
 	],
 	"web": [
 		{
 			"image": "img/web/aaf6.png",
 			"title": "Jonathan The Sorcerer",
 			"author":  "ncannasse",
-			"url": "https://ldjam.com/events/ludum-dare/40/jonathan-the-sorcerer"
+			"url": "https://ldjam.com/events/ludum-dare/40/jonathan-the-sorcerer",
+			"sourceUrl": "https://github.com/ncannasse/ld40"
 		},
 		{
 			"image": "img/web/c6a5.png",
 			"title": "Cats are assholes",
 			"author":  "deepnight",
-			"url": "https://ldjam.com/events/ludum-dare/40/cats-are-assholes"
+			"url": "https://ldjam.com/events/ludum-dare/40/cats-are-assholes",
+			"sourceUrl": "https://github.com/deepnight/ld40-catsAreAssholes"
 		},
 		{
 			"image": "img/web/c29d.jpg",
 			"title": "For Better or For Worse",
 			"author":  "Kiuun (@kiuun), valandre (@valandre) *, emak (@emak), MrBulldops (@mrbulldops), and looping (@looping)",
-			"url": "https://ldjam.com/events/ludum-dare/40/for-better-or-for-worse"
+			"url": "https://ldjam.com/events/ludum-dare/40/for-better-or-for-worse",
+			"sourceUrl": "http://retrofusion.fr/LD40/src.zip"
 		}
 	]
 }
