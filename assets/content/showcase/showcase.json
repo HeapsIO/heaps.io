@@ -18,14 +18,14 @@
 			"image": "img/evoland2/evoland2.jpg",
 			"title": "Evoland 2",
 			"author":  "Shiro Games",
-			"platforms": ["win","mac","linux","xbox","ps4"],
+			"platforms": ["win","mac","linux"],
 			"url": "http://store.steampowered.com/app/359310"
 		},
 		{
 			"image": "img/evoland2/evoland1.jpg",
 			"title": "Evoland",
 			"author":  "Shiro Games",
-			"platforms": ["win","mac","linux","xbox","ps4"],
+			"platforms": ["win","mac","linux","ios","android"],
 			"url": "http://store.steampowered.com/app/233470"
 		}
 
