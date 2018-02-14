@@ -18,12 +18,12 @@
 			</div>
 			<!--<div class="col-1">&nbsp;</div>-->
 			<div class="col-8 logos">
-				<a href="https://github.com/HeapsIO/heaps/wiki/Target-platforms"><img src="img/logo/html5.svg" /></a>
-				<a href="https://github.com/HeapsIO/heaps/wiki/Target-platforms"><img src="img/logo/opengl.svg" /></a>
-				<a href="https://github.com/HeapsIO/heaps/wiki/Target-platforms"><img src="img/logo/directx.svg" /></a>
-				<a href="https://github.com/HeapsIO/heaps/wiki/Target-platforms"><img src="img/logo/nintendo-switch.svg" /></a>
-				<a href="https://github.com/HeapsIO/heaps/wiki/Target-platforms"><img src="img/logo/playstation4.svg" /></a>
-				<a href="https://github.com/HeapsIO/heaps/wiki/Target-platforms"><img src="img/logo/xbox.svg" /></a>
+				<a href="/documentation/target-platforms"><img src="img/logo/html5.svg" /></a>
+				<a href="/documentation/target-platforms"><img src="img/logo/opengl.svg" /></a>
+				<a href="/documentation/target-platforms"><img src="img/logo/directx.svg" /></a>
+				<a href="/documentation/target-platforms"><img src="img/logo/nintendo-switch.svg" /></a>
+				<a href="/documentation/target-platforms"><img src="img/logo/playstation4.svg" /></a>
+				<a href="/documentation/target-platforms"><img src="img/logo/xbox.svg" /></a>
 			</div>
 		</div>
 	</div>
