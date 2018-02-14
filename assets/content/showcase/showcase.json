@@ -25,7 +25,7 @@
 			"image": "img/evoland2/evoland1.jpg",
 			"title": "Evoland",
 			"author":  "Shiro Games",
-			"platforms": ["win","mac","linux","ios","android"],
+			"platforms": ["win","mac","linux","android","ios"],
 			"url": "http://store.steampowered.com/app/233470"
 		}
 
