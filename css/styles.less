@@ -1,6 +1,6 @@
 
 @bodyText: #222;
-@darkText: #591E62 ;
+@darkText: #591E62;
 @midText: #245795;
 @lightText: #245795;
 @baseFont: "Roboto","Helvetica","Arial",sans-serif;
@@ -345,6 +345,9 @@ ul li.page-list-item {
 
 	.button {
 		background: #fff;
+		&:hover {
+			color:@bodyText;
+		}
 	}
 }
 
@@ -482,10 +485,10 @@ footer {
 	font-size:21px;
 	text-decoration:none;
 	display:inline-block;
-
+	
 	&:hover {
 		text-decoration: none;
-		color: white;
+		color: @bodyText;
 	}
 
 	&.small-button {
@@ -539,7 +542,8 @@ footer {
 
 pre {
 	padding:30px;
-	background: #eee;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
 	color:@bodyText;
 	overflow: auto;
 	font-size:16px;
@@ -838,4 +842,71 @@ iframe {
 		}
 	}
 
+ }
+
+ 
+ /// API documentation
+ .api-documentation {
+	font-family: @baseFont;
+	font-size: 17px;
+	line-height: 1.5;
+	h1, h2, h3, h4, h5, h6  {
+		font-family: @titleFont;
+	}
+	.viewsource .btn.btn-medium {
+		font-size: 18px;
+		color: @bodyText;
+		background: #EBEBEB;
+		border-radius: 0px;
+		text-shadow: 0;
+		border:0;
+		padding: 5px 20px;
+		&:hover {
+			color: @bodyText;
+			background: #F3F3F3;
+		}
+	}
+	h1 {
+		font-size:36px;
+		font-weight:normal;
+		color:@darkText;
+	}
+	h2 {
+		font-size:32px;
+		font-weight:normal;
+		color: @midText;
+	}
+
+	h3 {
+		font-size:28px;
+		font-weight:normal;
+		color: @darkText;
+		&.section {
+			&:not(:first-child) {
+				margin-top: 1em;
+			}
+		}
+	}
+
+	h4 {
+		font-size:21px;
+		font-weight:normal;
+	}
+
+	h5 {
+		font-size:18px;
+	}
+	.well {
+		background-color: #f9f9f9;
+		border: 1px solid #ddd;
+		border-radius:0;
+	 }
+	 .fields {
+		 margin-left: 20px;
+	 }
+	 .field {
+		padding: 10px 20px;
+		border: 1px solid #ddd;
+		background: #f9f9f9;
+	 }
  }

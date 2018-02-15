@@ -320,6 +320,9 @@ ul li.page-list-item:not(:last-child) {
 ul li.page-list-item .button {
   background: #fff;
 }
+ul li.page-list-item .button:hover {
+  color: #222;
+}
 .lead {
   font-family: "Roboto Condensed", "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 150%;
@@ -445,7 +448,7 @@ footer .copyright a:hover {
 }
 .button:hover {
   text-decoration: none;
-  color: white;
+  color: #222;
 }
 .button.small-button {
   font-size: 18px;
@@ -491,7 +494,8 @@ footer .copyright a:hover {
 }
 pre {
   padding: 30px;
-  background: #eee;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
   color: #222;
   overflow: auto;
   font-size: 16px;
@@ -771,4 +775,68 @@ iframe.sample-frame {
   .features .row img {
     height: 90px;
   }
+}
+.api-documentation {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.api-documentation h1,
+.api-documentation h2,
+.api-documentation h3,
+.api-documentation h4,
+.api-documentation h5,
+.api-documentation h6 {
+  font-family: "Roboto Condensed", "Roboto", "Helvetica", "Arial", sans-serif;
+}
+.api-documentation .viewsource .btn.btn-medium {
+  font-size: 18px;
+  color: #222;
+  background: #EBEBEB;
+  border-radius: 0px;
+  text-shadow: 0;
+  border: 0;
+  padding: 5px 20px;
+}
+.api-documentation .viewsource .btn.btn-medium:hover {
+  color: #222;
+  background: #F3F3F3;
+}
+.api-documentation h1 {
+  font-size: 36px;
+  font-weight: normal;
+  color: #591E62;
+}
+.api-documentation h2 {
+  font-size: 32px;
+  font-weight: normal;
+  color: #245795;
+}
+.api-documentation h3 {
+  font-size: 28px;
+  font-weight: normal;
+  color: #591E62;
+}
+.api-documentation h3.section:not(:first-child) {
+  margin-top: 1em;
+}
+.api-documentation h4 {
+  font-size: 21px;
+  font-weight: normal;
+}
+.api-documentation h5 {
+  font-size: 18px;
+}
+.api-documentation .well {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 0;
+}
+.api-documentation .fields {
+  margin-left: 20px;
+}
+.api-documentation .field {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
 }
