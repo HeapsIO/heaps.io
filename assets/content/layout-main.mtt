@@ -81,9 +81,13 @@
 	</div>
 
 	<div class="copyright">
-		&copy; 2018 <a href="https://haxe.org/foundation/">Haxe Foundation</a>
+		&copy; ::DateTools.format(now, "%Y"):: <a href="https://haxe.org/foundation/">Haxe Foundation</a>
+		::if (currentPage.contributionUrl != null)::
+		| <a href="::currentPage.contributionUrl::">Contribute to this page</a>
+		::else::
 		| <a href="https://github.com/HeapsIO/heaps.io">Contribute to this page</a>
-		| <a href="https://feathericons.com/">Feather open source icons</a>
+		::end::
+		| <a href="https://feathericons.com/" rel="nofollow">Feather open source icons</a>
 	</div>
 
 </footer>
