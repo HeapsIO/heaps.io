@@ -1,14 +1,39 @@
 
 <footer>
-	<div class="container">
-		<div class="lead">
-			<p>Follow <a href="https://github.com/HeapsIO/">Heaps.io on Github</a>: <br/>
-				<a class="github-button" href="https://github.com/HeapsIO/heaps/issues" data-icon="octicon-issue-opened" data-style="mega" data-count-api="/repos/HeapsIO/heaps#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue HeapsIO/heaps on GitHub">Issue</a> &nbsp; 
-				<a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-style="mega" data-count-href="/HeapsIO/heaps/stargazers" data-count-api="/repos/HeapsIO/heaps#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star HeapsIO/heaps on GitHub">Star</a>
-			</p>
+	<div class="container row">
+		<div class="col-5">
+			<a href="::api.config.rootPath::../"><img src="::api.config.rootPath::../img/logo.svg" /></a>
+		</div>
+		<div class="col-3 links">
+			<h3>Heaps.io</h3>
+			<p>Heaps is an open source and multi-platform toolkit to create 2D and 3D games.</p>
+			<a href="::api.config.rootPath::../documentation/getting-started">Download</a>
+			<a href="::api.config.rootPath::../about.html">About</a>
+			<a href="::api.config.rootPath::../api">API</a>
+			<a href="https://github.com/HeapsIO/">Contribute</a>
+			<a href="https://gitter.im/heapsio/Lobby">Community</a>
+		</div>
+		<div class="col-1">&nbsp;</div>
+		<div class="col-3 links">
+			<h3>Haxe</h3>
+			<p>Haxe is an open source and cross-platform language and toolkit.</p>
+			<a href="https://www.haxe.org">About</a>
+			<a href="https://www.haxe.org/use-cases">Use cases</a>
+			<a href="https://haxe.org/documentation/introduction/">Learn</a>
+			<a href="https://www.haxe.org/foundation">Haxe foundation</a>
 		</div>
 	</div>
-</footer>
 
+	<div class="copyright">
+		&copy; ::api.config.date.getFullYear():: <a href="https://haxe.org/foundation/">Haxe Foundation</a>
+		::if (type != null && api.isDefined("source-path"))::
+		| <a href="::api.getSourceLink(type)::">Contribute to this page</a>
+		::else::
+		| <a href="https://github.com/HeapsIO/heaps">Contribute to this page</a>
+		::end::
+		| <a href="https://feathericons.com/" rel="nofollow">Feather open source icons</a>
+	</div>
+
+</footer>
 
 <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
