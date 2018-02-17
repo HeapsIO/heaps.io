@@ -211,7 +211,7 @@ section.targets .logos {
   text-align: right;
 }
 section.targets .logos img {
-  max-height: 65px;
+  max-height: 50px;
   margin-bottom: 20px;
 }
 section.targets .logos a + a img {
