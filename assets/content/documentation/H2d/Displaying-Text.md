@@ -35,6 +35,24 @@ In the BMFont-tool, use these settings:
   * Put in your Heaps project under `./res/fonts/myFontName.fnt` 
   
 > Download BMFont here: <http://www.angelcode.com/products/bmfont/>
+
+### Convert font to bitmap font using Littera
+
+In [Littera](http://www.kvazars.com/littera/), use these settings:
+
+* Settings in the left column
+  * Update a font from your computer with _Select Font_ big button
+  * Choose size 
+  * Set the values:
+    * Select what glyphs do you want to export.
+    * Fill: to get a non-gradient color, remove one of the markers dragging it down from the rectangle.
+    * Enable/disable stroke
+    * Background color
+    * ...
+* Export settings in the header
+  * Default values are fine for Heaps
+  * Press _Export_ start the downloading process.
+  * Unzip the file an put it's content in your Heaps project under `./res/fonts/` 
   
 ### Be creative with bitmapfonts
 
