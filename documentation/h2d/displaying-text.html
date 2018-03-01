@@ -17,6 +17,13 @@ s2d.addChild(tf);</code></pre>
 <p>In the BMFont-tool, use these settings:</p><ul><li><em>File</em> → <em>Font settings</em></li><li>Choose font</li><li>Choose size </li><li>Render from TrueType outline <em>(if you want smooth fonts)</em></li><li><em>File</em> → <em>Export settings</em></li><li>Bit depth: 32</li><li>Preset: black text with alpha</li><li>Font descriptor: Text</li><li>Texture: Png</li><li><em>File</em> → <em>Save bitmap font as..</em> </li><li>Put in your Heaps project under <code>./res/fonts/myFontName.fnt</code> </li></ul>
 <blockquote>
 <p>Download BMFont here: <a href="http://www.angelcode.com/products/bmfont/">http://www.angelcode.com/products/bmfont/</a></p></blockquote>
+<h3>Convert font to bitmap font using Littera</h3>
+<p>In <a href="http://www.kvazars.com/littera/">Littera</a>, use these settings:</p><ul><li>Settings in the left column</li><li>Update a font from your computer with <em>Select Font</em> big button</li><li>Choose size </li><li>Set the values:
+<em> Select what glyphs do you want to export.
+</em> Fill: to get a non-gradient color, remove one of the markers dragging it down from the rectangle.
+<em> Enable/disable stroke
+</em> Background color
+* ...</li><li>Export settings in the header</li><li>Default values are fine for Heaps</li><li>Press <em>Export</em> start the downloading process.</li><li>Unzip the file an put it's content in your Heaps project under <code>./res/fonts/</code> </li></ul>
 <h3>Be creative with bitmapfonts</h3>
 <p>If you add some 'padding' (not 'spacing') in the export options, you can decorate the outputted .png-file in your image-editing software with some colors/effects/gradients. You can bake this inside your bitmap.</p>
 <p>Want gradients? Its not simple to add them with image-editing software if cells are uneven. Use the "equalize the cell heights" in the export options. Then all chars have the same height and is a bit easier to add the gradients. Of course, the texture will be a bit bigger in that case, since there is a bit more whitespace.</p>
