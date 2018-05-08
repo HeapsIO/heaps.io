@@ -7752,43 +7752,60 @@ hxbit_Serializer.prototype = {
 					tmp2 = m1;
 				}
 				return tmp2;
-			default:
+			case 6:
 				var v10 = this.input.b[this.inPos++];
 				if(v10 == 128) {
 					v10 = this.input.getInt32(this.inPos);
 					this.inPos += 4;
 				}
 				var len4 = v10;
-				var tmp3;
 				if(len4 == 0) {
+					return null;
+				}
+				var m2 = new haxe_ds_EnumValueMap();
+				while(--len4 > 0) {
+					var k3 = this.readValue(k);
+					var v11 = this.readValue(v5);
+					m2.set(k3,v11);
+				}
+				return m2;
+			default:
+				var v12 = this.input.b[this.inPos++];
+				if(v12 == 128) {
+					v12 = this.input.getInt32(this.inPos);
+					this.inPos += 4;
+				}
+				var len5 = v12;
+				var tmp3;
+				if(len5 == 0) {
 					tmp3 = null;
 				} else {
-					var m2 = new haxe_ds_ObjectMap();
-					while(--len4 > 0) {
-						var k3 = _gthis.readValue(k);
-						var v11 = _gthis.readValue(v5);
-						m2.set(k3,v11);
+					var m3 = new haxe_ds_ObjectMap();
+					while(--len5 > 0) {
+						var k4 = _gthis.readValue(k);
+						var v13 = _gthis.readValue(v5);
+						m3.set(k4,v13);
 					}
-					tmp3 = m2;
+					tmp3 = m3;
 				}
 				return tmp3;
 			}
 			break;
 		case 8:
 			var t1 = t[2];
-			var v12 = this.input.b[this.inPos++];
-			if(v12 == 128) {
-				v12 = this.input.getInt32(this.inPos);
+			var v14 = this.input.b[this.inPos++];
+			if(v14 == 128) {
+				v14 = this.input.getInt32(this.inPos);
 				this.inPos += 4;
 			}
-			var len5 = v12;
-			if(len5 == 0) {
+			var len6 = v14;
+			if(len6 == 0) {
 				return null;
 			} else {
-				--len5;
+				--len6;
 				var a = [];
 				var _g1 = 0;
-				var _g = len5;
+				var _g = len6;
 				while(_g1 < _g) {
 					var i = _g1++;
 					a[i] = _gthis.readValue(t1);
@@ -7798,12 +7815,12 @@ hxbit_Serializer.prototype = {
 			break;
 		case 9:
 			var fields = t[2];
-			var v13 = this.input.b[this.inPos++];
-			if(v13 == 128) {
-				v13 = this.input.getInt32(this.inPos);
+			var v15 = this.input.b[this.inPos++];
+			if(v15 == 128) {
+				v15 = this.input.getInt32(this.inPos);
 				this.inPos += 4;
 			}
-			var bits = v13;
+			var bits = v15;
 			if(bits == 0) {
 				return null;
 			}
@@ -7835,20 +7852,20 @@ hxbit_Serializer.prototype = {
 			return this.readValue(t2);
 		case 11:
 			var t3 = t[2];
-			var v14 = this.input.b[this.inPos++];
-			if(v14 == 128) {
-				v14 = this.input.getInt32(this.inPos);
+			var v16 = this.input.b[this.inPos++];
+			if(v16 == 128) {
+				v16 = this.input.getInt32(this.inPos);
 				this.inPos += 4;
 			}
-			var len6 = v14;
-			if(len6 == 0) {
+			var len7 = v16;
+			if(len7 == 0) {
 				return null;
 			} else {
-				--len6;
-				var this1 = new Array(len6);
+				--len7;
+				var this1 = new Array(len7);
 				var a1 = this1;
 				var _g13 = 0;
-				var _g3 = len6;
+				var _g3 = len7;
 				while(_g13 < _g3) {
 					var i1 = _g13++;
 					a1[i1] = _gthis.readValue(t3);
@@ -7870,16 +7887,16 @@ hxbit_Serializer.prototype = {
 		case 14:
 			return this.getDynamic();
 		case 15:
-			var v15 = this.input.getInt64(this.inPos);
+			var v17 = this.input.getInt64(this.inPos);
 			this.inPos += 8;
-			return v15;
+			return v17;
 		case 16:
-			var v16 = this.input.b[this.inPos++];
-			if(v16 == 128) {
-				v16 = this.input.getInt32(this.inPos);
+			var v18 = this.input.b[this.inPos++];
+			if(v18 == 128) {
+				v18 = this.input.getInt32(this.inPos);
 				this.inPos += 4;
 			}
-			return v16;
+			return v18;
 		case 17:
 			return this.getStruct();
 		}
@@ -7963,48 +7980,123 @@ hxbit_Serializer.prototype = {
 		case 7:
 			var t1 = t[3];
 			var k = t[2];
-			var a = v;
-			if(a == null) {
-				this.out.b.push(0);
-			} else {
-				var _e = a;
-				var keys = Lambda.array({ iterator : function() {
-					return _e.keys();
-				}});
-				var v4 = keys.length + 1;
-				if(v4 >= 0 && v4 < 128) {
-					this.out.b.push(v4);
+			switch(k[1]) {
+			case 0:
+				var v4 = v;
+				if(v4 == null) {
+					this.out.b.push(0);
+				} else {
+					var _e = v4;
+					var keys = Lambda.array({ iterator : function() {
+						return _e.keys();
+					}});
+					var v5 = keys.length + 1;
+					if(v5 >= 0 && v5 < 128) {
+						this.out.b.push(v5);
+					} else {
+						this.out.b.push(128);
+						this.out.addInt32(v5);
+					}
+					var _g3 = 0;
+					while(_g3 < keys.length) {
+						var k1 = keys[_g3];
+						++_g3;
+						_gthis.writeValue(k1,k);
+						_gthis.writeValue(v4.h[k1],t1);
+					}
+				}
+				break;
+			case 3:
+				var v6 = v;
+				if(v6 == null) {
+					this.out.b.push(0);
+				} else {
+					var _e1 = v6;
+					var keys1 = Lambda.array({ iterator : function() {
+						return _e1.keys();
+					}});
+					var v7 = keys1.length + 1;
+					if(v7 >= 0 && v7 < 128) {
+						this.out.b.push(v7);
+					} else {
+						this.out.b.push(128);
+						this.out.addInt32(v7);
+					}
+					var _g4 = 0;
+					while(_g4 < keys1.length) {
+						var k2 = keys1[_g4];
+						++_g4;
+						_gthis.writeValue(k2,k);
+						_gthis.writeValue(__map_reserved[k2] != null ? v6.getReserved(k2) : v6.h[k2],t1);
+					}
+				}
+				break;
+			case 6:
+				var v8 = v;
+				if(v8 == null) {
+					this.out.b.push(0);
+					return;
+				}
+				var keys2 = Lambda.array({ iterator : $bind(v8,v8.keys)});
+				var v9 = keys2.length + 1;
+				if(v9 >= 0 && v9 < 128) {
+					this.out.b.push(v9);
 				} else {
 					this.out.b.push(128);
-					this.out.addInt32(v4);
+					this.out.addInt32(v9);
 				}
-				var _g3 = 0;
-				while(_g3 < keys.length) {
-					var k1 = keys[_g3];
-					++_g3;
-					_gthis.writeValue(k1,k);
-					_gthis.writeValue(a.get(k1),t1);
+				var _g5 = 0;
+				while(_g5 < keys2.length) {
+					var vk = keys2[_g5];
+					++_g5;
+					this.writeValue(vk,k);
+					this.writeValue(v8.get(vk),t1);
+				}
+				break;
+			default:
+				var v10 = v;
+				if(v10 == null) {
+					this.out.b.push(0);
+				} else {
+					var _e2 = v10;
+					var keys3 = Lambda.array({ iterator : function() {
+						return _e2.keys();
+					}});
+					var v11 = keys3.length + 1;
+					if(v11 >= 0 && v11 < 128) {
+						this.out.b.push(v11);
+					} else {
+						this.out.b.push(128);
+						this.out.addInt32(v11);
+					}
+					var _g6 = 0;
+					while(_g6 < keys3.length) {
+						var k3 = keys3[_g6];
+						++_g6;
+						_gthis.writeValue(k3,k);
+						_gthis.writeValue(v10.h[k3.__id__],t1);
+					}
 				}
 			}
 			break;
 		case 8:
 			var t2 = t[2];
-			var a1 = v;
-			if(a1 == null) {
+			var a = v;
+			if(a == null) {
 				this.out.b.push(0);
 			} else {
-				var v5 = a1.length + 1;
-				if(v5 >= 0 && v5 < 128) {
-					this.out.b.push(v5);
+				var v12 = a.length + 1;
+				if(v12 >= 0 && v12 < 128) {
+					this.out.b.push(v12);
 				} else {
 					this.out.b.push(128);
-					this.out.addInt32(v5);
+					this.out.addInt32(v12);
 				}
-				var _g4 = 0;
-				while(_g4 < a1.length) {
-					var v6 = a1[_g4];
-					++_g4;
-					_gthis.writeValue(v6,t2);
+				var _g7 = 0;
+				while(_g7 < a.length) {
+					var v13 = a[_g7];
+					++_g7;
+					_gthis.writeValue(v13,t2);
 				}
 			}
 			break;
@@ -8014,16 +8106,16 @@ hxbit_Serializer.prototype = {
 				this.out.b.push(0);
 			} else {
 				var fbits = 0;
-				var _g5 = [];
+				var _g8 = [];
 				var _g12 = 0;
 				while(_g12 < fields.length) {
 					var f = fields[_g12];
 					++_g12;
 					if(this.isNullable(f.type)) {
-						_g5.push(f);
+						_g8.push(f);
 					}
 				}
-				var nullables = _g5;
+				var nullables = _g8;
 				var _g21 = 0;
 				var _g13 = nullables.length;
 				while(_g21 < _g13) {
@@ -8032,19 +8124,18 @@ hxbit_Serializer.prototype = {
 						fbits |= 1 << i2;
 					}
 				}
-				var v7 = fbits + 1;
-				if(v7 >= 0 && v7 < 128) {
-					this.out.b.push(v7);
+				var v14 = fbits + 1;
+				if(v14 >= 0 && v14 < 128) {
+					this.out.b.push(v14);
 				} else {
 					this.out.b.push(128);
-					this.out.addInt32(v7);
+					this.out.addInt32(v14);
 				}
 				var _g14 = 0;
 				while(_g14 < fields.length) {
 					var f1 = fields[_g14];
 					++_g14;
 					var nidx = nullables.indexOf(f1);
-					var name1 = f1.name;
 					if(nidx >= 0 && (fbits & 1 << nidx) == 0) {
 						continue;
 					}
@@ -8058,22 +8149,22 @@ hxbit_Serializer.prototype = {
 			break;
 		case 11:
 			var t4 = t[2];
-			var a2 = v;
-			if(a2 == null) {
+			var a1 = v;
+			if(a1 == null) {
 				this.out.b.push(0);
 			} else {
-				var v8 = a2.length + 1;
-				if(v8 >= 0 && v8 < 128) {
-					this.out.b.push(v8);
+				var v15 = a1.length + 1;
+				if(v15 >= 0 && v15 < 128) {
+					this.out.b.push(v15);
 				} else {
 					this.out.b.push(128);
-					this.out.addInt32(v8);
+					this.out.addInt32(v15);
 				}
-				var _g6 = 0;
-				while(_g6 < a2.length) {
-					var v9 = a2[_g6];
-					++_g6;
-					_gthis.writeValue(v9,t4);
+				var _g9 = 0;
+				while(_g9 < a1.length) {
+					var v16 = a1[_g9];
+					++_g9;
+					_gthis.writeValue(v16,t4);
 				}
 			}
 			break;
@@ -8096,12 +8187,12 @@ hxbit_Serializer.prototype = {
 			this.out.addInt64(v);
 			break;
 		case 16:
-			var v10 = v;
-			if(v10 >= 0 && v10 < 128) {
-				this.out.b.push(v10);
+			var v17 = v;
+			if(v17 >= 0 && v17 < 128) {
+				this.out.b.push(v17);
 			} else {
 				this.out.b.push(128);
-				this.out.addInt32(v10);
+				this.out.addInt32(v17);
 			}
 			break;
 		case 17:
@@ -37914,20 +38005,23 @@ hxbit_Convert.prototype = {
 	}
 	,__class__: hxbit_Convert
 };
-var hxbit_RpcMode = $hxClasses["hxbit.RpcMode"] = { __ename__ : true, __constructs__ : ["All","Client","Server","Owner"] };
+var hxbit_RpcMode = $hxClasses["hxbit.RpcMode"] = { __ename__ : true, __constructs__ : ["All","Clients","Server","Owner","Immediate"] };
 hxbit_RpcMode.All = ["All",0];
 hxbit_RpcMode.All.toString = $estr;
 hxbit_RpcMode.All.__enum__ = hxbit_RpcMode;
-hxbit_RpcMode.Client = ["Client",1];
-hxbit_RpcMode.Client.toString = $estr;
-hxbit_RpcMode.Client.__enum__ = hxbit_RpcMode;
+hxbit_RpcMode.Clients = ["Clients",1];
+hxbit_RpcMode.Clients.toString = $estr;
+hxbit_RpcMode.Clients.__enum__ = hxbit_RpcMode;
 hxbit_RpcMode.Server = ["Server",2];
 hxbit_RpcMode.Server.toString = $estr;
 hxbit_RpcMode.Server.__enum__ = hxbit_RpcMode;
 hxbit_RpcMode.Owner = ["Owner",3];
 hxbit_RpcMode.Owner.toString = $estr;
 hxbit_RpcMode.Owner.__enum__ = hxbit_RpcMode;
-hxbit_RpcMode.__empty_constructs__ = [hxbit_RpcMode.All,hxbit_RpcMode.Client,hxbit_RpcMode.Server,hxbit_RpcMode.Owner];
+hxbit_RpcMode.Immediate = ["Immediate",4];
+hxbit_RpcMode.Immediate.toString = $estr;
+hxbit_RpcMode.Immediate.__enum__ = hxbit_RpcMode;
+hxbit_RpcMode.__empty_constructs__ = [hxbit_RpcMode.All,hxbit_RpcMode.Clients,hxbit_RpcMode.Server,hxbit_RpcMode.Owner,hxbit_RpcMode.Immediate];
 var hxbit_PropTypeDesc = $hxClasses["hxbit.PropTypeDesc"] = { __ename__ : true, __constructs__ : ["PInt","PFloat","PBool","PString","PBytes","PSerializable","PEnum","PMap","PArray","PObj","PAlias","PVector","PNull","PUnknown","PDynamic","PInt64","PFlags","PStruct"] };
 hxbit_PropTypeDesc.PInt = ["PInt",0];
 hxbit_PropTypeDesc.PInt.toString = $estr;
