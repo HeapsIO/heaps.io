@@ -1,6 +1,6 @@
 # Lights 
 
-Heaps supports real-time lighting.  There are currently two types of lights supported, directional and point lights.  
+Heaps supports real-time lighting.  There are currently two types of lights supported, directional and point lights.
 
 # Enabling Lights
 In order for lights to be enabled on your objects, you need to specifcy it on an object's material.  You do so as follows:
@@ -28,7 +28,7 @@ myPointLight.color.setColor(0xffffff);
 
 # Direction Lights
 
-Directional lights are lights that affect every object in your scene and like their name implies, emit in a specific direction.  They have no position.  They are comparable to the light from a source like the Sun.  
+Directional lights are lights that affect every object with a light enabled material in your scene and like their name implies, emit in a specific direction.  They have no position.  They are comparable to the light from a source like the Sun.  
 
 The following is an example of how to create a directional light
 
@@ -40,7 +40,7 @@ directionalLight.color.set(0.1, 0.1, 0.1);
 ```
 # Specular Lighting
 
-Both directional and point lights support specular lighting.  You can enabled specular lighting on your lights as follows:
+Both directional and point lights support specular lighting.  You can enable specular lighting on your lights with the following:
 
 ```
 myDirectionalOrPointLight.enableSpecular = true;

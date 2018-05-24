@@ -1,6 +1,6 @@
 # Shadows
 
-Heaps has support for real-time shadows.  Objects can both cast and receive shadows.  This can be set at a material level.  In order to for shadows to work properly normals need to be calculated for your geometry.
+Heaps has support for real-time shadows.  Objects can both cast and receive shadows.  This is set at a material level.  In order to for shadows to work properly normals need to be calculated for your geometry.
 
 In the following example you can see a simple scene with a couple of spheres and a floor.  The spheres both cast and receive shadows while the floor only receives them.
 
