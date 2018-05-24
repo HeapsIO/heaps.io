@@ -2,7 +2,7 @@
 
 Making objects interactive is done creating a `h3d.scene.Interactive` instance. You give it a target object and attach it to a parent.
 
-## Interation in H3D
+## Interaction in H3D
 
 ```haxe
 var interaction = new h3d.scene.Interactive(collider, s3d);
