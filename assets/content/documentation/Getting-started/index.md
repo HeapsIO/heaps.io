@@ -1,1 +1,1 @@
-<p class="lead">Getting started with heaps is easy. Just add <code>-lib heaps</code> to your project and start building great games.</p>
+<p class="lead">Getting started with Heaps is easy. Just add <code>-lib heaps</code> to your project and start building great games.</p>
