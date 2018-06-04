@@ -8,7 +8,7 @@ It's also possible to get the size of the text with textWidth/textHeight.
 ```haxe
 var tf = new h2d.Text(hxd.Res.fonts.myFontName.toFont());
 tf.text = "Hello World\nHeaps is great!";
-tf.align = Center;
+tf.textAlign = Center;
 
 // add to any parent, in this case we append to root
 s2d.addChild(tf);
