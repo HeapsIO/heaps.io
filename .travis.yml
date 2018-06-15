@@ -16,6 +16,7 @@ install:
   - npm install -g less-plugin-clean-css@1.5
   - haxelib install all --always
   - haxelib list
+  - npm install
 
 script:
   - haxe build-run-dox.hxml
