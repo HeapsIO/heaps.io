@@ -57,3 +57,6 @@ You can set up ambient lighting as follows
 //Set the color on the ambient light object
 s3d.lightSystem.ambientLight.set(0, 0, 0);
 ```
+
+### See Also
+[Shadows](/documentation/h3d/shadows.html).
