@@ -8,6 +8,7 @@ assets/includes/api
 *.xml
 assets/includes/samples/*/*.hxml
 .haxelib/*/
+node_modules/
 
 # OS generated files #
 ######################

@@ -22,3 +22,15 @@
  --macro keep("DateTools")
  --macro keep("haxe.ds.StringMap")
  --macro keep("haxe.ds.IntMap")
+
+ --next
+-main SyntaxHighlighter
+-lib markdown
+-lib highlighter
+-lib tink_template
+-cp src
+--macro tink.Template.addFlavor('html', '::', '::', false)
+-js bin/syntaxthighlighter.js
+-lib hxnodejs
+-cmd node bin/syntaxthighlighter.js
+
