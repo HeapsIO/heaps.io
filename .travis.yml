@@ -16,6 +16,8 @@ install:
   - npm install -g less-plugin-clean-css@1.5
   - haxelib install all --always
   - haxelib list
+    # get hxnodejs from git, haxelib's is outdated
+  - haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs
   - npm install
 
 script:
