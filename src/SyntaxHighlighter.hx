@@ -16,13 +16,23 @@ class SyntaxHighlighter
 		];
 
 		// Go over the generated HTML file and apply syntax highlighting
-		var missingGrammars = Highlighter.patchFolder("output", grammars, function (classList) {
+		var missingGrammars = Highlighter.patchFolder("output/documentation", grammars, function (classList) {
 			return classList.substr(12);
 		});
 
 		for (g in missingGrammars) {
 			Sys.println('Missing grammar for "${g}"');
 		}
+
+		// Go over the generated HTML file and apply syntax highlighting
+		missingGrammars = Highlighter.patchFolder("output/samples", grammars, function (classList) {
+			return classList.substr(12);
+		});
+
+		for (g in missingGrammars) {
+			Sys.println('Missing grammar for "${g}"');
+		}
+
 
 		// Add CSS rules for highlighting
 		var path = "output/css/styles.min.css";
