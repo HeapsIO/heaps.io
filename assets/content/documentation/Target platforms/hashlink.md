@@ -5,12 +5,12 @@
 Heaps is able to support both SDL and DirectX. In order to specify which you'd like to use, you simple need to include the appropriate library when compiling your project.
 
 For DirectX
-```
+```hxml
 -lib hldx
 ```
 
 For SDL
-```
+```hxml
 -lib hlsdl
 ```
 

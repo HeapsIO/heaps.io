@@ -4,7 +4,7 @@ Materials are the cornerstone of viewing content in 3d. Your scene can have many
 
 Materials get applied to Meshes.  By default materials area specific color (white) but this can be customized in a variety of ways.
 
-```
+```haxe
 // creates a cube to act as our geometry
 var cube = new h3d.prim.Cube();
 
@@ -24,7 +24,7 @@ The result is our unlit cube.
 
 As you can see the results are not terribly impressive. Things start to look better once we start working with lights. Continuing from the same code as above.
 
-```
+```haxe
 //Add normals to our geometry so that the lighting can react to the faces
 cube.addNormals();
 
@@ -41,7 +41,7 @@ To really customize our materials though we want to use [textures](https://en.wi
 
 Using the geometry from our previous example lets take a look at how to use textures.
 
-```
+```haxe
 // creates a cube to act as our geometry
 var cube = new h3d.prim.Cube();
 
@@ -74,7 +74,7 @@ Materials can have blend modes applied to them to blend with the objects behind 
 
 Changing blend modes on a material is straightforward. You simply access the .blendMode property of the material you want to change.
 
-```
+```haxe
 mat.blendMode = h2d.BlendMode.Multiply;
 
 //Here are the currently supported blend modes

@@ -4,7 +4,7 @@ Heaps offers an easy way to draw custom shapes and colors to the screen in the 2
 
 First you start by creating a custom graphics object.
 
-```
+```haxe
 //Create a custom graphics object by passing a 2d scene reference.
 var customGraphics = new h2d.Graphics(s2d);
 
@@ -21,7 +21,7 @@ The above code will produce the following
 
 You can also fill a graphics object with a loaded bitmap.  You use the 'beginTileFill()' method of the Graphics object as follows:
 
-```
+```haxe
 var logo = hxd.Res.hxlogo.toTile();
 
 var g = new h2d.Graphics(s2d);			

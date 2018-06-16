@@ -5,7 +5,7 @@ Heaps supports real-time lighting.  There are currently two types of lights supp
 # Enabling Lights
 In order for lights to be enabled on your objects, you need to specifcy it on an object's material.  You do so as follows:
 
-```
+```haxe
 myLitMesh.material.mainPass.enableLights = true;
 ```
 
@@ -15,7 +15,7 @@ Point lights are lights that are part of the environment, have a specific color 
 
 To create a point light you do the following:
 
-```
+```haxe
 //Create the point light by passing it our 3d scene
 var myPointLight = new h3d.scene.PointLight(s3d);
 //Set the position on the light
@@ -42,7 +42,7 @@ directionalLight.color.set(0.1, 0.1, 0.1);
 
 Both directional and point lights support specular lighting.  You can enable specular lighting on your lights with the following:
 
-```
+```haxe
 myDirectionalOrPointLight.enableSpecular = true;
 ```
 
@@ -53,7 +53,7 @@ Ambient lighting is a color that illuminates the entire scene with no specific d
 
 You can set up ambient lighting as follows
 
-```
+```haxe
 //Set the color on the ambient light object
 s3d.lightSystem.ambientLight.set(0, 0, 0);
 ```

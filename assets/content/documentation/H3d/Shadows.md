@@ -4,7 +4,7 @@ Heaps has support for real-time shadows.  Objects can both cast and receive shad
 
 In the following example you can see a simple scene with a couple of spheres and a floor.  The spheres both cast and receive shadows while the floor only receives them.  For shadows to render correctly your scene will need at least 1 [light](/documentation/h3d/lights.html).
 
-```
+```haxe
 //Create a floor plane where we can view our cast shadows
 var floor = new h3d.prim.Cube(10, 10, 0.1);
 //Make sure se add normals
@@ -57,7 +57,7 @@ To create a more realistic effect you can blur your shadows.  You do so by acces
  
 You can see an example here:
 
-```
+```haxe
 var shadow = s3d.renderer.getPass(h3d.pass.ShadowMap);
 //Increasing the amount of passes increases the amount of blur applied to the shadow
 shadow.blur.passes = 3;
