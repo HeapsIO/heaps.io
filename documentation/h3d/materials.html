@@ -4,69 +4,76 @@
 <meta name="twitter:creator" content="@ncanasse"/>
 <meta property="og:title" content="Material Basics - H3d  - Heaps.io Game Engine"/><meta property="og:description" content="Materials are the cornerstone of viewing content in 3d. Your scene can have many objects with geometry but if no materials are applied you will not see anything in your viewport. "/><meta property="og:type" content="website"/><meta property="og:url" content="http://heaps.io/documentation/h3d/materials.html"/><meta property="og:image" content="http://heaps.io//img/share.png"/>    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/></head><body><a href="https://github.com/HeapsIO/" class="fork-button"><img src="img/fork-on-github.png" alt="Fork Heaps on GitHub"/></a><main><header class="header-page"><a class="mobileMenu" href="#"><img src="img/menu.png" alt="Menu"/> </a><nav class="top-nav"><a href="index.html" class="button ">Home</a><a href="about.html" class="button ">About</a><a href="samples/" class="button ">Samples</a><a href="documentation/getting-started/" class="button disabled">Online handbook</a><a href="api/" class="button">API</a><a href="https://gitter.im/heapsio/Lobby" class="button" target="_blank">Community</a></nav><div class="logo"><a href="./"><img src="img/logo.svg"/></a></div></header> <div class="row container"><nav class="col-4 sidebar"><ul class="unstyled"><li><a href="documentation/getting-started/">Getting started</a></li><li><a href="documentation/h2d/">H2d</a></li><li class="active"><a href="documentation/h3d/">H3d</a><ul><li><a href="documentation/h3d/events-and-interactivity.html">Events and interaction</a></li><li><a href="documentation/h3d/fbx-models.html">FBX Models</a></li><li><a href="documentation/h3d/gpuparticles.html">GPU Particles</a></li><li><a href="documentation/h3d/lights.html">Lights</a></li><li class="current"><a href="documentation/h3d/materials.html">Material Basics</a></li><li><a href="documentation/h3d/multipass-explained.html">Multipass explained</a></li><li><a href="documentation/h3d/pbrmaterials.html">PBR Materials</a></li><li><a href="documentation/h3d/scene-and-camera.html">Scenes and camera</a></li><li><a href="documentation/h3d/shadows.html">Shadows</a></li><li><a href="documentation/h3d/worldbatching.html">World Batching</a></li></ul></li><li><a href="documentation/hxd/">Hxd</a></li><li><a href="documentation/shaders/">Shaders</a></li><li><a href="documentation/target-platforms/">Target platforms</a></li><li><a href="documentation/tools/">Tools</a></li></ul></nav><article class="col-8 documentation"><div class="content"><h1><span>H3d</span> Material Basics </h1><p>Materials are the cornerstone of viewing content in 3d. Your scene can have many objects with geometry but if no materials are applied you will not see anything in your viewport. </p>
 <p>Materials get applied to Meshes.  By default materials area specific color (white) but this can be customized in a variety of ways.</p>
-<pre><code>// creates a cube to act as our geometry
-var cube = new h3d.prim.Cube();
+<pre class="highlighted">
+<span class="mtk4">// creates a cube to act as our geometry</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">cube</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.prim.</span><span class="mtk9">Cube</span><span class="mtk1">();</span>
 
-// translate it so its center will be at the center of the cube
-cube.translate( -0.5, -0.5, -0.5);
+<span class="mtk4">// translate it so its center will be at the center of the cube</span>
+<span class="mtk17">cube</span><span class="mtk1">.</span><span class="mtk10">translate</span><span class="mtk1">( -</span><span class="mtk8">0.5</span><span class="mtk1">, -</span><span class="mtk8">0.5</span><span class="mtk1">, -</span><span class="mtk8">0.5</span><span class="mtk1">);</span>
 
-//Create a mesh out of our geometry - it has a default material applied.
-var mesh = new Mesh(prim, s3d);
+<span class="mtk4">//Create a mesh out of our geometry - it has a default material applied.</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">mesh</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> </span><span class="mtk9">Mesh</span><span class="mtk1">(</span><span class="mtk17">prim</span><span class="mtk1">, </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
 
-//Set the material color to Haxe orange
-mesh.material.color.setColor(0xEA8220);</code></pre>
+<span class="mtk4">//Set the material color to Haxe orange</span>
+<span class="mtk17">mesh</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">color</span><span class="mtk1">.</span><span class="mtk10">setColor</span><span class="mtk1">(</span><span class="mtk8">0xEA8220</span><span class="mtk1">);</span>
+</pre>
 <p>The result is our unlit cube.
 <img src="img/h3d/mat_nolights.jpg" alt="Unlit cube"/></p>
 <p>As you can see the results are not terribly impressive. Things start to look better once we start working with lights. Continuing from the same code as above.</p>
-<pre><code>//Add normals to our geometry so that the lighting can react to the faces
-cube.addNormals();
+<pre class="highlighted">
+<span class="mtk4">//Add normals to our geometry so that the lighting can react to the faces</span>
+<span class="mtk17">cube</span><span class="mtk1">.</span><span class="mtk10">addNormals</span><span class="mtk1">();</span>
 
-//Add a directional light to our scene
-var light = new h3d.scene.DirLight(new h3d.Vector(0.5, 0.5, -0.5), s3d);</code></pre>
+<span class="mtk4">//Add a directional light to our scene</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">light</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">DirLight</span><span class="mtk1">(</span><span class="mtk5">new</span><span class="mtk1"> h3d.</span><span class="mtk9">Vector</span><span class="mtk1">(</span><span class="mtk8">0.5</span><span class="mtk1">, </span><span class="mtk8">0.5</span><span class="mtk1">, -</span><span class="mtk8">0.5</span><span class="mtk1">), </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
+</pre>
 <p>Our cube is looking a lot better.
 <img src="img/h3d/mat_lights.jpg" alt="Lit cube"/></p>
 <h2>Textures</h2>
 <p>To really customize our materials though we want to use <a href="https://en.wikipedia.org/wiki/Texture_mapping">textures</a>. To keep it simple, texture allow us to apply custom images to our geometry. Textures are <a href="/documentation/Hxd/Resource-Management.md">resources</a> that need to be loaded into your Heaps application. Once your textures are loaded they need to be added to materials and then applied to geometry. </p>
 <p>Using the geometry from our previous example lets take a look at how to use textures.</p>
-<pre><code>// creates a cube to act as our geometry
-var cube = new h3d.prim.Cube();
+<pre class="highlighted">
+<span class="mtk4">// creates a cube to act as our geometry</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">cube</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.prim.</span><span class="mtk9">Cube</span><span class="mtk1">();</span>
 
-// translate it so its center will be at the center of the cube
-cube.translate( -0.5, -0.5, -0.5);
+<span class="mtk4">// translate it so its center will be at the center of the cube</span>
+<span class="mtk17">cube</span><span class="mtk1">.</span><span class="mtk10">translate</span><span class="mtk1">( -</span><span class="mtk8">0.5</span><span class="mtk1">, -</span><span class="mtk8">0.5</span><span class="mtk1">, -</span><span class="mtk8">0.5</span><span class="mtk1">);</span>
 
-//Add normals and texture coordinates to our cube otherwise texture mapping won't work
-cube.addNormals();
-cube.addUVs();
+<span class="mtk4">//Add normals and texture coordinates to our cube otherwise texture mapping won't work</span>
+<span class="mtk17">cube</span><span class="mtk1">.</span><span class="mtk10">addNormals</span><span class="mtk1">();</span>
+<span class="mtk17">cube</span><span class="mtk1">.</span><span class="mtk10">addUVs</span><span class="mtk1">();</span>
 
-//get our image resource and convert it into a texture
-var tex = hxd.Res.hxlogo.toTexture();
+<span class="mtk4">//get our image resource and convert it into a texture</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">tex</span><span class="mtk1"> = hxd.</span><span class="mtk9">Res</span><span class="mtk1">.</span><span class="mtk17">hxlogo</span><span class="mtk1">.</span><span class="mtk10">toTexture</span><span class="mtk1">();</span>
 
-// create a material with this texture
-var mat = h3d.mat.Material.create(tex);
+<span class="mtk4">// create a material with this texture</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">mat</span><span class="mtk1"> = h3d.mat.</span><span class="mtk9">Material</span><span class="mtk1">.</span><span class="mtk10">create</span><span class="mtk1">(</span><span class="mtk17">tex</span><span class="mtk1">);</span>
 
-//Create a mesh out of our geometry - and apply the material with the texture we just created to it
-var mesh = new Mesh(prim,mat, s3d);
+<span class="mtk4">//Create a mesh out of our geometry - and apply the material with the texture we just created to it</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">mesh</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> </span><span class="mtk9">Mesh</span><span class="mtk1">(</span><span class="mtk17">prim</span><span class="mtk1">,</span><span class="mtk17">mat</span><span class="mtk1">, </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
 
-//Add a directional light to our scene
-var light = new h3d.scene.DirLight(new h3d.Vector(0.5, 0.5, -0.5), s3d);</code></pre>
+<span class="mtk4">//Add a directional light to our scene</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">light</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">DirLight</span><span class="mtk1">(</span><span class="mtk5">new</span><span class="mtk1"> h3d.</span><span class="mtk9">Vector</span><span class="mtk1">(</span><span class="mtk8">0.5</span><span class="mtk1">, </span><span class="mtk8">0.5</span><span class="mtk1">, -</span><span class="mtk8">0.5</span><span class="mtk1">), </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
+</pre>
 <p>Here you can see our cube with the loaded texture applied
 <img src="img/h3d/mat_texture.jpg" alt="Cube with texture"/></p>
 <h2>Blend Modes</h2>
 <p>Materials can have blend modes applied to them to blend with the objects behind them. These are comparable to Photoshop blend modes.</p>
 <p>Changing blend modes on a material is straightforward. You simply access the .blendMode property of the material you want to change.</p>
-<pre><code>mat.blendMode = h2d.BlendMode.Multiply;
+<pre class="highlighted">
+<span class="mtk17">mat</span><span class="mtk1">.</span><span class="mtk17">blendMode</span><span class="mtk1"> = h2d.</span><span class="mtk9">BlendMode</span><span class="mtk1">.</span><span class="mtk9">Multiply</span><span class="mtk1">;</span>
 
-//Here are the currently supported blend modes
-enum BlendMode {
-	None;
-	Alpha;
-	Add;
-	SoftAdd;
-	Multiply;
-	Erase;
-	Screen;
-}
-</code></pre>
+<span class="mtk4">//Here are the currently supported blend modes</span>
+<span class="mtk5">enum</span><span class="mtk1"> </span><span class="mtk9">BlendMode</span><span class="mtk1"> {</span>
+<span class="mtk1">    </span><span class="mtk9">None</span><span class="mtk1">;</span>
+<span class="mtk1">    </span><span class="mtk9">Alpha</span><span class="mtk1">;</span>
+<span class="mtk1">    </span><span class="mtk9">Add</span><span class="mtk1">;</span>
+<span class="mtk1">    </span><span class="mtk9">SoftAdd</span><span class="mtk1">;</span>
+<span class="mtk1">    </span><span class="mtk9">Multiply</span><span class="mtk1">;</span>
+<span class="mtk1">    </span><span class="mtk9">Erase</span><span class="mtk1">;</span>
+<span class="mtk1">    </span><span class="mtk9">Screen</span><span class="mtk1">;</span>
+<span class="mtk1">}</span>
+</pre>
 <p>Our Haxe Cube with BlendMode.Add applied
 <img src="img/h3d/mat_blend.jpg" alt="Cube with texture"/></p>
 <h3>See Also</h3>

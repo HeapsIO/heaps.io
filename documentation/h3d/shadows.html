@@ -4,55 +4,59 @@
 <meta name="twitter:creator" content="@ncanasse"/>
 <meta property="og:title" content="Shadows - H3d  - Heaps.io Game Engine"/><meta property="og:description" content="Heaps has support for real-time shadows.  Objects can both cast and receive shadows.  This is set at a material level.  In order to for shadows to work properly normals need to be calculated for your geometry."/><meta property="og:type" content="website"/><meta property="og:url" content="http://heaps.io/documentation/h3d/shadows.html"/><meta property="og:image" content="http://heaps.io//img/share.png"/>    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/></head><body><a href="https://github.com/HeapsIO/" class="fork-button"><img src="img/fork-on-github.png" alt="Fork Heaps on GitHub"/></a><main><header class="header-page"><a class="mobileMenu" href="#"><img src="img/menu.png" alt="Menu"/> </a><nav class="top-nav"><a href="index.html" class="button ">Home</a><a href="about.html" class="button ">About</a><a href="samples/" class="button ">Samples</a><a href="documentation/getting-started/" class="button disabled">Online handbook</a><a href="api/" class="button">API</a><a href="https://gitter.im/heapsio/Lobby" class="button" target="_blank">Community</a></nav><div class="logo"><a href="./"><img src="img/logo.svg"/></a></div></header> <div class="row container"><nav class="col-4 sidebar"><ul class="unstyled"><li><a href="documentation/getting-started/">Getting started</a></li><li><a href="documentation/h2d/">H2d</a></li><li class="active"><a href="documentation/h3d/">H3d</a><ul><li><a href="documentation/h3d/events-and-interactivity.html">Events and interaction</a></li><li><a href="documentation/h3d/fbx-models.html">FBX Models</a></li><li><a href="documentation/h3d/gpuparticles.html">GPU Particles</a></li><li><a href="documentation/h3d/lights.html">Lights</a></li><li><a href="documentation/h3d/materials.html">Material Basics</a></li><li><a href="documentation/h3d/multipass-explained.html">Multipass explained</a></li><li><a href="documentation/h3d/pbrmaterials.html">PBR Materials</a></li><li><a href="documentation/h3d/scene-and-camera.html">Scenes and camera</a></li><li class="current"><a href="documentation/h3d/shadows.html">Shadows</a></li><li><a href="documentation/h3d/worldbatching.html">World Batching</a></li></ul></li><li><a href="documentation/hxd/">Hxd</a></li><li><a href="documentation/shaders/">Shaders</a></li><li><a href="documentation/target-platforms/">Target platforms</a></li><li><a href="documentation/tools/">Tools</a></li></ul></nav><article class="col-8 documentation"><div class="content"><h1><span>H3d</span> Shadows </h1><p>Heaps has support for real-time shadows.  Objects can both cast and receive shadows.  This is set at a material level.  In order to for shadows to work properly normals need to be calculated for your geometry.</p>
 <p>In the following example you can see a simple scene with a couple of spheres and a floor.  The spheres both cast and receive shadows while the floor only receives them.  For shadows to render correctly your scene will need at least 1 <a href="/documentation/h3d/lights.html">light</a>.</p>
-<pre><code>//Create a floor plane where we can view our cast shadows
-var floor = new h3d.prim.Cube(10, 10, 0.1);
-//Make sure se add normals
-floor.addNormals();
-floor.translate( -5, -5, 0);
+<pre class="highlighted">
+<span class="mtk4">//Create a floor plane where we can view our cast shadows</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">floor</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.prim.</span><span class="mtk9">Cube</span><span class="mtk1">(</span><span class="mtk8">10</span><span class="mtk1">, </span><span class="mtk8">10</span><span class="mtk1">, </span><span class="mtk8">0.1</span><span class="mtk1">);</span>
+<span class="mtk4">//Make sure se add normals</span>
+<span class="mtk17">floor</span><span class="mtk1">.</span><span class="mtk10">addNormals</span><span class="mtk1">();</span>
+<span class="mtk17">floor</span><span class="mtk1">.</span><span class="mtk10">translate</span><span class="mtk1">( -</span><span class="mtk8">5</span><span class="mtk1">, -</span><span class="mtk8">5</span><span class="mtk1">, </span><span class="mtk8">0</span><span class="mtk1">);</span>
 
-var m = new h3d.scene.Mesh(floor, s3d);
-//Enabled lighting
-m.material.mainPass.enableLights = true;
-//Enable receieiving of shadows. Our floor does not need to cast
-m.material.receiveShadows = true;
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">m</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">Mesh</span><span class="mtk1">(</span><span class="mtk17">floor</span><span class="mtk1">, </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
+<span class="mtk4">//Enabled lighting</span>
+<span class="mtk17">m</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">mainPass</span><span class="mtk1">.</span><span class="mtk17">enableLights</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
+<span class="mtk4">//Enable receieiving of shadows. Our floor does not need to cast</span>
+<span class="mtk17">m</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">receiveShadows</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
 
-//Greate some sphere geometry for casting and receiving shadows
-var sphere = new h3d.prim.Sphere(1, 32, 24);
-//Make sure we add normals
-sphere.addNormals();
+<span class="mtk4">//Greate some sphere geometry for casting and receiving shadows</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">sphere</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.prim.</span><span class="mtk9">Sphere</span><span class="mtk1">(</span><span class="mtk8">1</span><span class="mtk1">, </span><span class="mtk8">32</span><span class="mtk1">, </span><span class="mtk8">24</span><span class="mtk1">);</span>
+<span class="mtk4">//Make sure we add normals</span>
+<span class="mtk17">sphere</span><span class="mtk1">.</span><span class="mtk10">addNormals</span><span class="mtk1">();</span>
 
-var p = new h3d.scene.Mesh(sphere, s3d);
-p.z = 1;
-p.material.mainPass.enableLights = true;
-//Enable casting and receiving of shadows
-p.material.shadows = true;
-p.material.color.setColor(Std.random(0x1000000));
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">p</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">Mesh</span><span class="mtk1">(</span><span class="mtk17">sphere</span><span class="mtk1">, </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
+<span class="mtk17">p</span><span class="mtk1">.</span><span class="mtk17">z</span><span class="mtk1"> = </span><span class="mtk8">1</span><span class="mtk1">;</span>
+<span class="mtk17">p</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">mainPass</span><span class="mtk1">.</span><span class="mtk17">enableLights</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
+<span class="mtk4">//Enable casting and receiving of shadows</span>
+<span class="mtk17">p</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">shadows</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
+<span class="mtk17">p</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">color</span><span class="mtk1">.</span><span class="mtk10">setColor</span><span class="mtk1">(</span><span class="mtk9">Std</span><span class="mtk1">.</span><span class="mtk10">random</span><span class="mtk1">(</span><span class="mtk8">0x1000000</span><span class="mtk1">));</span>
 
-var p2 = new h3d.scene.Mesh(sphere, s3d);
-p2.z = 2.5;
-p2.x = 1;
-p2.y = 1;
-p2.scale(0.5);
-p2.material.mainPass.enableLights = true;
-//Enable casting and receiving of shadows
-p2.material.shadows = true;
-p2.material.color.setColor(Std.random(0x1000000));
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">p2</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">Mesh</span><span class="mtk1">(</span><span class="mtk17">sphere</span><span class="mtk1">, </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
+<span class="mtk17">p2</span><span class="mtk1">.</span><span class="mtk17">z</span><span class="mtk1"> = </span><span class="mtk8">2.5</span><span class="mtk1">;</span>
+<span class="mtk17">p2</span><span class="mtk1">.</span><span class="mtk17">x</span><span class="mtk1"> = </span><span class="mtk8">1</span><span class="mtk1">;</span>
+<span class="mtk17">p2</span><span class="mtk1">.</span><span class="mtk17">y</span><span class="mtk1"> = </span><span class="mtk8">1</span><span class="mtk1">;</span>
+<span class="mtk17">p2</span><span class="mtk1">.</span><span class="mtk10">scale</span><span class="mtk1">(</span><span class="mtk8">0.5</span><span class="mtk1">);</span>
+<span class="mtk17">p2</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">mainPass</span><span class="mtk1">.</span><span class="mtk17">enableLights</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
+<span class="mtk4">//Enable casting and receiving of shadows</span>
+<span class="mtk17">p2</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">shadows</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
+<span class="mtk17">p2</span><span class="mtk1">.</span><span class="mtk17">material</span><span class="mtk1">.</span><span class="mtk17">color</span><span class="mtk1">.</span><span class="mtk10">setColor</span><span class="mtk1">(</span><span class="mtk9">Std</span><span class="mtk1">.</span><span class="mtk10">random</span><span class="mtk1">(</span><span class="mtk8">0x1000000</span><span class="mtk1">));</span>
 
-//Set up a light otherwise we don't get any shadows
-var directionalLight = new h3d.scene.DirLight(new h3d.Vector(-0.3, -0.2, -1), s3d);
+<span class="mtk4">//Set up a light otherwise we don't get any shadows</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">directionalLight</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">DirLight</span><span class="mtk1">(</span><span class="mtk5">new</span><span class="mtk1"> h3d.</span><span class="mtk9">Vector</span><span class="mtk1">(-</span><span class="mtk8">0.3</span><span class="mtk1">, -</span><span class="mtk8">0.2</span><span class="mtk1">, -</span><span class="mtk8">1</span><span class="mtk1">), </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
 
-//Move our camera to a position to see the shadows
-s3d.camera.pos.set(12, 12, 6);
+<span class="mtk4">//Move our camera to a position to see the shadows</span>
+<span class="mtk17">s3d</span><span class="mtk1">.</span><span class="mtk17">camera</span><span class="mtk1">.</span><span class="mtk17">pos</span><span class="mtk1">.</span><span class="mtk10">set</span><span class="mtk1">(</span><span class="mtk8">12</span><span class="mtk1">, </span><span class="mtk8">12</span><span class="mtk1">, </span><span class="mtk8">6</span><span class="mtk1">);</span>
 
-//Setup a Camera Controller to move the camera
-new h3d.scene.CameraController(s3d).loadFromCamera();</code></pre>
+<span class="mtk4">//Setup a Camera Controller to move the camera</span>
+<span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">CameraController</span><span class="mtk1">(</span><span class="mtk17">s3d</span><span class="mtk1">).</span><span class="mtk10">loadFromCamera</span><span class="mtk1">();</span>
+</pre>
 <p><img src="img/h3d/shadows.jpg" alt="Shadow Example"/></p>
 <h1>Blurring Shadows</h1>
 <p>To create a more realistic effect you can blur your shadows.  You do so by accessing the shadow pass from the renderer and setting the amount of passes on the blur object.</p>
 <p>You can see an example here:</p>
-<pre><code>var shadow = s3d.renderer.getPass(h3d.pass.ShadowMap);
-//Increasing the amount of passes increases the amount of blur applied to the shadow
-shadow.blur.passes = 3;</code></pre>
+<pre class="highlighted">
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">shadow</span><span class="mtk1"> = </span><span class="mtk17">s3d</span><span class="mtk1">.</span><span class="mtk17">renderer</span><span class="mtk1">.</span><span class="mtk10">getPass</span><span class="mtk1">(h3d.pass.</span><span class="mtk9">ShadowMap</span><span class="mtk1">);</span>
+<span class="mtk4">//Increasing the amount of passes increases the amount of blur applied to the shadow</span>
+<span class="mtk17">shadow</span><span class="mtk1">.</span><span class="mtk17">blur</span><span class="mtk1">.</span><span class="mtk17">passes</span><span class="mtk1"> = </span><span class="mtk8">3</span><span class="mtk1">;</span>
+</pre>
 <p>An example with shadow.blur.passes = 1;
 <img src="img/h3d/shadows_blur_1.jpg" alt="Shadow blurring set to 1"/></p>
 <p>An example with shadow.blur.passes = 10;
