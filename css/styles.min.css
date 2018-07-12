@@ -348,6 +348,9 @@ header.header-documentation {
   padding: 10px;
   margin-top: 1em;
 }
+.content img {
+  max-width: 100%;
+}
 .logo {
   text-align: center;
 }
