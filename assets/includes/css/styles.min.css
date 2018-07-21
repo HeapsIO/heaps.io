@@ -178,7 +178,7 @@ section.dark a {
 section.light {
   background: #8cb0c0;
   background: -webkit-radial-gradient(0% 100%, circle, #B6D9E0, #B9D8E3);
-  background: url("../img/pattern.png") no-repeat center center;
+  background: url("../img/pattern.jpg") no-repeat center center;
   background-size: cover;
   background-attachment: fixed;
   color: rgba(255, 255, 255, 0.8);
@@ -334,13 +334,13 @@ header {
   padding: 0;
 }
 header.header-main {
-  background: url("../img/pattern.png") no-repeat center top;
+  background: url("../img/pattern.jpg") no-repeat center top;
   background-size: cover;
   background-attachment: fixed;
 }
 header.header-page,
 header.header-documentation {
-  background: url("../img/pattern.png") no-repeat center top;
+  background: url("../img/pattern.jpg") no-repeat center top;
   background-size: cover;
   background-attachment: fixed;
 }
@@ -388,7 +388,7 @@ header.header-documentation {
 }
 footer {
   background: #edc31c;
-  background: url("../img/pattern.png") no-repeat center bottom;
+  background: url("../img/pattern.jpg") no-repeat center bottom;
   background-size: cover;
   background-attachment: fixed;
   padding-top: 90px;

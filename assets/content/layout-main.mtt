@@ -94,7 +94,5 @@
 
 <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
 
-<link rel="stylesheet" type="text/css" href="https://code.haxe.org/css/highlighter.min.css"/>
-<script defer="defer" src="https://code.haxe.org/js/highlighter.js"></script>
 </body>
 </html>
