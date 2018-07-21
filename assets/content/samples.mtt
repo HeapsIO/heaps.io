@@ -1,3 +1,20 @@
-<script>
-location.href = "::currentPage.customData.samples[0].outputPath::";
-</script>
+<section>
+	<div class="container">
+		<h1>Samples</h1>
+
+		<p class="lead">
+			::currentPage.description::
+		</p>
+
+		<div id="sampleList">
+		::foreach sample currentPage.customData.samples.samples::
+			<div>
+				<h2><a href="samples/::sample.name.toLowerCase()::.html">::sample.name::</a></h2>
+				<a href="samples/::sample.name.toLowerCase()::.html">
+					<img src="img/samples/::sample.name.toLowerCase()::.png" />
+				</a>
+			</div>
+		::end::
+		</div>
+	</div>
+</section>

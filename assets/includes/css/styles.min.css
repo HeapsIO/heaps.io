@@ -469,6 +469,17 @@ footer .copyright a:hover {
   right: 0;
   border: 0;
 }
+#sampleList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+#sampleList div {
+  margin: 0 40px 40px;
+  width: 250px;
+}
 .sample-button {
   display: block;
   width: 270px;
