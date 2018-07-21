@@ -24,12 +24,10 @@
 <h1>Direction Lights</h1>
 <p>Directional lights are lights that affect every object with a light enabled material in your scene and like their name implies, emit in a specific direction.  They have no position.  They are comparable to the light from a source like the Sun.</p>
 <p>The following is an example of how to create a directional light</p>
-<pre class="highlighted">
-<span class="mtk4">//Create the directional light by giving it a Vector indicating the direction in which it illuminates and a reference to our 3d scene</span>
-<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">directionalLight</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">DirLight</span><span class="mtk1">(</span><span class="mtk5">new</span><span class="mtk1"> h3d.</span><span class="mtk9">Vector</span><span class="mtk1">(</span><span class="mtk8">0.2</span><span class="mtk1">, </span><span class="mtk8">0.3</span><span class="mtk1">, -</span><span class="mtk8">1</span><span class="mtk1">), </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
-<span class="mtk4">//Set the color on the directional light</span>
-<span class="mtk17">directionalLight</span><span class="mtk1">.</span><span class="mtk17">color</span><span class="mtk1">.</span><span class="mtk10">set</span><span class="mtk1">(</span><span class="mtk8">0.1</span><span class="mtk1">, </span><span class="mtk8">0.1</span><span class="mtk1">, </span><span class="mtk8">0.1</span><span class="mtk1">);</span>
-</pre>
+<pre><code>//Create the directional light by giving it a Vector indicating the direction in which it illuminates and a reference to our 3d scene
+var directionalLight = new h3d.scene.DirLight(new h3d.Vector(0.2, 0.3, -1), s3d);
+//Set the color on the directional light
+directionalLight.color.set(0.1, 0.1, 0.1);</code></pre>
 <h1>Specular Lighting</h1>
 <p>Both directional and point lights support specular lighting.  You can enable specular lighting on your lights with the following:</p>
 <pre class="highlighted">
