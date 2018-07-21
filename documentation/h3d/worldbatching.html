@@ -13,7 +13,7 @@
 <span class="mtk4">//Create our world with the supplied values.</span>
 <span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">world</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">World</span><span class="mtk1">(</span><span class="mtk17">numberOfChunks</span><span class="mtk1">, </span><span class="mtk17">worldSize</span><span class="mtk1">, </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
 </pre>
-<p>Now we need to add objects to our world. Objects need to be loaded directly via the world object so certain batching optimizations can take place. You then reuses these obejcts when you want to disperse them through your world.</p>
+<p>Now we need to add objects to our world. Objects need to be loaded directly via the world object so certain batching optimizations can take place. You then reuses these objects when you want to disperse them through your world.</p>
 <pre class="highlighted">
 <span class="mtk4">//Loud our resources from the world</span>
 <span class="mtk4">//These are taken from the World sample application</span>
@@ -23,10 +23,10 @@
 <span class="mtk4">//Add 5000 objeects to our scene - randomly choosing between a rock and a tree</span>
 <span class="mtk14">for</span><span class="mtk1">( </span><span class="mtk17">i</span><span class="mtk1"> </span><span class="mtk5">in</span><span class="mtk1"> </span><span class="mtk8">0</span><span class="mtk1">...</span><span class="mtk8">5000</span><span class="mtk1"> )</span>
 <span class="mtk1">            </span><span class="mtk17">world</span><span class="mtk1">.</span><span class="mtk10">add</span><span class="mtk1">(  </span><span class="mtk9">Std</span><span class="mtk1">.</span><span class="mtk10">random</span><span class="mtk1">(</span><span class="mtk8">2</span><span class="mtk1">) == </span><span class="mtk8">0</span><span class="mtk1"> ? </span><span class="mtk17">tree</span><span class="mtk1"> : </span><span class="mtk17">rock</span><span class="mtk1">,</span>
-<span class="mtk1">                        </span><span class="mtk9">Math</span><span class="mtk1">.</span><span class="mtk10">random</span><span class="mtk1">() * </span><span class="mtk17">worldSize</span><span class="mtk1">, </span>
-<span class="mtk1">                        </span><span class="mtk9">Math</span><span class="mtk1">.</span><span class="mtk10">random</span><span class="mtk1">() * </span><span class="mtk17">worldSize</span><span class="mtk1">, </span>
-<span class="mtk1">                        </span><span class="mtk8">0</span><span class="mtk1">, </span>
-<span class="mtk1">                        </span><span class="mtk8">1.2</span><span class="mtk1"> + hxd.</span><span class="mtk9">Math</span><span class="mtk1">.</span><span class="mtk10">srand</span><span class="mtk1">(</span><span class="mtk8">0.4</span><span class="mtk1">), </span>
+<span class="mtk1">                        </span><span class="mtk9">Math</span><span class="mtk1">.</span><span class="mtk10">random</span><span class="mtk1">() * </span><span class="mtk17">worldSize</span><span class="mtk1">,</span>
+<span class="mtk1">                        </span><span class="mtk9">Math</span><span class="mtk1">.</span><span class="mtk10">random</span><span class="mtk1">() * </span><span class="mtk17">worldSize</span><span class="mtk1">,</span>
+<span class="mtk1">                        </span><span class="mtk8">0</span><span class="mtk1">,</span>
+<span class="mtk1">                        </span><span class="mtk8">1.2</span><span class="mtk1"> + hxd.</span><span class="mtk9">Math</span><span class="mtk1">.</span><span class="mtk10">srand</span><span class="mtk1">(</span><span class="mtk8">0.4</span><span class="mtk1">),</span>
 <span class="mtk1">                        hxd.</span><span class="mtk9">Math</span><span class="mtk1">.</span><span class="mtk10">srand</span><span class="mtk1">(</span><span class="mtk9">Math</span><span class="mtk1">.</span><span class="mtk17">PI</span><span class="mtk1">)</span>
 <span class="mtk1">                    );</span>
 

@@ -5,20 +5,20 @@
 <meta property="og:title" content="Debugging - Getting started  - Heaps.io Game Engine"/><meta property="og:description" content="Heaps supports debugging for JavaScript, Flash and HashLink targets.  Debugging is support via Visual Studio Code, which is the preferred IDE for Heaps development."/><meta property="og:type" content="website"/><meta property="og:url" content="http://heaps.io/documentation/getting-started/3.debugging.html"/><meta property="og:image" content="http://heaps.io//img/share.png"/>    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/></head><body><a href="https://github.com/HeapsIO/" class="fork-button"><img src="img/fork-on-github.png" alt="Fork Heaps on GitHub"/></a><main><header class="header-page"><a class="mobileMenu" href="#"><img src="img/menu.png" alt="Menu"/> </a><nav class="top-nav"><a href="index.html" class="button ">Home</a><a href="about.html" class="button ">About</a><a href="samples/" class="button ">Samples</a><a href="documentation/getting-started/" class="button disabled">Online handbook</a><a href="api/" class="button">API</a><a href="https://gitter.im/heapsio/Lobby" class="button" target="_blank">Community</a></nav><div class="logo"><a href="./"><img src="img/logo.svg"/></a></div></header> <div class="row container"><nav class="col-4 sidebar"><ul class="unstyled"><li class="active"><a href="documentation/getting-started/">Getting started</a><ul><li><a href="documentation/getting-started/1.installation.html">Installation</a></li><li><a href="documentation/getting-started/2.hello-world-heaps.html">Example application</a></li><li class="current"><a href="documentation/getting-started/3.debugging.html">Debugging</a></li></ul></li><li><a href="documentation/h2d/">H2d</a></li><li><a href="documentation/h3d/">H3d</a></li><li><a href="documentation/hxd/">Hxd</a></li><li><a href="documentation/shaders/">Shaders</a></li><li><a href="documentation/target-platforms/">Target platforms</a></li><li><a href="documentation/tools/">Tools</a></li></ul></nav><article class="col-8 documentation"><div class="content"><h1><span>Getting started</span> Debugging </h1><p>Heaps supports debugging for JavaScript, Flash and HashLink targets.  Debugging is support via <a href="https://code.visualstudio.com/">Visual Studio Code</a>, which is the preferred IDE for Heaps development.</p>
 <h1>JavaScript</h1>
 <p>In order to debug JavaScript you need to install the <a href="https://github.com/Microsoft/vscode-chrome-debug">Chrome Extension for Visual Studio Code</a>.  You'll also need to create source maps so that the Chrome debugger will know how to map your generated JavaScript to the correct location in your Haxe code.</p>
-<p>Compiling with the -debug flag will create a source map (.map) alongside the .js file. Source maps can also be generated for release builds with -D source-map. For more information on Haxe source maps see <a href="https://haxe.org/manual/debugging-source-map.html">this artcile.</a></p>
+<p>Compiling with the -debug flag will create a source map (.map) alongside the .js file. Source maps can also be generated for release builds with -D source-map. For more information on Haxe source maps see <a href="https://haxe.org/manual/debugging-source-map.html">this article</a>.</p>
 <pre><code>#Specifying debug will generate source maps
--debug 
+-debug
 
 #Source maps can also be generated explicitly.
 -D source-map</code></pre>
-<p>Once your Chrome Debugger extension is installed you need to enable it in the debug panel of Visual Studio Code.  From the drop down menu choose 'Add Configuration' then select 'Chrome' from the following menu, then 'Chrome Launch'.  This will generate a launch.json file.  </p>
+<p>Once your Chrome Debugger extension is installed you need to enable it in the debug panel of Visual Studio Code.  From the drop down menu choose 'Add Configuration' then select 'Chrome' from the following menu, then 'Chrome Launch'.  This will generate a launch.json file.</p>
 <p><img src="img/debugging/debugconfig.jpg" alt="Chrome Debugger Panel"/></p>
 <p>Your 'launch.json' file will look something like the following.  Note that the port should match the port of your server environment.  Visual Studio Code includes several live server extensions for you run as a local server.</p>
 <p><img src="img/debugging/launch.jpg" alt="Chrome Debugger launch.json"/></p>
 <p>The Visual Studio Code debugging panel dropdown menu will now include an option to 'Launch Chrome'.  Select that and a new window should get created that the debugger can attach to.  If you have generated source maps for your build and set a break point the debugger should stop on the break and allow you to inspect.</p>
 <p><img src="img/debugging/break.jpg" alt="Visual Studio Code debugging Heaps"/></p>
 <h1>HashLink</h1>
-<p>HashLink supports debugging in Visual Studio Code*.  To get strated with debugging  HashLink you need to install the 'HashLink Debugger Extension'.  Although Heaps supports Haxe 3.4.7, HashLink has Haxe 4.0 as a requirement for debugging.</p>
+<p>HashLink supports debugging in Visual Studio Code*. To get started with debugging  HashLink you need to install the 'HashLink Debugger Extension'.  Although Heaps supports Haxe 3.4.7, HashLink has Haxe 4.0 as a requirement for debugging.</p>
 <p>*Currently only Windows and Linux support debugging, OSX will be added at a later date.</p>
 <p><img src="img/debugging/hldebuggerext.jpg" alt="HashLink Debugger Extension"/></p>
 <p>To configure the HashLink debugger go to the debug panel of Visual Studio Code. From the drop down menu choose 'Add Configuration' then select 'HashLink' from the following menu. This will generate a launch.json file. You should be able to then select 'HashLink' from the debug configuration menu.</p>
@@ -26,9 +26,9 @@
 <p>If you set a breakpoint in your code when it launches you should see something like the following.</p>
 <p><img src="img/debugging/hldebug.jpg" alt="HashLink Debugger in Visual Studio Code"/></p>
 <h1>Flash</h1>
-<p>You can debug your SWF files as well via the Flash Debugger extension for Visual Studio Code. </p>
+<p>You can debug your SWF files as well via the Flash Debugger extension for Visual Studio Code.</p>
 <p><img src="img/debugging/fdb.jpg" alt="Flash Debugger Extension"/></p>
-<p>Your SWF needs to be compiled correctly for the debugger to work.  Make sure that '-d fdb' is added to your HXML file.  Please refer to the <a href="https://github.com/vshaxe/flash-debugger">Flash Debugger page</a> on how to configure it correctly. </p>
+<p>Your SWF needs to be compiled correctly for the debugger to work.  Make sure that '-d fdb' is added to your HXML file.  Please refer to the <a href="https://github.com/vshaxe/flash-debugger">Flash Debugger page</a> on how to configure it correctly.</p>
 <pre><code>#Your SWF compile needs to include the following for the debugger to work
 -D fdb
 

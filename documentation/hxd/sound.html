@@ -6,12 +6,12 @@
 <pre class="highlighted">
 <span class="mtk14">if</span><span class="mtk1">(hxd.res.</span><span class="mtk9">Sound</span><span class="mtk1">.</span><span class="mtk10">supportedFormat</span><span class="mtk1">(</span><span class="mtk9">Mp3</span><span class="mtk1">)){</span>
 <span class="mtk1">    </span><span class="mtk4">//Mp3 is available</span>
-<span class="mtk1">} </span>
+<span class="mtk1">}</span>
 <span class="mtk14">if</span><span class="mtk1">(hxd.res.</span><span class="mtk9">Sound</span><span class="mtk1">.</span><span class="mtk10">supportedFormat</span><span class="mtk1">(</span><span class="mtk9">OggVorbis</span><span class="mtk1">)){</span>
 <span class="mtk1">    </span><span class="mtk4">//Ogg format is available</span>
 <span class="mtk1">}</span>
 </pre>
-<p>Sounds can be included in your project by specificying them at compile time in your HXML file</p>
+<p>Sounds can be included in your project by specifying them at compile time in your HXML file</p>
 <pre class="highlighted">
 <span class="mtk5">-D</span><span class="mtk1"> resourcesPath="../relative/path/to/sound/folder/"</span>
 </pre>
@@ -23,7 +23,7 @@
 <span class="mtk4">//If we support mp3 we have our sound</span>
 <span class="mtk14">if</span><span class="mtk1">(hxd.res.</span><span class="mtk9">Sound</span><span class="mtk1">.</span><span class="mtk10">supportedFormat</span><span class="mtk1">(</span><span class="mtk9">Mp3</span><span class="mtk1">)){</span>
 <span class="mtk1">    </span><span class="mtk17">musicResource</span><span class="mtk1"> = hxd.</span><span class="mtk9">Res</span><span class="mtk1">.</span><span class="mtk17">my_music</span><span class="mtk1">;</span>
-<span class="mtk1">}  </span>
+<span class="mtk1">}</span>
 
 <span class="mtk14">if</span><span class="mtk1">(</span><span class="mtk17">musicResource</span><span class="mtk1"> != </span><span class="mtk5">null</span><span class="mtk1">){</span>
 <span class="mtk1">    </span><span class="mtk4">//Play the music and loop it</span>
