@@ -13,7 +13,7 @@ var worldSize = 256;
 var world = new h3d.scene.World(numberOfChunks, worldSize, s3d);
 ```
 
-Now we need to add objects to our world. Objects need to be loaded directly via the world object so certain batching optimizations can take place. You then reuses these obejcts when you want to disperse them through your world.
+Now we need to add objects to our world. Objects need to be loaded directly via the world object so certain batching optimizations can take place. You then reuses these objects when you want to disperse them through your world.
 
 ```haxe
 //Loud our resources from the world
@@ -24,10 +24,10 @@ var rock = world.loadModel(hxd.Res.rock);
 //Add 5000 objeects to our scene - randomly choosing between a rock and a tree
 for( i in 0...5000 )
 			world.add(  Std.random(2) == 0 ? tree : rock,
-                        Math.random() * worldSize, 
-                        Math.random() * worldSize, 
-                        0, 
-                        1.2 + hxd.Math.srand(0.4), 
+                        Math.random() * worldSize,
+                        Math.random() * worldSize,
+                        0,
+                        1.2 + hxd.Math.srand(0.4),
                         hxd.Math.srand(Math.PI)
                     );
 
