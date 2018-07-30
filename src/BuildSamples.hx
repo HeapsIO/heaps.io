@@ -29,10 +29,17 @@ class BuildSamples
 		trace( "** Copy the samples");
 		Sys.setCwd("../../");
 		trace(sampleBuildDir, "assets/includes/samples/");
-		copyDirectory(sampleBuildDir, "assets/includes/samples/", function(srcPath, dstPath) {
+		copyDirectory(sampleBuildDir, "assets/includes/samples/", true, function(srcPath, dstPath) {
 			if (dstPath.indexOf(".js") != -1) {
 				trace("Minify " + dstPath);
+				File.copy(srcPath, dstPath);
 				UglifyJS.compileFile(dstPath, dstPath);
+			}
+		});
+		copyDirectory(FOLDER, "assets/includes/samples/", false, function(srcPath, dstPath) {
+			if (dstPath.indexOf(".hx") != -1) {
+				trace("Copy source file: " + dstPath);
+				File.copy(srcPath, dstPath);
 			}
 		});
 		
@@ -48,7 +55,7 @@ class BuildSamples
 		return out;
 	}
 	
-	static function copyDirectory(dir:String, path:String, onEachFile:String->String->Void) {
+	static function copyDirectory(dir:String, path:String, recursive:Bool, onEachFile:String->String->Void) {
 		FileSystem.createDirectory(path);
 		trace("include directory: " + path);
 		
@@ -56,10 +63,11 @@ class BuildSamples
 			var srcPath = '$dir/$file';
 			var dstPath = '$path/$file';
 			if (FileSystem.isDirectory(srcPath)) {
-				FileSystem.createDirectory(dstPath);
-				copyDirectory(srcPath, dstPath, onEachFile);
+				if (recursive) {
+					FileSystem.createDirectory(dstPath);
+					copyDirectory(srcPath, dstPath, recursive, onEachFile);
+				}
 			} else {
-				File.copy(srcPath, dstPath);
 				onEachFile(srcPath, dstPath);
 			}
 		}
