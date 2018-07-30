@@ -1,7 +1,0 @@
--lib heaps
--cp ../..
--swf fullscreen.swf
--swf-header 1280:800:60:FFFFFF
--swf-version 15.0
--main Fullscreen
--lib hxbit

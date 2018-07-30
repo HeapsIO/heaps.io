@@ -1,6 +1,0 @@
--lib heaps
--cp ../..
--js interactive.js
--main Interactive
--lib hxbit
--D resourcesPath=../../skin_res

@@ -1,8 +1,0 @@
--lib heaps
--cp ../..
--swf sound.swf
--swf-header 1280:800:60:FFFFFF
--swf-version 15.0
--main Sound
--D resourcesPath=../../sound_res
--lib hxbit

@@ -1,7 +1,0 @@
--lib heaps
--cp ../..
--swf base3D.swf
--swf-header 1280:800:60:FFFFFF
--swf-version 15.0
--main Base3D
--lib hxbit

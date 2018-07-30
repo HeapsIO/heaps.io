@@ -1,7 +1,0 @@
--lib heaps
--cp ../..
--hl pbr.hl
--main Pbr
--D windowSize=1024x768
--D resourcesPath=../../pbr_res
--lib hxbit

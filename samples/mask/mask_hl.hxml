@@ -1,6 +1,0 @@
--lib heaps
--cp ../..
--hl mask.hl
--main Mask
--D windowSize=1024x768
--lib hxbit

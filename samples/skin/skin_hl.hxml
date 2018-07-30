@@ -1,7 +1,0 @@
--lib heaps
--cp ../..
--hl skin.hl
--main Skin
--D windowSize=1024x768
--D resourcesPath=../../skin_res
--lib hxbit
