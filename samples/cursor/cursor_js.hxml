@@ -1,0 +1,5 @@
+-lib heaps
+-cp ../..
+-js cursor.js
+-main Cursor
+-lib hxbit

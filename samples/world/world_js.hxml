@@ -1,0 +1,6 @@
+-lib heaps
+-cp ../..
+-js world.js
+-main World
+-D resourcesPath=../../world_res
+-lib hxbit

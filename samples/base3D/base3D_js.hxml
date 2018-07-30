@@ -1,0 +1,5 @@
+-lib heaps
+-cp ../..
+-js base3D.js
+-main Base3D
+-lib hxbit

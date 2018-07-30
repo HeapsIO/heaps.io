@@ -1,0 +1,6 @@
+-lib heaps
+-cp ../..
+-js pbr.js
+-main Pbr
+-D resourcesPath=../../pbr_res
+-lib hxbit
