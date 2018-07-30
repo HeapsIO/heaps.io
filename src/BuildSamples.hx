@@ -36,7 +36,7 @@ class BuildSamples
 				UglifyJS.compileFile(dstPath, dstPath);
 			}
 		});
-		copyDirectory(FOLDER, "assets/includes/samples/", false, function(srcPath, dstPath) {
+		copyDirectory(sampleDir, "assets/includes/samples/", false, function(srcPath, dstPath) {
 			if (dstPath.indexOf(".hx") != -1) {
 				trace("Copy source file: " + dstPath);
 				File.copy(srcPath, dstPath);
