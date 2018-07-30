@@ -6,7 +6,7 @@ assets/includes/api
 *.hxproj
 *.swf
 *.xml
-assets/includes/samples/*/*.hxml
+assets/includes/samples/
 .haxelib/*/
 node_modules/
 
