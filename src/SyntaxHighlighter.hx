@@ -9,10 +9,12 @@ class SyntaxHighlighter
 
 		var haxeGrammar = new Highlighter("grammars/haxe-TmLanguage/haxe.tmLanguage");
 		var hxmlGrammar = new Highlighter("grammars/haxe-TmLanguage/hxml.tmLanguage");
-		
+		var htmlGrammar = new Highlighter("grammars/html.tmbundle/Syntaxes/HTML.plist");
+
 		var grammars = [
 			"haxe" => haxeGrammar,
-			"hxml" => hxmlGrammar,			
+			"hxml" => hxmlGrammar,
+			"html" => htmlGrammar,
 		];
 
 		// Go over the generated HTML file and apply syntax highlighting
@@ -45,5 +47,3 @@ class SyntaxHighlighter
 		SyntaxHighlighter.patch();
 	}
 }
-
-

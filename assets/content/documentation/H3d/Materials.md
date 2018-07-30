@@ -1,6 +1,6 @@
 # Material Basics
 
-Materials are the cornerstone of viewing content in 3d. Your scene can have many objects with geometry but if no materials are applied you will not see anything in your viewport. 
+Materials are the cornerstone of viewing content in 3d. Your scene can have many objects with geometry but if no materials are applied you will not see anything in your viewport.
 
 Materials get applied to Meshes.  By default materials area specific color (white) but this can be customized in a variety of ways.
 
@@ -37,7 +37,7 @@ Our cube is looking a lot better.
 
 ## Textures
 
-To really customize our materials though we want to use [textures](https://en.wikipedia.org/wiki/Texture_mapping). To keep it simple, texture allow us to apply custom images to our geometry. Textures are [resources](/documentation/Hxd/Resource-Management.md) that need to be loaded into your Heaps application. Once your textures are loaded they need to be added to materials and then applied to geometry. 
+To really customize our materials though we want to use [textures](https://en.wikipedia.org/wiki/Texture_mapping). To keep it simple, texture allow us to apply custom images to our geometry. Textures are [resources](/documentation/Hxd/Resource-Management.md) that need to be loaded into your Heaps application. Once your textures are loaded they need to be added to materials and then applied to geometry.
 
 Using the geometry from our previous example lets take a look at how to use textures.
 
@@ -70,7 +70,7 @@ Here you can see our cube with the loaded texture applied
 
 ## Blend Modes
 
-Materials can have blend modes applied to them to blend with the objects behind them. These are comparable to Photoshop blend modes.
+Materials can have blend modes applied to them to blend with the objects behind them. These are comparable to Photoshop's blend modes.
 
 Changing blend modes on a material is straightforward. You simply access the .blendMode property of the material you want to change.
 

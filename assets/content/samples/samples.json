@@ -19,7 +19,6 @@
 		{ "name":"Pad", "description": "" },
 		{ "name":"Pbr", "description": "" },
 		{ "name":"Quaternion", "description": "" },
-		{ "name":"SampleApp", "description": "" },
 		{ "name":"Sao", "description": "" },
 		{ "name":"Shadows", "description": "" },
 		{ "name":"Skin", "description": "" },

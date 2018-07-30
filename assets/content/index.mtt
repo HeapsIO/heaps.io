@@ -62,7 +62,7 @@
 			<div class="col-4">
 				<img src="img/feather/codepen.svg"/>
 				<h3>2D and 3D game engine</h3>
-				<p>At its core, Heaps is built to support both 2D and 3D environements.</p>
+				<p>At its core, Heaps is built to support both 2D and 3D environments.</p>
 			</div>
 
 			<div class="col-4">
@@ -153,7 +153,7 @@
 		<div class="col-4">
 			<div class="box box-raised">
 				<h3>Proven technology</h3>
-				<p>Heaps is used by several (indie) game studios with successful game titles. Unbeatable performance, intuitive API, globally used and battle­tested. </p>
+				<p>Heaps is used by several (indie) game studios with successful game titles. Unbeatable performance, intuitive API, globally used and battle tested. </p>
 				<p><a href="about.html" class="button">Learn more</a></p>
 			</div>
 		</div>
