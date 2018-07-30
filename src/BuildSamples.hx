@@ -29,7 +29,12 @@ class BuildSamples
 		trace( "** Copy the samples");
 		Sys.setCwd("../../");
 		trace(sampleBuildDir, "assets/includes/samples/");
-		copyDirectory(sampleBuildDir, "assets/includes/samples/");
+		copyDirectory(sampleBuildDir, "assets/includes/samples/", function(srcPath, dstPath) {
+			if (dstPath.indexOf(".js") != -1) {
+				trace("Minify " + dstPath);
+				UglifyJS.compileFile(dstPath, dstPath);
+			}
+		});
 		
 		trace( "** Samples done!");
 	}
@@ -43,7 +48,7 @@ class BuildSamples
 		return out;
 	}
 	
-	static function copyDirectory(dir:String, path:String) {
+	static function copyDirectory(dir:String, path:String, onEachFile:String->String->Void) {
 		FileSystem.createDirectory(path);
 		trace("include directory: " + path);
 		
@@ -52,9 +57,10 @@ class BuildSamples
 			var dstPath = '$path/$file';
 			if (FileSystem.isDirectory(srcPath)) {
 				FileSystem.createDirectory(dstPath);
-				copyDirectory(srcPath, dstPath);
+				copyDirectory(srcPath, dstPath, onEachFile);
 			} else {
 				File.copy(srcPath, dstPath);
+				onEachFile(srcPath, dstPath);
 			}
 		}
 	}
