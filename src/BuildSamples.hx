@@ -9,8 +9,8 @@ import sys.io.Process;
  */
 class BuildSamples
 {
-	//static var heapsVersionTag = "1.0.0";
-	//static var heapsFolder = "C:/HaxeToolkit/libs/heaps/git";
+	static var GIT_TAG = "1.2.0"; // tag name
+	static var GIT_REPO = "https://github.com/HeapsIO/heaps.git";
 	static var TEMPFILE = ".install-heaps.tmp";
 	static var FOLDER = ".temp/";
 	
@@ -19,12 +19,12 @@ class BuildSamples
 		var sampleDir = FOLDER + "samples/";
 		var sampleBuildDir = sampleDir + "/build/";
 		trace( "** Git the samples");
-		Sys.command('git',["clone", "--branch",  "1.1.0", "--depth", "1", "--single-branch", "https://github.com/HeapsIO/heaps.git", FOLDER]);
+		Sys.command('git', ["clone", "--branch",  GIT_TAG, "--depth", "1", "--single-branch", GIT_REPO, FOLDER]);
 		
 		trace( "** Build the samples");
 		
 		Sys.setCwd(sampleDir);
-		Sys.command('haxe',["all.hxml"]);
+		Sys.command('haxe', ["all.hxml"]);
 		
 		trace( "** Copy the samples");
 		Sys.setCwd("../../");
