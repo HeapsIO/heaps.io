@@ -7,14 +7,6 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var EReg = function(r,opt) {
-	this.r = new RegExp(r,opt.split("u").join(""));
-};
-$hxClasses["EReg"] = EReg;
-EReg.__name__ = ["EReg"];
-EReg.prototype = {
-	__class__: EReg
-};
 var HxOverrides = function() { };
 $hxClasses["HxOverrides"] = HxOverrides;
 HxOverrides.__name__ = ["HxOverrides"];
@@ -175,6246 +167,24 @@ _$List_ListIterator.prototype = {
 	,__class__: _$List_ListIterator
 };
 Math.__name__ = ["Math"];
-var Reflect = function() { };
-$hxClasses["Reflect"] = Reflect;
-Reflect.__name__ = ["Reflect"];
-Reflect.field = function(o,field) {
-	try {
-		return o[field];
-	} catch( e ) {
-		return null;
-	}
-};
-Reflect.fields = function(o) {
-	var a = [];
-	if(o != null) {
-		var hasOwnProperty = Object.prototype.hasOwnProperty;
-		for( var f in o ) {
-		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
-			a.push(f);
-		}
-		}
-	}
-	return a;
-};
-Reflect.isFunction = function(f) {
-	if(typeof(f) == "function") {
-		return !(f.__name__ || f.__ename__);
-	} else {
-		return false;
-	}
-};
-Reflect.compare = function(a,b) {
-	if(a == b) {
-		return 0;
-	} else if(a > b) {
-		return 1;
-	} else {
-		return -1;
-	}
-};
-Reflect.compareMethods = function(f1,f2) {
-	if(f1 == f2) {
-		return true;
-	}
-	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
-		return false;
-	}
-	if(f1.scope == f2.scope && f1.method == f2.method) {
-		return f1.method != null;
-	} else {
-		return false;
-	}
-};
-Reflect.isEnumValue = function(v) {
-	if(v != null) {
-		return v.__enum__ != null;
-	} else {
-		return false;
-	}
-};
-Reflect.deleteField = function(o,field) {
-	if(!Object.prototype.hasOwnProperty.call(o,field)) {
-		return false;
-	}
-	delete(o[field]);
-	return true;
-};
-var Std = function() { };
-$hxClasses["Std"] = Std;
-Std.__name__ = ["Std"];
-Std.string = function(s) {
-	return js_Boot.__string_rec(s,"");
-};
-Std.parseInt = function(x) {
-	var v = parseInt(x,10);
-	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) {
-		v = parseInt(x);
-	}
-	if(isNaN(v)) {
-		return null;
-	}
-	return v;
-};
-Std.random = function(x) {
-	if(x <= 0) {
-		return 0;
-	} else {
-		return Math.floor(Math.random() * x);
-	}
-};
-var StringBuf = function() {
-	this.b = "";
-};
-$hxClasses["StringBuf"] = StringBuf;
-StringBuf.__name__ = ["StringBuf"];
-StringBuf.prototype = {
-	__class__: StringBuf
-};
-var StringTools = function() { };
-$hxClasses["StringTools"] = StringTools;
-StringTools.__name__ = ["StringTools"];
-StringTools.startsWith = function(s,start) {
-	if(s.length >= start.length) {
-		return HxOverrides.substr(s,0,start.length) == start;
-	} else {
-		return false;
-	}
-};
-StringTools.isSpace = function(s,pos) {
-	var c = HxOverrides.cca(s,pos);
-	if(!(c > 8 && c < 14)) {
-		return c == 32;
-	} else {
-		return true;
-	}
-};
-StringTools.ltrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,r)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,r,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.rtrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,0,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.trim = function(s) {
-	return StringTools.ltrim(StringTools.rtrim(s));
-};
-StringTools.hex = function(n,digits) {
-	var s = "";
-	var hexChars = "0123456789ABCDEF";
-	while(true) {
-		s = hexChars.charAt(n & 15) + s;
-		n >>>= 4;
-		if(!(n > 0)) {
-			break;
-		}
-	}
-	if(digits != null) {
-		while(s.length < digits) s = "0" + s;
-	}
-	return s;
-};
-var h2d_Sprite = function(parent) {
-	this.alpha = 1.;
-	this.matA = 1;
-	this.matB = 0;
-	this.matC = 0;
-	this.matD = 1;
-	this.absX = 0;
-	this.absY = 0;
-	this.posChanged = true;
-	this.x = 0;
-	this.posChanged = true;
-	this.y = 0;
-	this.posChanged = true;
-	this.scaleX = 1;
-	this.posChanged = true;
-	this.scaleY = 1;
-	this.posChanged = true;
-	this.rotation = 0;
-	this.posChanged = parent != null;
-	this.set_visible(true);
-	this.children = [];
-	if(parent != null) {
-		parent.addChild(this);
-	}
-};
-$hxClasses["h2d.Sprite"] = h2d_Sprite;
-h2d_Sprite.__name__ = ["h2d","Sprite"];
-h2d_Sprite.prototype = {
-	getBounds: function(relativeTo,out) {
-		if(out == null) {
-			out = new h2d_col_Bounds();
-		} else {
-			out.xMin = 1e20;
-			out.yMin = 1e20;
-			out.xMax = -1e20;
-			out.yMax = -1e20;
-		}
-		if(relativeTo != null) {
-			relativeTo.syncPos();
-		}
-		if(relativeTo != this) {
-			this.syncPos();
-		}
-		this.getBoundsRec(relativeTo,out,false);
-		if(out.xMax <= out.xMin || out.yMax <= out.yMin) {
-			this.addBounds(relativeTo,out,-1,-1,2,2);
-			out.xMax = out.xMin = (out.xMax + out.xMin) * 0.5;
-			out.yMax = out.yMin = (out.yMax + out.yMin) * 0.5;
-		}
-		return out;
-	}
-	,getSize: function(out) {
-		if(out == null) {
-			out = new h2d_col_Bounds();
-		} else {
-			out.xMin = 1e20;
-			out.yMin = 1e20;
-			out.xMax = -1e20;
-			out.yMax = -1e20;
-		}
-		this.syncPos();
-		this.getBoundsRec(this.parent,out,true);
-		if(out.xMax <= out.xMin || out.yMax <= out.yMin) {
-			this.addBounds(this.parent,out,-1,-1,2,2);
-			out.xMax = out.xMin = (out.xMax + out.xMin) * 0.5;
-			out.yMax = out.yMin = (out.yMax + out.yMin) * 0.5;
-		}
-		var dx = -this.x;
-		var dy = -this.y;
-		out.xMin += dx;
-		out.xMax += dx;
-		out.yMin += dy;
-		out.yMax += dy;
-		return out;
-	}
-	,find: function(f) {
-		var v = f(this);
-		if(v != null) {
-			return v;
-		}
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var o = _g1[_g];
-			++_g;
-			var v1 = o.find(f);
-			if(v1 != null) {
-				return v1;
-			}
-		}
-		return null;
-	}
-	,findAll: function(f,arr) {
-		if(arr == null) {
-			arr = [];
-		}
-		var v = f(this);
-		if(v != null) {
-			arr.push(v);
-		}
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var o = _g1[_g];
-			++_g;
-			o.findAll(f,arr);
-		}
-		return arr;
-	}
-	,set_filter: function(f) {
-		if(this.filter != null && this.allocated) {
-			this.filter.unbind(this);
-		}
-		this.filter = f;
-		if(f != null && this.allocated) {
-			f.bind(this);
-		}
-		return f;
-	}
-	,getBoundsRec: function(relativeTo,out,forSize) {
-		if(this.posChanged) {
-			this.calcAbsPos();
-			var _g = 0;
-			var _g1 = this.children;
-			while(_g < _g1.length) {
-				var c = _g1[_g];
-				++_g;
-				c.posChanged = true;
-			}
-			this.posChanged = false;
-		}
-		var n = this.children.length;
-		if(n == 0) {
-			out.xMin = 1e20;
-			out.yMin = 1e20;
-			out.xMax = -1e20;
-			out.yMax = -1e20;
-			return;
-		}
-		if(n == 1) {
-			var c1 = this.children[0];
-			if(c1.visible) {
-				c1.getBoundsRec(relativeTo,out,forSize);
-			} else {
-				out.xMin = 1e20;
-				out.yMin = 1e20;
-				out.xMax = -1e20;
-				out.yMax = -1e20;
-			}
-			return;
-		}
-		var xmin = Infinity;
-		var ymin = Infinity;
-		var xmax = -Infinity;
-		var ymax = -Infinity;
-		var _g2 = 0;
-		var _g11 = this.children;
-		while(_g2 < _g11.length) {
-			var c2 = _g11[_g2];
-			++_g2;
-			if(!c2.visible) {
-				continue;
-			}
-			c2.getBoundsRec(relativeTo,out,forSize);
-			if(out.xMin < xmin) {
-				xmin = out.xMin;
-			}
-			if(out.yMin < ymin) {
-				ymin = out.yMin;
-			}
-			if(out.xMax > xmax) {
-				xmax = out.xMax;
-			}
-			if(out.yMax > ymax) {
-				ymax = out.yMax;
-			}
-		}
-		out.xMin = xmin;
-		out.yMin = ymin;
-		out.xMax = xmax;
-		out.yMax = ymax;
-	}
-	,addBounds: function(relativeTo,out,dx,dy,width,height) {
-		if(width <= 0 || height <= 0) {
-			return;
-		}
-		if(relativeTo == null) {
-			var x;
-			var y;
-			var x1 = dx * this.matA + dy * this.matC + this.absX;
-			var y1 = dx * this.matB + dy * this.matD + this.absY;
-			if(x1 < out.xMin) {
-				out.xMin = x1;
-			}
-			if(x1 > out.xMax) {
-				out.xMax = x1;
-			}
-			if(y1 < out.yMin) {
-				out.yMin = y1;
-			}
-			if(y1 > out.yMax) {
-				out.yMax = y1;
-			}
-			var x2 = (dx + width) * this.matA + dy * this.matC + this.absX;
-			var y2 = (dx + width) * this.matB + dy * this.matD + this.absY;
-			if(x2 < out.xMin) {
-				out.xMin = x2;
-			}
-			if(x2 > out.xMax) {
-				out.xMax = x2;
-			}
-			if(y2 < out.yMin) {
-				out.yMin = y2;
-			}
-			if(y2 > out.yMax) {
-				out.yMax = y2;
-			}
-			var x3 = dx * this.matA + (dy + height) * this.matC + this.absX;
-			var y3 = dx * this.matB + (dy + height) * this.matD + this.absY;
-			if(x3 < out.xMin) {
-				out.xMin = x3;
-			}
-			if(x3 > out.xMax) {
-				out.xMax = x3;
-			}
-			if(y3 < out.yMin) {
-				out.yMin = y3;
-			}
-			if(y3 > out.yMax) {
-				out.yMax = y3;
-			}
-			var x4 = (dx + width) * this.matA + (dy + height) * this.matC + this.absX;
-			var y4 = (dx + width) * this.matB + (dy + height) * this.matD + this.absY;
-			if(x4 < out.xMin) {
-				out.xMin = x4;
-			}
-			if(x4 > out.xMax) {
-				out.xMax = x4;
-			}
-			if(y4 < out.yMin) {
-				out.yMin = y4;
-			}
-			if(y4 > out.yMax) {
-				out.yMax = y4;
-			}
-			return;
-		}
-		if(relativeTo == this) {
-			if(out.xMin > dx) {
-				out.xMin = dx;
-			}
-			if(out.yMin > dy) {
-				out.yMin = dy;
-			}
-			if(out.xMax < dx + width) {
-				out.xMax = dx + width;
-			}
-			if(out.yMax < dy + height) {
-				out.yMax = dy + height;
-			}
-			return;
-		}
-		var r = relativeTo.matA * relativeTo.matD - relativeTo.matB * relativeTo.matC;
-		if(r == 0) {
-			return;
-		}
-		var det = 1 / r;
-		var rA = relativeTo.matD * det;
-		var rB = -relativeTo.matB * det;
-		var rC = -relativeTo.matC * det;
-		var rD = relativeTo.matA * det;
-		var rX = this.absX - relativeTo.absX;
-		var rY = this.absY - relativeTo.absY;
-		var x5;
-		var y5;
-		x5 = dx * this.matA + dy * this.matC + rX;
-		y5 = dx * this.matB + dy * this.matD + rY;
-		var x6 = x5 * rA + y5 * rC;
-		var y6 = x5 * rB + y5 * rD;
-		if(x6 < out.xMin) {
-			out.xMin = x6;
-		}
-		if(x6 > out.xMax) {
-			out.xMax = x6;
-		}
-		if(y6 < out.yMin) {
-			out.yMin = y6;
-		}
-		if(y6 > out.yMax) {
-			out.yMax = y6;
-		}
-		x5 = (dx + width) * this.matA + dy * this.matC + rX;
-		y5 = (dx + width) * this.matB + dy * this.matD + rY;
-		var x7 = x5 * rA + y5 * rC;
-		var y7 = x5 * rB + y5 * rD;
-		if(x7 < out.xMin) {
-			out.xMin = x7;
-		}
-		if(x7 > out.xMax) {
-			out.xMax = x7;
-		}
-		if(y7 < out.yMin) {
-			out.yMin = y7;
-		}
-		if(y7 > out.yMax) {
-			out.yMax = y7;
-		}
-		x5 = dx * this.matA + (dy + height) * this.matC + rX;
-		y5 = dx * this.matB + (dy + height) * this.matD + rY;
-		var x8 = x5 * rA + y5 * rC;
-		var y8 = x5 * rB + y5 * rD;
-		if(x8 < out.xMin) {
-			out.xMin = x8;
-		}
-		if(x8 > out.xMax) {
-			out.xMax = x8;
-		}
-		if(y8 < out.yMin) {
-			out.yMin = y8;
-		}
-		if(y8 > out.yMax) {
-			out.yMax = y8;
-		}
-		x5 = (dx + width) * this.matA + (dy + height) * this.matC + rX;
-		y5 = (dx + width) * this.matB + (dy + height) * this.matD + rY;
-		var x9 = x5 * rA + y5 * rC;
-		var y9 = x5 * rB + y5 * rD;
-		if(x9 < out.xMin) {
-			out.xMin = x9;
-		}
-		if(x9 > out.xMax) {
-			out.xMax = x9;
-		}
-		if(y9 < out.yMin) {
-			out.yMin = y9;
-		}
-		if(y9 > out.yMax) {
-			out.yMax = y9;
-		}
-	}
-	,getSpritesCount: function() {
-		var k = 0;
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var c = _g1[_g];
-			++_g;
-			k += c.getSpritesCount() + 1;
-		}
-		return k;
-	}
-	,localToGlobal: function(pt) {
-		this.syncPos();
-		if(pt == null) {
-			pt = new h2d_col_Point();
-		}
-		var px = pt.x * this.matA + pt.y * this.matC + this.absX;
-		var py = pt.x * this.matB + pt.y * this.matD + this.absY;
-		pt.x = px;
-		pt.y = py;
-		return pt;
-	}
-	,globalToLocal: function(pt) {
-		this.syncPos();
-		pt.x -= this.absX;
-		pt.y -= this.absY;
-		var invDet = 1 / (this.matA * this.matD - this.matB * this.matC);
-		var px = (pt.x * this.matD - pt.y * this.matC) * invDet;
-		var py = (-pt.x * this.matB + pt.y * this.matA) * invDet;
-		pt.x = px;
-		pt.y = py;
-		return pt;
-	}
-	,getScene: function() {
-		var p = this;
-		while(p.parent != null) p = p.parent;
-		return (p instanceof h2d_Scene) ? p : null;
-	}
-	,set_visible: function(b) {
-		if(this.visible == b) {
-			return b;
-		}
-		this.visible = b;
-		if(this.parentContainer != null) {
-			this.parentContainer.contentChanged(this);
-		}
-		return b;
-	}
-	,addChild: function(s) {
-		this.addChildAt(s,this.children.length);
-	}
-	,addChildAt: function(s,pos) {
-		if(pos < 0) {
-			pos = 0;
-		}
-		if(pos > this.children.length) {
-			pos = this.children.length;
-		}
-		var p = this;
-		while(p != null) {
-			if(p == s) {
-				throw new js__$Boot_HaxeError("Recursive addChild");
-			}
-			p = p.parent;
-		}
-		if(s.parent != null) {
-			var old = s.allocated;
-			s.allocated = false;
-			s.parent.removeChild(s);
-			s.allocated = old;
-		}
-		this.children.splice(pos,0,s);
-		if(!this.allocated && s.allocated) {
-			s.onRemove();
-		}
-		s.parent = this;
-		s.parentContainer = this.parentContainer;
-		s.posChanged = true;
-		if(this.allocated) {
-			if(!s.allocated) {
-				s.onAdd();
-			} else {
-				s.onParentChanged();
-			}
-		}
-		if(this.parentContainer != null) {
-			this.parentContainer.contentChanged(this);
-		}
-	}
-	,onContentChanged: function() {
-		if(this.parentContainer != null) {
-			this.parentContainer.contentChanged(this);
-		}
-	}
-	,onParentChanged: function() {
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var c = _g1[_g];
-			++_g;
-			c.onParentChanged();
-		}
-	}
-	,onAdd: function() {
-		this.allocated = true;
-		if(this.filter != null) {
-			this.filter.bind(this);
-		}
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var c = _g1[_g];
-			++_g;
-			c.onAdd();
-		}
-	}
-	,onRemove: function() {
-		this.allocated = false;
-		if(this.filter != null) {
-			this.filter.unbind(this);
-		}
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var c = _g1[_g];
-			++_g;
-			c.onRemove();
-		}
-	}
-	,getMatrix: function(m) {
-		m.a = this.matA;
-		m.b = this.matB;
-		m.c = this.matC;
-		m.d = this.matD;
-		m.x = this.absX;
-		m.y = this.absY;
-	}
-	,removeChild: function(s) {
-		if(HxOverrides.remove(this.children,s)) {
-			if(s.allocated) {
-				s.onRemove();
-			}
-			s.parent = null;
-			if(s.parentContainer != null) {
-				s.setParentContainer(null);
-			}
-			s.posChanged = true;
-			if(this.parentContainer != null) {
-				this.parentContainer.contentChanged(this);
-			}
-		}
-	}
-	,setParentContainer: function(c) {
-		this.parentContainer = c;
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var s = _g1[_g];
-			++_g;
-			s.setParentContainer(c);
-		}
-	}
-	,removeChildren: function() {
-		while(this.children.length > 0) this.removeChild(this.children[0]);
-	}
-	,remove: function() {
-		if(this.parent != null) {
-			this.parent.removeChild(this);
-		}
-	}
-	,drawTo: function(t) {
-		var s = this.getScene();
-		var needDispose = s == null;
-		if(s == null) {
-			s = new h2d_Scene();
-		}
-		s.drawImplTo(this,t);
-		if(needDispose) {
-			s.dispose();
-		}
-	}
-	,draw: function(ctx) {
-	}
-	,sync: function(ctx) {
-		var changed = this.posChanged;
-		if(changed) {
-			this.calcAbsPos();
-			this.posChanged = false;
-		}
-		this.lastFrame = ctx.frame;
-		var p = 0;
-		var len = this.children.length;
-		while(p < len) {
-			var c = this.children[p];
-			if(c == null) {
-				break;
-			}
-			if(c.lastFrame != ctx.frame) {
-				if(changed) {
-					c.posChanged = true;
-				}
-				c.sync(ctx);
-			}
-			if(this.children[p] != c) {
-				p = 0;
-				len = this.children.length;
-			} else {
-				++p;
-			}
-		}
-	}
-	,syncPos: function() {
-		if(this.parent != null) {
-			this.parent.syncPos();
-		}
-		if(this.posChanged) {
-			this.calcAbsPos();
-			var _g = 0;
-			var _g1 = this.children;
-			while(_g < _g1.length) {
-				var c = _g1[_g];
-				++_g;
-				c.posChanged = true;
-			}
-			this.posChanged = false;
-		}
-	}
-	,calcAbsPos: function() {
-		if(this.parent == null) {
-			var cr;
-			var sr;
-			if(this.rotation == 0) {
-				cr = 1.;
-				sr = 0.;
-				this.matA = this.scaleX;
-				this.matB = 0;
-				this.matC = 0;
-				this.matD = this.scaleY;
-			} else {
-				cr = Math.cos(this.rotation);
-				sr = Math.sin(this.rotation);
-				this.matA = this.scaleX * cr;
-				this.matB = this.scaleX * sr;
-				this.matC = this.scaleY * -sr;
-				this.matD = this.scaleY * cr;
-			}
-			this.absX = this.x;
-			this.absY = this.y;
-		} else {
-			if(this.rotation == 0) {
-				this.matA = this.scaleX * this.parent.matA;
-				this.matB = this.scaleX * this.parent.matB;
-				this.matC = this.scaleY * this.parent.matC;
-				this.matD = this.scaleY * this.parent.matD;
-			} else {
-				var cr1 = Math.cos(this.rotation);
-				var sr1 = Math.sin(this.rotation);
-				var tmpA = this.scaleX * cr1;
-				var tmpB = this.scaleX * sr1;
-				var tmpC = this.scaleY * -sr1;
-				var tmpD = this.scaleY * cr1;
-				this.matA = tmpA * this.parent.matA + tmpB * this.parent.matC;
-				this.matB = tmpA * this.parent.matB + tmpB * this.parent.matD;
-				this.matC = tmpC * this.parent.matA + tmpD * this.parent.matC;
-				this.matD = tmpC * this.parent.matB + tmpD * this.parent.matD;
-			}
-			this.absX = this.x * this.parent.matA + this.y * this.parent.matC + this.parent.absX;
-			this.absY = this.x * this.parent.matB + this.y * this.parent.matD + this.parent.absY;
-		}
-	}
-	,emitTile: function(ctx,tile) {
-		if(h2d_Sprite.nullDrawable == null) {
-			h2d_Sprite.nullDrawable = new h2d_Drawable(null);
-		}
-		h2d_Sprite.nullDrawable.absX = this.absX;
-		h2d_Sprite.nullDrawable.absY = this.absY;
-		h2d_Sprite.nullDrawable.matA = this.matA;
-		h2d_Sprite.nullDrawable.matB = this.matB;
-		h2d_Sprite.nullDrawable.matC = this.matC;
-		h2d_Sprite.nullDrawable.matD = this.matD;
-		ctx.drawTile(h2d_Sprite.nullDrawable,tile);
-		return;
-	}
-	,clipBounds: function(ctx,bounds) {
-		var view = ctx.tmpBounds;
-		var matA;
-		var matB;
-		var matC;
-		var matD;
-		var absX;
-		var absY;
-		if(ctx.inFilter != null) {
-			var f1 = ctx.baseShader.filterMatrixA__;
-			var f2 = ctx.baseShader.filterMatrixB__;
-			matA = this.matA * f1.x + this.matB * f1.y;
-			matB = this.matA * f2.x + this.matB * f2.y;
-			matC = this.matC * f1.x + this.matD * f1.y;
-			matD = this.matC * f2.x + this.matD * f2.y;
-			absX = this.absX * f1.x + this.absY * f1.y + f1.z;
-			absY = this.absX * f2.x + this.absY * f2.y + f2.z;
-		} else {
-			matA = this.matA;
-			matB = this.matB;
-			matC = this.matC;
-			matD = this.matD;
-			absX = this.absX;
-			absY = this.absY;
-		}
-		view.xMin = 1e20;
-		view.yMin = 1e20;
-		view.xMax = -1e20;
-		view.yMax = -1e20;
-		var x = bounds.xMin;
-		var y = bounds.yMin;
-		var x1 = x * matA + y * matC + absX;
-		var y1 = x * matB + y * matD + absY;
-		if(x1 < view.xMin) {
-			view.xMin = x1;
-		}
-		if(x1 > view.xMax) {
-			view.xMax = x1;
-		}
-		if(y1 < view.yMin) {
-			view.yMin = y1;
-		}
-		if(y1 > view.yMax) {
-			view.yMax = y1;
-		}
-		var x2 = bounds.xMax;
-		var y2 = bounds.yMin;
-		var x3 = x2 * matA + y2 * matC + absX;
-		var y3 = x2 * matB + y2 * matD + absY;
-		if(x3 < view.xMin) {
-			view.xMin = x3;
-		}
-		if(x3 > view.xMax) {
-			view.xMax = x3;
-		}
-		if(y3 < view.yMin) {
-			view.yMin = y3;
-		}
-		if(y3 > view.yMax) {
-			view.yMax = y3;
-		}
-		var x4 = bounds.xMin;
-		var y4 = bounds.yMax;
-		var x5 = x4 * matA + y4 * matC + absX;
-		var y5 = x4 * matB + y4 * matD + absY;
-		if(x5 < view.xMin) {
-			view.xMin = x5;
-		}
-		if(x5 > view.xMax) {
-			view.xMax = x5;
-		}
-		if(y5 < view.yMin) {
-			view.yMin = y5;
-		}
-		if(y5 > view.yMax) {
-			view.yMax = y5;
-		}
-		var x6 = bounds.xMax;
-		var y6 = bounds.yMax;
-		var x7 = x6 * matA + y6 * matC + absX;
-		var y7 = x6 * matB + y6 * matD + absY;
-		if(x7 < view.xMin) {
-			view.xMin = x7;
-		}
-		if(x7 > view.xMax) {
-			view.xMax = x7;
-		}
-		if(y7 < view.yMin) {
-			view.yMin = y7;
-		}
-		if(y7 > view.yMax) {
-			view.yMax = y7;
-		}
-		if(view.xMin < ctx.curX) {
-			view.xMin = ctx.curX;
-		}
-		if(view.yMin < ctx.curY) {
-			view.yMin = ctx.curY;
-		}
-		if(view.xMax > ctx.curX + ctx.curWidth) {
-			view.xMax = ctx.curX + ctx.curWidth;
-		}
-		if(view.yMax > ctx.curY + ctx.curHeight) {
-			view.yMax = ctx.curY + ctx.curHeight;
-		}
-		var invDet = 1 / (matA * matD - matB * matC);
-		var sxMin = view.xMin;
-		var syMin = view.yMin;
-		var sxMax = view.xMax;
-		var syMax = view.yMax;
-		view.xMin = 1e20;
-		view.yMin = 1e20;
-		view.xMax = -1e20;
-		view.yMax = -1e20;
-		var x8 = sxMin;
-		var y8 = syMin;
-		x8 -= absX;
-		y8 -= absY;
-		var x9 = (x8 * matD - y8 * matC) * invDet;
-		var y9 = (-x8 * matB + y8 * matA) * invDet;
-		if(x9 < view.xMin) {
-			view.xMin = x9;
-		}
-		if(x9 > view.xMax) {
-			view.xMax = x9;
-		}
-		if(y9 < view.yMin) {
-			view.yMin = y9;
-		}
-		if(y9 > view.yMax) {
-			view.yMax = y9;
-		}
-		var x10 = sxMax;
-		var y10 = syMin;
-		x10 -= absX;
-		y10 -= absY;
-		var x11 = (x10 * matD - y10 * matC) * invDet;
-		var y11 = (-x10 * matB + y10 * matA) * invDet;
-		if(x11 < view.xMin) {
-			view.xMin = x11;
-		}
-		if(x11 > view.xMax) {
-			view.xMax = x11;
-		}
-		if(y11 < view.yMin) {
-			view.yMin = y11;
-		}
-		if(y11 > view.yMax) {
-			view.yMax = y11;
-		}
-		var x12 = sxMin;
-		var y12 = syMax;
-		x12 -= absX;
-		y12 -= absY;
-		var x13 = (x12 * matD - y12 * matC) * invDet;
-		var y13 = (-x12 * matB + y12 * matA) * invDet;
-		if(x13 < view.xMin) {
-			view.xMin = x13;
-		}
-		if(x13 > view.xMax) {
-			view.xMax = x13;
-		}
-		if(y13 < view.yMin) {
-			view.yMin = y13;
-		}
-		if(y13 > view.yMax) {
-			view.yMax = y13;
-		}
-		var x14 = sxMax;
-		var y14 = syMax;
-		x14 -= absX;
-		y14 -= absY;
-		var x15 = (x14 * matD - y14 * matC) * invDet;
-		var y15 = (-x14 * matB + y14 * matA) * invDet;
-		if(x15 < view.xMin) {
-			view.xMin = x15;
-		}
-		if(x15 > view.xMax) {
-			view.xMax = x15;
-		}
-		if(y15 < view.yMin) {
-			view.yMin = y15;
-		}
-		if(y15 > view.yMax) {
-			view.yMax = y15;
-		}
-		var a = bounds.xMin;
-		var b = view.xMin;
-		bounds.xMin = a < b ? b : a;
-		var a1 = bounds.yMin;
-		var b1 = view.yMin;
-		bounds.yMin = a1 < b1 ? b1 : a1;
-		var a2 = bounds.xMax;
-		var b2 = view.xMax;
-		bounds.xMax = a2 > b2 ? b2 : a2;
-		var a3 = bounds.yMax;
-		var b3 = view.yMax;
-		bounds.yMax = a3 > b3 ? b3 : a3;
-	}
-	,drawFilters: function(ctx) {
-		if(!ctx.pushFilter(this)) {
-			return;
-		}
-		var bounds = ctx.tmpBounds;
-		var total = new h2d_col_Bounds();
-		var maxExtent = -1.;
-		this.filter.sync(ctx,this);
-		if(this.filter.autoBounds) {
-			maxExtent = this.filter.boundsExtend;
-		} else {
-			this.filter.getBounds(this,bounds);
-			if(bounds.xMin < total.xMin) {
-				total.xMin = bounds.xMin;
-			}
-			if(bounds.xMax > total.xMax) {
-				total.xMax = bounds.xMax;
-			}
-			if(bounds.yMin < total.yMin) {
-				total.yMin = bounds.yMin;
-			}
-			if(bounds.yMax > total.yMax) {
-				total.yMax = bounds.yMax;
-			}
-		}
-		if(maxExtent >= 0) {
-			this.getBounds(this,bounds);
-			bounds.xMin -= maxExtent;
-			bounds.yMin -= maxExtent;
-			bounds.xMax += maxExtent;
-			bounds.yMax += maxExtent;
-			if(bounds.xMin < total.xMin) {
-				total.xMin = bounds.xMin;
-			}
-			if(bounds.xMax > total.xMax) {
-				total.xMax = bounds.xMax;
-			}
-			if(bounds.yMin < total.yMin) {
-				total.yMin = bounds.yMin;
-			}
-			if(bounds.yMax > total.yMax) {
-				total.yMax = bounds.yMax;
-			}
-		}
-		this.clipBounds(ctx,total);
-		var xMin = Math.floor(total.xMin + 1e-10);
-		var yMin = Math.floor(total.yMin + 1e-10);
-		var width = Math.ceil(total.xMax - xMin - 1e-10);
-		var height = Math.ceil(total.yMax - yMin - 1e-10);
-		if(width <= 0 || height <= 0 || total.xMax < total.xMin) {
-			return;
-		}
-		var t = ctx.textures.allocTarget("filterTemp",ctx,width,height,false);
-		ctx.pushTarget(t,xMin,yMin,width,height);
-		ctx.engine.clear(0);
-		var oldAlpha = ctx.globalAlpha;
-		var shader = ctx.baseShader;
-		var oldA_z;
-		var oldA_y;
-		var oldA_x;
-		var oldA_w;
-		var _this = shader.filterMatrixA__;
-		oldA_x = _this.x;
-		oldA_y = _this.y;
-		oldA_z = _this.z;
-		oldA_w = _this.w;
-		var oldB_z;
-		var oldB_y;
-		var oldB_x;
-		var oldB_w;
-		var _this1 = shader.filterMatrixB__;
-		oldB_x = _this1.x;
-		oldB_y = _this1.y;
-		oldB_z = _this1.z;
-		oldB_w = _this1.w;
-		var oldF = ctx.inFilter;
-		var invDet = 1 / (this.matA * this.matD - this.matB * this.matC);
-		var invA = this.matD * invDet;
-		var invB = -this.matB * invDet;
-		var invC = -this.matC * invDet;
-		var invD = this.matA * invDet;
-		var invX = -(this.absX * invA + this.absY * invC);
-		var invY = -(this.absX * invB + this.absY * invD);
-		var _this2 = shader.filterMatrixA__;
-		_this2.x = invA;
-		_this2.y = invC;
-		_this2.z = invX;
-		_this2.w = 1.;
-		var _this3 = shader.filterMatrixB__;
-		_this3.x = invB;
-		_this3.y = invD;
-		_this3.z = invY;
-		_this3.w = 1.;
-		ctx.globalAlpha = 1;
-		this.draw(ctx);
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var c = _g1[_g];
-			++_g;
-			c.drawRec(ctx);
-		}
-		var finalTile = h2d_Tile.fromTexture(t);
-		finalTile.dx = xMin;
-		finalTile.dy = yMin;
-		var prev = finalTile;
-		finalTile = this.filter.draw(ctx,finalTile);
-		if(finalTile != prev && finalTile != null) {
-			finalTile.dx += xMin;
-			finalTile.dy += yMin;
-		}
-		var _this4 = shader.filterMatrixA__;
-		_this4.x = oldA_x;
-		_this4.y = oldA_y;
-		_this4.z = oldA_z;
-		_this4.w = oldA_w;
-		var _this5 = shader.filterMatrixB__;
-		_this5.x = oldB_x;
-		_this5.y = oldB_y;
-		_this5.z = oldB_z;
-		_this5.w = oldB_w;
-		ctx.popTarget();
-		ctx.popFilter();
-		if(finalTile == null) {
-			return;
-		}
-		ctx.globalAlpha = oldAlpha * this.alpha;
-		this.emitTile(ctx,finalTile);
-		ctx.globalAlpha = oldAlpha;
-	}
-	,drawRec: function(ctx) {
-		if(!this.visible) {
-			return;
-		}
-		if(this.posChanged) {
-			this.calcAbsPos();
-			var _g = 0;
-			var _g1 = this.children;
-			while(_g < _g1.length) {
-				var c = _g1[_g];
-				++_g;
-				c.posChanged = true;
-			}
-			this.posChanged = false;
-		}
-		if(this.filter != null) {
-			this.drawFilters(ctx);
-		} else {
-			var old = ctx.globalAlpha;
-			ctx.globalAlpha *= this.alpha;
-			if(ctx.front2back) {
-				var nchilds = this.children.length;
-				var _g11 = 0;
-				var _g2 = nchilds;
-				while(_g11 < _g2) {
-					var i = _g11++;
-					this.children[nchilds - 1 - i].drawRec(ctx);
-				}
-				this.draw(ctx);
-			} else {
-				this.draw(ctx);
-				var _g3 = 0;
-				var _g12 = this.children;
-				while(_g3 < _g12.length) {
-					var c1 = _g12[_g3];
-					++_g3;
-					c1.drawRec(ctx);
-				}
-			}
-			ctx.globalAlpha = old;
-		}
-	}
-	,set_x: function(v) {
-		this.posChanged = true;
-		return this.x = v;
-	}
-	,set_y: function(v) {
-		this.posChanged = true;
-		return this.y = v;
-	}
-	,set_scaleX: function(v) {
-		this.posChanged = true;
-		return this.scaleX = v;
-	}
-	,set_scaleY: function(v) {
-		this.posChanged = true;
-		return this.scaleY = v;
-	}
-	,set_rotation: function(v) {
-		this.posChanged = true;
-		return this.rotation = v;
-	}
-	,move: function(dx,dy) {
-		var _g = this;
-		var v = _g.x + dx * Math.cos(this.rotation);
-		_g.posChanged = true;
-		_g.x = v;
-		var _g1 = this;
-		var v1 = _g1.y + dy * Math.sin(this.rotation);
-		_g1.posChanged = true;
-		_g1.y = v1;
-	}
-	,setPos: function(x,y) {
-		this.posChanged = true;
-		this.x = x;
-		this.posChanged = true;
-		this.y = y;
-	}
-	,rotate: function(v) {
-		var _g = this;
-		_g.posChanged = true;
-		_g.rotation += v;
-	}
-	,scale: function(v) {
-		var _g = this;
-		_g.posChanged = true;
-		_g.scaleX *= v;
-		var _g1 = this;
-		_g1.posChanged = true;
-		_g1.scaleY *= v;
-	}
-	,setScale: function(v) {
-		this.posChanged = true;
-		this.scaleX = v;
-		this.posChanged = true;
-		this.scaleY = v;
-	}
-	,getChildAt: function(n) {
-		return this.children[n];
-	}
-	,getChildIndex: function(s) {
-		var _g1 = 0;
-		var _g = this.children.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			if(this.children[i] == s) {
-				return i;
-			}
-		}
-		return -1;
-	}
-	,get_numChildren: function() {
-		return this.children.length;
-	}
-	,iterator: function() {
-		return new hxd_impl_ArrayIterator_$h2d_$Sprite(this.children);
-	}
-	,toString: function() {
-		var c = Type.getClassName(js_Boot.getClass(this));
-		if(this.name == null) {
-			return c;
-		} else {
-			return this.name + "(" + c + ")";
-		}
-	}
-	,contentChanged: function(s) {
-	}
-	,constraintSize: function(maxWidth,maxHeight) {
-	}
-	,__class__: h2d_Sprite
-};
-var TextWidget = function(parent,font,str,align) {
-	h2d_Sprite.call(this,parent);
-	this.align = align;
-	this.back = new h2d_Graphics(this);
-	var tf = new h2d_Text(font,this);
-	tf.set_textColor(16777215);
-	tf.set_textAlign(align);
-	tf.set_text(str);
-	this.textField = tf;
-	this.refreshBounds();
-};
-$hxClasses["TextWidget"] = TextWidget;
-TextWidget.__name__ = ["TextWidget"];
-TextWidget.__super__ = h2d_Sprite;
-TextWidget.prototype = $extend(h2d_Sprite.prototype,{
-	refreshBounds: function() {
-		this.back.clear();
-		var size = this.textField.getSize();
-		this.back.beginFill(5263615,0.5);
-		this.back.drawRect(size.xMin,size.yMin,size.xMax - size.xMin,size.yMax - size.yMin);
-		this.back.endFill();
-		this.back.lineStyle(1,5308240);
-		var bounds = this.textField.getBounds(this);
-		this.back.drawRect(bounds.xMin,bounds.yMin,bounds.xMax - bounds.xMin,bounds.yMax - bounds.yMin);
-		this.back.lineStyle(1,16732240);
-		var _this = this.back;
-		var x = bounds.xMin;
-		var y = bounds.yMin;
-		_this.flush();
-		_this.addVertex(x,y,_this.curR,_this.curG,_this.curB,_this.curA,x * _this.ma + y * _this.mc + _this.mx,x * _this.mb + y * _this.md + _this.my);
-		var _this1 = this.back;
-		var x1 = bounds.xMin + this.textField.get_textWidth();
-		var y1 = bounds.yMin;
-		_this1.addVertex(x1,y1,_this1.curR,_this1.curG,_this1.curB,_this1.curA,x1 * _this1.ma + y1 * _this1.mc + _this1.mx,x1 * _this1.mb + y1 * _this1.md + _this1.my);
-		var _this2 = this.back;
-		var x2 = bounds.xMin;
-		var y2 = bounds.yMin;
-		_this2.flush();
-		_this2.addVertex(x2,y2,_this2.curR,_this2.curG,_this2.curB,_this2.curA,x2 * _this2.ma + y2 * _this2.mc + _this2.mx,x2 * _this2.mb + y2 * _this2.md + _this2.my);
-		var _this3 = this.back;
-		var x3 = bounds.xMin;
-		var y3 = bounds.yMin + this.textField.get_textHeight();
-		_this3.addVertex(x3,y3,_this3.curR,_this3.curG,_this3.curB,_this3.curA,x3 * _this3.ma + y3 * _this3.mc + _this3.mx,x3 * _this3.mb + y3 * _this3.md + _this3.my);
-	}
-	,setMaxWidth: function(w) {
-		this.textField.set_maxWidth(w);
-		this.refreshBounds();
-	}
-	,__class__: TextWidget
-});
-var h3d_IDrawable = function() { };
-$hxClasses["h3d.IDrawable"] = h3d_IDrawable;
-h3d_IDrawable.__name__ = ["h3d","IDrawable"];
-h3d_IDrawable.prototype = {
-	__class__: h3d_IDrawable
-};
-var hxd_App = function() {
-	var _gthis = this;
-	var engine = h3d_Engine.CURRENT;
-	if(engine != null) {
-		this.engine = engine;
-		engine.onReady = $bind(this,this.setup);
-		haxe_Timer.delay($bind(this,this.setup),0);
-	} else {
-		hxd_System.start(function() {
-			engine = new h3d_Engine();
-			_gthis.engine = engine;
-			engine.onReady = $bind(_gthis,_gthis.setup);
-			engine.init();
-		});
-	}
-};
-$hxClasses["hxd.App"] = hxd_App;
-hxd_App.__name__ = ["hxd","App"];
-hxd_App.__interfaces__ = [h3d_IDrawable];
-hxd_App.staticHandler = function() {
-};
-hxd_App.prototype = {
-	get_wantedFPS: function() {
-		return hxd_Timer.wantedFPS;
-	}
-	,set_wantedFPS: function(fps) {
-		return hxd_Timer.wantedFPS = fps;
-	}
-	,onResize: function() {
-	}
-	,setScene: function(scene,disposePrevious) {
-		if(disposePrevious == null) {
-			disposePrevious = true;
-		}
-		var new2D = (scene instanceof h2d_Scene) ? scene : null;
-		var new3D = (scene instanceof h3d_scene_Scene) ? scene : null;
-		if(new2D != null) {
-			this.sevents.removeScene(this.s2d);
-		}
-		if(new3D != null) {
-			this.sevents.removeScene(this.s3d);
-		}
-		this.sevents.addScene(scene);
-		if(disposePrevious) {
-			if(new2D != null) {
-				this.s2d.dispose();
-			} else if(new3D != null) {
-				this.s3d.dispose();
-			} else {
-				throw new js__$Boot_HaxeError("Can't dispose previous scene");
-			}
-		}
-		if(new2D != null) {
-			this.s2d = new2D;
-		}
-		if(new3D != null) {
-			this.s3d = new3D;
-		}
-	}
-	,setScene2D: function(s2d,disposePrevious) {
-		if(disposePrevious == null) {
-			disposePrevious = true;
-		}
-		this.sevents.removeScene(this.s2d);
-		this.sevents.addScene(s2d,0);
-		if(disposePrevious) {
-			this.s2d.dispose();
-		}
-		this.s2d = s2d;
-	}
-	,render: function(e) {
-		this.s3d.render(e);
-		this.s2d.render(e);
-	}
-	,setup: function() {
-		var _gthis = this;
-		var initDone = false;
-		this.engine.onReady = hxd_App.staticHandler;
-		this.engine.onResized = function() {
-			if(_gthis.s2d == null) {
-				return;
-			}
-			_gthis.s2d.checkResize();
-			if(initDone) {
-				_gthis.onResize();
-			}
-		};
-		this.s3d = new h3d_scene_Scene();
-		this.s2d = new h2d_Scene();
-		this.sevents = new hxd_SceneEvents();
-		this.sevents.addScene(this.s2d);
-		this.sevents.addScene(this.s3d);
-		this.loadAssets(function() {
-			initDone = true;
-			_gthis.init();
-			hxd_Timer.skip();
-			_gthis.mainLoop();
-			hxd_System.setLoop($bind(_gthis,_gthis.mainLoop));
-			hxd_Key.initialize();
-		});
-	}
-	,dispose: function() {
-		this.engine.onResized = hxd_App.staticHandler;
-		this.engine.onContextLost = hxd_App.staticHandler;
-		this.isDisposed = true;
-		this.s2d.dispose();
-		this.s3d.dispose();
-		this.sevents.dispose();
-	}
-	,loadAssets: function(onLoaded) {
-		onLoaded();
-	}
-	,init: function() {
-	}
-	,mainLoop: function() {
-		hxd_Timer.update();
-		this.sevents.checkEvents();
-		if(this.isDisposed) {
-			return;
-		}
-		this.update(hxd_Timer.tmod);
-		if(this.isDisposed) {
-			return;
-		}
-		this.s2d.setElapsedTime(hxd_Timer.tmod / 60);
-		this.s3d.setElapsedTime(hxd_Timer.tmod / 60);
-		this.engine.render(this);
-	}
-	,update: function(dt) {
-	}
-	,__class__: hxd_App
-};
-var Text = function() {
-	this.resizeWidgets = [];
-	this.textWidgets = [];
-	hxd_App.call(this);
-};
-$hxClasses["Text"] = Text;
-Text.__name__ = ["Text"];
-Text.main = function() {
-	hxd_Res.set_loader(new hxd_res_Loader(new hxd_fs_EmbedFileSystem(haxe_Unserializer.run("oy14:customFont.fntty14:customFont.pngty10:hxlogo.pngty13:normalmap.pngty16:trueTypeFont.ttfty15:gravityFont.fntty15:gravityFont.pngtg"))));
-	new Text();
-};
-Text.__super__ = hxd_App;
-Text.prototype = $extend(hxd_App.prototype,{
-	init: function() {
-		var _gthis = this;
-		var font = hxd_Res.get_loader().loadBitmapFont("gravityFont.fnt").toFont();
-		var multilineText = "This is a multiline text.\nLorem ipsum dolor";
-		var singleText = "Hello simple text";
-		var yoffset = 10.0;
-		var createWidget = function(str,align) {
-			var w = new TextWidget(_gthis.s2d,font,str,align);
-			w.posChanged = true;
-			w.y = yoffset;
-			_gthis.textWidgets.push(w);
-			return w;
-		};
-		var _g = 0;
-		var _g1 = [h2d_Align.Left,h2d_Align.Center,h2d_Align.Right];
-		while(_g < _g1.length) {
-			var a = _g1[_g];
-			++_g;
-			var w1 = createWidget("",a);
-			yoffset += w1.textField.get_textHeight() + 10;
-			var w2 = createWidget(singleText,a);
-			yoffset += w2.textField.get_textHeight() + 10;
-			var w3 = createWidget(multilineText,a);
-			yoffset += w3.textField.get_textHeight() + 10;
-		}
-		yoffset += 20;
-		var longText = "Lorem ipsum dolor sit amet, fabulas repudiare accommodare nec ut. Ut nec facete maiestatis, partem debitis eos id, perfecto ocurreret repudiandae cum no.";
-		var _g2 = 0;
-		var _g11 = [h2d_Align.Left,h2d_Align.Center,h2d_Align.Right];
-		while(_g2 < _g11.length) {
-			var a1 = _g11[_g2];
-			++_g2;
-			var w4 = createWidget(longText,a1);
-			w4.setMaxWidth(200);
-			this.resizeWidgets.push(w4);
-			yoffset += 100;
-		}
-		var createText = function(parent,str1,align1) {
-			var tf = new h2d_Text(font,parent);
-			tf.set_textColor(16777215);
-			tf.set_textAlign(align1);
-			tf.set_text(str1);
-			tf.set_maxWidth(150);
-			return tf;
-		};
-		var createFlow = function(parent1) {
-			var flow = new h2d_Flow(parent1);
-			flow.set_debug(true);
-			flow.set_horizontalSpacing(5);
-			flow.set_verticalSpacing(5);
-			flow.set_padding(5);
-			return flow;
-		};
-		yoffset = 0;
-		var flow1 = createFlow(this.s2d);
-		flow1.set_verticalAlign(h2d_FlowAlign.Middle);
-		createText(flow1,singleText,h2d_Align.Left);
-		createText(flow1,multilineText,h2d_Align.Left);
-		var _this = flow1.getBounds();
-		yoffset += _this.yMax - _this.yMin + 10;
-		var flow2 = createFlow(this.s2d);
-		flow2.posChanged = true;
-		flow2.y = yoffset;
-		flow2.set_multiline(false);
-		flow2.set_verticalAlign(h2d_FlowAlign.Middle);
-		createText(flow2,multilineText,h2d_Align.Center);
-		createText(flow2,multilineText,h2d_Align.Right);
-		var _this1 = flow2.getBounds();
-		yoffset += _this1.yMax - _this1.yMin + 10;
-		var flow3 = createFlow(this.s2d);
-		flow3.posChanged = true;
-		flow3.y = yoffset;
-		flow3.set_verticalAlign(h2d_FlowAlign.Middle);
-		flow3.set_maxWidth(150);
-		createText(flow3,singleText,h2d_Align.Left);
-		createText(flow3,multilineText,h2d_Align.Center);
-		var _this2 = flow3.getBounds();
-		yoffset += _this2.yMax - _this2.yMin + 10;
-		var flow4 = createFlow(this.s2d);
-		flow4.posChanged = true;
-		flow4.y = yoffset;
-		flow4.set_horizontalAlign(h2d_FlowAlign.Middle);
-		flow4.set_maxWidth(150);
-		flow4.set_isVertical(true);
-		createText(flow4,singleText,h2d_Align.Left);
-		createText(flow4,multilineText,h2d_Align.Right);
-		var _this3 = flow4.getBounds();
-		yoffset += _this3.yMax - _this3.yMin + 10;
-		var flow5 = createFlow(this.s2d);
-		flow5.posChanged = true;
-		flow5.y = yoffset;
-		flow5.posChanged = true;
-		flow5.x = 100;
-		flow5.set_horizontalAlign(h2d_FlowAlign.Middle);
-		flow5.set_isVertical(true);
-		var f1 = createFlow(flow5);
-		createText(f1,multilineText,h2d_Align.Left);
-		var f2 = createFlow(flow5);
-		createText(f2,multilineText,h2d_Align.Left);
-		this.onResize();
-	}
-	,onResize: function() {
-		var _g = 0;
-		var _g1 = this.textWidgets;
-		while(_g < _g1.length) {
-			var w = _g1[_g];
-			++_g;
-			w.posChanged = true;
-			w.x = this.s2d.width / (2 * this.s2d.scaleX);
-		}
-	}
-	,update: function(dt) {
-		var _g = 0;
-		var _g1 = this.resizeWidgets;
-		while(_g < _g1.length) {
-			var w = _g1[_g];
-			++_g;
-			w.setMaxWidth(300 + Math.sin(new Date().getTime() / 1000 * 0.5) * 100.0 | 0);
-		}
-	}
-	,__class__: Text
-});
-var ValueType = $hxClasses["ValueType"] = { __ename__ : true, __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
-ValueType.TNull = ["TNull",0];
-ValueType.TNull.toString = $estr;
-ValueType.TNull.__enum__ = ValueType;
-ValueType.TInt = ["TInt",1];
-ValueType.TInt.toString = $estr;
-ValueType.TInt.__enum__ = ValueType;
-ValueType.TFloat = ["TFloat",2];
-ValueType.TFloat.toString = $estr;
-ValueType.TFloat.__enum__ = ValueType;
-ValueType.TBool = ["TBool",3];
-ValueType.TBool.toString = $estr;
-ValueType.TBool.__enum__ = ValueType;
-ValueType.TObject = ["TObject",4];
-ValueType.TObject.toString = $estr;
-ValueType.TObject.__enum__ = ValueType;
-ValueType.TFunction = ["TFunction",5];
-ValueType.TFunction.toString = $estr;
-ValueType.TFunction.__enum__ = ValueType;
-ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
-ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
-ValueType.TUnknown = ["TUnknown",8];
-ValueType.TUnknown.toString = $estr;
-ValueType.TUnknown.__enum__ = ValueType;
-ValueType.__empty_constructs__ = [ValueType.TNull,ValueType.TInt,ValueType.TFloat,ValueType.TBool,ValueType.TObject,ValueType.TFunction,ValueType.TUnknown];
-var Type = function() { };
-$hxClasses["Type"] = Type;
-Type.__name__ = ["Type"];
-Type.getSuperClass = function(c) {
-	return c.__super__;
-};
-Type.getClassName = function(c) {
-	var a = c.__name__;
-	if(a == null) {
-		return null;
-	}
-	return a.join(".");
-};
-Type.resolveClass = function(name) {
-	var cl = $hxClasses[name];
-	if(cl == null || !cl.__name__) {
-		return null;
-	}
-	return cl;
-};
-Type.resolveEnum = function(name) {
-	var e = $hxClasses[name];
-	if(e == null || !e.__ename__) {
-		return null;
-	}
-	return e;
-};
-Type.createEmptyInstance = function(cl) {
-	function empty() {}; empty.prototype = cl.prototype;
-	return new empty();
-};
-Type.createEnum = function(e,constr,params) {
-	var f = Reflect.field(e,constr);
-	if(f == null) {
-		throw new js__$Boot_HaxeError("No such constructor " + constr);
-	}
-	if(Reflect.isFunction(f)) {
-		if(params == null) {
-			throw new js__$Boot_HaxeError("Constructor " + constr + " need parameters");
-		}
-		return f.apply(e,params);
-	}
-	if(params != null && params.length != 0) {
-		throw new js__$Boot_HaxeError("Constructor " + constr + " does not need parameters");
-	}
-	return f;
-};
-Type.createEnumIndex = function(e,index,params) {
-	var c = e.__constructs__[index];
-	if(c == null) {
-		throw new js__$Boot_HaxeError(index + " is not a valid enum constructor index");
-	}
-	return Type.createEnum(e,c,params);
-};
-Type["typeof"] = function(v) {
-	var _g = typeof(v);
-	switch(_g) {
-	case "boolean":
-		return ValueType.TBool;
-	case "function":
-		if(v.__name__ || v.__ename__) {
-			return ValueType.TObject;
-		}
-		return ValueType.TFunction;
-	case "number":
-		if(Math.ceil(v) == v % 2147483648.0) {
-			return ValueType.TInt;
-		}
-		return ValueType.TFloat;
-	case "object":
-		if(v == null) {
-			return ValueType.TNull;
-		}
-		var e = v.__enum__;
-		if(e != null) {
-			return ValueType.TEnum(e);
-		}
-		var c = js_Boot.getClass(v);
-		if(c != null) {
-			return ValueType.TClass(c);
-		}
-		return ValueType.TObject;
-	case "string":
-		return ValueType.TClass(String);
-	case "undefined":
-		return ValueType.TNull;
-	default:
-		return ValueType.TUnknown;
-	}
-};
-Type.enumEq = function(a,b) {
-	if(a == b) {
-		return true;
-	}
-	try {
-		if(a[0] != b[0]) {
-			return false;
-		}
-		var _g1 = 2;
-		var _g = a.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			if(!Type.enumEq(a[i],b[i])) {
-				return false;
-			}
-		}
-		var e = a.__enum__;
-		if(e != b.__enum__ || e == null) {
-			return false;
-		}
-	} catch( e1 ) {
-		return false;
-	}
-	return true;
-};
-var Xml = function(nodeType) {
-	this.nodeType = nodeType;
-	this.children = [];
-	this.attributeMap = new haxe_ds_StringMap();
-};
-$hxClasses["Xml"] = Xml;
-Xml.__name__ = ["Xml"];
-Xml.parse = function(str) {
-	return haxe_xml_Parser.parse(str);
-};
-Xml.createElement = function(name) {
-	var xml = new Xml(Xml.Element);
-	if(xml.nodeType != Xml.Element) {
-		throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + xml.nodeType);
-	}
-	xml.nodeName = name;
-	return xml;
-};
-Xml.createPCData = function(data) {
-	var xml = new Xml(Xml.PCData);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
-		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	}
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createCData = function(data) {
-	var xml = new Xml(Xml.CData);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
-		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	}
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createComment = function(data) {
-	var xml = new Xml(Xml.Comment);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
-		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	}
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createDocType = function(data) {
-	var xml = new Xml(Xml.DocType);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
-		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	}
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createProcessingInstruction = function(data) {
-	var xml = new Xml(Xml.ProcessingInstruction);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
-		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	}
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createDocument = function() {
-	return new Xml(Xml.Document);
-};
-Xml.prototype = {
-	get: function(att) {
-		if(this.nodeType != Xml.Element) {
-			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
-		}
-		var _this = this.attributeMap;
-		if(__map_reserved[att] != null) {
-			return _this.getReserved(att);
-		} else {
-			return _this.h[att];
-		}
-	}
-	,set: function(att,value) {
-		if(this.nodeType != Xml.Element) {
-			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
-		}
-		var _this = this.attributeMap;
-		if(__map_reserved[att] != null) {
-			_this.setReserved(att,value);
-		} else {
-			_this.h[att] = value;
-		}
-	}
-	,exists: function(att) {
-		if(this.nodeType != Xml.Element) {
-			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
-		}
-		var _this = this.attributeMap;
-		if(__map_reserved[att] != null) {
-			return _this.existsReserved(att);
-		} else {
-			return _this.h.hasOwnProperty(att);
-		}
-	}
-	,elements: function() {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
-			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		}
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.children;
-		while(_g1 < _g2.length) {
-			var child = _g2[_g1];
-			++_g1;
-			if(child.nodeType == Xml.Element) {
-				_g.push(child);
-			}
-		}
-		var ret = _g;
-		return HxOverrides.iter(ret);
-	}
-	,elementsNamed: function(name) {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
-			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		}
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.children;
-		while(_g1 < _g2.length) {
-			var child = _g2[_g1];
-			++_g1;
-			var tmp;
-			if(child.nodeType == Xml.Element) {
-				if(child.nodeType != Xml.Element) {
-					throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + child.nodeType);
-				}
-				tmp = child.nodeName == name;
-			} else {
-				tmp = false;
-			}
-			if(tmp) {
-				_g.push(child);
-			}
-		}
-		var ret = _g;
-		return HxOverrides.iter(ret);
-	}
-	,firstElement: function() {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
-			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		}
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var child = _g1[_g];
-			++_g;
-			if(child.nodeType == Xml.Element) {
-				return child;
-			}
-		}
-		return null;
-	}
-	,addChild: function(x) {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
-			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		}
-		if(x.parent != null) {
-			x.parent.removeChild(x);
-		}
-		this.children.push(x);
-		x.parent = this;
-	}
-	,removeChild: function(x) {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
-			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		}
-		if(HxOverrides.remove(this.children,x)) {
-			x.parent = null;
-			return true;
-		}
-		return false;
-	}
-	,__class__: Xml
-};
-var format_gif_Block = $hxClasses["format.gif.Block"] = { __ename__ : true, __constructs__ : ["BFrame","BExtension","BEOF"] };
-format_gif_Block.BFrame = function(frame) { var $x = ["BFrame",0,frame]; $x.__enum__ = format_gif_Block; $x.toString = $estr; return $x; };
-format_gif_Block.BExtension = function(extension) { var $x = ["BExtension",1,extension]; $x.__enum__ = format_gif_Block; $x.toString = $estr; return $x; };
-format_gif_Block.BEOF = ["BEOF",2];
-format_gif_Block.BEOF.toString = $estr;
-format_gif_Block.BEOF.__enum__ = format_gif_Block;
-format_gif_Block.__empty_constructs__ = [format_gif_Block.BEOF];
-var format_gif_Extension = $hxClasses["format.gif.Extension"] = { __ename__ : true, __constructs__ : ["EGraphicControl","EComment","EText","EApplicationExtension","EUnknown"] };
-format_gif_Extension.EGraphicControl = function(gce) { var $x = ["EGraphicControl",0,gce]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
-format_gif_Extension.EComment = function(text) { var $x = ["EComment",1,text]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
-format_gif_Extension.EText = function(pte) { var $x = ["EText",2,pte]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
-format_gif_Extension.EApplicationExtension = function(ext) { var $x = ["EApplicationExtension",3,ext]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
-format_gif_Extension.EUnknown = function(id,data) { var $x = ["EUnknown",4,id,data]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
-format_gif_Extension.__empty_constructs__ = [];
-var format_gif_ApplicationExtension = $hxClasses["format.gif.ApplicationExtension"] = { __ename__ : true, __constructs__ : ["AENetscapeLooping","AEUnknown"] };
-format_gif_ApplicationExtension.AENetscapeLooping = function(loops) { var $x = ["AENetscapeLooping",0,loops]; $x.__enum__ = format_gif_ApplicationExtension; $x.toString = $estr; return $x; };
-format_gif_ApplicationExtension.AEUnknown = function(name,version,data) { var $x = ["AEUnknown",1,name,version,data]; $x.__enum__ = format_gif_ApplicationExtension; $x.toString = $estr; return $x; };
-format_gif_ApplicationExtension.__empty_constructs__ = [];
-var format_gif_Version = $hxClasses["format.gif.Version"] = { __ename__ : true, __constructs__ : ["GIF87a","GIF89a","Unknown"] };
-format_gif_Version.GIF87a = ["GIF87a",0];
-format_gif_Version.GIF87a.toString = $estr;
-format_gif_Version.GIF87a.__enum__ = format_gif_Version;
-format_gif_Version.GIF89a = ["GIF89a",1];
-format_gif_Version.GIF89a.toString = $estr;
-format_gif_Version.GIF89a.__enum__ = format_gif_Version;
-format_gif_Version.Unknown = function(version) { var $x = ["Unknown",2,version]; $x.__enum__ = format_gif_Version; $x.toString = $estr; return $x; };
-format_gif_Version.__empty_constructs__ = [format_gif_Version.GIF87a,format_gif_Version.GIF89a];
-var format_gif_DisposalMethod = $hxClasses["format.gif.DisposalMethod"] = { __ename__ : true, __constructs__ : ["UNSPECIFIED","NO_ACTION","FILL_BACKGROUND","RENDER_PREVIOUS","UNDEFINED"] };
-format_gif_DisposalMethod.UNSPECIFIED = ["UNSPECIFIED",0];
-format_gif_DisposalMethod.UNSPECIFIED.toString = $estr;
-format_gif_DisposalMethod.UNSPECIFIED.__enum__ = format_gif_DisposalMethod;
-format_gif_DisposalMethod.NO_ACTION = ["NO_ACTION",1];
-format_gif_DisposalMethod.NO_ACTION.toString = $estr;
-format_gif_DisposalMethod.NO_ACTION.__enum__ = format_gif_DisposalMethod;
-format_gif_DisposalMethod.FILL_BACKGROUND = ["FILL_BACKGROUND",2];
-format_gif_DisposalMethod.FILL_BACKGROUND.toString = $estr;
-format_gif_DisposalMethod.FILL_BACKGROUND.__enum__ = format_gif_DisposalMethod;
-format_gif_DisposalMethod.RENDER_PREVIOUS = ["RENDER_PREVIOUS",3];
-format_gif_DisposalMethod.RENDER_PREVIOUS.toString = $estr;
-format_gif_DisposalMethod.RENDER_PREVIOUS.__enum__ = format_gif_DisposalMethod;
-format_gif_DisposalMethod.UNDEFINED = function(index) { var $x = ["UNDEFINED",4,index]; $x.__enum__ = format_gif_DisposalMethod; $x.toString = $estr; return $x; };
-format_gif_DisposalMethod.__empty_constructs__ = [format_gif_DisposalMethod.UNSPECIFIED,format_gif_DisposalMethod.NO_ACTION,format_gif_DisposalMethod.FILL_BACKGROUND,format_gif_DisposalMethod.RENDER_PREVIOUS];
-var format_gif_Reader = function(i) {
-	this.i = i;
-	i.set_bigEndian(false);
-};
-$hxClasses["format.gif.Reader"] = format_gif_Reader;
-format_gif_Reader.__name__ = ["format","gif","Reader"];
-format_gif_Reader.prototype = {
-	read: function() {
-		var _g = 0;
-		var _g1 = [71,73,70];
-		while(_g < _g1.length) {
-			var b = _g1[_g];
-			++_g;
-			if(this.i.readByte() != b) {
-				throw new js__$Boot_HaxeError("Invalid header");
-			}
-		}
-		var gifVer = this.i.readString(3);
-		var version = format_gif_Version.GIF89a;
-		switch(gifVer) {
-		case "87a":
-			version = format_gif_Version.GIF87a;
-			break;
-		case "89a":
-			version = format_gif_Version.GIF89a;
-			break;
-		default:
-			version = format_gif_Version.Unknown(gifVer);
-		}
-		var width = this.i.readUInt16();
-		var height = this.i.readUInt16();
-		var packedField = this.i.readByte();
-		var bgIndex = this.i.readByte();
-		var pixelAspectRatio = this.i.readByte();
-		if(pixelAspectRatio != 0) {
-			pixelAspectRatio = (pixelAspectRatio + 15) / 64;
-		} else {
-			pixelAspectRatio = 1;
-		}
-		var lsd = { width : width, height : height, hasGlobalColorTable : (packedField & 128) == 128, colorResolution : (packedField & 112) >>> 4, sorted : (packedField & 8) == 8, globalColorTableSize : 2 << (packedField & 7), backgroundColorIndex : bgIndex, pixelAspectRatio : pixelAspectRatio};
-		var gct = null;
-		if(lsd.hasGlobalColorTable) {
-			gct = this.readColorTable(lsd.globalColorTableSize);
-		}
-		var blocks = new List();
-		while(true) {
-			var b1 = this.readBlock();
-			blocks.add(b1);
-			if(b1 == format_gif_Block.BEOF) {
-				break;
-			}
-		}
-		return { version : version, logicalScreenDescriptor : lsd, globalColorTable : gct, blocks : blocks};
-	}
-	,readBlock: function() {
-		var blockID = this.i.readByte();
-		switch(blockID) {
-		case 33:
-			return this.readExtension();
-		case 44:
-			return this.readImage();
-		case 59:
-			return format_gif_Block.BEOF;
-		}
-		return format_gif_Block.BEOF;
-	}
-	,readImage: function() {
-		var x = this.i.readUInt16();
-		var y = this.i.readUInt16();
-		var width = this.i.readUInt16();
-		var height = this.i.readUInt16();
-		var packed = this.i.readByte();
-		var localColorTable = (packed & 128) == 128;
-		var interlaced = (packed & 64) == 64;
-		var sorted = (packed & 32) == 32;
-		var localColorTableSize = 2 << (packed & 7);
-		var lct = null;
-		if(localColorTable) {
-			lct = this.readColorTable(localColorTableSize);
-		}
-		return format_gif_Block.BFrame({ x : x, y : y, width : width, height : height, localColorTable : localColorTable, interlaced : interlaced, sorted : sorted, localColorTableSize : localColorTableSize, pixels : this.readPixels(width,height,interlaced), colorTable : lct});
-	}
-	,readPixels: function(width,height,interlaced) {
-		var input = this.i;
-		var pixelsCount = width * height;
-		var pixels = new haxe_io_Bytes(new ArrayBuffer(pixelsCount));
-		var minCodeSize = input.readByte();
-		var blockSize = input.readByte() - 1;
-		var bits = input.readByte();
-		var bitsCount = 8;
-		var clearCode = 1 << minCodeSize;
-		var eoiCode = clearCode + 1;
-		var codeSize = minCodeSize + 1;
-		var codeSizeLimit = 1 << codeSize;
-		var codeMask = codeSizeLimit - 1;
-		var baseDict = [];
-		var _g1 = 0;
-		var _g = clearCode;
-		while(_g1 < _g) {
-			var i = _g1++;
-			baseDict[i] = [i];
-		}
-		var dict = [];
-		var dictLen = clearCode + 2;
-		var newRecord;
-		var i1 = 0;
-		var code = 0;
-		var last;
-		while(i1 < pixelsCount) {
-			last = code;
-			while(bitsCount < codeSize) {
-				if(blockSize == 0) {
-					break;
-				}
-				bits |= input.readByte() << bitsCount;
-				bitsCount += 8;
-				--blockSize;
-				if(blockSize == 0) {
-					blockSize = input.readByte();
-				}
-			}
-			code = bits & codeMask;
-			bits >>= codeSize;
-			bitsCount -= codeSize;
-			if(code == clearCode) {
-				dict = baseDict.slice();
-				dictLen = clearCode + 2;
-				codeSize = minCodeSize + 1;
-				codeSizeLimit = 1 << codeSize;
-				codeMask = codeSizeLimit - 1;
-				continue;
-			}
-			if(code == eoiCode) {
-				break;
-			}
-			if(code < dictLen) {
-				if(last != clearCode) {
-					newRecord = dict[last].slice();
-					newRecord.push(dict[code][0]);
-					dict[dictLen++] = newRecord;
-				}
-			} else {
-				if(code != dictLen) {
-					throw new js__$Boot_HaxeError("Invalid LZW code. Excepted: " + dictLen + ", got: " + code);
-				}
-				newRecord = dict[last].slice();
-				newRecord.push(newRecord[0]);
-				dict[dictLen++] = newRecord;
-			}
-			newRecord = dict[code];
-			var _g2 = 0;
-			while(_g2 < newRecord.length) {
-				var item = newRecord[_g2];
-				++_g2;
-				pixels.b[i1++] = item & 255;
-			}
-			if(dictLen == codeSizeLimit && codeSize < 12) {
-				++codeSize;
-				codeSizeLimit = 1 << codeSize;
-				codeMask = codeSizeLimit - 1;
-			}
-		}
-		while(blockSize > 0) {
-			input.readByte();
-			--blockSize;
-			if(blockSize == 0) {
-				blockSize = input.readByte();
-			}
-		}
-		while(i1 < pixelsCount) pixels.b[i1++] = 0;
-		if(interlaced) {
-			var buffer = new haxe_io_Bytes(new ArrayBuffer(pixelsCount));
-			var offset = this.deinterlace(pixels,buffer,8,0,0,width,height);
-			offset = this.deinterlace(pixels,buffer,8,4,offset,width,height);
-			offset = this.deinterlace(pixels,buffer,4,2,offset,width,height);
-			this.deinterlace(pixels,buffer,2,1,offset,width,height);
-			pixels = buffer;
-		}
-		return pixels;
-	}
-	,deinterlace: function(input,output,step,y,offset,width,height) {
-		while(y < height) {
-			output.blit(y * width,input,offset,width);
-			offset += width;
-			y += step;
-		}
-		return offset;
-	}
-	,readExtension: function() {
-		var subId = this.i.readByte();
-		switch(subId) {
-		case 1:
-			if(this.i.readByte() != 12) {
-				throw new js__$Boot_HaxeError("Incorrect size of Plain Text Extension introducer block.");
-			}
-			var tmp = this.i.readUInt16();
-			var tmp1 = this.i.readUInt16();
-			var tmp2 = this.i.readUInt16();
-			var tmp3 = this.i.readUInt16();
-			var tmp4 = this.i.readByte();
-			var tmp5 = this.i.readByte();
-			var tmp6 = this.i.readByte();
-			var tmp7 = this.i.readByte();
-			var buffer = new haxe_io_BytesOutput();
-			var bytes = new haxe_io_Bytes(new ArrayBuffer(255));
-			var len = this.i.readByte();
-			while(len != 0) {
-				this.i.readBytes(bytes,0,len);
-				buffer.writeBytes(bytes,0,len);
-				len = this.i.readByte();
-			}
-			buffer.flush();
-			bytes = buffer.getBytes();
-			buffer.close();
-			return format_gif_Block.BExtension(format_gif_Extension.EText({ textGridX : tmp, textGridY : tmp1, textGridWidth : tmp2, textGridHeight : tmp3, charCellWidth : tmp4, charCellHeight : tmp5, textForegroundColorIndex : tmp6, textBackgroundColorIndex : tmp7, text : bytes.toString()}));
-		case 249:
-			if(this.i.readByte() != 4) {
-				throw new js__$Boot_HaxeError("Incorrect Graphic Control Extension block size!");
-			}
-			var packed = this.i.readByte();
-			var disposalMethod;
-			var _g = (packed & 28) >> 2;
-			switch(_g) {
-			case 0:
-				disposalMethod = format_gif_DisposalMethod.UNSPECIFIED;
-				break;
-			case 1:
-				disposalMethod = format_gif_DisposalMethod.NO_ACTION;
-				break;
-			case 2:
-				disposalMethod = format_gif_DisposalMethod.FILL_BACKGROUND;
-				break;
-			case 3:
-				disposalMethod = format_gif_DisposalMethod.RENDER_PREVIOUS;
-				break;
-			default:
-				disposalMethod = format_gif_DisposalMethod.UNDEFINED((packed & 28) >> 2);
-			}
-			var b = format_gif_Block.BExtension(format_gif_Extension.EGraphicControl({ disposalMethod : disposalMethod, userInput : (packed & 2) == 2, hasTransparentColor : (packed & 1) == 1, delay : this.i.readUInt16(), transparentIndex : this.i.readByte()}));
-			this.i.readByte();
-			return b;
-		case 254:
-			var buffer1 = new haxe_io_BytesOutput();
-			var bytes1 = new haxe_io_Bytes(new ArrayBuffer(255));
-			var len1 = this.i.readByte();
-			while(len1 != 0) {
-				this.i.readBytes(bytes1,0,len1);
-				buffer1.writeBytes(bytes1,0,len1);
-				len1 = this.i.readByte();
-			}
-			buffer1.flush();
-			bytes1 = buffer1.getBytes();
-			buffer1.close();
-			return format_gif_Block.BExtension(format_gif_Extension.EComment(bytes1.toString()));
-		case 255:
-			return this.readApplicationExtension();
-		default:
-			var buffer2 = new haxe_io_BytesOutput();
-			var bytes2 = new haxe_io_Bytes(new ArrayBuffer(255));
-			var len2 = this.i.readByte();
-			while(len2 != 0) {
-				this.i.readBytes(bytes2,0,len2);
-				buffer2.writeBytes(bytes2,0,len2);
-				len2 = this.i.readByte();
-			}
-			buffer2.flush();
-			bytes2 = buffer2.getBytes();
-			buffer2.close();
-			return format_gif_Block.BExtension(format_gif_Extension.EUnknown(subId,bytes2));
-		}
-	}
-	,readApplicationExtension: function() {
-		if(this.i.readByte() != 11) {
-			throw new js__$Boot_HaxeError("Incorrect size of Application Extension introducer block.");
-		}
-		var name = this.i.readString(8);
-		var version = this.i.readString(3);
-		var buffer = new haxe_io_BytesOutput();
-		var bytes = new haxe_io_Bytes(new ArrayBuffer(255));
-		var len = this.i.readByte();
-		while(len != 0) {
-			this.i.readBytes(bytes,0,len);
-			buffer.writeBytes(bytes,0,len);
-			len = this.i.readByte();
-		}
-		buffer.flush();
-		bytes = buffer.getBytes();
-		buffer.close();
-		var data = bytes;
-		if(name == "NETSCAPE" && version == "2.0" && data.b[0] == 1) {
-			return format_gif_Block.BExtension(format_gif_Extension.EApplicationExtension(format_gif_ApplicationExtension.AENetscapeLooping(data.b[1] | data.b[2] << 8)));
-		}
-		return format_gif_Block.BExtension(format_gif_Extension.EApplicationExtension(format_gif_ApplicationExtension.AEUnknown(name,version,data)));
-	}
-	,readBlocks: function() {
-		var buffer = new haxe_io_BytesOutput();
-		var bytes = new haxe_io_Bytes(new ArrayBuffer(255));
-		var len = this.i.readByte();
-		while(len != 0) {
-			this.i.readBytes(bytes,0,len);
-			buffer.writeBytes(bytes,0,len);
-			len = this.i.readByte();
-		}
-		buffer.flush();
-		bytes = buffer.getBytes();
-		buffer.close();
-		return bytes;
-	}
-	,readColorTable: function(size) {
-		size *= 3;
-		var output = new haxe_io_Bytes(new ArrayBuffer(size));
-		var c = 0;
-		while(c < size) {
-			var v = this.i.readByte();
-			output.b[c] = v & 255;
-			var v1 = this.i.readByte();
-			output.b[c + 1] = v1 & 255;
-			var v2 = this.i.readByte();
-			output.b[c + 2] = v2 & 255;
-			c += 3;
-		}
-		return output;
-	}
-	,__class__: format_gif_Reader
-};
-var format_gif_Tools = function() { };
-$hxClasses["format.gif.Tools"] = format_gif_Tools;
-format_gif_Tools.__name__ = ["format","gif","Tools"];
-format_gif_Tools.framesCount = function(data) {
-	var frames = 0;
-	var _g_head = data.blocks.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var block = val;
-		if(block[1] == 0) {
-			++frames;
-		}
-	}
-	return frames;
-};
-format_gif_Tools.frame = function(data,frameIndex) {
-	var counter = 0;
-	var _g_head = data.blocks.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var block = val;
-		if(block[1] == 0) {
-			var frame = block[2];
-			if(counter == frameIndex) {
-				return frame;
-			}
-			++counter;
-		}
-	}
-	return null;
-};
-format_gif_Tools.graphicControl = function(data,frameIndex) {
-	var counter = 0;
-	var gce = null;
-	var _g_head = data.blocks.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var block = val;
-		switch(block[1]) {
-		case 0:
-			var frame = block[2];
-			if(counter == frameIndex) {
-				return gce;
-			}
-			gce = null;
-			++counter;
-			break;
-		case 1:
-			if(block[2][1] == 0) {
-				var g = block[2][2];
-				gce = g;
-			}
-			break;
-		default:
-		}
-	}
-	return null;
-};
-format_gif_Tools.extractBGRA = function(data,frameIndex) {
-	var gce = null;
-	var frameCaret = 0;
-	var _g_head = data.blocks.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var block = val;
-		switch(block[1]) {
-		case 0:
-			var frame = block[2];
-			if(frameCaret == frameIndex) {
-				var bytes = new haxe_io_Bytes(new ArrayBuffer(frame.width * frame.height * 4));
-				var ct = frame.localColorTable ? frame.colorTable : data.globalColorTable;
-				if(ct == null) {
-					throw new js__$Boot_HaxeError("Frame does not have a color table!");
-				}
-				var transparentIndex = gce != null && gce.hasTransparentColor ? gce.transparentIndex * 3 : -1;
-				var writeCaret = 0;
-				var _g1 = 0;
-				var _g = frame.pixels.length;
-				while(_g1 < _g) {
-					var i = _g1++;
-					var index = frame.pixels.b[i] * 3;
-					bytes.b[writeCaret] = ct.b[index + 2] & 255;
-					bytes.b[writeCaret + 1] = ct.b[index + 1] & 255;
-					bytes.b[writeCaret + 2] = ct.b[index] & 255;
-					if(transparentIndex == index) {
-						bytes.b[writeCaret + 3] = 0;
-					} else {
-						bytes.b[writeCaret + 3] = 255;
-					}
-					writeCaret += 4;
-				}
-				return bytes;
-			}
-			++frameCaret;
-			gce = null;
-			break;
-		case 1:
-			var ext = block[2];
-			if(ext[1] == 0) {
-				var g = ext[2];
-				gce = g;
-			}
-			break;
-		default:
-		}
-	}
-	return null;
-};
-format_gif_Tools.extractRGBA = function(data,frameIndex) {
-	var gce = null;
-	var frameCaret = 0;
-	var _g_head = data.blocks.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var block = val;
-		switch(block[1]) {
-		case 0:
-			var frame = block[2];
-			if(frameCaret == frameIndex) {
-				var bytes = new haxe_io_Bytes(new ArrayBuffer(frame.width * frame.height * 4));
-				var ct = frame.localColorTable ? frame.colorTable : data.globalColorTable;
-				if(ct == null) {
-					throw new js__$Boot_HaxeError("Frame does not have a color table!");
-				}
-				var transparentIndex = gce != null && gce.hasTransparentColor ? gce.transparentIndex * 3 : -1;
-				var writeCaret = 0;
-				var _g1 = 0;
-				var _g = frame.pixels.length;
-				while(_g1 < _g) {
-					var i = _g1++;
-					var index = frame.pixels.b[i] * 3;
-					bytes.b[writeCaret] = ct.b[index] & 255;
-					bytes.b[writeCaret + 1] = ct.b[index + 1] & 255;
-					bytes.b[writeCaret + 2] = ct.b[index + 2] & 255;
-					if(transparentIndex == index) {
-						bytes.b[writeCaret + 3] = 0;
-					} else {
-						bytes.b[writeCaret + 3] = 255;
-					}
-					writeCaret += 4;
-				}
-				return bytes;
-			}
-			++frameCaret;
-			gce = null;
-			break;
-		case 1:
-			var ext = block[2];
-			if(ext[1] == 0) {
-				var g = ext[2];
-				gce = g;
-			}
-			break;
-		default:
-		}
-	}
-	return null;
-};
-format_gif_Tools.extractFullBGRA = function(data,frameIndex) {
-	var gce = null;
-	var frameCaret = 0;
-	var bytes = new haxe_io_Bytes(new ArrayBuffer(data.logicalScreenDescriptor.width * data.logicalScreenDescriptor.height * 4));
-	var _g_head = data.blocks.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var block = val;
-		switch(block[1]) {
-		case 0:
-			var frame = block[2];
-			var ct = frame.localColorTable ? frame.colorTable : data.globalColorTable;
-			if(ct == null) {
-				throw new js__$Boot_HaxeError("Frame does not have a color table!");
-			}
-			var transparentIndex = gce != null && gce.hasTransparentColor ? gce.transparentIndex * 3 : -1;
-			var pixels = frame.pixels;
-			var x = 0;
-			var writeCaret = (frame.y * data.logicalScreenDescriptor.width + frame.x) * 4;
-			var lineSkip = (data.logicalScreenDescriptor.width - frame.width) * 4 + 4;
-			var disposalMethod = frameCaret != frameIndex && gce != null ? gce.disposalMethod : format_gif_DisposalMethod.NO_ACTION;
-			switch(disposalMethod[1]) {
-			case 2:
-				var _g1 = 0;
-				var _g = pixels.length;
-				while(_g1 < _g) {
-					var i = _g1++;
-					bytes.b[writeCaret] = 0;
-					bytes.b[writeCaret + 1] = 0;
-					bytes.b[writeCaret + 2] = 0;
-					bytes.b[writeCaret + 3] = 0;
-					if(++x == frame.width) {
-						x = 0;
-						writeCaret += lineSkip;
-					} else {
-						writeCaret += 4;
-					}
-				}
-				break;
-			case 3:
-				break;
-			default:
-				var _g11 = 0;
-				var _g2 = pixels.length;
-				while(_g11 < _g2) {
-					var i1 = _g11++;
-					var index = pixels.b[i1] * 3;
-					if(transparentIndex != index) {
-						bytes.b[writeCaret] = ct.b[index + 2] & 255;
-						bytes.b[writeCaret + 1] = ct.b[index + 1] & 255;
-						bytes.b[writeCaret + 2] = ct.b[index] & 255;
-						bytes.b[writeCaret + 3] = 255;
-					}
-					if(++x == frame.width) {
-						x = 0;
-						writeCaret += lineSkip;
-					} else {
-						writeCaret += 4;
-					}
-				}
-			}
-			if(frameCaret == frameIndex) {
-				return bytes;
-			}
-			++frameCaret;
-			gce = null;
-			break;
-		case 1:
-			var ext = block[2];
-			if(ext[1] == 0) {
-				var g = ext[2];
-				gce = g;
-			}
-			break;
-		default:
-		}
-	}
-	return bytes;
-};
-format_gif_Tools.extractFullRGBA = function(data,frameIndex) {
-	var gce = null;
-	var frameCaret = 0;
-	var bytes = new haxe_io_Bytes(new ArrayBuffer(data.logicalScreenDescriptor.width * data.logicalScreenDescriptor.height * 4));
-	var _g_head = data.blocks.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var block = val;
-		switch(block[1]) {
-		case 0:
-			var frame = block[2];
-			var ct = frame.localColorTable ? frame.colorTable : data.globalColorTable;
-			if(ct == null) {
-				throw new js__$Boot_HaxeError("Frame does not have a color table!");
-			}
-			var transparentIndex = gce != null && gce.hasTransparentColor ? gce.transparentIndex * 3 : -1;
-			var pixels = frame.pixels;
-			var x = 0;
-			var writeCaret = (frame.y * data.logicalScreenDescriptor.width + frame.x) * 4;
-			var lineSkip = (data.logicalScreenDescriptor.width - frame.width) * 4 + 4;
-			var disposalMethod = frameCaret != frameIndex && gce != null ? gce.disposalMethod : format_gif_DisposalMethod.NO_ACTION;
-			switch(disposalMethod[1]) {
-			case 2:
-				var _g1 = 0;
-				var _g = pixels.length;
-				while(_g1 < _g) {
-					var i = _g1++;
-					bytes.b[writeCaret] = 0;
-					bytes.b[writeCaret + 1] = 0;
-					bytes.b[writeCaret + 2] = 0;
-					bytes.b[writeCaret + 3] = 0;
-					if(++x == frame.width) {
-						x = 0;
-						writeCaret += lineSkip;
-					} else {
-						writeCaret += 4;
-					}
-				}
-				break;
-			case 3:
-				break;
-			default:
-				var _g11 = 0;
-				var _g2 = pixels.length;
-				while(_g11 < _g2) {
-					var i1 = _g11++;
-					var index = pixels.b[i1] * 3;
-					if(transparentIndex != index) {
-						bytes.b[writeCaret] = ct.b[index] & 255;
-						bytes.b[writeCaret + 1] = ct.b[index + 1] & 255;
-						bytes.b[writeCaret + 2] = ct.b[index + 2] & 255;
-						bytes.b[writeCaret + 3] = 255;
-					}
-					if(++x == frame.width) {
-						x = 0;
-						writeCaret += lineSkip;
-					} else {
-						writeCaret += 4;
-					}
-				}
-			}
-			if(frameCaret == frameIndex) {
-				return bytes;
-			}
-			++frameCaret;
-			gce = null;
-			break;
-		case 1:
-			var ext = block[2];
-			if(ext[1] == 0) {
-				var g = ext[2];
-				gce = g;
-			}
-			break;
-		default:
-		}
-	}
-	return bytes;
-};
-format_gif_Tools.loopCount = function(data) {
-	var _g_head = data.blocks.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var block = val;
-		if(block[1] == 1) {
-			if(block[2][1] == 3) {
-				if(block[2][2][1] == 0) {
-					var loops = block[2][2][2];
-					return loops;
-				}
-			}
-		}
-	}
-	return 1;
-};
-format_gif_Tools.log2 = function(val) {
-	return Math.log(val) / format_gif_Tools.LN2;
-};
-var format_mp3_SamplingRate = $hxClasses["format.mp3.SamplingRate"] = { __ename__ : true, __constructs__ : ["SR_8000","SR_11025","SR_12000","SR_22050","SR_24000","SR_32000","SR_44100","SR_48000","SR_Bad"] };
-format_mp3_SamplingRate.SR_8000 = ["SR_8000",0];
-format_mp3_SamplingRate.SR_8000.toString = $estr;
-format_mp3_SamplingRate.SR_8000.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.SR_11025 = ["SR_11025",1];
-format_mp3_SamplingRate.SR_11025.toString = $estr;
-format_mp3_SamplingRate.SR_11025.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.SR_12000 = ["SR_12000",2];
-format_mp3_SamplingRate.SR_12000.toString = $estr;
-format_mp3_SamplingRate.SR_12000.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.SR_22050 = ["SR_22050",3];
-format_mp3_SamplingRate.SR_22050.toString = $estr;
-format_mp3_SamplingRate.SR_22050.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.SR_24000 = ["SR_24000",4];
-format_mp3_SamplingRate.SR_24000.toString = $estr;
-format_mp3_SamplingRate.SR_24000.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.SR_32000 = ["SR_32000",5];
-format_mp3_SamplingRate.SR_32000.toString = $estr;
-format_mp3_SamplingRate.SR_32000.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.SR_44100 = ["SR_44100",6];
-format_mp3_SamplingRate.SR_44100.toString = $estr;
-format_mp3_SamplingRate.SR_44100.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.SR_48000 = ["SR_48000",7];
-format_mp3_SamplingRate.SR_48000.toString = $estr;
-format_mp3_SamplingRate.SR_48000.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.SR_Bad = ["SR_Bad",8];
-format_mp3_SamplingRate.SR_Bad.toString = $estr;
-format_mp3_SamplingRate.SR_Bad.__enum__ = format_mp3_SamplingRate;
-format_mp3_SamplingRate.__empty_constructs__ = [format_mp3_SamplingRate.SR_8000,format_mp3_SamplingRate.SR_11025,format_mp3_SamplingRate.SR_12000,format_mp3_SamplingRate.SR_22050,format_mp3_SamplingRate.SR_24000,format_mp3_SamplingRate.SR_32000,format_mp3_SamplingRate.SR_44100,format_mp3_SamplingRate.SR_48000,format_mp3_SamplingRate.SR_Bad];
-var format_mp3_Bitrate = $hxClasses["format.mp3.Bitrate"] = { __ename__ : true, __constructs__ : ["BR_8","BR_16","BR_24","BR_32","BR_40","BR_48","BR_56","BR_64","BR_80","BR_96","BR_112","BR_128","BR_144","BR_160","BR_176","BR_192","BR_224","BR_256","BR_288","BR_320","BR_352","BR_384","BR_416","BR_448","BR_Free","BR_Bad"] };
-format_mp3_Bitrate.BR_8 = ["BR_8",0];
-format_mp3_Bitrate.BR_8.toString = $estr;
-format_mp3_Bitrate.BR_8.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_16 = ["BR_16",1];
-format_mp3_Bitrate.BR_16.toString = $estr;
-format_mp3_Bitrate.BR_16.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_24 = ["BR_24",2];
-format_mp3_Bitrate.BR_24.toString = $estr;
-format_mp3_Bitrate.BR_24.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_32 = ["BR_32",3];
-format_mp3_Bitrate.BR_32.toString = $estr;
-format_mp3_Bitrate.BR_32.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_40 = ["BR_40",4];
-format_mp3_Bitrate.BR_40.toString = $estr;
-format_mp3_Bitrate.BR_40.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_48 = ["BR_48",5];
-format_mp3_Bitrate.BR_48.toString = $estr;
-format_mp3_Bitrate.BR_48.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_56 = ["BR_56",6];
-format_mp3_Bitrate.BR_56.toString = $estr;
-format_mp3_Bitrate.BR_56.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_64 = ["BR_64",7];
-format_mp3_Bitrate.BR_64.toString = $estr;
-format_mp3_Bitrate.BR_64.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_80 = ["BR_80",8];
-format_mp3_Bitrate.BR_80.toString = $estr;
-format_mp3_Bitrate.BR_80.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_96 = ["BR_96",9];
-format_mp3_Bitrate.BR_96.toString = $estr;
-format_mp3_Bitrate.BR_96.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_112 = ["BR_112",10];
-format_mp3_Bitrate.BR_112.toString = $estr;
-format_mp3_Bitrate.BR_112.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_128 = ["BR_128",11];
-format_mp3_Bitrate.BR_128.toString = $estr;
-format_mp3_Bitrate.BR_128.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_144 = ["BR_144",12];
-format_mp3_Bitrate.BR_144.toString = $estr;
-format_mp3_Bitrate.BR_144.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_160 = ["BR_160",13];
-format_mp3_Bitrate.BR_160.toString = $estr;
-format_mp3_Bitrate.BR_160.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_176 = ["BR_176",14];
-format_mp3_Bitrate.BR_176.toString = $estr;
-format_mp3_Bitrate.BR_176.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_192 = ["BR_192",15];
-format_mp3_Bitrate.BR_192.toString = $estr;
-format_mp3_Bitrate.BR_192.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_224 = ["BR_224",16];
-format_mp3_Bitrate.BR_224.toString = $estr;
-format_mp3_Bitrate.BR_224.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_256 = ["BR_256",17];
-format_mp3_Bitrate.BR_256.toString = $estr;
-format_mp3_Bitrate.BR_256.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_288 = ["BR_288",18];
-format_mp3_Bitrate.BR_288.toString = $estr;
-format_mp3_Bitrate.BR_288.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_320 = ["BR_320",19];
-format_mp3_Bitrate.BR_320.toString = $estr;
-format_mp3_Bitrate.BR_320.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_352 = ["BR_352",20];
-format_mp3_Bitrate.BR_352.toString = $estr;
-format_mp3_Bitrate.BR_352.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_384 = ["BR_384",21];
-format_mp3_Bitrate.BR_384.toString = $estr;
-format_mp3_Bitrate.BR_384.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_416 = ["BR_416",22];
-format_mp3_Bitrate.BR_416.toString = $estr;
-format_mp3_Bitrate.BR_416.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_448 = ["BR_448",23];
-format_mp3_Bitrate.BR_448.toString = $estr;
-format_mp3_Bitrate.BR_448.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_Free = ["BR_Free",24];
-format_mp3_Bitrate.BR_Free.toString = $estr;
-format_mp3_Bitrate.BR_Free.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.BR_Bad = ["BR_Bad",25];
-format_mp3_Bitrate.BR_Bad.toString = $estr;
-format_mp3_Bitrate.BR_Bad.__enum__ = format_mp3_Bitrate;
-format_mp3_Bitrate.__empty_constructs__ = [format_mp3_Bitrate.BR_8,format_mp3_Bitrate.BR_16,format_mp3_Bitrate.BR_24,format_mp3_Bitrate.BR_32,format_mp3_Bitrate.BR_40,format_mp3_Bitrate.BR_48,format_mp3_Bitrate.BR_56,format_mp3_Bitrate.BR_64,format_mp3_Bitrate.BR_80,format_mp3_Bitrate.BR_96,format_mp3_Bitrate.BR_112,format_mp3_Bitrate.BR_128,format_mp3_Bitrate.BR_144,format_mp3_Bitrate.BR_160,format_mp3_Bitrate.BR_176,format_mp3_Bitrate.BR_192,format_mp3_Bitrate.BR_224,format_mp3_Bitrate.BR_256,format_mp3_Bitrate.BR_288,format_mp3_Bitrate.BR_320,format_mp3_Bitrate.BR_352,format_mp3_Bitrate.BR_384,format_mp3_Bitrate.BR_416,format_mp3_Bitrate.BR_448,format_mp3_Bitrate.BR_Free,format_mp3_Bitrate.BR_Bad];
-var format_mp3_MPEG = function() { };
-$hxClasses["format.mp3.MPEG"] = format_mp3_MPEG;
-format_mp3_MPEG.__name__ = ["format","mp3","MPEG"];
-format_mp3_MPEG.enum2Num = function(m) {
-	switch(m[1]) {
-	case 0:
-		return 3;
-	case 1:
-		return 2;
-	case 2:
-		return 0;
-	case 3:
-		return format_mp3_MPEG.Reserved;
-	}
-};
-format_mp3_MPEG.num2Enum = function(m) {
-	switch(m) {
-	case 0:
-		return format_mp3_MPEGVersion.MPEG_V25;
-	case 2:
-		return format_mp3_MPEGVersion.MPEG_V2;
-	case 3:
-		return format_mp3_MPEGVersion.MPEG_V1;
-	default:
-		return format_mp3_MPEGVersion.MPEG_Reserved;
-	}
-};
-format_mp3_MPEG.srNum2Enum = function(sr) {
-	switch(sr) {
-	case 8000:
-		return format_mp3_SamplingRate.SR_8000;
-	case 11025:
-		return format_mp3_SamplingRate.SR_11025;
-	case 12000:
-		return format_mp3_SamplingRate.SR_12000;
-	case 22050:
-		return format_mp3_SamplingRate.SR_22050;
-	case 24000:
-		return format_mp3_SamplingRate.SR_24000;
-	case 32000:
-		return format_mp3_SamplingRate.SR_32000;
-	case 44100:
-		return format_mp3_SamplingRate.SR_44100;
-	case 48000:
-		return format_mp3_SamplingRate.SR_48000;
-	default:
-		return format_mp3_SamplingRate.SR_Bad;
-	}
-};
-format_mp3_MPEG.srEnum2Num = function(sr) {
-	switch(sr[1]) {
-	case 0:
-		return 8000;
-	case 1:
-		return 11025;
-	case 2:
-		return 12000;
-	case 3:
-		return 22050;
-	case 4:
-		return 24000;
-	case 5:
-		return 32000;
-	case 6:
-		return 44100;
-	case 7:
-		return 48000;
-	case 8:
-		return -1;
-	}
-};
-format_mp3_MPEG.getBitrateIdx = function(br,mpeg,layer) {
-	var arr = (mpeg == format_mp3_MPEGVersion.MPEG_V1 ? format_mp3_MPEG.V1_Bitrates : format_mp3_MPEG.V2_Bitrates)[format_mp3_CLayer.enum2Num(layer)];
-	var _g = 0;
-	while(_g < 16) {
-		var i = _g++;
-		if(arr[i] == br) {
-			return i;
-		}
-	}
-	throw new js__$Boot_HaxeError("Bitrate index not found");
-};
-format_mp3_MPEG.getSamplingRateIdx = function(sr,mpeg) {
-	var arr = format_mp3_MPEG.SamplingRates[format_mp3_MPEG.enum2Num(mpeg)];
-	var _g = 0;
-	while(_g < 4) {
-		var i = _g++;
-		if(arr[i] == sr) {
-			return i;
-		}
-	}
-	throw new js__$Boot_HaxeError("Sampling rate index not found");
-};
-format_mp3_MPEG.bitrateEnum2Num = function(br) {
-	switch(br[1]) {
-	case 0:
-		return 8;
-	case 1:
-		return 16;
-	case 2:
-		return 24;
-	case 3:
-		return 32;
-	case 4:
-		return 40;
-	case 5:
-		return 48;
-	case 6:
-		return 56;
-	case 7:
-		return 64;
-	case 8:
-		return 80;
-	case 9:
-		return 96;
-	case 10:
-		return 112;
-	case 11:
-		return 128;
-	case 12:
-		return 144;
-	case 13:
-		return 160;
-	case 14:
-		return 176;
-	case 15:
-		return 192;
-	case 16:
-		return 224;
-	case 17:
-		return 256;
-	case 18:
-		return 288;
-	case 19:
-		return 320;
-	case 20:
-		return 352;
-	case 21:
-		return 384;
-	case 22:
-		return 416;
-	case 23:
-		return 448;
-	case 24:
-		return 0;
-	case 25:
-		return -1;
-	}
-};
-format_mp3_MPEG.bitrateNum2Enum = function(br) {
-	switch(br) {
-	case 0:
-		return format_mp3_Bitrate.BR_Free;
-	case 8:
-		return format_mp3_Bitrate.BR_8;
-	case 16:
-		return format_mp3_Bitrate.BR_16;
-	case 24:
-		return format_mp3_Bitrate.BR_24;
-	case 32:
-		return format_mp3_Bitrate.BR_32;
-	case 40:
-		return format_mp3_Bitrate.BR_40;
-	case 48:
-		return format_mp3_Bitrate.BR_48;
-	case 56:
-		return format_mp3_Bitrate.BR_56;
-	case 64:
-		return format_mp3_Bitrate.BR_64;
-	case 80:
-		return format_mp3_Bitrate.BR_80;
-	case 96:
-		return format_mp3_Bitrate.BR_96;
-	case 112:
-		return format_mp3_Bitrate.BR_112;
-	case 128:
-		return format_mp3_Bitrate.BR_128;
-	case 144:
-		return format_mp3_Bitrate.BR_144;
-	case 160:
-		return format_mp3_Bitrate.BR_160;
-	case 176:
-		return format_mp3_Bitrate.BR_176;
-	case 192:
-		return format_mp3_Bitrate.BR_192;
-	case 224:
-		return format_mp3_Bitrate.BR_224;
-	case 256:
-		return format_mp3_Bitrate.BR_256;
-	case 288:
-		return format_mp3_Bitrate.BR_288;
-	case 320:
-		return format_mp3_Bitrate.BR_320;
-	case 352:
-		return format_mp3_Bitrate.BR_352;
-	case 384:
-		return format_mp3_Bitrate.BR_384;
-	case 416:
-		return format_mp3_Bitrate.BR_416;
-	case 448:
-		return format_mp3_Bitrate.BR_448;
-	default:
-		return format_mp3_Bitrate.BR_Bad;
-	}
-};
-var format_mp3_CLayer = function() { };
-$hxClasses["format.mp3.CLayer"] = format_mp3_CLayer;
-format_mp3_CLayer.__name__ = ["format","mp3","CLayer"];
-format_mp3_CLayer.enum2Num = function(l) {
-	switch(l[1]) {
-	case 0:
-		return format_mp3_CLayer.LReserved;
-	case 1:
-		return format_mp3_CLayer.LLayer3;
-	case 2:
-		return format_mp3_CLayer.LLayer2;
-	case 3:
-		return format_mp3_CLayer.LLayer1;
-	}
-};
-format_mp3_CLayer.num2Enum = function(l) {
-	switch(l) {
-	case 1:
-		return format_mp3_Layer.Layer3;
-	case 2:
-		return format_mp3_Layer.Layer2;
-	case 3:
-		return format_mp3_Layer.Layer1;
-	default:
-		return format_mp3_Layer.LayerReserved;
-	}
-};
-var format_mp3_CChannelMode = function() { };
-$hxClasses["format.mp3.CChannelMode"] = format_mp3_CChannelMode;
-format_mp3_CChannelMode.__name__ = ["format","mp3","CChannelMode"];
-format_mp3_CChannelMode.enum2Num = function(c) {
-	switch(c[1]) {
-	case 0:
-		return 0;
-	case 1:
-		return 1;
-	case 2:
-		return 2;
-	case 3:
-		return 3;
-	}
-};
-format_mp3_CChannelMode.num2Enum = function(c) {
-	switch(c) {
-	case 0:
-		return format_mp3_ChannelMode.Stereo;
-	case 1:
-		return format_mp3_ChannelMode.JointStereo;
-	case 2:
-		return format_mp3_ChannelMode.DualChannel;
-	case 3:
-		return format_mp3_ChannelMode.Mono;
-	default:
-		throw new js__$Boot_HaxeError("assert");
-	}
-};
-var format_mp3_CEmphasis = function() { };
-$hxClasses["format.mp3.CEmphasis"] = format_mp3_CEmphasis;
-format_mp3_CEmphasis.__name__ = ["format","mp3","CEmphasis"];
-format_mp3_CEmphasis.enum2Num = function(c) {
-	switch(c[1]) {
-	case 0:
-		return 0;
-	case 1:
-		return 1;
-	case 2:
-		return 3;
-	case 3:
-		return 2;
-	}
-};
-format_mp3_CEmphasis.num2Enum = function(c) {
-	switch(c) {
-	case 0:
-		return format_mp3_Emphasis.NoEmphasis;
-	case 1:
-		return format_mp3_Emphasis.Ms50_15;
-	case 2:
-		return format_mp3_Emphasis.InvalidEmphasis;
-	case 3:
-		return format_mp3_Emphasis.CCIT_J17;
-	default:
-		throw new js__$Boot_HaxeError("assert");
-	}
-};
-var format_mp3_MPEGVersion = $hxClasses["format.mp3.MPEGVersion"] = { __ename__ : true, __constructs__ : ["MPEG_V1","MPEG_V2","MPEG_V25","MPEG_Reserved"] };
-format_mp3_MPEGVersion.MPEG_V1 = ["MPEG_V1",0];
-format_mp3_MPEGVersion.MPEG_V1.toString = $estr;
-format_mp3_MPEGVersion.MPEG_V1.__enum__ = format_mp3_MPEGVersion;
-format_mp3_MPEGVersion.MPEG_V2 = ["MPEG_V2",1];
-format_mp3_MPEGVersion.MPEG_V2.toString = $estr;
-format_mp3_MPEGVersion.MPEG_V2.__enum__ = format_mp3_MPEGVersion;
-format_mp3_MPEGVersion.MPEG_V25 = ["MPEG_V25",2];
-format_mp3_MPEGVersion.MPEG_V25.toString = $estr;
-format_mp3_MPEGVersion.MPEG_V25.__enum__ = format_mp3_MPEGVersion;
-format_mp3_MPEGVersion.MPEG_Reserved = ["MPEG_Reserved",3];
-format_mp3_MPEGVersion.MPEG_Reserved.toString = $estr;
-format_mp3_MPEGVersion.MPEG_Reserved.__enum__ = format_mp3_MPEGVersion;
-format_mp3_MPEGVersion.__empty_constructs__ = [format_mp3_MPEGVersion.MPEG_V1,format_mp3_MPEGVersion.MPEG_V2,format_mp3_MPEGVersion.MPEG_V25,format_mp3_MPEGVersion.MPEG_Reserved];
-var format_mp3_Layer = $hxClasses["format.mp3.Layer"] = { __ename__ : true, __constructs__ : ["LayerReserved","Layer3","Layer2","Layer1"] };
-format_mp3_Layer.LayerReserved = ["LayerReserved",0];
-format_mp3_Layer.LayerReserved.toString = $estr;
-format_mp3_Layer.LayerReserved.__enum__ = format_mp3_Layer;
-format_mp3_Layer.Layer3 = ["Layer3",1];
-format_mp3_Layer.Layer3.toString = $estr;
-format_mp3_Layer.Layer3.__enum__ = format_mp3_Layer;
-format_mp3_Layer.Layer2 = ["Layer2",2];
-format_mp3_Layer.Layer2.toString = $estr;
-format_mp3_Layer.Layer2.__enum__ = format_mp3_Layer;
-format_mp3_Layer.Layer1 = ["Layer1",3];
-format_mp3_Layer.Layer1.toString = $estr;
-format_mp3_Layer.Layer1.__enum__ = format_mp3_Layer;
-format_mp3_Layer.__empty_constructs__ = [format_mp3_Layer.LayerReserved,format_mp3_Layer.Layer3,format_mp3_Layer.Layer2,format_mp3_Layer.Layer1];
-var format_mp3_ChannelMode = $hxClasses["format.mp3.ChannelMode"] = { __ename__ : true, __constructs__ : ["Stereo","JointStereo","DualChannel","Mono"] };
-format_mp3_ChannelMode.Stereo = ["Stereo",0];
-format_mp3_ChannelMode.Stereo.toString = $estr;
-format_mp3_ChannelMode.Stereo.__enum__ = format_mp3_ChannelMode;
-format_mp3_ChannelMode.JointStereo = ["JointStereo",1];
-format_mp3_ChannelMode.JointStereo.toString = $estr;
-format_mp3_ChannelMode.JointStereo.__enum__ = format_mp3_ChannelMode;
-format_mp3_ChannelMode.DualChannel = ["DualChannel",2];
-format_mp3_ChannelMode.DualChannel.toString = $estr;
-format_mp3_ChannelMode.DualChannel.__enum__ = format_mp3_ChannelMode;
-format_mp3_ChannelMode.Mono = ["Mono",3];
-format_mp3_ChannelMode.Mono.toString = $estr;
-format_mp3_ChannelMode.Mono.__enum__ = format_mp3_ChannelMode;
-format_mp3_ChannelMode.__empty_constructs__ = [format_mp3_ChannelMode.Stereo,format_mp3_ChannelMode.JointStereo,format_mp3_ChannelMode.DualChannel,format_mp3_ChannelMode.Mono];
-var format_mp3_Emphasis = $hxClasses["format.mp3.Emphasis"] = { __ename__ : true, __constructs__ : ["NoEmphasis","Ms50_15","CCIT_J17","InvalidEmphasis"] };
-format_mp3_Emphasis.NoEmphasis = ["NoEmphasis",0];
-format_mp3_Emphasis.NoEmphasis.toString = $estr;
-format_mp3_Emphasis.NoEmphasis.__enum__ = format_mp3_Emphasis;
-format_mp3_Emphasis.Ms50_15 = ["Ms50_15",1];
-format_mp3_Emphasis.Ms50_15.toString = $estr;
-format_mp3_Emphasis.Ms50_15.__enum__ = format_mp3_Emphasis;
-format_mp3_Emphasis.CCIT_J17 = ["CCIT_J17",2];
-format_mp3_Emphasis.CCIT_J17.toString = $estr;
-format_mp3_Emphasis.CCIT_J17.__enum__ = format_mp3_Emphasis;
-format_mp3_Emphasis.InvalidEmphasis = ["InvalidEmphasis",3];
-format_mp3_Emphasis.InvalidEmphasis.toString = $estr;
-format_mp3_Emphasis.InvalidEmphasis.__enum__ = format_mp3_Emphasis;
-format_mp3_Emphasis.__empty_constructs__ = [format_mp3_Emphasis.NoEmphasis,format_mp3_Emphasis.Ms50_15,format_mp3_Emphasis.CCIT_J17,format_mp3_Emphasis.InvalidEmphasis];
-var format_mp3_FrameType = $hxClasses["format.mp3.FrameType"] = { __ename__ : true, __constructs__ : ["FT_MP3","FT_NONE"] };
-format_mp3_FrameType.FT_MP3 = ["FT_MP3",0];
-format_mp3_FrameType.FT_MP3.toString = $estr;
-format_mp3_FrameType.FT_MP3.__enum__ = format_mp3_FrameType;
-format_mp3_FrameType.FT_NONE = ["FT_NONE",1];
-format_mp3_FrameType.FT_NONE.toString = $estr;
-format_mp3_FrameType.FT_NONE.__enum__ = format_mp3_FrameType;
-format_mp3_FrameType.__empty_constructs__ = [format_mp3_FrameType.FT_MP3,format_mp3_FrameType.FT_NONE];
-var format_mp3_Reader = function(i) {
-	this.i = i;
-	i.set_bigEndian(true);
-	this.bits = new format_tools_BitsInput(i);
-	this.samples = 0;
-	this.sampleSize = 0;
-	this.any_read = false;
-};
-$hxClasses["format.mp3.Reader"] = format_mp3_Reader;
-format_mp3_Reader.__name__ = ["format","mp3","Reader"];
-format_mp3_Reader.prototype = {
-	skipID3v2: function() {
-		this.id3v2_version = this.i.readUInt16();
-		this.id3v2_flags = this.i.readByte();
-		var size = this.i.readByte() & 127;
-		size = size << 7 | this.i.readByte() & 127;
-		size = size << 7 | this.i.readByte() & 127;
-		size = size << 7 | this.i.readByte() & 127;
-		this.id3v2_data = this.i.read(size);
-	}
-	,seekFrame: function() {
-		var found = false;
-		try {
-			var b;
-			while(true) {
-				b = this.i.readByte();
-				if(!this.any_read) {
-					this.any_read = true;
-					if(b == 73) {
-						b = this.i.readByte();
-						if(b == 68) {
-							b = this.i.readByte();
-							if(b == 51) {
-								this.skipID3v2();
-							}
-						}
-					}
-				}
-				if(b == 255) {
-					this.bits.nbits = 0;
-					b = this.bits.readBits(3);
-					if(b == 7) {
-						return format_mp3_FrameType.FT_MP3;
-					}
-				}
-			}
-		} catch( ex ) {
-			if (ex instanceof js__$Boot_HaxeError) ex = ex.val;
-			if( js_Boot.__instanceof(ex,haxe_io_Eof) ) {
-				return format_mp3_FrameType.FT_NONE;
-			} else throw(ex);
-		}
-	}
-	,readFrames: function() {
-		var frames = [];
-		var ft;
-		while(true) {
-			ft = this.seekFrame();
-			if(!(ft != format_mp3_FrameType.FT_NONE)) {
-				break;
-			}
-			switch(ft[1]) {
-			case 0:
-				var f = this.readFrame();
-				if(f != null) {
-					frames.push(f);
-				}
-				break;
-			case 1:
-				break;
-			}
-		}
-		return frames;
-	}
-	,readFrameHeader: function() {
-		var version = this.bits.readBits(2);
-		var layer = this.bits.readBits(2);
-		var hasCrc = !this.bits.readBit();
-		if(version == format_mp3_MPEG.Reserved || layer == format_mp3_CLayer.LReserved) {
-			return null;
-		}
-		var bitrateIdx = this.bits.readBits(4);
-		var bitrate = format_mp3_Tools.getBitrate(version,layer,bitrateIdx);
-		var samplingRateIdx = this.bits.readBits(2);
-		var samplingRate = format_mp3_Tools.getSamplingRate(version,samplingRateIdx);
-		var isPadded = this.bits.readBit();
-		var privateBit = this.bits.readBit();
-		if(bitrate == format_mp3_Bitrate.BR_Bad || bitrate == format_mp3_Bitrate.BR_Free || samplingRate == format_mp3_SamplingRate.SR_Bad) {
-			return null;
-		}
-		var channelMode = this.bits.readBits(2);
-		var isIntensityStereo = this.bits.readBit();
-		var isMSStereo = this.bits.readBit();
-		var isCopyrighted = this.bits.readBit();
-		var isOriginal = this.bits.readBit();
-		var emphasis = this.bits.readBits(2);
-		var crc16 = 0;
-		if(hasCrc) {
-			crc16 = this.i.readUInt16();
-		}
-		return { version : format_mp3_MPEG.num2Enum(version), layer : format_mp3_CLayer.num2Enum(layer), hasCrc : hasCrc, crc16 : crc16, bitrate : bitrate, samplingRate : samplingRate, isPadded : isPadded, privateBit : privateBit, channelMode : format_mp3_CChannelMode.num2Enum(channelMode), isIntensityStereo : isIntensityStereo, isMSStereo : isMSStereo, isCopyrighted : isCopyrighted, isOriginal : isOriginal, emphasis : format_mp3_CEmphasis.num2Enum(emphasis)};
-	}
-	,readFrame: function() {
-		var header = this.readFrameHeader();
-		if(header == null || format_mp3_Tools.isInvalidFrameHeader(header)) {
-			return null;
-		}
-		try {
-			var data = this.i.read(format_mp3_Tools.getSampleDataSizeHdr(header));
-			this.samples += format_mp3_Tools.getSampleCountHdr(header);
-			this.sampleSize += data.length;
-			return { header : header, data : data};
-		} catch( e ) {
-			if (e instanceof js__$Boot_HaxeError) e = e.val;
-			if( js_Boot.__instanceof(e,haxe_io_Eof) ) {
-				return null;
-			} else throw(e);
-		}
-	}
-	,read: function() {
-		var fs = this.readFrames();
-		return { frames : fs, sampleCount : this.samples, sampleSize : this.sampleSize, id3v2 : this.id3v2_data == null ? null : { versionBytes : this.id3v2_version, flagByte : this.id3v2_flags, data : this.id3v2_data}};
-	}
-	,__class__: format_mp3_Reader
-};
-var format_mp3_Tools = function() { };
-$hxClasses["format.mp3.Tools"] = format_mp3_Tools;
-format_mp3_Tools.__name__ = ["format","mp3","Tools"];
-format_mp3_Tools.getBitrate = function(mpegVersion,layerIdx,bitrateIdx) {
-	if(mpegVersion == format_mp3_MPEG.Reserved || layerIdx == format_mp3_CLayer.LReserved) {
-		return format_mp3_Bitrate.BR_Bad;
-	}
-	return (mpegVersion == 3 ? format_mp3_MPEG.V1_Bitrates : format_mp3_MPEG.V2_Bitrates)[layerIdx][bitrateIdx];
-};
-format_mp3_Tools.getSamplingRate = function(mpegVersion,samplingRateIdx) {
-	return format_mp3_MPEG.SamplingRates[mpegVersion][samplingRateIdx];
-};
-format_mp3_Tools.isInvalidFrameHeader = function(hdr) {
-	if(!(hdr.version == format_mp3_MPEGVersion.MPEG_Reserved || hdr.layer == format_mp3_Layer.LayerReserved || hdr.bitrate == format_mp3_Bitrate.BR_Bad || hdr.bitrate == format_mp3_Bitrate.BR_Free)) {
-		return hdr.samplingRate == format_mp3_SamplingRate.SR_Bad;
-	} else {
-		return true;
-	}
-};
-format_mp3_Tools.getSampleDataSize = function(mpegVersion,bitrate,samplingRate,isPadded,hasCrc) {
-	return ((mpegVersion == 3 ? 144 : 72) * bitrate * 1000 / samplingRate | 0) + (isPadded ? 1 : 0) - (hasCrc ? 2 : 0) - 4;
-};
-format_mp3_Tools.getSampleDataSizeHdr = function(hdr) {
-	return format_mp3_Tools.getSampleDataSize(format_mp3_MPEG.enum2Num(hdr.version),format_mp3_MPEG.bitrateEnum2Num(hdr.bitrate),format_mp3_MPEG.srEnum2Num(hdr.samplingRate),hdr.isPadded,hdr.hasCrc);
-};
-format_mp3_Tools.getSampleCount = function(mpegVersion) {
-	if(mpegVersion == 3) {
-		return 1152;
-	} else {
-		return 576;
-	}
-};
-format_mp3_Tools.getSampleCountHdr = function(hdr) {
-	return format_mp3_Tools.getSampleCount(format_mp3_MPEG.enum2Num(hdr.version));
-};
-format_mp3_Tools.getFrameInfo = function(fr) {
-	return Std.string(fr.header.version) + ", " + Std.string(fr.header.layer) + ", " + Std.string(fr.header.channelMode) + ", " + Std.string(fr.header.samplingRate) + " Hz, " + Std.string(fr.header.bitrate) + " kbps " + "Emphasis: " + Std.string(fr.header.emphasis) + ", " + (fr.header.hasCrc ? "(CRC) " : "") + (fr.header.isPadded ? "(Padded) " : "") + (fr.header.isIntensityStereo ? "(Intensity Stereo) " : "") + (fr.header.isMSStereo ? "(MS Stereo) " : "") + (fr.header.isCopyrighted ? "(Copyrighted) " : "") + (fr.header.isOriginal ? "(Original) " : "");
-};
-var format_png_Color = $hxClasses["format.png.Color"] = { __ename__ : true, __constructs__ : ["ColGrey","ColTrue","ColIndexed"] };
-format_png_Color.ColGrey = function(alpha) { var $x = ["ColGrey",0,alpha]; $x.__enum__ = format_png_Color; $x.toString = $estr; return $x; };
-format_png_Color.ColTrue = function(alpha) { var $x = ["ColTrue",1,alpha]; $x.__enum__ = format_png_Color; $x.toString = $estr; return $x; };
-format_png_Color.ColIndexed = ["ColIndexed",2];
-format_png_Color.ColIndexed.toString = $estr;
-format_png_Color.ColIndexed.__enum__ = format_png_Color;
-format_png_Color.__empty_constructs__ = [format_png_Color.ColIndexed];
-var format_png_Chunk = $hxClasses["format.png.Chunk"] = { __ename__ : true, __constructs__ : ["CEnd","CHeader","CData","CPalette","CUnknown"] };
-format_png_Chunk.CEnd = ["CEnd",0];
-format_png_Chunk.CEnd.toString = $estr;
-format_png_Chunk.CEnd.__enum__ = format_png_Chunk;
-format_png_Chunk.CHeader = function(h) { var $x = ["CHeader",1,h]; $x.__enum__ = format_png_Chunk; $x.toString = $estr; return $x; };
-format_png_Chunk.CData = function(b) { var $x = ["CData",2,b]; $x.__enum__ = format_png_Chunk; $x.toString = $estr; return $x; };
-format_png_Chunk.CPalette = function(b) { var $x = ["CPalette",3,b]; $x.__enum__ = format_png_Chunk; $x.toString = $estr; return $x; };
-format_png_Chunk.CUnknown = function(id,data) { var $x = ["CUnknown",4,id,data]; $x.__enum__ = format_png_Chunk; $x.toString = $estr; return $x; };
-format_png_Chunk.__empty_constructs__ = [format_png_Chunk.CEnd];
-var format_png_Reader = function(i) {
-	this.i = i;
-	i.set_bigEndian(true);
-	this.checkCRC = true;
-};
-$hxClasses["format.png.Reader"] = format_png_Reader;
-format_png_Reader.__name__ = ["format","png","Reader"];
-format_png_Reader.prototype = {
-	read: function() {
-		var _g = 0;
-		var _g1 = [137,80,78,71,13,10,26,10];
-		while(_g < _g1.length) {
-			var b = _g1[_g];
-			++_g;
-			if(this.i.readByte() != b) {
-				throw new js__$Boot_HaxeError("Invalid header");
-			}
-		}
-		var l = new List();
-		while(true) {
-			var c = this.readChunk();
-			l.add(c);
-			if(c == format_png_Chunk.CEnd) {
-				break;
-			}
-		}
-		return l;
-	}
-	,readHeader: function(i) {
-		i.set_bigEndian(true);
-		var width = i.readInt32();
-		var height = i.readInt32();
-		var colbits = i.readByte();
-		var color = i.readByte();
-		var color1;
-		switch(color) {
-		case 0:
-			color1 = format_png_Color.ColGrey(false);
-			break;
-		case 2:
-			color1 = format_png_Color.ColTrue(false);
-			break;
-		case 3:
-			color1 = format_png_Color.ColIndexed;
-			break;
-		case 4:
-			color1 = format_png_Color.ColGrey(true);
-			break;
-		case 6:
-			color1 = format_png_Color.ColTrue(true);
-			break;
-		default:
-			throw new js__$Boot_HaxeError("Unknown color model " + color + ":" + colbits);
-		}
-		var compress = i.readByte();
-		var filter = i.readByte();
-		if(compress != 0 || filter != 0) {
-			throw new js__$Boot_HaxeError("Invalid header");
-		}
-		var interlace = i.readByte();
-		if(interlace != 0 && interlace != 1) {
-			throw new js__$Boot_HaxeError("Invalid header");
-		}
-		return { width : width, height : height, colbits : colbits, color : color1, interlaced : interlace == 1};
-	}
-	,readChunk: function() {
-		var dataLen = this.i.readInt32();
-		var id = this.i.readString(4);
-		var data = this.i.read(dataLen);
-		var crc = this.i.readInt32();
-		if(this.checkCRC) {
-			var c = new haxe_crypto_Crc32();
-			var _g = 0;
-			while(_g < 4) {
-				var i = _g++;
-				c["byte"](HxOverrides.cca(id,i));
-			}
-			c.update(data,0,data.length);
-			if(c.get() != crc) {
-				throw new js__$Boot_HaxeError("CRC check failure");
-			}
-		}
-		switch(id) {
-		case "IDAT":
-			return format_png_Chunk.CData(data);
-		case "IEND":
-			return format_png_Chunk.CEnd;
-		case "IHDR":
-			return format_png_Chunk.CHeader(this.readHeader(new haxe_io_BytesInput(data)));
-		case "PLTE":
-			return format_png_Chunk.CPalette(data);
-		default:
-			return format_png_Chunk.CUnknown(id,data);
-		}
-	}
-	,__class__: format_png_Reader
-};
-var format_png_Tools = function() { };
-$hxClasses["format.png.Tools"] = format_png_Tools;
-format_png_Tools.__name__ = ["format","png","Tools"];
-format_png_Tools.getHeader = function(d) {
-	var _g_head = d.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var c = val;
-		if(c[1] == 1) {
-			var h = c[2];
-			return h;
-		}
-	}
-	throw new js__$Boot_HaxeError("Header not found");
-};
-format_png_Tools.getPalette = function(d) {
-	var _g_head = d.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var c = val;
-		if(c[1] == 3) {
-			var b = c[2];
-			return b;
-		}
-	}
-	return null;
-};
-format_png_Tools.filter = function(data,x,y,stride,prev,p,numChannels) {
-	if(numChannels == null) {
-		numChannels = 4;
-	}
-	var b = y == 0 ? 0 : data.b[p - stride];
-	var c = x == 0 || y == 0 ? 0 : data.b[p - stride - numChannels];
-	var k = prev + b - c;
-	var pa = k - prev;
-	if(pa < 0) {
-		pa = -pa;
-	}
-	var pb = k - b;
-	if(pb < 0) {
-		pb = -pb;
-	}
-	var pc = k - c;
-	if(pc < 0) {
-		pc = -pc;
-	}
-	if(pa <= pb && pa <= pc) {
-		return prev;
-	} else if(pb <= pc) {
-		return b;
-	} else {
-		return c;
-	}
-};
-format_png_Tools.reverseBytes = function(b) {
-	var p = 0;
-	var _g1 = 0;
-	var _g = b.length >> 2;
-	while(_g1 < _g) {
-		var i = _g1++;
-		var b1 = b.b[p];
-		var g = b.b[p + 1];
-		var r = b.b[p + 2];
-		var a = b.b[p + 3];
-		b.b[p++] = a & 255;
-		b.b[p++] = r & 255;
-		b.b[p++] = g & 255;
-		b.b[p++] = b1 & 255;
-	}
-};
-format_png_Tools.extractGrey = function(d) {
-	var h = format_png_Tools.getHeader(d);
-	var grey = new haxe_io_Bytes(new ArrayBuffer(h.width * h.height));
-	var data = null;
-	var fullData = null;
-	var _g_head = d.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var c = val;
-		if(c[1] == 2) {
-			var b = c[2];
-			if(fullData != null) {
-				var b1 = fullData.b;
-				var b2 = b.b;
-				var _g1 = 0;
-				var _g = b.length;
-				while(_g1 < _g) {
-					var i = _g1++;
-					fullData.b.push(b2[i]);
-				}
-			} else if(data == null) {
-				data = b;
-			} else {
-				fullData = new haxe_io_BytesBuffer();
-				var b11 = fullData.b;
-				var b21 = data.b;
-				var _g11 = 0;
-				var _g2 = data.length;
-				while(_g11 < _g2) {
-					var i1 = _g11++;
-					fullData.b.push(b21[i1]);
-				}
-				var b12 = fullData.b;
-				var b22 = b.b;
-				var _g12 = 0;
-				var _g3 = b.length;
-				while(_g12 < _g3) {
-					var i2 = _g12++;
-					fullData.b.push(b22[i2]);
-				}
-				data = null;
-			}
-		}
-	}
-	if(fullData != null) {
-		data = fullData.getBytes();
-	}
-	if(data == null) {
-		throw new js__$Boot_HaxeError("Data not found");
-	}
-	data = format_tools_Inflate.run(data);
-	var r = 0;
-	var w = 0;
-	var _g4 = h.color;
-	if(_g4[1] == 0) {
-		var alpha = _g4[2];
-		if(h.colbits != 8) {
-			throw new js__$Boot_HaxeError("Unsupported color mode");
-		}
-		var width = h.width;
-		var stride = (alpha ? 2 : 1) * width + 1;
-		if(data.length < h.height * stride) {
-			throw new js__$Boot_HaxeError("Not enough data");
-		}
-		var rinc = alpha ? 2 : 1;
-		var _g13 = 0;
-		var _g5 = h.height;
-		while(_g13 < _g5) {
-			var y = _g13++;
-			var f = data.b[r++];
-			switch(f) {
-			case 0:
-				var _g31 = 0;
-				var _g21 = width;
-				while(_g31 < _g21) {
-					var x = _g31++;
-					var v = data.b[r];
-					r += rinc;
-					grey.b[w++] = v & 255;
-				}
-				break;
-			case 1:
-				var cv = 0;
-				var _g32 = 0;
-				var _g22 = width;
-				while(_g32 < _g22) {
-					var x1 = _g32++;
-					cv += data.b[r];
-					r += rinc;
-					grey.b[w++] = cv & 255;
-				}
-				break;
-			case 2:
-				var stride1 = y == 0 ? 0 : width;
-				var _g33 = 0;
-				var _g23 = width;
-				while(_g33 < _g23) {
-					var x2 = _g33++;
-					var v1 = data.b[r] + grey.b[w - stride1];
-					r += rinc;
-					grey.b[w++] = v1 & 255;
-				}
-				break;
-			case 3:
-				var cv1 = 0;
-				var stride2 = y == 0 ? 0 : width;
-				var _g34 = 0;
-				var _g24 = width;
-				while(_g34 < _g24) {
-					var x3 = _g34++;
-					cv1 = data.b[r] + (cv1 + grey.b[w - stride2] >> 1) & 255;
-					r += rinc;
-					grey.b[w++] = cv1 & 255;
-				}
-				break;
-			case 4:
-				var stride3 = width;
-				var cv2 = 0;
-				var _g35 = 0;
-				var _g25 = width;
-				while(_g35 < _g25) {
-					var x4 = _g35++;
-					var b3 = y == 0 ? 0 : grey.b[w - stride3];
-					var c1 = x4 == 0 || y == 0 ? 0 : grey.b[w - stride3 - 1];
-					var k = cv2 + b3 - c1;
-					var pa = k - cv2;
-					if(pa < 0) {
-						pa = -pa;
-					}
-					var pb = k - b3;
-					if(pb < 0) {
-						pb = -pb;
-					}
-					var pc = k - c1;
-					if(pc < 0) {
-						pc = -pc;
-					}
-					cv2 = (pa <= pb && pa <= pc ? cv2 : pb <= pc ? b3 : c1) + data.b[r] & 255;
-					r += rinc;
-					grey.b[w++] = cv2 & 255;
-				}
-				break;
-			default:
-				throw new js__$Boot_HaxeError("Invalid filter " + f);
-			}
-		}
-	} else {
-		throw new js__$Boot_HaxeError("Unsupported color mode");
-	}
-	return grey;
-};
-format_png_Tools.extract32 = function(d,bytes,flipY) {
-	var h = format_png_Tools.getHeader(d);
-	var bgra = bytes == null ? new haxe_io_Bytes(new ArrayBuffer(h.width * h.height * 4)) : bytes;
-	var data = null;
-	var fullData = null;
-	var _g_head = d.h;
-	while(_g_head != null) {
-		var val = _g_head.item;
-		_g_head = _g_head.next;
-		var c = val;
-		if(c[1] == 2) {
-			var b = c[2];
-			if(fullData != null) {
-				var b1 = fullData.b;
-				var b2 = b.b;
-				var _g1 = 0;
-				var _g = b.length;
-				while(_g1 < _g) {
-					var i = _g1++;
-					fullData.b.push(b2[i]);
-				}
-			} else if(data == null) {
-				data = b;
-			} else {
-				fullData = new haxe_io_BytesBuffer();
-				var b11 = fullData.b;
-				var b21 = data.b;
-				var _g11 = 0;
-				var _g2 = data.length;
-				while(_g11 < _g2) {
-					var i1 = _g11++;
-					fullData.b.push(b21[i1]);
-				}
-				var b12 = fullData.b;
-				var b22 = b.b;
-				var _g12 = 0;
-				var _g3 = b.length;
-				while(_g12 < _g3) {
-					var i2 = _g12++;
-					fullData.b.push(b22[i2]);
-				}
-				data = null;
-			}
-		}
-	}
-	if(fullData != null) {
-		data = fullData.getBytes();
-	}
-	if(data == null) {
-		throw new js__$Boot_HaxeError("Data not found");
-	}
-	data = format_tools_Inflate.run(data);
-	var r = 0;
-	var w = 0;
-	var lineDelta = 0;
-	if(flipY) {
-		lineDelta = -h.width * 8;
-		w = (h.height - 1) * (h.width * 4);
-	}
-	var flipY1 = flipY ? -1 : 1;
-	var _g4 = h.color;
-	switch(_g4[1]) {
-	case 0:
-		var alpha = _g4[2];
-		if(h.colbits != 8) {
-			throw new js__$Boot_HaxeError("Unsupported color mode");
-		}
-		var width = h.width;
-		var stride = (alpha ? 2 : 1) * width + 1;
-		if(data.length < h.height * stride) {
-			throw new js__$Boot_HaxeError("Not enough data");
-		}
-		var alphvaIdx = -1;
-		if(!alpha) {
-			var _g_head1 = d.h;
-			while(_g_head1 != null) {
-				var val1 = _g_head1.item;
-				_g_head1 = _g_head1.next;
-				var t = val1;
-				if(t[1] == 4) {
-					if(t[2] == "tRNS") {
-						var data1 = t[3];
-						if(data1.length >= 2) {
-							alphvaIdx = data1.b[1];
-						}
-						break;
-					}
-				}
-			}
-		}
-		var _g13 = 0;
-		var _g5 = h.height;
-		while(_g13 < _g5) {
-			var y = _g13++;
-			var f = data.b[r++];
-			switch(f) {
-			case 0:
-				if(alpha) {
-					var _g31 = 0;
-					var _g21 = width;
-					while(_g31 < _g21) {
-						var x = _g31++;
-						var v = data.b[r++];
-						bgra.b[w++] = v & 255;
-						bgra.b[w++] = v & 255;
-						bgra.b[w++] = v & 255;
-						bgra.b[w++] = data.b[r++] & 255;
-					}
-				} else {
-					var _g32 = 0;
-					var _g22 = width;
-					while(_g32 < _g22) {
-						var x1 = _g32++;
-						var v1 = data.b[r++];
-						bgra.b[w++] = v1 & 255;
-						bgra.b[w++] = v1 & 255;
-						bgra.b[w++] = v1 & 255;
-						bgra.b[w++] = (v1 == alphvaIdx ? 0 : 255) & 255;
-					}
-				}
-				break;
-			case 1:
-				var cv = 0;
-				var ca = 0;
-				if(alpha) {
-					var _g33 = 0;
-					var _g23 = width;
-					while(_g33 < _g23) {
-						var x2 = _g33++;
-						cv += data.b[r++];
-						bgra.b[w++] = cv & 255;
-						bgra.b[w++] = cv & 255;
-						bgra.b[w++] = cv & 255;
-						ca += data.b[r++];
-						bgra.b[w++] = ca & 255;
-					}
-				} else {
-					var _g34 = 0;
-					var _g24 = width;
-					while(_g34 < _g24) {
-						var x3 = _g34++;
-						cv += data.b[r++];
-						bgra.b[w++] = cv & 255;
-						bgra.b[w++] = cv & 255;
-						bgra.b[w++] = cv & 255;
-						bgra.b[w++] = (cv == alphvaIdx ? 0 : 255) & 255;
-					}
-				}
-				break;
-			case 2:
-				var stride1 = y == 0 ? 0 : width * 4 * flipY1;
-				if(alpha) {
-					var _g35 = 0;
-					var _g25 = width;
-					while(_g35 < _g25) {
-						var x4 = _g35++;
-						var v2 = data.b[r++] + bgra.b[w - stride1];
-						bgra.b[w++] = v2 & 255;
-						bgra.b[w++] = v2 & 255;
-						bgra.b[w++] = v2 & 255;
-						bgra.b[w++] = data.b[r++] + bgra.b[w - stride1] & 255;
-					}
-				} else {
-					var _g36 = 0;
-					var _g26 = width;
-					while(_g36 < _g26) {
-						var x5 = _g36++;
-						var v3 = data.b[r++] + bgra.b[w - stride1];
-						bgra.b[w++] = v3 & 255;
-						bgra.b[w++] = v3 & 255;
-						bgra.b[w++] = v3 & 255;
-						bgra.b[w++] = (v3 == alphvaIdx ? 0 : 255) & 255;
-					}
-				}
-				break;
-			case 3:
-				var cv1 = 0;
-				var ca1 = 0;
-				var stride2 = y == 0 ? 0 : width * 4 * flipY1;
-				if(alpha) {
-					var _g37 = 0;
-					var _g27 = width;
-					while(_g37 < _g27) {
-						var x6 = _g37++;
-						cv1 = data.b[r++] + (cv1 + bgra.b[w - stride2] >> 1) & 255;
-						bgra.b[w++] = cv1 & 255;
-						bgra.b[w++] = cv1 & 255;
-						bgra.b[w++] = cv1 & 255;
-						ca1 = data.b[r++] + (ca1 + bgra.b[w - stride2] >> 1) & 255;
-						bgra.b[w++] = ca1 & 255;
-					}
-				} else {
-					var _g38 = 0;
-					var _g28 = width;
-					while(_g38 < _g28) {
-						var x7 = _g38++;
-						cv1 = data.b[r++] + (cv1 + bgra.b[w - stride2] >> 1) & 255;
-						bgra.b[w++] = cv1 & 255;
-						bgra.b[w++] = cv1 & 255;
-						bgra.b[w++] = cv1 & 255;
-						bgra.b[w++] = (cv1 == alphvaIdx ? 0 : 255) & 255;
-					}
-				}
-				break;
-			case 4:
-				var stride3 = width * 4 * flipY1;
-				var cv2 = 0;
-				var ca2 = 0;
-				if(alpha) {
-					var _g39 = 0;
-					var _g29 = width;
-					while(_g39 < _g29) {
-						var x8 = _g39++;
-						var b3 = y == 0 ? 0 : bgra.b[w - stride3];
-						var c1 = x8 == 0 || y == 0 ? 0 : bgra.b[w - stride3 - 4];
-						var k = cv2 + b3 - c1;
-						var pa = k - cv2;
-						if(pa < 0) {
-							pa = -pa;
-						}
-						var pb = k - b3;
-						if(pb < 0) {
-							pb = -pb;
-						}
-						var pc = k - c1;
-						if(pc < 0) {
-							pc = -pc;
-						}
-						cv2 = (pa <= pb && pa <= pc ? cv2 : pb <= pc ? b3 : c1) + data.b[r++] & 255;
-						bgra.b[w++] = cv2 & 255;
-						bgra.b[w++] = cv2 & 255;
-						bgra.b[w++] = cv2 & 255;
-						var b4 = y == 0 ? 0 : bgra.b[w - stride3];
-						var c2 = x8 == 0 || y == 0 ? 0 : bgra.b[w - stride3 - 4];
-						var k1 = ca2 + b4 - c2;
-						var pa1 = k1 - ca2;
-						if(pa1 < 0) {
-							pa1 = -pa1;
-						}
-						var pb1 = k1 - b4;
-						if(pb1 < 0) {
-							pb1 = -pb1;
-						}
-						var pc1 = k1 - c2;
-						if(pc1 < 0) {
-							pc1 = -pc1;
-						}
-						ca2 = (pa1 <= pb1 && pa1 <= pc1 ? ca2 : pb1 <= pc1 ? b4 : c2) + data.b[r++] & 255;
-						bgra.b[w++] = ca2 & 255;
-					}
-				} else {
-					var _g310 = 0;
-					var _g210 = width;
-					while(_g310 < _g210) {
-						var x9 = _g310++;
-						var b5 = y == 0 ? 0 : bgra.b[w - stride3];
-						var c3 = x9 == 0 || y == 0 ? 0 : bgra.b[w - stride3 - 4];
-						var k2 = cv2 + b5 - c3;
-						var pa2 = k2 - cv2;
-						if(pa2 < 0) {
-							pa2 = -pa2;
-						}
-						var pb2 = k2 - b5;
-						if(pb2 < 0) {
-							pb2 = -pb2;
-						}
-						var pc2 = k2 - c3;
-						if(pc2 < 0) {
-							pc2 = -pc2;
-						}
-						cv2 = (pa2 <= pb2 && pa2 <= pc2 ? cv2 : pb2 <= pc2 ? b5 : c3) + data.b[r++] & 255;
-						bgra.b[w++] = cv2 & 255;
-						bgra.b[w++] = cv2 & 255;
-						bgra.b[w++] = cv2 & 255;
-						bgra.b[w++] = (cv2 == alphvaIdx ? 0 : 255) & 255;
-					}
-				}
-				break;
-			default:
-				throw new js__$Boot_HaxeError("Invalid filter " + f);
-			}
-			w += lineDelta;
-		}
-		break;
-	case 1:
-		var alpha1 = _g4[2];
-		if(h.colbits != 8) {
-			throw new js__$Boot_HaxeError("Unsupported color mode");
-		}
-		var width1 = h.width;
-		var stride4 = (alpha1 ? 4 : 3) * width1 + 1;
-		if(data.length < h.height * stride4) {
-			throw new js__$Boot_HaxeError("Not enough data");
-		}
-		var alphaRed = -1;
-		var alphaGreen = -1;
-		var alphaBlue = -1;
-		if(!alpha1) {
-			var _g_head2 = d.h;
-			while(_g_head2 != null) {
-				var val2 = _g_head2.item;
-				_g_head2 = _g_head2.next;
-				var t1 = val2;
-				if(t1[1] == 4) {
-					if(t1[2] == "tRNS") {
-						var data2 = t1[3];
-						if(data2.length >= 6) {
-							alphaRed = data2.b[1];
-							alphaGreen = data2.b[3];
-							alphaBlue = data2.b[5];
-						}
-						break;
-					}
-				}
-			}
-		}
-		var cr = 0;
-		var cg = 0;
-		var cb = 0;
-		var ca3 = 0;
-		var _g14 = 0;
-		var _g6 = h.height;
-		while(_g14 < _g6) {
-			var y1 = _g14++;
-			var f1 = data.b[r++];
-			switch(f1) {
-			case 0:
-				if(alpha1) {
-					var _g311 = 0;
-					var _g211 = width1;
-					while(_g311 < _g211) {
-						var x10 = _g311++;
-						bgra.b[w++] = data.b[r + 2] & 255;
-						bgra.b[w++] = data.b[r + 1] & 255;
-						bgra.b[w++] = data.b[r] & 255;
-						bgra.b[w++] = data.b[r + 3] & 255;
-						r += 4;
-					}
-				} else {
-					var _g312 = 0;
-					var _g212 = width1;
-					while(_g312 < _g212) {
-						var x11 = _g312++;
-						cb = data.b[r + 2];
-						bgra.b[w++] = cb & 255;
-						cg = data.b[r + 1];
-						bgra.b[w++] = cg & 255;
-						cr = data.b[r];
-						bgra.b[w++] = cr & 255;
-						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
-						r += 3;
-					}
-				}
-				break;
-			case 1:
-				ca3 = 0;
-				cb = ca3;
-				cg = cb;
-				cr = cg;
-				if(alpha1) {
-					var _g313 = 0;
-					var _g213 = width1;
-					while(_g313 < _g213) {
-						var x12 = _g313++;
-						cb += data.b[r + 2];
-						bgra.b[w++] = cb & 255;
-						cg += data.b[r + 1];
-						bgra.b[w++] = cg & 255;
-						cr += data.b[r];
-						bgra.b[w++] = cr & 255;
-						ca3 += data.b[r + 3];
-						bgra.b[w++] = ca3 & 255;
-						r += 4;
-					}
-				} else {
-					var _g314 = 0;
-					var _g214 = width1;
-					while(_g314 < _g214) {
-						var x13 = _g314++;
-						cb += data.b[r + 2];
-						bgra.b[w++] = cb & 255;
-						cg += data.b[r + 1];
-						bgra.b[w++] = cg & 255;
-						cr += data.b[r];
-						bgra.b[w++] = cr & 255;
-						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
-						r += 3;
-					}
-				}
-				break;
-			case 2:
-				var stride5 = y1 == 0 ? 0 : width1 * 4 * flipY1;
-				if(alpha1) {
-					var _g315 = 0;
-					var _g215 = width1;
-					while(_g315 < _g215) {
-						var x14 = _g315++;
-						bgra.b[w] = data.b[r + 2] + bgra.b[w - stride5] & 255;
-						++w;
-						bgra.b[w] = data.b[r + 1] + bgra.b[w - stride5] & 255;
-						++w;
-						bgra.b[w] = data.b[r] + bgra.b[w - stride5] & 255;
-						++w;
-						bgra.b[w] = data.b[r + 3] + bgra.b[w - stride5] & 255;
-						++w;
-						r += 4;
-					}
-				} else {
-					var _g316 = 0;
-					var _g216 = width1;
-					while(_g316 < _g216) {
-						var x15 = _g316++;
-						cb = data.b[r + 2] + bgra.b[w - stride5];
-						bgra.b[w] = cb & 255;
-						++w;
-						cg = data.b[r + 1] + bgra.b[w - stride5];
-						bgra.b[w] = cg & 255;
-						++w;
-						cr = data.b[r] + bgra.b[w - stride5];
-						bgra.b[w] = cr & 255;
-						++w;
-						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
-						r += 3;
-					}
-				}
-				break;
-			case 3:
-				ca3 = 0;
-				cb = ca3;
-				cg = cb;
-				cr = cg;
-				var stride6 = y1 == 0 ? 0 : width1 * 4 * flipY1;
-				if(alpha1) {
-					var _g317 = 0;
-					var _g217 = width1;
-					while(_g317 < _g217) {
-						var x16 = _g317++;
-						cb = data.b[r + 2] + (cb + bgra.b[w - stride6] >> 1) & 255;
-						bgra.b[w++] = cb & 255;
-						cg = data.b[r + 1] + (cg + bgra.b[w - stride6] >> 1) & 255;
-						bgra.b[w++] = cg & 255;
-						cr = data.b[r] + (cr + bgra.b[w - stride6] >> 1) & 255;
-						bgra.b[w++] = cr & 255;
-						ca3 = data.b[r + 3] + (ca3 + bgra.b[w - stride6] >> 1) & 255;
-						bgra.b[w++] = ca3 & 255;
-						r += 4;
-					}
-				} else {
-					var _g318 = 0;
-					var _g218 = width1;
-					while(_g318 < _g218) {
-						var x17 = _g318++;
-						cb = data.b[r + 2] + (cb + bgra.b[w - stride6] >> 1) & 255;
-						bgra.b[w++] = cb & 255;
-						cg = data.b[r + 1] + (cg + bgra.b[w - stride6] >> 1) & 255;
-						bgra.b[w++] = cg & 255;
-						cr = data.b[r] + (cr + bgra.b[w - stride6] >> 1) & 255;
-						bgra.b[w++] = cr & 255;
-						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
-						r += 3;
-					}
-				}
-				break;
-			case 4:
-				var stride7 = width1 * 4 * flipY1;
-				ca3 = 0;
-				cb = ca3;
-				cg = cb;
-				cr = cg;
-				if(alpha1) {
-					var _g319 = 0;
-					var _g219 = width1;
-					while(_g319 < _g219) {
-						var x18 = _g319++;
-						var b6 = y1 == 0 ? 0 : bgra.b[w - stride7];
-						var c4 = x18 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
-						var k3 = cb + b6 - c4;
-						var pa3 = k3 - cb;
-						if(pa3 < 0) {
-							pa3 = -pa3;
-						}
-						var pb3 = k3 - b6;
-						if(pb3 < 0) {
-							pb3 = -pb3;
-						}
-						var pc3 = k3 - c4;
-						if(pc3 < 0) {
-							pc3 = -pc3;
-						}
-						cb = (pa3 <= pb3 && pa3 <= pc3 ? cb : pb3 <= pc3 ? b6 : c4) + data.b[r + 2] & 255;
-						bgra.b[w++] = cb & 255;
-						var b7 = y1 == 0 ? 0 : bgra.b[w - stride7];
-						var c5 = x18 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
-						var k4 = cg + b7 - c5;
-						var pa4 = k4 - cg;
-						if(pa4 < 0) {
-							pa4 = -pa4;
-						}
-						var pb4 = k4 - b7;
-						if(pb4 < 0) {
-							pb4 = -pb4;
-						}
-						var pc4 = k4 - c5;
-						if(pc4 < 0) {
-							pc4 = -pc4;
-						}
-						cg = (pa4 <= pb4 && pa4 <= pc4 ? cg : pb4 <= pc4 ? b7 : c5) + data.b[r + 1] & 255;
-						bgra.b[w++] = cg & 255;
-						var b8 = y1 == 0 ? 0 : bgra.b[w - stride7];
-						var c6 = x18 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
-						var k5 = cr + b8 - c6;
-						var pa5 = k5 - cr;
-						if(pa5 < 0) {
-							pa5 = -pa5;
-						}
-						var pb5 = k5 - b8;
-						if(pb5 < 0) {
-							pb5 = -pb5;
-						}
-						var pc5 = k5 - c6;
-						if(pc5 < 0) {
-							pc5 = -pc5;
-						}
-						cr = (pa5 <= pb5 && pa5 <= pc5 ? cr : pb5 <= pc5 ? b8 : c6) + data.b[r] & 255;
-						bgra.b[w++] = cr & 255;
-						var b9 = y1 == 0 ? 0 : bgra.b[w - stride7];
-						var c7 = x18 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
-						var k6 = ca3 + b9 - c7;
-						var pa6 = k6 - ca3;
-						if(pa6 < 0) {
-							pa6 = -pa6;
-						}
-						var pb6 = k6 - b9;
-						if(pb6 < 0) {
-							pb6 = -pb6;
-						}
-						var pc6 = k6 - c7;
-						if(pc6 < 0) {
-							pc6 = -pc6;
-						}
-						ca3 = (pa6 <= pb6 && pa6 <= pc6 ? ca3 : pb6 <= pc6 ? b9 : c7) + data.b[r + 3] & 255;
-						bgra.b[w++] = ca3 & 255;
-						r += 4;
-					}
-				} else {
-					var _g320 = 0;
-					var _g220 = width1;
-					while(_g320 < _g220) {
-						var x19 = _g320++;
-						var b10 = y1 == 0 ? 0 : bgra.b[w - stride7];
-						var c8 = x19 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
-						var k7 = cb + b10 - c8;
-						var pa7 = k7 - cb;
-						if(pa7 < 0) {
-							pa7 = -pa7;
-						}
-						var pb7 = k7 - b10;
-						if(pb7 < 0) {
-							pb7 = -pb7;
-						}
-						var pc7 = k7 - c8;
-						if(pc7 < 0) {
-							pc7 = -pc7;
-						}
-						cb = (pa7 <= pb7 && pa7 <= pc7 ? cb : pb7 <= pc7 ? b10 : c8) + data.b[r + 2] & 255;
-						bgra.b[w++] = cb & 255;
-						var b13 = y1 == 0 ? 0 : bgra.b[w - stride7];
-						var c9 = x19 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
-						var k8 = cg + b13 - c9;
-						var pa8 = k8 - cg;
-						if(pa8 < 0) {
-							pa8 = -pa8;
-						}
-						var pb8 = k8 - b13;
-						if(pb8 < 0) {
-							pb8 = -pb8;
-						}
-						var pc8 = k8 - c9;
-						if(pc8 < 0) {
-							pc8 = -pc8;
-						}
-						cg = (pa8 <= pb8 && pa8 <= pc8 ? cg : pb8 <= pc8 ? b13 : c9) + data.b[r + 1] & 255;
-						bgra.b[w++] = cg & 255;
-						var b14 = y1 == 0 ? 0 : bgra.b[w - stride7];
-						var c10 = x19 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
-						var k9 = cr + b14 - c10;
-						var pa9 = k9 - cr;
-						if(pa9 < 0) {
-							pa9 = -pa9;
-						}
-						var pb9 = k9 - b14;
-						if(pb9 < 0) {
-							pb9 = -pb9;
-						}
-						var pc9 = k9 - c10;
-						if(pc9 < 0) {
-							pc9 = -pc9;
-						}
-						cr = (pa9 <= pb9 && pa9 <= pc9 ? cr : pb9 <= pc9 ? b14 : c10) + data.b[r] & 255;
-						bgra.b[w++] = cr & 255;
-						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
-						r += 3;
-					}
-				}
-				break;
-			default:
-				throw new js__$Boot_HaxeError("Invalid filter " + f1);
-			}
-			w += lineDelta;
-		}
-		break;
-	case 2:
-		var pal = format_png_Tools.getPalette(d);
-		if(pal == null) {
-			throw new js__$Boot_HaxeError("PNG Palette is missing");
-		}
-		var alpha2 = null;
-		var _g_head3 = d.h;
-		while(_g_head3 != null) {
-			var val3 = _g_head3.item;
-			_g_head3 = _g_head3.next;
-			var t2 = val3;
-			if(t2[1] == 4) {
-				if(t2[2] == "tRNS") {
-					var data3 = t2[3];
-					alpha2 = data3;
-					break;
-				}
-			}
-		}
-		if(alpha2 != null && alpha2.length < 1 << h.colbits) {
-			var alpha21 = new haxe_io_Bytes(new ArrayBuffer(1 << h.colbits));
-			alpha21.blit(0,alpha2,0,alpha2.length);
-			alpha21.fill(alpha2.length,alpha21.length - alpha2.length,255);
-			alpha2 = alpha21;
-		}
-		var width2 = h.width;
-		var stride8 = Math.ceil(width2 * h.colbits / 8) + 1;
-		if(data.length < h.height * stride8) {
-			throw new js__$Boot_HaxeError("Not enough data");
-		}
-		var rline = h.width * h.colbits >> 3;
-		var _g15 = 0;
-		var _g7 = h.height;
-		while(_g15 < _g7) {
-			var y2 = _g15++;
-			var f2 = data.b[r++];
-			if(f2 == 0) {
-				r += rline;
-				continue;
-			}
-			switch(f2) {
-			case 1:
-				var c11 = 0;
-				var _g321 = 0;
-				var _g221 = width2;
-				while(_g321 < _g221) {
-					var x20 = _g321++;
-					var v4 = data.b[r];
-					c11 += v4;
-					data.b[r++] = c11 & 255 & 255;
-				}
-				break;
-			case 2:
-				var stride9 = y2 == 0 ? 0 : rline + 1;
-				var _g322 = 0;
-				var _g222 = width2;
-				while(_g322 < _g222) {
-					var x21 = _g322++;
-					var v5 = data.b[r];
-					data.b[r] = v5 + data.b[r - stride9] & 255;
-					++r;
-				}
-				break;
-			case 3:
-				var c12 = 0;
-				var stride10 = y2 == 0 ? 0 : rline + 1;
-				var _g323 = 0;
-				var _g223 = width2;
-				while(_g323 < _g223) {
-					var x22 = _g323++;
-					var v6 = data.b[r];
-					c12 = v6 + (c12 + data.b[r - stride10] >> 1) & 255;
-					data.b[r++] = c12 & 255;
-				}
-				break;
-			case 4:
-				var stride11 = rline + 1;
-				var c13 = 0;
-				var _g324 = 0;
-				var _g224 = width2;
-				while(_g324 < _g224) {
-					var x23 = _g324++;
-					var v7 = data.b[r];
-					var b15 = y2 == 0 ? 0 : data.b[r - stride11];
-					var c14 = x23 == 0 || y2 == 0 ? 0 : data.b[r - stride11 - 1];
-					var k10 = c13 + b15 - c14;
-					var pa10 = k10 - c13;
-					if(pa10 < 0) {
-						pa10 = -pa10;
-					}
-					var pb10 = k10 - b15;
-					if(pb10 < 0) {
-						pb10 = -pb10;
-					}
-					var pc10 = k10 - c14;
-					if(pc10 < 0) {
-						pc10 = -pc10;
-					}
-					c13 = (pa10 <= pb10 && pa10 <= pc10 ? c13 : pb10 <= pc10 ? b15 : c14) + v7 & 255;
-					data.b[r++] = c13 & 255;
-				}
-				break;
-			default:
-				throw new js__$Boot_HaxeError("Invalid filter " + f2);
-			}
-		}
-		var r1 = 0;
-		if(h.colbits == 8) {
-			var _g16 = 0;
-			var _g8 = h.height;
-			while(_g16 < _g8) {
-				var y3 = _g16++;
-				++r1;
-				var _g325 = 0;
-				var _g225 = h.width;
-				while(_g325 < _g225) {
-					var x24 = _g325++;
-					var c15 = data.b[r1++];
-					bgra.b[w++] = pal.b[c15 * 3 + 2] & 255;
-					bgra.b[w++] = pal.b[c15 * 3 + 1] & 255;
-					bgra.b[w++] = pal.b[c15 * 3] & 255;
-					bgra.b[w++] = (alpha2 != null ? alpha2.b[c15] : 255) & 255;
-				}
-				w += lineDelta;
-			}
-		} else if(h.colbits < 8) {
-			var req = h.colbits;
-			var mask = (1 << req) - 1;
-			var _g17 = 0;
-			var _g9 = h.height;
-			while(_g17 < _g9) {
-				var y4 = _g17++;
-				++r1;
-				var bits = 0;
-				var nbits = 0;
-				var v8;
-				var _g326 = 0;
-				var _g226 = h.width;
-				while(_g326 < _g226) {
-					var x25 = _g326++;
-					if(nbits < req) {
-						bits = bits << 8 | data.b[r1++];
-						nbits += 8;
-					}
-					var c16 = bits >>> nbits - req & mask;
-					nbits -= req;
-					bgra.b[w++] = pal.b[c16 * 3 + 2] & 255;
-					bgra.b[w++] = pal.b[c16 * 3 + 1] & 255;
-					bgra.b[w++] = pal.b[c16 * 3] & 255;
-					bgra.b[w++] = (alpha2 != null ? alpha2.b[c16] : 255) & 255;
-				}
-				w += lineDelta;
-			}
-		} else {
-			throw new js__$Boot_HaxeError(h.colbits + " indexed bits per pixel not supported");
-		}
-		break;
-	}
-	return bgra;
-};
-format_png_Tools.buildGrey = function(width,height,data,level) {
-	if(level == null) {
-		level = 9;
-	}
-	var rgb = new haxe_io_Bytes(new ArrayBuffer(width * height + height));
-	var w = 0;
-	var r = 0;
-	var _g1 = 0;
-	var _g = height;
-	while(_g1 < _g) {
-		var y = _g1++;
-		rgb.b[w++] = 0;
-		var _g3 = 0;
-		var _g2 = width;
-		while(_g3 < _g2) {
-			var x = _g3++;
-			rgb.b[w++] = data.b[r++] & 255;
-		}
-	}
-	var l = new List();
-	l.add(format_png_Chunk.CHeader({ width : width, height : height, colbits : 8, color : format_png_Color.ColGrey(false), interlaced : false}));
-	l.add(format_png_Chunk.CData(format_tools_Deflate.run(rgb,level)));
-	l.add(format_png_Chunk.CEnd);
-	return l;
-};
-format_png_Tools.buildRGB = function(width,height,data,level) {
-	if(level == null) {
-		level = 9;
-	}
-	var rgb = new haxe_io_Bytes(new ArrayBuffer(width * height * 3 + height));
-	var w = 0;
-	var r = 0;
-	var _g1 = 0;
-	var _g = height;
-	while(_g1 < _g) {
-		var y = _g1++;
-		rgb.b[w++] = 0;
-		var _g3 = 0;
-		var _g2 = width;
-		while(_g3 < _g2) {
-			var x = _g3++;
-			rgb.b[w++] = data.b[r + 2] & 255;
-			rgb.b[w++] = data.b[r + 1] & 255;
-			rgb.b[w++] = data.b[r] & 255;
-			r += 3;
-		}
-	}
-	var l = new List();
-	l.add(format_png_Chunk.CHeader({ width : width, height : height, colbits : 8, color : format_png_Color.ColTrue(false), interlaced : false}));
-	l.add(format_png_Chunk.CData(format_tools_Deflate.run(rgb,level)));
-	l.add(format_png_Chunk.CEnd);
-	return l;
-};
-format_png_Tools.build32ARGB = function(width,height,data,level) {
-	if(level == null) {
-		level = 9;
-	}
-	var rgba = new haxe_io_Bytes(new ArrayBuffer(width * height * 4 + height));
-	var w = 0;
-	var r = 0;
-	var _g1 = 0;
-	var _g = height;
-	while(_g1 < _g) {
-		var y = _g1++;
-		rgba.b[w++] = 0;
-		var _g3 = 0;
-		var _g2 = width;
-		while(_g3 < _g2) {
-			var x = _g3++;
-			rgba.b[w++] = data.b[r + 1] & 255;
-			rgba.b[w++] = data.b[r + 2] & 255;
-			rgba.b[w++] = data.b[r + 3] & 255;
-			rgba.b[w++] = data.b[r] & 255;
-			r += 4;
-		}
-	}
-	var l = new List();
-	l.add(format_png_Chunk.CHeader({ width : width, height : height, colbits : 8, color : format_png_Color.ColTrue(true), interlaced : false}));
-	l.add(format_png_Chunk.CData(format_tools_Deflate.run(rgba,level)));
-	l.add(format_png_Chunk.CEnd);
-	return l;
-};
-format_png_Tools.build32BGRA = function(width,height,data,level) {
-	if(level == null) {
-		level = 9;
-	}
-	var rgba = new haxe_io_Bytes(new ArrayBuffer(width * height * 4 + height));
-	var w = 0;
-	var r = 0;
-	var _g1 = 0;
-	var _g = height;
-	while(_g1 < _g) {
-		var y = _g1++;
-		rgba.b[w++] = 0;
-		var _g3 = 0;
-		var _g2 = width;
-		while(_g3 < _g2) {
-			var x = _g3++;
-			rgba.b[w++] = data.b[r + 2] & 255;
-			rgba.b[w++] = data.b[r + 1] & 255;
-			rgba.b[w++] = data.b[r] & 255;
-			rgba.b[w++] = data.b[r + 3] & 255;
-			r += 4;
-		}
-	}
-	var l = new List();
-	l.add(format_png_Chunk.CHeader({ width : width, height : height, colbits : 8, color : format_png_Color.ColTrue(true), interlaced : false}));
-	l.add(format_png_Chunk.CData(format_tools_Deflate.run(rgba,level)));
-	l.add(format_png_Chunk.CEnd);
-	return l;
-};
-var format_png_Writer = function(o) {
-	this.o = o;
-	o.set_bigEndian(true);
-};
-$hxClasses["format.png.Writer"] = format_png_Writer;
-format_png_Writer.__name__ = ["format","png","Writer"];
-format_png_Writer.prototype = {
-	write: function(png) {
-		var _g = 0;
-		var _g1 = [137,80,78,71,13,10,26,10];
-		while(_g < _g1.length) {
-			var b = _g1[_g];
-			++_g;
-			this.o.writeByte(b);
-		}
-		var _g_head = png.h;
-		while(_g_head != null) {
-			var val = _g_head.item;
-			_g_head = _g_head.next;
-			var c = val;
-			switch(c[1]) {
-			case 0:
-				this.writeChunk("IEND",new haxe_io_Bytes(new ArrayBuffer(0)));
-				break;
-			case 1:
-				var h = c[2];
-				var b1 = new haxe_io_BytesOutput();
-				b1.set_bigEndian(true);
-				b1.writeInt32(h.width);
-				b1.writeInt32(h.height);
-				b1.writeByte(h.colbits);
-				var _g2 = h.color;
-				var tmp;
-				switch(_g2[1]) {
-				case 0:
-					var alpha = _g2[2];
-					if(alpha) {
-						tmp = 4;
-					} else {
-						tmp = 0;
-					}
-					break;
-				case 1:
-					var alpha1 = _g2[2];
-					if(alpha1) {
-						tmp = 6;
-					} else {
-						tmp = 2;
-					}
-					break;
-				case 2:
-					tmp = 3;
-					break;
-				}
-				b1.writeByte(tmp);
-				b1.writeByte(0);
-				b1.writeByte(0);
-				b1.writeByte(h.interlaced ? 1 : 0);
-				this.writeChunk("IHDR",b1.getBytes());
-				break;
-			case 2:
-				var d = c[2];
-				this.writeChunk("IDAT",d);
-				break;
-			case 3:
-				var b2 = c[2];
-				this.writeChunk("PLTE",b2);
-				break;
-			case 4:
-				var data = c[3];
-				var id = c[2];
-				this.writeChunk(id,data);
-				break;
-			}
-		}
-	}
-	,writeChunk: function(id,data) {
-		this.o.writeInt32(data.length);
-		this.o.writeString(id);
-		this.o.write(data);
-		var crc = new haxe_crypto_Crc32();
-		var _g = 0;
-		while(_g < 4) {
-			var i = _g++;
-			crc["byte"](HxOverrides.cca(id,i));
-		}
-		crc.update(data,0,data.length);
-		this.o.writeInt32(crc.get());
-	}
-	,__class__: format_png_Writer
-};
-var format_tools_BitsInput = function(i) {
-	this.i = i;
-	this.nbits = 0;
-	this.bits = 0;
-};
-$hxClasses["format.tools.BitsInput"] = format_tools_BitsInput;
-format_tools_BitsInput.__name__ = ["format","tools","BitsInput"];
-format_tools_BitsInput.prototype = {
-	readBits: function(n) {
-		if(this.nbits >= n) {
-			var c = this.nbits - n;
-			var k = this.bits >>> c & (1 << n) - 1;
-			this.nbits = c;
-			return k;
-		}
-		var k1 = this.i.readByte();
-		if(this.nbits >= 24) {
-			if(n >= 31) {
-				throw new js__$Boot_HaxeError("Bits error");
-			}
-			var c1 = 8 + this.nbits - n;
-			var d = this.bits & (1 << this.nbits) - 1;
-			d = d << 8 - c1 | k1 << c1;
-			this.bits = k1;
-			this.nbits = c1;
-			return d;
-		}
-		this.bits = this.bits << 8 | k1;
-		this.nbits += 8;
-		return this.readBits(n);
-	}
-	,readBit: function() {
-		if(this.nbits == 0) {
-			this.bits = this.i.readByte();
-			this.nbits = 8;
-		}
-		this.nbits--;
-		return (this.bits >>> this.nbits & 1) == 1;
-	}
-	,reset: function() {
-		this.nbits = 0;
-	}
-	,__class__: format_tools_BitsInput
-};
-var format_tools_Deflate = function() { };
-$hxClasses["format.tools.Deflate"] = format_tools_Deflate;
-format_tools_Deflate.__name__ = ["format","tools","Deflate"];
-format_tools_Deflate.run = function(b,level) {
-	if(level == null) {
-		level = 9;
-	}
-	return haxe_zip_Compress.run(b,level);
-};
-var format_tools_Inflate = function() { };
-$hxClasses["format.tools.Inflate"] = format_tools_Inflate;
-format_tools_Inflate.__name__ = ["format","tools","Inflate"];
-format_tools_Inflate.run = function(bytes) {
-	return haxe_zip_Uncompress.run(bytes);
-};
-var format_wav_WAVEFormat = $hxClasses["format.wav.WAVEFormat"] = { __ename__ : true, __constructs__ : ["WF_PCM"] };
-format_wav_WAVEFormat.WF_PCM = ["WF_PCM",0];
-format_wav_WAVEFormat.WF_PCM.toString = $estr;
-format_wav_WAVEFormat.WF_PCM.__enum__ = format_wav_WAVEFormat;
-format_wav_WAVEFormat.__empty_constructs__ = [format_wav_WAVEFormat.WF_PCM];
-var format_wav_Reader = function(i) {
-	this.i = i;
-	i.set_bigEndian(false);
-};
-$hxClasses["format.wav.Reader"] = format_wav_Reader;
-format_wav_Reader.__name__ = ["format","wav","Reader"];
-format_wav_Reader.prototype = {
-	readInt: function() {
-		return this.i.readInt32();
-	}
-	,read: function() {
-		if(this.i.readString(4) != "RIFF") {
-			throw new js__$Boot_HaxeError("RIFF header expected");
-		}
-		var len = this.i.readInt32();
-		if(this.i.readString(4) != "WAVE") {
-			throw new js__$Boot_HaxeError("WAVE signature not found");
-		}
-		var fmt = this.i.readString(4);
-		try {
-			while(fmt != "fmt ") switch(fmt) {
-			case "JUNK":
-				var junkLen = this.i.readInt32();
-				this.i.read(junkLen);
-				fmt = this.i.readString(4);
-				break;
-			case "bext":
-				var bextLen = this.i.readInt32();
-				this.i.read(bextLen);
-				fmt = this.i.readString(4);
-				break;
-			default:
-				throw "__break__";
-			}
-		} catch( e ) { if( e != "__break__" ) throw e; }
-		if(fmt != "fmt ") {
-			throw new js__$Boot_HaxeError("unsupported wave chunk " + fmt);
-		}
-		var fmtlen = this.i.readInt32();
-		var format1;
-		var _g = this.i.readUInt16();
-		switch(_g) {
-		case 1:case 3:
-			format1 = format_wav_WAVEFormat.WF_PCM;
-			break;
-		default:
-			throw new js__$Boot_HaxeError("only PCM (uncompressed) WAV files are supported");
-		}
-		var channels = this.i.readUInt16();
-		var samplingRate = this.i.readInt32();
-		var byteRate = this.i.readInt32();
-		var blockAlign = this.i.readUInt16();
-		var bitsPerSample = this.i.readUInt16();
-		if(fmtlen > 16) {
-			this.i.read(fmtlen - 16);
-		}
-		var nextChunk = this.i.readString(4);
-		while(nextChunk != "data") {
-			this.i.read(this.i.readInt32());
-			nextChunk = this.i.readString(4);
-		}
-		if(nextChunk != "data") {
-			throw new js__$Boot_HaxeError("expected data subchunk");
-		}
-		var datalen = this.i.readInt32();
-		var data = this.i.readAll();
-		if(data.length > datalen) {
-			data = data.sub(0,datalen);
-		}
-		return { header : { format : format1, channels : channels, samplingRate : samplingRate, byteRate : byteRate, blockAlign : blockAlign, bitsPerSample : bitsPerSample}, data : data};
-	}
-	,__class__: format_wav_Reader
-};
-var h2d_Drawable = function(parent) {
-	h2d_Sprite.call(this,parent);
-	this.blendMode = h2d_BlendMode.Alpha;
-	this.color = new h3d_Vector(1,1,1,1);
-};
-$hxClasses["h2d.Drawable"] = h2d_Drawable;
-h2d_Drawable.__name__ = ["h2d","Drawable"];
-h2d_Drawable.__super__ = h2d_Sprite;
-h2d_Drawable.prototype = $extend(h2d_Sprite.prototype,{
-	set_tileWrap: function(b) {
-		return this.tileWrap = b;
-	}
-	,get_colorAdd: function() {
-		var s = this.getShader(h3d_shader_ColorAdd);
-		if(s == null) {
-			return null;
-		} else {
-			return s.color__;
-		}
-	}
-	,set_colorAdd: function(c) {
-		var s = this.getShader(h3d_shader_ColorAdd);
-		if(s == null) {
-			if(c != null) {
-				s = this.addShader(new h3d_shader_ColorAdd());
-				s.color__ = c;
-			}
-		} else if(c == null) {
-			this.removeShader(s);
-		} else {
-			s.color__ = c;
-		}
-		return c;
-	}
-	,set_colorKey: function(v) {
-		var s = this.getShader(h3d_shader_ColorKey);
-		if(s == null) {
-			if(v != null) {
-				s = this.addShader(new h3d_shader_ColorKey(-16777216 | v));
-			}
-		} else if(v == null) {
-			this.removeShader(s);
-		} else {
-			var _this = s.colorKey__;
-			var c = -16777216 | v;
-			_this.x = (c >> 16 & 255) / 255;
-			_this.y = (c >> 8 & 255) / 255;
-			_this.z = (c & 255) / 255;
-			_this.w = (c >>> 24) / 255;
-		}
-		return this.colorKey = v;
-	}
-	,adjustColor: function(col) {
-		if(col == null) {
-			this.set_colorMatrix(null);
-		} else {
-			var m = this.get_colorMatrix();
-			if(m == null) {
-				m = new h3d_Matrix();
-				this.set_colorMatrix(m);
-			}
-			m.identity();
-			if(col.hue != null) {
-				m.colorHue(col.hue);
-			}
-			if(col.saturation != null) {
-				m.colorSaturation(col.saturation);
-			}
-			if(col.contrast != null) {
-				m.colorContrast(col.contrast);
-			}
-			if(col.lightness != null) {
-				m.colorLightness(col.lightness);
-			}
-			if(col.gain != null) {
-				m.colorGain(col.gain.color,col.gain.alpha);
-			}
-		}
-	}
-	,get_colorMatrix: function() {
-		var s = this.getShader(h3d_shader_ColorMatrix);
-		if(s == null) {
-			return null;
-		} else {
-			return s.matrix__;
-		}
-	}
-	,set_colorMatrix: function(m) {
-		var s = this.getShader(h3d_shader_ColorMatrix);
-		if(s == null) {
-			if(m != null) {
-				s = this.addShader(new h3d_shader_ColorMatrix());
-				s.matrix__ = m;
-			}
-		} else if(m == null) {
-			this.removeShader(s);
-		} else {
-			s.matrix__ = m;
-		}
-		return m;
-	}
-	,getDebugShaderCode: function(toHxsl) {
-		if(toHxsl == null) {
-			toHxsl = true;
-		}
-		var ctx = this.getScene().ctx;
-		var shader = ctx.manager.compileShaders(new hxsl_ShaderList(ctx.baseShader,this.shaders));
-		if(toHxsl) {
-			var toString = function(s) {
-				return hxsl_Printer.shaderToString(s,true);
-			};
-			return "// vertex:\n" + toString(shader.vertex.data) + "\n\nfragment:\n" + toString(shader.fragment.data);
-		} else {
-			return h3d_Engine.CURRENT.driver.getNativeShaderCode(shader);
-		}
-	}
-	,getShader: function(stype) {
-		if(this.shaders != null) {
-			var _g_last;
-			var _g_l = this.shaders;
-			_g_last = null;
-			while(_g_l != _g_last) {
-				var s = _g_l.s;
-				_g_l = _g_l.next;
-				var s1 = s;
-				var s2 = (s1 instanceof stype) ? s1 : null;
-				if(s2 != null) {
-					return s2;
-				}
-			}
-		}
-		return null;
-	}
-	,getShaders: function() {
-		return new hxsl__$ShaderList_ShaderIterator(this.shaders,null);
-	}
-	,addShader: function(s) {
-		if(s == null) {
-			throw new js__$Boot_HaxeError("Can't add null shader");
-		}
-		this.shaders = new hxsl_ShaderList(s,this.shaders);
-		return s;
-	}
-	,removeShader: function(s) {
-		var prev = null;
-		var cur = this.shaders;
-		while(cur != null) {
-			if(cur.s == s) {
-				if(prev == null) {
-					this.shaders = cur.next;
-				} else {
-					prev.next = cur.next;
-				}
-				return true;
-			}
-			prev = cur;
-			cur = cur.next;
-		}
-		return false;
-	}
-	,emitTile: function(ctx,tile) {
-		if(tile == null) {
-			tile = new h2d_Tile(null,0,0,5,5);
-		}
-		if(!ctx.drawTile(this,tile)) {
-			return;
-		}
-		return;
-	}
-	,__class__: h2d_Drawable
-});
-var h2d_Bitmap = function(tile,parent) {
-	h2d_Drawable.call(this,parent);
-	this.tile = tile;
-};
-$hxClasses["h2d.Bitmap"] = h2d_Bitmap;
-h2d_Bitmap.__name__ = ["h2d","Bitmap"];
-h2d_Bitmap.__super__ = h2d_Drawable;
-h2d_Bitmap.prototype = $extend(h2d_Drawable.prototype,{
-	set_tileWrap: function(b) {
-		if(b && this.tile != null && (this.tile.innerTex.flags & 1 << h3d_mat_TextureFlags.IsNPOT[1]) != 0) {
-			throw new js__$Boot_HaxeError("Cannot set tileWrap on a non power-of-two texture");
-		}
-		return this.tileWrap = b;
-	}
-	,getBoundsRec: function(relativeTo,out,forSize) {
-		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
-		if(this.tile != null) {
-			this.addBounds(relativeTo,out,this.tile.dx,this.tile.dy,this.tile.width,this.tile.height);
-		}
-	}
-	,draw: function(ctx) {
-		this.emitTile(ctx,this.tile);
-	}
-	,__class__: h2d_Bitmap
-});
-var h2d_BlendMode = $hxClasses["h2d.BlendMode"] = { __ename__ : true, __constructs__ : ["None","Alpha","Add","SoftAdd","Multiply","Erase","Screen"] };
-h2d_BlendMode.None = ["None",0];
-h2d_BlendMode.None.toString = $estr;
-h2d_BlendMode.None.__enum__ = h2d_BlendMode;
-h2d_BlendMode.Alpha = ["Alpha",1];
-h2d_BlendMode.Alpha.toString = $estr;
-h2d_BlendMode.Alpha.__enum__ = h2d_BlendMode;
-h2d_BlendMode.Add = ["Add",2];
-h2d_BlendMode.Add.toString = $estr;
-h2d_BlendMode.Add.__enum__ = h2d_BlendMode;
-h2d_BlendMode.SoftAdd = ["SoftAdd",3];
-h2d_BlendMode.SoftAdd.toString = $estr;
-h2d_BlendMode.SoftAdd.__enum__ = h2d_BlendMode;
-h2d_BlendMode.Multiply = ["Multiply",4];
-h2d_BlendMode.Multiply.toString = $estr;
-h2d_BlendMode.Multiply.__enum__ = h2d_BlendMode;
-h2d_BlendMode.Erase = ["Erase",5];
-h2d_BlendMode.Erase.toString = $estr;
-h2d_BlendMode.Erase.__enum__ = h2d_BlendMode;
-h2d_BlendMode.Screen = ["Screen",6];
-h2d_BlendMode.Screen.toString = $estr;
-h2d_BlendMode.Screen.__enum__ = h2d_BlendMode;
-h2d_BlendMode.__empty_constructs__ = [h2d_BlendMode.None,h2d_BlendMode.Alpha,h2d_BlendMode.Add,h2d_BlendMode.SoftAdd,h2d_BlendMode.Multiply,h2d_BlendMode.Erase,h2d_BlendMode.Screen];
-var h2d_FlowAlign = $hxClasses["h2d.FlowAlign"] = { __ename__ : true, __constructs__ : ["Top","Left","Right","Middle","Bottom"] };
-h2d_FlowAlign.Top = ["Top",0];
-h2d_FlowAlign.Top.toString = $estr;
-h2d_FlowAlign.Top.__enum__ = h2d_FlowAlign;
-h2d_FlowAlign.Left = ["Left",1];
-h2d_FlowAlign.Left.toString = $estr;
-h2d_FlowAlign.Left.__enum__ = h2d_FlowAlign;
-h2d_FlowAlign.Right = ["Right",2];
-h2d_FlowAlign.Right.toString = $estr;
-h2d_FlowAlign.Right.__enum__ = h2d_FlowAlign;
-h2d_FlowAlign.Middle = ["Middle",3];
-h2d_FlowAlign.Middle.toString = $estr;
-h2d_FlowAlign.Middle.__enum__ = h2d_FlowAlign;
-h2d_FlowAlign.Bottom = ["Bottom",4];
-h2d_FlowAlign.Bottom.toString = $estr;
-h2d_FlowAlign.Bottom.__enum__ = h2d_FlowAlign;
-h2d_FlowAlign.__empty_constructs__ = [h2d_FlowAlign.Top,h2d_FlowAlign.Left,h2d_FlowAlign.Right,h2d_FlowAlign.Middle,h2d_FlowAlign.Bottom];
-var h2d_FlowProperties = function(elt) {
-	this.constraint = true;
-	this.calculatedHeight = 0.;
-	this.calculatedWidth = 0.;
-	this.offsetY = 0;
-	this.offsetX = 0;
-	this.isAbsolute = false;
-	this.paddingBottom = 0;
-	this.paddingRight = 0;
-	this.paddingTop = 0;
-	this.paddingLeft = 0;
-	this.elt = elt;
-};
-$hxClasses["h2d.FlowProperties"] = h2d_FlowProperties;
-h2d_FlowProperties.__name__ = ["h2d","FlowProperties"];
-h2d_FlowProperties.prototype = {
-	align: function(vertical,horizontal) {
-		this.verticalAlign = vertical;
-		this.horizontalAlign = horizontal;
-	}
-	,set_isAbsolute: function(a) {
-		if(a) {
-			this.elt.constraintSize(-1,-1);
-		}
-		return this.isAbsolute = a;
-	}
-	,__class__: h2d_FlowProperties
-};
-var h2d_col_Bounds = function() {
-	this.xMin = 1e20;
-	this.yMin = 1e20;
-	this.xMax = -1e20;
-	this.yMax = -1e20;
-};
-$hxClasses["h2d.col.Bounds"] = h2d_col_Bounds;
-h2d_col_Bounds.__name__ = ["h2d","col","Bounds"];
-h2d_col_Bounds.fromValues = function(x0,y0,width,height) {
-	var b = new h2d_col_Bounds();
-	b.xMin = x0;
-	b.yMin = y0;
-	b.xMax = x0 + width;
-	b.yMax = y0 + height;
-	return b;
-};
-h2d_col_Bounds.fromPoints = function(min,max) {
-	var b = new h2d_col_Bounds();
-	b.xMin = min.x;
-	b.yMin = min.y;
-	b.xMax = max.x;
-	b.yMax = max.y;
-	return b;
-};
-h2d_col_Bounds.prototype = {
-	toIBounds: function(scale) {
-		if(scale == null) {
-			scale = 1.;
-		}
-		var x0 = Math.floor(this.xMin * scale);
-		var y0 = Math.floor(this.yMin * scale);
-		var width = Math.floor((this.xMax - this.xMin) * scale);
-		var height = Math.floor((this.yMax - this.yMin) * scale);
-		var b = new h2d_col_IBounds();
-		b.xMin = x0;
-		b.yMin = y0;
-		b.xMax = x0 + width;
-		b.yMax = y0 + height;
-		return b;
-	}
-	,intersects: function(b) {
-		return !(this.xMin > b.xMax || this.yMin > b.yMax || this.xMax < b.xMin || this.yMax < b.yMin);
-	}
-	,contains: function(p) {
-		if(p.x >= this.xMin && p.x < this.xMax && p.y >= this.yMin) {
-			return p.y < this.yMax;
-		} else {
-			return false;
-		}
-	}
-	,addBounds: function(b) {
-		if(b.xMin < this.xMin) {
-			this.xMin = b.xMin;
-		}
-		if(b.xMax > this.xMax) {
-			this.xMax = b.xMax;
-		}
-		if(b.yMin < this.yMin) {
-			this.yMin = b.yMin;
-		}
-		if(b.yMax > this.yMax) {
-			this.yMax = b.yMax;
-		}
-	}
-	,addPoint: function(p) {
-		if(p.x < this.xMin) {
-			this.xMin = p.x;
-		}
-		if(p.x > this.xMax) {
-			this.xMax = p.x;
-		}
-		if(p.y < this.yMin) {
-			this.yMin = p.y;
-		}
-		if(p.y > this.yMax) {
-			this.yMax = p.y;
-		}
-	}
-	,addPos: function(x,y) {
-		if(x < this.xMin) {
-			this.xMin = x;
-		}
-		if(x > this.xMax) {
-			this.xMax = x;
-		}
-		if(y < this.yMin) {
-			this.yMin = y;
-		}
-		if(y > this.yMax) {
-			this.yMax = y;
-		}
-	}
-	,set: function(x,y,width,height) {
-		this.xMin = x;
-		this.yMin = y;
-		this.xMax = x + width;
-		this.yMax = y + height;
-	}
-	,setMin: function(p) {
-		this.xMin = p.x;
-		this.yMin = p.y;
-	}
-	,setMax: function(p) {
-		this.xMax = p.x;
-		this.yMax = p.y;
-	}
-	,doIntersect: function(b) {
-		var a = this.xMin;
-		var b1 = b.xMin;
-		this.xMin = a < b1 ? b1 : a;
-		var a1 = this.yMin;
-		var b2 = b.yMin;
-		this.yMin = a1 < b2 ? b2 : a1;
-		var a2 = this.xMax;
-		var b3 = b.xMax;
-		this.xMax = a2 > b3 ? b3 : a2;
-		var a3 = this.yMax;
-		var b4 = b.yMax;
-		this.yMax = a3 > b4 ? b4 : a3;
-	}
-	,doUnion: function(b) {
-		var a = this.xMin;
-		var b1 = b.xMin;
-		this.xMin = a > b1 ? b1 : a;
-		var a1 = this.yMin;
-		var b2 = b.yMin;
-		this.yMin = a1 > b2 ? b2 : a1;
-		var a2 = this.xMax;
-		var b3 = b.xMax;
-		this.xMax = a2 < b3 ? b3 : a2;
-		var a3 = this.yMax;
-		var b4 = b.yMax;
-		this.yMax = a3 < b4 ? b4 : a3;
-	}
-	,intersection: function(b) {
-		var i = new h2d_col_Bounds();
-		var a = this.xMin;
-		var b1 = b.xMin;
-		i.xMin = a < b1 ? b1 : a;
-		var a1 = this.yMin;
-		var b2 = b.yMin;
-		i.yMin = a1 < b2 ? b2 : a1;
-		var a2 = this.xMax;
-		var b3 = b.xMax;
-		i.xMax = a2 > b3 ? b3 : a2;
-		var a3 = this.yMax;
-		var b4 = b.yMax;
-		i.yMax = a3 > b4 ? b4 : a3;
-		if(i.xMax < i.xMin) {
-			i.xMax = i.xMin;
-		}
-		if(i.yMax < i.yMin) {
-			i.yMax = i.yMin;
-		}
-		return i;
-	}
-	,union: function(b) {
-		var i = new h2d_col_Bounds();
-		var a = this.xMin;
-		var b1 = b.xMin;
-		i.xMin = a > b1 ? b1 : a;
-		var a1 = this.yMin;
-		var b2 = b.yMin;
-		i.yMin = a1 > b2 ? b2 : a1;
-		var a2 = this.xMax;
-		var b3 = b.xMax;
-		i.xMax = a2 < b3 ? b3 : a2;
-		var a3 = this.yMax;
-		var b4 = b.yMax;
-		i.yMax = a3 < b4 ? b4 : a3;
-		return i;
-	}
-	,load: function(b) {
-		this.xMin = b.xMin;
-		this.yMin = b.yMin;
-		this.xMax = b.xMax;
-		this.yMax = b.yMax;
-	}
-	,scalePivot: function(v) {
-		this.xMin *= v;
-		this.yMin *= v;
-		this.xMax *= v;
-		this.yMax *= v;
-	}
-	,scaleCenter: function(v) {
-		var dx = (this.xMax - this.xMin) * 0.5 * v;
-		var dy = (this.yMax - this.yMin) * 0.5 * v;
-		var mx = (this.xMax + this.xMin) * 0.5;
-		var my = (this.yMax + this.yMin) * 0.5;
-		this.xMin = mx - dx;
-		this.yMin = my - dy;
-		this.xMax = mx + dx;
-		this.yMax = my + dy;
-	}
-	,rotate: function(angle) {
-		var cos = Math.cos(angle);
-		var sin = Math.sin(angle);
-		var x0 = this.xMin;
-		var y0 = this.yMin;
-		var x1 = this.xMax;
-		var y1 = this.yMax;
-		this.xMin = 1e20;
-		this.yMin = 1e20;
-		this.xMax = -1e20;
-		this.yMax = -1e20;
-		var x = x0 * cos - y0 * sin;
-		var y = x0 * sin + y0 * cos;
-		if(x < this.xMin) {
-			this.xMin = x;
-		}
-		if(x > this.xMax) {
-			this.xMax = x;
-		}
-		if(y < this.yMin) {
-			this.yMin = y;
-		}
-		if(y > this.yMax) {
-			this.yMax = y;
-		}
-		var x2 = x1 * cos - y0 * sin;
-		var y2 = x1 * sin + y0 * cos;
-		if(x2 < this.xMin) {
-			this.xMin = x2;
-		}
-		if(x2 > this.xMax) {
-			this.xMax = x2;
-		}
-		if(y2 < this.yMin) {
-			this.yMin = y2;
-		}
-		if(y2 > this.yMax) {
-			this.yMax = y2;
-		}
-		var x3 = x0 * cos - y1 * sin;
-		var y3 = x0 * sin + y1 * cos;
-		if(x3 < this.xMin) {
-			this.xMin = x3;
-		}
-		if(x3 > this.xMax) {
-			this.xMax = x3;
-		}
-		if(y3 < this.yMin) {
-			this.yMin = y3;
-		}
-		if(y3 > this.yMax) {
-			this.yMax = y3;
-		}
-		var x4 = x1 * cos - y1 * sin;
-		var y4 = x1 * sin + y1 * cos;
-		if(x4 < this.xMin) {
-			this.xMin = x4;
-		}
-		if(x4 > this.xMax) {
-			this.xMax = x4;
-		}
-		if(y4 < this.yMin) {
-			this.yMin = y4;
-		}
-		if(y4 > this.yMax) {
-			this.yMax = y4;
-		}
-	}
-	,offset: function(dx,dy) {
-		this.xMin += dx;
-		this.xMax += dx;
-		this.yMin += dy;
-		this.yMax += dy;
-	}
-	,getMin: function() {
-		return new h2d_col_Point(this.xMin,this.yMin);
-	}
-	,getCenter: function() {
-		return new h2d_col_Point((this.xMin + this.xMax) * 0.5,(this.yMin + this.yMax) * 0.5);
-	}
-	,getSize: function() {
-		return new h2d_col_Point(this.xMax - this.xMin,this.yMax - this.yMin);
-	}
-	,getMax: function() {
-		return new h2d_col_Point(this.xMax,this.yMax);
-	}
-	,isEmpty: function() {
-		if(!(this.xMax <= this.xMin)) {
-			return this.yMax <= this.yMin;
-		} else {
-			return true;
-		}
-	}
-	,empty: function() {
-		this.xMin = 1e20;
-		this.yMin = 1e20;
-		this.xMax = -1e20;
-		this.yMax = -1e20;
-	}
-	,all: function() {
-		this.xMin = -1e20;
-		this.yMin = -1e20;
-		this.xMax = 1e20;
-		this.yMax = 1e20;
-	}
-	,clone: function() {
-		var b = new h2d_col_Bounds();
-		b.xMin = this.xMin;
-		b.yMin = this.yMin;
-		b.xMax = this.xMax;
-		b.yMax = this.yMax;
-		return b;
-	}
-	,get_x: function() {
-		return this.xMin;
-	}
-	,get_y: function() {
-		return this.yMin;
-	}
-	,set_x: function(x) {
-		this.xMax += x - this.xMin;
-		return this.xMin = x;
-	}
-	,set_y: function(y) {
-		this.yMax += y - this.yMin;
-		return this.yMin = y;
-	}
-	,get_width: function() {
-		return this.xMax - this.xMin;
-	}
-	,get_height: function() {
-		return this.yMax - this.yMin;
-	}
-	,set_width: function(w) {
-		this.xMax = this.xMin + w;
-		return w;
-	}
-	,set_height: function(h) {
-		this.yMax = this.yMin + h;
-		return h;
-	}
-	,toString: function() {
-		return "{" + Std.string(new h2d_col_Point(this.xMin,this.yMin)) + "," + Std.string(new h2d_col_Point(this.xMax - this.xMin,this.yMax - this.yMin)) + "}";
-	}
-	,__class__: h2d_col_Bounds
-};
-var h2d_Flow = function(parent) {
-	this.realMaxHeight = -1;
-	this.realMaxWidth = -1;
-	this.constraintHeight = -1;
-	this.constraintWidth = -1;
-	this.calculatedHeight = 0.;
-	this.calculatedWidth = 0.;
-	this.properties = [];
-	this.multiline = false;
-	this.isInline = true;
-	this.borderHeight = 0;
-	this.borderWidth = 0;
-	this.verticalSpacing = 0;
-	this.horizontalSpacing = 0;
-	this.paddingBottom = 0;
-	this.paddingTop = 0;
-	this.paddingRight = 0;
-	this.paddingLeft = 0;
-	this.overflow = false;
-	this.needReflow = true;
-	h2d_Sprite.call(this,parent);
-};
-$hxClasses["h2d.Flow"] = h2d_Flow;
-h2d_Flow.__name__ = ["h2d","Flow"];
-h2d_Flow.__super__ = h2d_Sprite;
-h2d_Flow.prototype = $extend(h2d_Sprite.prototype,{
-	getProperties: function(e) {
-		this.set_needReflow(true);
-		return this.properties[this.getChildIndex(e)];
-	}
-	,set_isVertical: function(v) {
-		if(this.isVertical == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.isVertical = v;
-	}
-	,set_horizontalAlign: function(v) {
-		if(this.horizontalAlign == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.horizontalAlign = v;
-	}
-	,set_debug: function(v) {
-		if(this.debug == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		if(v) {
-			this.debugGraphics = new h2d_Graphics(this);
-			this.getProperties(this.debugGraphics).set_isAbsolute(true);
-		} else {
-			var _this = this.debugGraphics;
-			if(_this != null && _this.parent != null) {
-				_this.parent.removeChild(_this);
-			}
-			this.debugGraphics = null;
-		}
-		return this.debug = v;
-	}
-	,set_verticalAlign: function(v) {
-		if(this.verticalAlign == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.verticalAlign = v;
-	}
-	,set_overflow: function(v) {
-		if(this.overflow == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.overflow = v;
-	}
-	,set_multiline: function(v) {
-		if(this.multiline == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.multiline = v;
-	}
-	,set_needReflow: function(v) {
-		if(this.needReflow == v) {
-			return v;
-		}
-		if(v) {
-			if(this.parentContainer != null) {
-				this.parentContainer.contentChanged(this);
-			}
-		}
-		return this.needReflow = v;
-	}
-	,set_lineHeight: function(v) {
-		if(this.lineHeight == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.lineHeight = v;
-	}
-	,set_colWidth: function(v) {
-		if(this.colWidth == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.colWidth = v;
-	}
-	,set_padding: function(v) {
-		this.set_paddingLeft(v);
-		this.set_paddingTop(v);
-		this.set_paddingRight(v);
-		this.set_paddingBottom(v);
-		return v;
-	}
-	,set_paddingHorizontal: function(v) {
-		this.set_paddingLeft(v);
-		this.set_paddingRight(v);
-		return v;
-	}
-	,set_paddingVertical: function(v) {
-		this.set_paddingTop(v);
-		this.set_paddingBottom(v);
-		return v;
-	}
-	,get_outerWidth: function() {
-		if(this.needReflow) {
-			this.reflow();
-		}
-		return Math.ceil(this.calculatedWidth);
-	}
-	,get_outerHeight: function() {
-		if(this.needReflow) {
-			this.reflow();
-		}
-		return Math.ceil(this.calculatedHeight);
-	}
-	,get_innerWidth: function() {
-		if(this.needReflow) {
-			this.reflow();
-		}
-		return Math.ceil(this.calculatedWidth) - (this.paddingLeft + this.paddingRight + this.borderWidth * 2);
-	}
-	,get_innerHeight: function() {
-		if(this.needReflow) {
-			this.reflow();
-		}
-		return Math.ceil(this.calculatedHeight) - (this.paddingTop + this.paddingBottom + this.borderHeight * 2);
-	}
-	,set_paddingLeft: function(v) {
-		if(this.paddingLeft == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.paddingLeft = v;
-	}
-	,set_paddingRight: function(v) {
-		if(this.paddingRight == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.paddingRight = v;
-	}
-	,set_paddingTop: function(v) {
-		if(this.paddingTop == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.paddingTop = v;
-	}
-	,set_paddingBottom: function(v) {
-		if(this.paddingBottom == v) {
-			return v;
-		}
-		this.set_needReflow(true);
-		return this.paddingBottom = v;
-	}
-	,constraintSize: function(width,height) {
-		this.constraintWidth = width;
-		this.constraintHeight = height;
-		this.updateConstraint();
-	}
-	,contentChanged: function(s) {
-		while(s.parent != this) s = s.parent;
-		if(this.getProperties(s).isAbsolute) {
-			return;
-		}
-		this.set_needReflow(true);
-		if(this.parentContainer != null) {
-			this.parentContainer.contentChanged(this);
-		}
-	}
-	,addSpacing: function(v) {
-		var last = this.properties.length - 1;
-		while(last >= 0 && this.properties[last].isAbsolute) --last;
-		if(this.isVertical) {
-			if(last >= 0) {
-				this.properties[last].paddingBottom += v;
-			} else {
-				var _g = this;
-				_g.set_paddingTop(_g.paddingTop + v);
-			}
-		} else if(last >= 0) {
-			this.properties[last].paddingRight += v;
-		} else {
-			var _g1 = this;
-			_g1.set_paddingLeft(_g1.paddingLeft + v);
-		}
-	}
-	,getBoundsRec: function(relativeTo,out,forSize) {
-		if(this.needReflow) {
-			this.reflow();
-		}
-		if(forSize) {
-			if(!this.isInline) {
-				h2d_Sprite.prototype.getBoundsRec.call(this,relativeTo,out,true);
-			}
-			if(this.calculatedWidth != 0) {
-				this.addBounds(relativeTo,out,0,0,this.calculatedWidth,this.calculatedHeight);
-			}
-		} else {
-			h2d_Sprite.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
-		}
-	}
-	,setParentContainer: function(c) {
-		this.parentContainer = c;
-	}
-	,addChildAt: function(s,pos) {
-		if(this.background != null) {
-			++pos;
-		}
-		var fp = this.getProperties(s);
-		h2d_Sprite.prototype.addChildAt.call(this,s,pos);
-		if(fp == null) {
-			fp = new h2d_FlowProperties(s);
-		} else {
-			HxOverrides.remove(this.properties,fp);
-		}
-		this.properties.splice(pos,0,fp);
-		this.set_needReflow(true);
-		s.setParentContainer(this);
-	}
-	,removeChild: function(s) {
-		var index = this.getChildIndex(s);
-		h2d_Sprite.prototype.removeChild.call(this,s);
-		if(index >= 0) {
-			this.set_needReflow(true);
-			this.properties.splice(index,1);
-			s.constraintSize(-1,-1);
-		}
-		if(s != null) {
-			if(s == this.background) {
-				this.set_backgroundTile(null);
-			}
-			if(s == this.interactive) {
-				this.set_enableInteractive(false);
-			}
-		}
-	}
-	,sync: function(ctx) {
-		if(this.needReflow) {
-			this.reflow();
-		}
-		h2d_Sprite.prototype.sync.call(this,ctx);
-	}
-	,set_maxWidth: function(w) {
-		if(this.maxWidth == w) {
-			return w;
-		}
-		this.maxWidth = w;
-		this.updateConstraint();
-		return w;
-	}
-	,set_maxHeight: function(h) {
-		if(this.maxHeight == h) {
-			return h;
-		}
-		this.maxHeight = h;
-		this.updateConstraint();
-		return h;
-	}
-	,updateConstraint: function() {
-		var oldW = this.realMaxWidth;
-		var oldH = this.realMaxHeight;
-		var tmp;
-		if(this.maxWidth == null) {
-			tmp = this.constraintWidth;
-		} else if(this.constraintWidth < 0) {
-			tmp = this.maxWidth;
-		} else {
-			var a = this.maxWidth;
-			var b = this.constraintWidth;
-			if(a > b) {
-				tmp = b;
-			} else {
-				tmp = a;
-			}
-		}
-		this.realMaxWidth = tmp;
-		var tmp1;
-		if(this.maxHeight == null) {
-			tmp1 = this.constraintHeight;
-		} else if(this.constraintHeight < 0) {
-			tmp1 = this.maxHeight;
-		} else {
-			var a1 = this.maxHeight;
-			var b1 = this.constraintHeight;
-			if(a1 > b1) {
-				tmp1 = b1;
-			} else {
-				tmp1 = a1;
-			}
-		}
-		this.realMaxHeight = tmp1;
-		if(this.realMaxWidth != oldW || this.realMaxHeight != oldH) {
-			this.set_needReflow(true);
-		}
-	}
-	,set_minWidth: function(w) {
-		if(this.minWidth == w) {
-			return w;
-		}
-		this.set_needReflow(true);
-		return this.minWidth = w;
-	}
-	,set_minHeight: function(h) {
-		if(this.minHeight == h) {
-			return h;
-		}
-		this.set_needReflow(true);
-		return this.minHeight = h;
-	}
-	,set_horizontalSpacing: function(s) {
-		if(this.horizontalSpacing == s) {
-			return s;
-		}
-		this.set_needReflow(true);
-		return this.horizontalSpacing = s;
-	}
-	,set_verticalSpacing: function(s) {
-		if(this.verticalSpacing == s) {
-			return s;
-		}
-		this.set_needReflow(true);
-		return this.verticalSpacing = s;
-	}
-	,set_enableInteractive: function(b) {
-		if(this.enableInteractive == b) {
-			return b;
-		}
-		if(b) {
-			if(this.interactive == null) {
-				this.interactive = new h2d_Interactive(0,0,this);
-				this.interactive.set_cursor(hxd_Cursor.Default);
-				this.properties[this.properties.length - 1].set_isAbsolute(true);
-				if(!this.needReflow) {
-					this.interactive.width = this.calculatedWidth;
-					this.interactive.height = this.calculatedHeight;
-				}
-			}
-		} else if(this.interactive != null) {
-			var _this = this.interactive;
-			if(_this != null && _this.parent != null) {
-				_this.parent.removeChild(_this);
-			}
-			this.interactive = null;
-		}
-		return this.enableInteractive = b;
-	}
-	,set_backgroundTile: function(t) {
-		if(this.backgroundTile == t) {
-			return t;
-		}
-		if(t != null) {
-			if(this.background == null) {
-				var background = new h2d_ScaleGrid(t,this.borderWidth,this.borderHeight);
-				this.addChildAt(background,0);
-				this.properties[0].set_isAbsolute(true);
-				this.background = background;
-				if(!this.needReflow) {
-					background.set_width(Math.ceil(this.calculatedWidth));
-					background.set_height(Math.ceil(this.calculatedHeight));
-				}
-			}
-			this.background.tile = t;
-		} else if(this.background != null) {
-			var _this = this.background;
-			if(_this != null && _this.parent != null) {
-				_this.parent.removeChild(_this);
-			}
-			this.background = null;
-		}
-		return this.backgroundTile = t;
-	}
-	,set_borderWidth: function(v) {
-		if(this.borderWidth == v) {
-			return v;
-		}
-		if(this.background != null) {
-			this.background.set_borderWidth(v);
-		}
-		this.set_needReflow(true);
-		return this.borderWidth = v;
-	}
-	,set_borderHeight: function(v) {
-		if(this.borderHeight == v) {
-			return v;
-		}
-		if(this.background != null) {
-			this.background.set_borderHeight(v);
-		}
-		this.set_needReflow(true);
-		return this.borderHeight = v;
-	}
-	,reflow: function() {
-		var _gthis = this;
-		this.onBeforeReflow();
-		var isConstraintWidth = this.realMaxWidth >= 0;
-		var isConstraintHeight = this.realMaxHeight >= 0;
-		var maxTotWidth = this.realMaxWidth < 0 ? 100000000 : this.realMaxWidth;
-		var maxTotHeight = this.realMaxHeight < 0 ? 100000000 : this.realMaxHeight;
-		var maxWidth = maxTotWidth - (this.paddingLeft + this.paddingRight + this.borderWidth * 2);
-		var maxHeight = maxTotHeight - (this.paddingTop + this.paddingBottom + this.borderHeight * 2);
-		var cw;
-		var ch;
-		if(!this.isVertical) {
-			var halign = this.horizontalAlign == null ? h2d_FlowAlign.Left : this.horizontalAlign;
-			var valign = this.verticalAlign == null ? h2d_FlowAlign.Bottom : this.verticalAlign;
-			var startX = this.paddingLeft + this.borderWidth;
-			var x = startX;
-			var y = this.paddingTop + this.borderHeight;
-			cw = x;
-			var maxLineHeight = 0.;
-			var minLineHeight = this.lineHeight != null ? this.lineHeight : this.minHeight != null && !this.multiline ? this.minHeight - (this.paddingTop + this.paddingBottom + this.borderHeight * 2) : 0;
-			var tmpBounds = h2d_Flow.tmpBounds;
-			var lastIndex = 0;
-			var _g1 = 0;
-			var _g = this.children.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				var p = this.properties[i];
-				if(p.isAbsolute) {
-					continue;
-				}
-				var c = this.children[i];
-				if(!c.visible) {
-					continue;
-				}
-				c.constraintSize(isConstraintWidth && p.constraint ? maxWidth - (p.paddingLeft + p.paddingRight) : -1,isConstraintHeight && p.constraint ? maxHeight - (p.paddingTop + p.paddingBottom) : -1);
-				var b = c.getSize(tmpBounds);
-				var br = false;
-				p.calculatedWidth = b.xMax + p.paddingLeft + p.paddingRight;
-				p.calculatedHeight = b.yMax + p.paddingTop + p.paddingBottom;
-				if(p.minWidth != null && p.calculatedWidth < p.minWidth) {
-					p.calculatedWidth = p.minWidth;
-				}
-				if(p.minHeight != null && p.calculatedHeight < p.minHeight) {
-					p.calculatedHeight = p.minHeight;
-				}
-				if(this.multiline && x + p.calculatedWidth > maxWidth && x > startX) {
-					br = true;
-					if(maxLineHeight < minLineHeight) {
-						maxLineHeight = minLineHeight;
-					} else if(_gthis.overflow && minLineHeight != 0) {
-						maxLineHeight = minLineHeight;
-					}
-					var _g11 = lastIndex;
-					var _g2 = i;
-					while(_g11 < _g2) {
-						var i1 = _g11++;
-						var p1 = _gthis.properties[i1];
-						if(p1.isAbsolute) {
-							continue;
-						}
-						var c1 = _gthis.children[i1];
-						if(!c1.visible) {
-							continue;
-						}
-						var a = p1.verticalAlign != null ? p1.verticalAlign : valign;
-						c1.posChanged = true;
-						c1.y = y + p1.offsetY + p1.paddingTop;
-						switch(a[1]) {
-						case 3:
-							var _g21 = c1;
-							_g21.posChanged = true;
-							_g21.y += (maxLineHeight - p1.calculatedHeight) * 0.5 | 0;
-							break;
-						case 4:
-							var _g22 = c1;
-							_g22.posChanged = true;
-							_g22.y += maxLineHeight - p1.calculatedHeight;
-							break;
-						default:
-						}
-					}
-					lastIndex = i;
-					y += maxLineHeight + this.verticalSpacing;
-					maxLineHeight = 0;
-					x = startX;
-				}
-				p.isBreak = br;
-				x += p.calculatedWidth;
-				if(x > cw) {
-					cw = x;
-				}
-				x += this.horizontalSpacing;
-				if(p.calculatedHeight > maxLineHeight) {
-					maxLineHeight = p.calculatedHeight;
-				}
-			}
-			var maxIndex = this.children.length;
-			if(maxLineHeight < minLineHeight) {
-				maxLineHeight = minLineHeight;
-			} else if(_gthis.overflow && minLineHeight != 0) {
-				maxLineHeight = minLineHeight;
-			}
-			var _g12 = lastIndex;
-			var _g3 = maxIndex;
-			while(_g12 < _g3) {
-				var i2 = _g12++;
-				var p2 = _gthis.properties[i2];
-				if(p2.isAbsolute) {
-					continue;
-				}
-				var c2 = _gthis.children[i2];
-				if(!c2.visible) {
-					continue;
-				}
-				var a1 = p2.verticalAlign != null ? p2.verticalAlign : valign;
-				c2.posChanged = true;
-				c2.y = y + p2.offsetY + p2.paddingTop;
-				switch(a1[1]) {
-				case 3:
-					var _g23 = c2;
-					_g23.posChanged = true;
-					_g23.y += (maxLineHeight - p2.calculatedHeight) * 0.5 | 0;
-					break;
-				case 4:
-					var _g24 = c2;
-					_g24.posChanged = true;
-					_g24.y += maxLineHeight - p2.calculatedHeight;
-					break;
-				default:
-				}
-			}
-			lastIndex = maxIndex;
-			cw += this.paddingRight + this.borderWidth;
-			ch = y + maxLineHeight + this.paddingBottom + this.borderHeight;
-			if(this.minWidth != null && cw < this.minWidth) {
-				cw = this.minWidth;
-			}
-			var endX = cw - (this.paddingRight + this.borderWidth);
-			var xmin = startX;
-			var xmax = endX;
-			var midSpace = 0;
-			var _g13 = 0;
-			var _g4 = this.children.length;
-			while(_g13 < _g4) {
-				var i3 = _g13++;
-				var p3 = this.properties[i3];
-				if(p3.isAbsolute || !this.children[i3].visible) {
-					continue;
-				}
-				if(p3.isBreak) {
-					xmin = startX;
-					xmax = endX;
-					midSpace = 0;
-				}
-				var px;
-				var align = p3.horizontalAlign == null ? halign : p3.horizontalAlign;
-				switch(align[1]) {
-				case 2:
-					if(midSpace != 0) {
-						xmin += midSpace;
-						midSpace = 0;
-					}
-					xmax -= p3.calculatedWidth;
-					px = xmax;
-					xmax -= this.horizontalSpacing;
-					break;
-				case 3:
-					if(midSpace == 0) {
-						var remSize = p3.calculatedWidth;
-						var _g31 = i3 + 1;
-						var _g25 = this.children.length;
-						while(_g31 < _g25) {
-							var j = _g31++;
-							var p4 = this.properties[j];
-							if(p4.isAbsolute || !this.children[j].visible) {
-								continue;
-							}
-							if(p4.isBreak) {
-								break;
-							}
-							remSize += this.horizontalSpacing + p4.calculatedWidth;
-						}
-						midSpace = (xmax - xmin - remSize) * 0.5 | 0;
-						xmin += midSpace;
-					}
-					px = xmin;
-					xmin += p3.calculatedWidth + this.horizontalSpacing;
-					break;
-				default:
-					if(midSpace != 0) {
-						xmin += midSpace;
-						midSpace = 0;
-					}
-					px = xmin;
-					xmin += p3.calculatedWidth + this.horizontalSpacing;
-				}
-				var _this = this.children[i3];
-				_this.posChanged = true;
-				_this.x = px + p3.offsetX + p3.paddingLeft;
-			}
-		} else {
-			var halign1 = this.horizontalAlign == null ? h2d_FlowAlign.Left : this.horizontalAlign;
-			var valign1 = this.verticalAlign == null ? h2d_FlowAlign.Top : this.verticalAlign;
-			var startY = this.paddingTop + this.borderHeight;
-			var y1 = startY;
-			var x1 = this.paddingLeft + this.borderWidth;
-			ch = y1;
-			var maxColWidth = 0.;
-			var minColWidth = this.colWidth != null ? this.colWidth : this.minWidth != null && !this.multiline ? this.minWidth - (this.paddingLeft + this.paddingRight + this.borderWidth * 2) : 0;
-			var tmpBounds1 = h2d_Flow.tmpBounds;
-			var lastIndex1 = 0;
-			var _g14 = 0;
-			var _g5 = this.children.length;
-			while(_g14 < _g5) {
-				var i4 = _g14++;
-				var p5 = this.properties[i4];
-				if(p5.isAbsolute) {
-					continue;
-				}
-				var c3 = this.children[i4];
-				if(!c3.visible) {
-					continue;
-				}
-				c3.constraintSize(isConstraintWidth && p5.constraint ? maxWidth - (p5.paddingLeft + p5.paddingRight) : -1,isConstraintHeight && p5.constraint ? maxHeight - (p5.paddingTop + p5.paddingBottom) : -1);
-				var b1 = c3.getSize(tmpBounds1);
-				var br1 = false;
-				p5.calculatedWidth = b1.xMax + p5.paddingLeft + p5.paddingRight;
-				p5.calculatedHeight = b1.yMax + p5.paddingTop + p5.paddingBottom;
-				if(p5.minWidth != null && p5.calculatedWidth < p5.minWidth) {
-					p5.calculatedWidth = p5.minWidth;
-				}
-				if(p5.minHeight != null && p5.calculatedHeight < p5.minHeight) {
-					p5.calculatedHeight = p5.minHeight;
-				}
-				if(this.multiline && y1 + p5.calculatedHeight > maxHeight && y1 > startY) {
-					br1 = true;
-					if(maxColWidth < minColWidth) {
-						maxColWidth = minColWidth;
-					} else if(_gthis.overflow && minColWidth != 0) {
-						maxColWidth = minColWidth;
-					}
-					var _g15 = lastIndex1;
-					var _g6 = i4;
-					while(_g15 < _g6) {
-						var i5 = _g15++;
-						var p6 = _gthis.properties[i5];
-						if(p6.isAbsolute) {
-							continue;
-						}
-						var c4 = _gthis.children[i5];
-						if(!c4.visible) {
-							continue;
-						}
-						var a2 = p6.horizontalAlign != null ? p6.horizontalAlign : halign1;
-						c4.posChanged = true;
-						c4.x = x1 + p6.offsetX + p6.paddingLeft;
-						switch(a2[1]) {
-						case 2:
-							var _g26 = c4;
-							_g26.posChanged = true;
-							_g26.x += maxColWidth - p6.calculatedWidth;
-							break;
-						case 3:
-							var _g27 = c4;
-							_g27.posChanged = true;
-							_g27.x += (maxColWidth - p6.calculatedWidth) * 0.5 | 0;
-							break;
-						default:
-						}
-					}
-					lastIndex1 = i4;
-					x1 += maxColWidth + this.horizontalSpacing;
-					maxColWidth = 0;
-					y1 = startY;
-				}
-				p5.isBreak = br1;
-				c3.posChanged = true;
-				c3.y = y1 + p5.offsetY + p5.paddingTop;
-				y1 += p5.calculatedHeight;
-				if(y1 > ch) {
-					ch = y1;
-				}
-				y1 += this.verticalSpacing;
-				if(p5.calculatedWidth > maxColWidth) {
-					maxColWidth = p5.calculatedWidth;
-				}
-			}
-			var maxIndex1 = this.children.length;
-			if(maxColWidth < minColWidth) {
-				maxColWidth = minColWidth;
-			} else if(_gthis.overflow && minColWidth != 0) {
-				maxColWidth = minColWidth;
-			}
-			var _g16 = lastIndex1;
-			var _g7 = maxIndex1;
-			while(_g16 < _g7) {
-				var i6 = _g16++;
-				var p7 = _gthis.properties[i6];
-				if(p7.isAbsolute) {
-					continue;
-				}
-				var c5 = _gthis.children[i6];
-				if(!c5.visible) {
-					continue;
-				}
-				var a3 = p7.horizontalAlign != null ? p7.horizontalAlign : halign1;
-				c5.posChanged = true;
-				c5.x = x1 + p7.offsetX + p7.paddingLeft;
-				switch(a3[1]) {
-				case 2:
-					var _g28 = c5;
-					_g28.posChanged = true;
-					_g28.x += maxColWidth - p7.calculatedWidth;
-					break;
-				case 3:
-					var _g29 = c5;
-					_g29.posChanged = true;
-					_g29.x += (maxColWidth - p7.calculatedWidth) * 0.5 | 0;
-					break;
-				default:
-				}
-			}
-			lastIndex1 = maxIndex1;
-			ch += this.paddingBottom + this.borderHeight;
-			cw = x1 + maxColWidth + this.paddingRight + this.borderWidth;
-			if(this.minHeight != null && ch < this.minHeight) {
-				ch = this.minHeight;
-			}
-			var endY = ch - (this.paddingBottom + this.borderHeight);
-			var ymin = startY;
-			var ymax = endY;
-			var midSpace1 = 0;
-			var _g17 = 0;
-			var _g8 = this.children.length;
-			while(_g17 < _g8) {
-				var i7 = _g17++;
-				var p8 = this.properties[i7];
-				if(p8.isAbsolute || !this.children[i7].visible) {
-					continue;
-				}
-				if(p8.isBreak) {
-					ymin = startY;
-					ymax = endY;
-					midSpace1 = 0;
-				}
-				var py;
-				var align1 = p8.verticalAlign == null ? valign1 : p8.verticalAlign;
-				switch(align1[1]) {
-				case 3:
-					if(midSpace1 == 0) {
-						var remSize1 = p8.calculatedHeight;
-						var _g32 = i7 + 1;
-						var _g210 = this.children.length;
-						while(_g32 < _g210) {
-							var j1 = _g32++;
-							var p9 = this.properties[j1];
-							if(p9.isAbsolute || !this.children[j1].visible) {
-								continue;
-							}
-							if(p9.isBreak) {
-								break;
-							}
-							remSize1 += this.verticalSpacing + p9.calculatedHeight;
-						}
-						midSpace1 = (ymax - ymin - remSize1) * 0.5 | 0;
-						ymin += midSpace1;
-					}
-					py = ymin;
-					ymin += p8.calculatedHeight + this.verticalSpacing;
-					break;
-				case 4:
-					if(midSpace1 != 0) {
-						ymin += midSpace1;
-						midSpace1 = 0;
-					}
-					ymax -= p8.calculatedHeight;
-					py = ymax;
-					ymax -= this.verticalSpacing;
-					break;
-				default:
-					if(midSpace1 != 0) {
-						ymin += midSpace1;
-						midSpace1 = 0;
-					}
-					py = ymin;
-					ymin += p8.calculatedHeight + this.verticalSpacing;
-				}
-				var _this1 = this.children[i7];
-				_this1.posChanged = true;
-				_this1.y = py + p8.offsetY + p8.paddingTop;
-			}
-		}
-		if(this.minWidth != null && cw < this.minWidth) {
-			cw = this.minWidth;
-		}
-		if(this.minHeight != null && ch < this.minHeight) {
-			ch = this.minHeight;
-		}
-		if(this.overflow) {
-			if(isConstraintWidth && cw > maxTotWidth) {
-				cw = maxTotWidth;
-			}
-			if(isConstraintHeight && ch > maxTotHeight) {
-				ch = maxTotHeight;
-			}
-		}
-		if(this.interactive != null) {
-			this.interactive.width = cw;
-			this.interactive.height = ch;
-		}
-		if(this.background != null) {
-			this.background.set_width(Math.ceil(cw));
-			this.background.set_height(Math.ceil(ch));
-		}
-		this.calculatedWidth = cw;
-		this.calculatedHeight = ch;
-		this.set_needReflow(false);
-		if(this.debug) {
-			this.debugGraphics.clear();
-			if(this.debugGraphics != this.children[this.children.length - 1]) {
-				this.addChild(this.debugGraphics);
-				this.set_needReflow(false);
-			}
-			if(this.paddingLeft != 0 || this.paddingRight != 0 || this.paddingTop != 0 || this.paddingBottom != 0 || this.borderWidth != 0 || this.borderHeight != 0) {
-				this.debugGraphics.lineStyle(1,65280);
-				this.debugGraphics.drawRect(this.paddingLeft + this.borderWidth,this.paddingTop + this.borderHeight,this.get_innerWidth(),this.get_innerHeight());
-			}
-			this.debugGraphics.lineStyle(1,33023);
-			var _g18 = 0;
-			var _g9 = this.children.length;
-			while(_g18 < _g9) {
-				var i8 = _g18++;
-				var p10 = this.properties[i8];
-				var c6 = this.children[i8];
-				if(p10.isAbsolute || !c6.visible) {
-					continue;
-				}
-				this.debugGraphics.drawRect(c6.x,c6.y,p10.calculatedWidth,p10.calculatedHeight);
-			}
-			this.debugGraphics.lineStyle(1,16711680);
-			this.debugGraphics.drawRect(0,0,cw,ch);
-		}
-		this.onAfterReflow();
-	}
-	,onBeforeReflow: function() {
-	}
-	,onAfterReflow: function() {
-	}
-	,__class__: h2d_Flow
-});
-var h2d_Kerning = function(c,o) {
-	this.prevChar = c;
-	this.offset = o;
-};
-$hxClasses["h2d.Kerning"] = h2d_Kerning;
-h2d_Kerning.__name__ = ["h2d","Kerning"];
-h2d_Kerning.prototype = {
-	__class__: h2d_Kerning
-};
-var h2d_FontChar = function(t,w) {
-	this.t = t;
-	this.width = w;
-};
-$hxClasses["h2d.FontChar"] = h2d_FontChar;
-h2d_FontChar.__name__ = ["h2d","FontChar"];
-h2d_FontChar.prototype = {
-	addKerning: function(prevChar,offset) {
-		var k = new h2d_Kerning(prevChar,offset);
-		k.next = this.kerning;
-		this.kerning = k;
-	}
-	,getKerningOffset: function(prevChar) {
-		var k = this.kerning;
-		while(k != null) {
-			if(k.prevChar == prevChar) {
-				return k.offset;
-			}
-			k = k.next;
-		}
-		return 0;
-	}
-	,clone: function() {
-		var c = new h2d_FontChar(this.t.clone(),this.width);
-		c.kerning = this.kerning;
-		return c;
-	}
-	,__class__: h2d_FontChar
-};
-var h2d_Font = function(name,size) {
-	this.name = name;
-	this.size = size;
-	this.glyphs = new haxe_ds_IntMap();
-	this.defaultChar = new h2d_FontChar(new h2d_Tile(null,0,0,0,0),0);
-	this.charset = hxd_Charset.getDefault();
-};
-$hxClasses["h2d.Font"] = h2d_Font;
-h2d_Font.__name__ = ["h2d","Font"];
-h2d_Font.prototype = {
-	getChar: function(code) {
-		var c = this.glyphs.h[code];
-		if(c == null) {
-			c = this.charset.resolveChar(code,this.glyphs);
-			if(c == null) {
-				c = this.defaultChar;
-			}
-		}
-		return c;
-	}
-	,clone: function() {
-		var f = new h2d_Font(this.name,this.size);
-		f.baseLine = this.baseLine;
-		f.lineHeight = this.lineHeight;
-		f.tile = this.tile.clone();
-		f.charset = this.charset;
-		f.defaultChar = this.defaultChar.clone();
-		var g = this.glyphs.keys();
-		while(g.hasNext()) {
-			var g1 = g.next();
-			var c = this.glyphs.h[g1];
-			var c2 = c.clone();
-			if(c == this.defaultChar) {
-				f.defaultChar = c2;
-			}
-			f.glyphs.h[g1] = c2;
-		}
-		return f;
-	}
-	,resizeTo: function(size) {
-		var ratio = size / this.size;
-		var c = this.glyphs.iterator();
-		while(c.hasNext()) {
-			var c1 = c.next();
-			c1.width = c1.width * ratio | 0;
-			c1.t.scaleToSize(c1.t.width * ratio | 0,c1.t.height * ratio | 0);
-			c1.t.dx = c1.t.dx * ratio | 0;
-			c1.t.dy = c1.t.dy * ratio | 0;
-		}
-		this.lineHeight = this.lineHeight * ratio | 0;
-		this.baseLine = this.baseLine * ratio | 0;
-		this.size = size;
-	}
-	,hasChar: function(code) {
-		return this.glyphs.h[code] != null;
-	}
-	,dispose: function() {
-		this.tile.dispose();
-	}
-	,__class__: h2d_Font
-};
-var h2d__$Graphics_GPoint = function(x,y,r,g,b,a) {
-	this.x = x;
-	this.y = y;
-	this.r = r;
-	this.g = g;
-	this.b = b;
-	this.a = a;
-};
-$hxClasses["h2d._Graphics.GPoint"] = h2d__$Graphics_GPoint;
-h2d__$Graphics_GPoint.__name__ = ["h2d","_Graphics","GPoint"];
-h2d__$Graphics_GPoint.prototype = {
-	__class__: h2d__$Graphics_GPoint
+var hxbit_ProxyHost = function() { };
+$hxClasses["hxbit.ProxyHost"] = hxbit_ProxyHost;
+hxbit_ProxyHost.__name__ = ["hxbit","ProxyHost"];
+hxbit_ProxyHost.prototype = {
+	__class__: hxbit_ProxyHost
 };
 var hxbit_Serializable = function() { };
 $hxClasses["hxbit.Serializable"] = hxbit_Serializable;
 hxbit_Serializable.__name__ = ["hxbit","Serializable"];
 hxbit_Serializable.prototype = {
 	__class__: hxbit_Serializable
+};
+var hxbit_NetworkSerializable = function() { };
+$hxClasses["hxbit.NetworkSerializable"] = hxbit_NetworkSerializable;
+hxbit_NetworkSerializable.__name__ = ["hxbit","NetworkSerializable"];
+hxbit_NetworkSerializable.__interfaces__ = [hxbit_ProxyHost,hxbit_Serializable];
+hxbit_NetworkSerializable.prototype = {
+	__class__: hxbit_NetworkSerializable
 };
 var hxbit_Serializer = function() {
 	this.usedClasses = [];
@@ -8210,6 +1980,6499 @@ hxbit_Serializer.prototype = {
 		}
 	}
 	,__class__: hxbit_Serializer
+};
+var Cursor = function(color,uid) {
+	if(uid == null) {
+		uid = 0;
+	}
+	this.__uid = hxbit_Serializer.SEQ << 24 | ++hxbit_Serializer.UID;
+	this.__bits = 0;
+	this.networkInitProxys();
+	this.set_color(color);
+	this.set_uid(uid);
+	this.init();
+	this.set_x(0);
+	this.set_y(0);
+};
+$hxClasses["Cursor"] = Cursor;
+Cursor.__name__ = ["Cursor"];
+Cursor.__interfaces__ = [hxbit_NetworkSerializable];
+Cursor.prototype = {
+	networkAllow: function(op,propId,client) {
+		return client == this;
+	}
+	,set_x: function(v) {
+		if(v == this.x) {
+			return v;
+		}
+		if(this.bmp != null) {
+			var _this = this.bmp;
+			_this.posChanged = true;
+			_this.x = v;
+		}
+		if(this.x != v) {
+			if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,2)) && (this.__next != null || this.__host.mark(this))) {
+				this.__bits |= 4;
+			}
+		}
+		return this.x = v;
+	}
+	,set_y: function(v) {
+		if(this.bmp != null) {
+			var _this = this.bmp;
+			_this.posChanged = true;
+			_this.y = v;
+		}
+		if(this.y != v) {
+			if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,3)) && (this.__next != null || this.__host.mark(this))) {
+				this.__bits |= 8;
+			}
+		}
+		return this.y = v;
+	}
+	,toString: function() {
+		return "Cursor " + StringTools.hex(this.color,6) + (this.__host != null ? ":ALIVE" : "");
+	}
+	,init: function() {
+		var _gthis = this;
+		this.net = Network.inst;
+		this.net.log("Init " + Std.string(this),{ fileName : "Network.hx", lineNumber : 41, className : "Cursor", methodName : "init"});
+		this.bmp = new h2d_Graphics(this.net.s2d);
+		this.bmp.beginFill(this.color,0.5);
+		this.bmp.drawCircle(0,0,10);
+		this.bmp.beginFill(this.color);
+		this.bmp.drawCircle(0,0,5);
+		this.set_enableReplication(true);
+		var i = new h2d_Interactive(10,10,this.bmp);
+		i.posChanged = true;
+		i.posChanged = true;
+		i.x = i.y = -5;
+		i.isEllipse = true;
+		i.onClick = function(_) {
+			var tmp = 2 + Math.random() * 2;
+			_gthis.blink(tmp);
+		};
+	}
+	,blink__impl: function(s) {
+		var _gthis = this;
+		var _this = this.bmp;
+		var _g = _this;
+		_g.posChanged = true;
+		_g.scaleX *= s;
+		var _g1 = _this;
+		_g1.posChanged = true;
+		_g1.scaleY *= s;
+		this.net.event.waitUntil(function(dt) {
+			var _g2 = _gthis.bmp;
+			var v = _g2.scaleX * Math.pow(0.9,dt);
+			_g2.posChanged = true;
+			_g2.scaleX = v;
+			var _g3 = _gthis.bmp;
+			var v1 = _g3.scaleY * Math.pow(0.9,dt);
+			_g3.posChanged = true;
+			_g3.scaleY = v1;
+			if(_gthis.bmp.scaleX < 1) {
+				var _this1 = _gthis.bmp;
+				var _this2 = _gthis.bmp;
+				_this2.posChanged = true;
+				_this1.posChanged = true;
+				_this1.scaleX = _this2.scaleY = 1;
+				return true;
+			}
+			return false;
+		});
+	}
+	,alive: function() {
+		this.init();
+		this.set_x(this.x);
+		this.set_y(this.y);
+		if(this.uid == this.net.uid) {
+			this.net.cursor = this;
+			this.net.host.self.ownerObject = this;
+		}
+	}
+	,networkSetBit: function(b) {
+		if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,b)) && (this.__next != null || this.__host.mark(this))) {
+			this.__bits |= 1 << b;
+		}
+	}
+	,get_enableReplication: function() {
+		return this.__host != null;
+	}
+	,set_enableReplication: function(b) {
+		hxbit_NetworkHost.enableReplication(this,b);
+		return b;
+	}
+	,networkCancelProperty: function(props) {
+		this.__bits &= ~props;
+	}
+	,networkLocalChange: function(f) {
+		var old = this.__host;
+		this.__host = null;
+		f();
+		this.__host = old;
+	}
+	,__net_mark_color: function(v) {
+		if(this.color != v) {
+			if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,0)) && (this.__next != null || this.__host.mark(this))) {
+				this.__bits |= 1;
+			}
+		}
+		return v;
+	}
+	,set_color: function(v) {
+		if(this.color != v) {
+			if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,0)) && (this.__next != null || this.__host.mark(this))) {
+				this.__bits |= 1;
+			}
+		}
+		return this.color = v;
+	}
+	,get_networkPropColor: function() {
+		var this1 = 1;
+		return this1;
+	}
+	,__net_mark_uid: function(v) {
+		if(this.uid != v) {
+			if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,1)) && (this.__next != null || this.__host.mark(this))) {
+				this.__bits |= 2;
+			}
+		}
+		return v;
+	}
+	,set_uid: function(v) {
+		if(this.uid != v) {
+			if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,1)) && (this.__next != null || this.__host.mark(this))) {
+				this.__bits |= 2;
+			}
+		}
+		return this.uid = v;
+	}
+	,get_networkPropUid: function() {
+		var this1 = 2;
+		return this1;
+	}
+	,__net_mark_x: function(v) {
+		if(this.x != v) {
+			if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,2)) && (this.__next != null || this.__host.mark(this))) {
+				this.__bits |= 4;
+			}
+		}
+		return v;
+	}
+	,get_networkPropX: function() {
+		var this1 = 4;
+		return this1;
+	}
+	,__net_mark_y: function(v) {
+		if(this.y != v) {
+			if(this.__host != null && (this.__host.isAuth || this.__host.checkWrite(this,3)) && (this.__next != null || this.__host.mark(this))) {
+				this.__bits |= 8;
+			}
+		}
+		return v;
+	}
+	,get_networkPropY: function() {
+		var this1 = 8;
+		return this1;
+	}
+	,blink: function(s) {
+		if(this.__host != null) {
+			if(!this.__host.isAuth && !this.networkAllow(0,0,this.__host.self.ownerObject)) {
+				this.__host.logError("Calling RPC on an not allowed object");
+				return;
+			}
+			var __ctx = this.__host.beginRPC(this,0,null);
+			__ctx.out.addInt32(haxe_io_FPHelper.floatToI32(s));
+			this.__host.endRPC();
+			if(!this.__host.isAuth) {
+				return;
+			}
+		}
+		this.blink__impl(s);
+	}
+	,networkFlush: function(ctx) {
+		var b = this.__bits;
+		var v = this.__bits;
+		if(v >= 0 && v < 128) {
+			ctx.out.b.push(v);
+		} else {
+			ctx.out.b.push(128);
+			ctx.out.addInt32(v);
+		}
+		if((b & 1) != 0) {
+			var v1 = this.color;
+			if(v1 >= 0 && v1 < 128) {
+				ctx.out.b.push(v1);
+			} else {
+				ctx.out.b.push(128);
+				ctx.out.addInt32(v1);
+			}
+		}
+		if((b & 2) != 0) {
+			var v2 = this.uid;
+			if(v2 >= 0 && v2 < 128) {
+				ctx.out.b.push(v2);
+			} else {
+				ctx.out.b.push(128);
+				ctx.out.addInt32(v2);
+			}
+		}
+		if((b & 4) != 0) {
+			ctx.out.addInt32(haxe_io_FPHelper.floatToI32(this.x));
+		}
+		if((b & 8) != 0) {
+			ctx.out.addInt32(haxe_io_FPHelper.floatToI32(this.y));
+		}
+		this.__bits = 0;
+	}
+	,networkSync: function(ctx) {
+		if((this.__bits & 1) != 0) {
+			var v = ctx.input.b[ctx.inPos++];
+			if(v == 128) {
+				v = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			this.set_color(v);
+		}
+		if((this.__bits & 2) != 0) {
+			var v1 = ctx.input.b[ctx.inPos++];
+			if(v1 == 128) {
+				v1 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			this.set_uid(v1);
+		}
+		if((this.__bits & 4) != 0) {
+			var v2 = ctx.input.getFloat(ctx.inPos);
+			ctx.inPos += 4;
+			this.set_x(v2);
+		}
+		if((this.__bits & 8) != 0) {
+			var v3 = ctx.input.getFloat(ctx.inPos);
+			ctx.inPos += 4;
+			this.set_y(v3);
+		}
+	}
+	,networkInitProxys: function() {
+	}
+	,networkRPC: function(__ctx,__id,__clientResult) {
+		if(__id == 0) {
+			var s = null;
+			var v = __ctx.input.getFloat(__ctx.inPos);
+			__ctx.inPos += 4;
+			s = v;
+			if(__ctx.get_error()) {
+				return false;
+			}
+			if(this.__host != null && this.__host.isAuth) {
+				if(!this.networkAllow(0,0,this.__host.get_rpcClient().ownerObject)) {
+					return false;
+				}
+				var __ctx1 = this.__host.beginRPC(this,0,null);
+				__ctx1.out.addInt32(haxe_io_FPHelper.floatToI32(s));
+				this.__host.endRPC();
+			}
+			this.blink__impl(s);
+		} else {
+			throw new js__$Boot_HaxeError("Unknown RPC identifier " + __id);
+		}
+		return true;
+	}
+	,networkGetName: function(id,isRPC) {
+		if(isRPC == null) {
+			isRPC = false;
+		}
+		var _g = isRPC ? id + 4 : id;
+		switch(_g) {
+		case 0:
+			return "color";
+		case 1:
+			return "uid";
+		case 2:
+			return "x";
+		case 3:
+			return "y";
+		case 4:
+			return "blink";
+		default:
+			return null;
+		}
+	}
+	,getCLID: function() {
+		return Cursor.__clid;
+	}
+	,serialize: function(__ctx) {
+		var v = this.color;
+		if(v >= 0 && v < 128) {
+			__ctx.out.b.push(v);
+		} else {
+			__ctx.out.b.push(128);
+			__ctx.out.addInt32(v);
+		}
+		var v1 = this.uid;
+		if(v1 >= 0 && v1 < 128) {
+			__ctx.out.b.push(v1);
+		} else {
+			__ctx.out.b.push(128);
+			__ctx.out.addInt32(v1);
+		}
+		__ctx.out.addInt32(haxe_io_FPHelper.floatToI32(this.x));
+		__ctx.out.addInt32(haxe_io_FPHelper.floatToI32(this.y));
+	}
+	,getSerializeSchema: function() {
+		var schema = new hxbit_Schema();
+		schema.fieldsNames.push("color");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PInt);
+		schema.fieldsNames.push("uid");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PInt);
+		schema.fieldsNames.push("x");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
+		schema.fieldsNames.push("y");
+		schema.fieldsTypes.push(hxbit_PropTypeDesc.PFloat);
+		schema.isFinal = hxbit_Serializer.isClassFinal(Cursor.__clid);
+		return schema;
+	}
+	,unserializeInit: function() {
+		this.__bits = 0;
+	}
+	,unserialize: function(__ctx) {
+		var v = __ctx.input.b[__ctx.inPos++];
+		if(v == 128) {
+			v = __ctx.input.getInt32(__ctx.inPos);
+			__ctx.inPos += 4;
+		}
+		this.set_color(v);
+		var v1 = __ctx.input.b[__ctx.inPos++];
+		if(v1 == 128) {
+			v1 = __ctx.input.getInt32(__ctx.inPos);
+			__ctx.inPos += 4;
+		}
+		this.set_uid(v1);
+		var v2 = __ctx.input.getFloat(__ctx.inPos);
+		__ctx.inPos += 4;
+		this.set_x(v2);
+		var v3 = __ctx.input.getFloat(__ctx.inPos);
+		__ctx.inPos += 4;
+		this.set_y(v3);
+	}
+	,__class__: Cursor
+};
+var h3d_IDrawable = function() { };
+$hxClasses["h3d.IDrawable"] = h3d_IDrawable;
+h3d_IDrawable.__name__ = ["h3d","IDrawable"];
+h3d_IDrawable.prototype = {
+	__class__: h3d_IDrawable
+};
+var hxd_App = function() {
+	var _gthis = this;
+	var engine = h3d_Engine.CURRENT;
+	if(engine != null) {
+		this.engine = engine;
+		engine.onReady = $bind(this,this.setup);
+		haxe_Timer.delay($bind(this,this.setup),0);
+	} else {
+		hxd_System.start(function() {
+			engine = new h3d_Engine();
+			_gthis.engine = engine;
+			engine.onReady = $bind(_gthis,_gthis.setup);
+			engine.init();
+		});
+	}
+};
+$hxClasses["hxd.App"] = hxd_App;
+hxd_App.__name__ = ["hxd","App"];
+hxd_App.__interfaces__ = [h3d_IDrawable];
+hxd_App.staticHandler = function() {
+};
+hxd_App.prototype = {
+	get_wantedFPS: function() {
+		return hxd_Timer.wantedFPS;
+	}
+	,set_wantedFPS: function(fps) {
+		return hxd_Timer.wantedFPS = fps;
+	}
+	,onResize: function() {
+	}
+	,setScene: function(scene,disposePrevious) {
+		if(disposePrevious == null) {
+			disposePrevious = true;
+		}
+		var new2D = (scene instanceof h2d_Scene) ? scene : null;
+		var new3D = (scene instanceof h3d_scene_Scene) ? scene : null;
+		if(new2D != null) {
+			this.sevents.removeScene(this.s2d);
+		}
+		if(new3D != null) {
+			this.sevents.removeScene(this.s3d);
+		}
+		this.sevents.addScene(scene);
+		if(disposePrevious) {
+			if(new2D != null) {
+				this.s2d.dispose();
+			} else if(new3D != null) {
+				this.s3d.dispose();
+			} else {
+				throw new js__$Boot_HaxeError("Can't dispose previous scene");
+			}
+		}
+		if(new2D != null) {
+			this.s2d = new2D;
+		}
+		if(new3D != null) {
+			this.s3d = new3D;
+		}
+	}
+	,setScene2D: function(s2d,disposePrevious) {
+		if(disposePrevious == null) {
+			disposePrevious = true;
+		}
+		this.sevents.removeScene(this.s2d);
+		this.sevents.addScene(s2d,0);
+		if(disposePrevious) {
+			this.s2d.dispose();
+		}
+		this.s2d = s2d;
+	}
+	,render: function(e) {
+		this.s3d.render(e);
+		this.s2d.render(e);
+	}
+	,setup: function() {
+		var _gthis = this;
+		var initDone = false;
+		this.engine.onReady = hxd_App.staticHandler;
+		this.engine.onResized = function() {
+			if(_gthis.s2d == null) {
+				return;
+			}
+			_gthis.s2d.checkResize();
+			if(initDone) {
+				_gthis.onResize();
+			}
+		};
+		this.s3d = new h3d_scene_Scene();
+		this.s2d = new h2d_Scene();
+		this.sevents = new hxd_SceneEvents();
+		this.sevents.addScene(this.s2d);
+		this.sevents.addScene(this.s3d);
+		this.loadAssets(function() {
+			initDone = true;
+			_gthis.init();
+			hxd_Timer.skip();
+			_gthis.mainLoop();
+			hxd_System.setLoop($bind(_gthis,_gthis.mainLoop));
+			hxd_Key.initialize();
+		});
+	}
+	,dispose: function() {
+		this.engine.onResized = hxd_App.staticHandler;
+		this.engine.onContextLost = hxd_App.staticHandler;
+		this.isDisposed = true;
+		this.s2d.dispose();
+		this.s3d.dispose();
+		this.sevents.dispose();
+	}
+	,loadAssets: function(onLoaded) {
+		onLoaded();
+	}
+	,init: function() {
+	}
+	,mainLoop: function() {
+		hxd_Timer.update();
+		this.sevents.checkEvents();
+		if(this.isDisposed) {
+			return;
+		}
+		this.update(hxd_Timer.tmod);
+		if(this.isDisposed) {
+			return;
+		}
+		this.s2d.setElapsedTime(hxd_Timer.tmod / 60);
+		this.s3d.setElapsedTime(hxd_Timer.tmod / 60);
+		this.engine.render(this);
+	}
+	,update: function(dt) {
+	}
+	,__class__: hxd_App
+};
+var Network = function() {
+	hxd_App.call(this);
+};
+$hxClasses["Network"] = Network;
+Network.__name__ = ["Network"];
+Network.main = function() {
+	Network.inst = new Network();
+};
+Network.__super__ = hxd_App;
+Network.prototype = $extend(hxd_App.prototype,{
+	init: function() {
+		var _gthis = this;
+		this.event = new hxd_WaitEvent();
+		this.host = new hxd_net_SocketHost();
+		this.host.setLogger(function(msg) {
+			_gthis.log(msg,{ fileName : "Network.hx", lineNumber : 96, className : "Network", methodName : "init"});
+		});
+		this.log("Server not allowed on this platform",{ fileName : "Network.hx", lineNumber : 102, className : "Network", methodName : "init"});
+		try {
+			this.host.wait(Network.HOST,Network.PORT,function(c) {
+				_gthis.log("Client Connected",{ fileName : "Network.hx", lineNumber : 108, className : "Network", methodName : "init"});
+			});
+			this.host.onMessage = function(c1,uid) {
+				_gthis.log("Client identified (" + uid + ")",{ fileName : "Network.hx", lineNumber : 111, className : "Network", methodName : "init"});
+				var cursorClient = new Cursor(255,uid);
+				c1.ownerObject = cursorClient;
+				c1.sync();
+			};
+			this.log("Server Started",{ fileName : "Network.hx", lineNumber : 116, className : "Network", methodName : "init"});
+			this.start();
+		} catch( e ) {
+			this.log("Connecting",{ fileName : "Network.hx", lineNumber : 122, className : "Network", methodName : "init"});
+			this.uid = 1 + Std.random(1000);
+			this.host.connect(Network.HOST,Network.PORT,function(b) {
+				if(!b) {
+					_gthis.log("Failed to connect to server",{ fileName : "Network.hx", lineNumber : 127, className : "Network", methodName : "init"});
+					return;
+				}
+				_gthis.log("Connected to server",{ fileName : "Network.hx", lineNumber : 130, className : "Network", methodName : "init"});
+				_gthis.host.sendMessage(_gthis.uid);
+			});
+		}
+	}
+	,log: function(s,pos) {
+		pos.fileName = (this.host.isAuth ? "[S]" : "[C]") + " " + pos.fileName;
+		haxe_Log.trace(s,pos);
+	}
+	,start: function() {
+		this.cursor = new Cursor(16711680);
+		this.log("Live",{ fileName : "Network.hx", lineNumber : 143, className : "Network", methodName : "start"});
+		this.host.makeAlive();
+	}
+	,update: function(dt) {
+		this.event.update(dt);
+		if(this.cursor != null) {
+			this.cursor.set_x(this.s2d.get_mouseX());
+			this.cursor.set_y(this.s2d.get_mouseY());
+		}
+		this.host.flush();
+	}
+	,__class__: Network
+});
+var Reflect = function() { };
+$hxClasses["Reflect"] = Reflect;
+Reflect.__name__ = ["Reflect"];
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		return null;
+	}
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
+			a.push(f);
+		}
+		}
+	}
+	return a;
+};
+Reflect.isFunction = function(f) {
+	if(typeof(f) == "function") {
+		return !(f.__name__ || f.__ename__);
+	} else {
+		return false;
+	}
+};
+Reflect.compare = function(a,b) {
+	if(a == b) {
+		return 0;
+	} else if(a > b) {
+		return 1;
+	} else {
+		return -1;
+	}
+};
+Reflect.compareMethods = function(f1,f2) {
+	if(f1 == f2) {
+		return true;
+	}
+	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
+		return false;
+	}
+	if(f1.scope == f2.scope && f1.method == f2.method) {
+		return f1.method != null;
+	} else {
+		return false;
+	}
+};
+Reflect.isEnumValue = function(v) {
+	if(v != null) {
+		return v.__enum__ != null;
+	} else {
+		return false;
+	}
+};
+Reflect.deleteField = function(o,field) {
+	if(!Object.prototype.hasOwnProperty.call(o,field)) {
+		return false;
+	}
+	delete(o[field]);
+	return true;
+};
+var Std = function() { };
+$hxClasses["Std"] = Std;
+Std.__name__ = ["Std"];
+Std.string = function(s) {
+	return js_Boot.__string_rec(s,"");
+};
+Std.parseInt = function(x) {
+	var v = parseInt(x,10);
+	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) {
+		v = parseInt(x);
+	}
+	if(isNaN(v)) {
+		return null;
+	}
+	return v;
+};
+Std.random = function(x) {
+	if(x <= 0) {
+		return 0;
+	} else {
+		return Math.floor(Math.random() * x);
+	}
+};
+var StringBuf = function() {
+	this.b = "";
+};
+$hxClasses["StringBuf"] = StringBuf;
+StringBuf.__name__ = ["StringBuf"];
+StringBuf.prototype = {
+	__class__: StringBuf
+};
+var StringTools = function() { };
+$hxClasses["StringTools"] = StringTools;
+StringTools.__name__ = ["StringTools"];
+StringTools.startsWith = function(s,start) {
+	if(s.length >= start.length) {
+		return HxOverrides.substr(s,0,start.length) == start;
+	} else {
+		return false;
+	}
+};
+StringTools.isSpace = function(s,pos) {
+	var c = HxOverrides.cca(s,pos);
+	if(!(c > 8 && c < 14)) {
+		return c == 32;
+	} else {
+		return true;
+	}
+};
+StringTools.ltrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,r)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,r,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.rtrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,0,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.trim = function(s) {
+	return StringTools.ltrim(StringTools.rtrim(s));
+};
+StringTools.hex = function(n,digits) {
+	var s = "";
+	var hexChars = "0123456789ABCDEF";
+	while(true) {
+		s = hexChars.charAt(n & 15) + s;
+		n >>>= 4;
+		if(!(n > 0)) {
+			break;
+		}
+	}
+	if(digits != null) {
+		while(s.length < digits) s = "0" + s;
+	}
+	return s;
+};
+var ValueType = $hxClasses["ValueType"] = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
+ValueType.TNull = ["TNull",0];
+ValueType.TNull.toString = $estr;
+ValueType.TNull.__enum__ = ValueType;
+ValueType.TInt = ["TInt",1];
+ValueType.TInt.toString = $estr;
+ValueType.TInt.__enum__ = ValueType;
+ValueType.TFloat = ["TFloat",2];
+ValueType.TFloat.toString = $estr;
+ValueType.TFloat.__enum__ = ValueType;
+ValueType.TBool = ["TBool",3];
+ValueType.TBool.toString = $estr;
+ValueType.TBool.__enum__ = ValueType;
+ValueType.TObject = ["TObject",4];
+ValueType.TObject.toString = $estr;
+ValueType.TObject.__enum__ = ValueType;
+ValueType.TFunction = ["TFunction",5];
+ValueType.TFunction.toString = $estr;
+ValueType.TFunction.__enum__ = ValueType;
+ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TUnknown = ["TUnknown",8];
+ValueType.TUnknown.toString = $estr;
+ValueType.TUnknown.__enum__ = ValueType;
+ValueType.__empty_constructs__ = [ValueType.TNull,ValueType.TInt,ValueType.TFloat,ValueType.TBool,ValueType.TObject,ValueType.TFunction,ValueType.TUnknown];
+var Type = function() { };
+$hxClasses["Type"] = Type;
+Type.__name__ = ["Type"];
+Type.getSuperClass = function(c) {
+	return c.__super__;
+};
+Type.getClassName = function(c) {
+	var a = c.__name__;
+	if(a == null) {
+		return null;
+	}
+	return a.join(".");
+};
+Type.getEnumName = function(e) {
+	var a = e.__ename__;
+	return a.join(".");
+};
+Type.resolveClass = function(name) {
+	var cl = $hxClasses[name];
+	if(cl == null || !cl.__name__) {
+		return null;
+	}
+	return cl;
+};
+Type.resolveEnum = function(name) {
+	var e = $hxClasses[name];
+	if(e == null || !e.__ename__) {
+		return null;
+	}
+	return e;
+};
+Type.createEmptyInstance = function(cl) {
+	function empty() {}; empty.prototype = cl.prototype;
+	return new empty();
+};
+Type.createEnum = function(e,constr,params) {
+	var f = Reflect.field(e,constr);
+	if(f == null) {
+		throw new js__$Boot_HaxeError("No such constructor " + constr);
+	}
+	if(Reflect.isFunction(f)) {
+		if(params == null) {
+			throw new js__$Boot_HaxeError("Constructor " + constr + " need parameters");
+		}
+		return f.apply(e,params);
+	}
+	if(params != null && params.length != 0) {
+		throw new js__$Boot_HaxeError("Constructor " + constr + " does not need parameters");
+	}
+	return f;
+};
+Type.createEnumIndex = function(e,index,params) {
+	var c = e.__constructs__[index];
+	if(c == null) {
+		throw new js__$Boot_HaxeError(index + " is not a valid enum constructor index");
+	}
+	return Type.createEnum(e,c,params);
+};
+Type["typeof"] = function(v) {
+	var _g = typeof(v);
+	switch(_g) {
+	case "boolean":
+		return ValueType.TBool;
+	case "function":
+		if(v.__name__ || v.__ename__) {
+			return ValueType.TObject;
+		}
+		return ValueType.TFunction;
+	case "number":
+		if(Math.ceil(v) == v % 2147483648.0) {
+			return ValueType.TInt;
+		}
+		return ValueType.TFloat;
+	case "object":
+		if(v == null) {
+			return ValueType.TNull;
+		}
+		var e = v.__enum__;
+		if(e != null) {
+			return ValueType.TEnum(e);
+		}
+		var c = js_Boot.getClass(v);
+		if(c != null) {
+			return ValueType.TClass(c);
+		}
+		return ValueType.TObject;
+	case "string":
+		return ValueType.TClass(String);
+	case "undefined":
+		return ValueType.TNull;
+	default:
+		return ValueType.TUnknown;
+	}
+};
+Type.enumEq = function(a,b) {
+	if(a == b) {
+		return true;
+	}
+	try {
+		if(a[0] != b[0]) {
+			return false;
+		}
+		var _g1 = 2;
+		var _g = a.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(!Type.enumEq(a[i],b[i])) {
+				return false;
+			}
+		}
+		var e = a.__enum__;
+		if(e != b.__enum__ || e == null) {
+			return false;
+		}
+	} catch( e1 ) {
+		return false;
+	}
+	return true;
+};
+var Xml = function(nodeType) {
+	this.nodeType = nodeType;
+	this.children = [];
+	this.attributeMap = new haxe_ds_StringMap();
+};
+$hxClasses["Xml"] = Xml;
+Xml.__name__ = ["Xml"];
+Xml.parse = function(str) {
+	return haxe_xml_Parser.parse(str);
+};
+Xml.createElement = function(name) {
+	var xml = new Xml(Xml.Element);
+	if(xml.nodeType != Xml.Element) {
+		throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + xml.nodeType);
+	}
+	xml.nodeName = name;
+	return xml;
+};
+Xml.createPCData = function(data) {
+	var xml = new Xml(Xml.PCData);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
+		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	}
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createCData = function(data) {
+	var xml = new Xml(Xml.CData);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
+		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	}
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createComment = function(data) {
+	var xml = new Xml(Xml.Comment);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
+		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	}
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createDocType = function(data) {
+	var xml = new Xml(Xml.DocType);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
+		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	}
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createProcessingInstruction = function(data) {
+	var xml = new Xml(Xml.ProcessingInstruction);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) {
+		throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	}
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createDocument = function() {
+	return new Xml(Xml.Document);
+};
+Xml.prototype = {
+	get: function(att) {
+		if(this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		}
+		var _this = this.attributeMap;
+		if(__map_reserved[att] != null) {
+			return _this.getReserved(att);
+		} else {
+			return _this.h[att];
+		}
+	}
+	,set: function(att,value) {
+		if(this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		}
+		var _this = this.attributeMap;
+		if(__map_reserved[att] != null) {
+			_this.setReserved(att,value);
+		} else {
+			_this.h[att] = value;
+		}
+	}
+	,exists: function(att) {
+		if(this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		}
+		var _this = this.attributeMap;
+		if(__map_reserved[att] != null) {
+			return _this.existsReserved(att);
+		} else {
+			return _this.h.hasOwnProperty(att);
+		}
+	}
+	,elements: function() {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		}
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.children;
+		while(_g1 < _g2.length) {
+			var child = _g2[_g1];
+			++_g1;
+			if(child.nodeType == Xml.Element) {
+				_g.push(child);
+			}
+		}
+		var ret = _g;
+		return HxOverrides.iter(ret);
+	}
+	,elementsNamed: function(name) {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		}
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.children;
+		while(_g1 < _g2.length) {
+			var child = _g2[_g1];
+			++_g1;
+			var tmp;
+			if(child.nodeType == Xml.Element) {
+				if(child.nodeType != Xml.Element) {
+					throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + child.nodeType);
+				}
+				tmp = child.nodeName == name;
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				_g.push(child);
+			}
+		}
+		var ret = _g;
+		return HxOverrides.iter(ret);
+	}
+	,firstElement: function() {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		}
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var child = _g1[_g];
+			++_g;
+			if(child.nodeType == Xml.Element) {
+				return child;
+			}
+		}
+		return null;
+	}
+	,addChild: function(x) {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		}
+		if(x.parent != null) {
+			x.parent.removeChild(x);
+		}
+		this.children.push(x);
+		x.parent = this;
+	}
+	,removeChild: function(x) {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) {
+			throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		}
+		if(HxOverrides.remove(this.children,x)) {
+			x.parent = null;
+			return true;
+		}
+		return false;
+	}
+	,__class__: Xml
+};
+var format_gif_Block = $hxClasses["format.gif.Block"] = { __ename__ : ["format","gif","Block"], __constructs__ : ["BFrame","BExtension","BEOF"] };
+format_gif_Block.BFrame = function(frame) { var $x = ["BFrame",0,frame]; $x.__enum__ = format_gif_Block; $x.toString = $estr; return $x; };
+format_gif_Block.BExtension = function(extension) { var $x = ["BExtension",1,extension]; $x.__enum__ = format_gif_Block; $x.toString = $estr; return $x; };
+format_gif_Block.BEOF = ["BEOF",2];
+format_gif_Block.BEOF.toString = $estr;
+format_gif_Block.BEOF.__enum__ = format_gif_Block;
+format_gif_Block.__empty_constructs__ = [format_gif_Block.BEOF];
+var format_gif_Extension = $hxClasses["format.gif.Extension"] = { __ename__ : ["format","gif","Extension"], __constructs__ : ["EGraphicControl","EComment","EText","EApplicationExtension","EUnknown"] };
+format_gif_Extension.EGraphicControl = function(gce) { var $x = ["EGraphicControl",0,gce]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
+format_gif_Extension.EComment = function(text) { var $x = ["EComment",1,text]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
+format_gif_Extension.EText = function(pte) { var $x = ["EText",2,pte]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
+format_gif_Extension.EApplicationExtension = function(ext) { var $x = ["EApplicationExtension",3,ext]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
+format_gif_Extension.EUnknown = function(id,data) { var $x = ["EUnknown",4,id,data]; $x.__enum__ = format_gif_Extension; $x.toString = $estr; return $x; };
+format_gif_Extension.__empty_constructs__ = [];
+var format_gif_ApplicationExtension = $hxClasses["format.gif.ApplicationExtension"] = { __ename__ : ["format","gif","ApplicationExtension"], __constructs__ : ["AENetscapeLooping","AEUnknown"] };
+format_gif_ApplicationExtension.AENetscapeLooping = function(loops) { var $x = ["AENetscapeLooping",0,loops]; $x.__enum__ = format_gif_ApplicationExtension; $x.toString = $estr; return $x; };
+format_gif_ApplicationExtension.AEUnknown = function(name,version,data) { var $x = ["AEUnknown",1,name,version,data]; $x.__enum__ = format_gif_ApplicationExtension; $x.toString = $estr; return $x; };
+format_gif_ApplicationExtension.__empty_constructs__ = [];
+var format_gif_Version = $hxClasses["format.gif.Version"] = { __ename__ : ["format","gif","Version"], __constructs__ : ["GIF87a","GIF89a","Unknown"] };
+format_gif_Version.GIF87a = ["GIF87a",0];
+format_gif_Version.GIF87a.toString = $estr;
+format_gif_Version.GIF87a.__enum__ = format_gif_Version;
+format_gif_Version.GIF89a = ["GIF89a",1];
+format_gif_Version.GIF89a.toString = $estr;
+format_gif_Version.GIF89a.__enum__ = format_gif_Version;
+format_gif_Version.Unknown = function(version) { var $x = ["Unknown",2,version]; $x.__enum__ = format_gif_Version; $x.toString = $estr; return $x; };
+format_gif_Version.__empty_constructs__ = [format_gif_Version.GIF87a,format_gif_Version.GIF89a];
+var format_gif_DisposalMethod = $hxClasses["format.gif.DisposalMethod"] = { __ename__ : ["format","gif","DisposalMethod"], __constructs__ : ["UNSPECIFIED","NO_ACTION","FILL_BACKGROUND","RENDER_PREVIOUS","UNDEFINED"] };
+format_gif_DisposalMethod.UNSPECIFIED = ["UNSPECIFIED",0];
+format_gif_DisposalMethod.UNSPECIFIED.toString = $estr;
+format_gif_DisposalMethod.UNSPECIFIED.__enum__ = format_gif_DisposalMethod;
+format_gif_DisposalMethod.NO_ACTION = ["NO_ACTION",1];
+format_gif_DisposalMethod.NO_ACTION.toString = $estr;
+format_gif_DisposalMethod.NO_ACTION.__enum__ = format_gif_DisposalMethod;
+format_gif_DisposalMethod.FILL_BACKGROUND = ["FILL_BACKGROUND",2];
+format_gif_DisposalMethod.FILL_BACKGROUND.toString = $estr;
+format_gif_DisposalMethod.FILL_BACKGROUND.__enum__ = format_gif_DisposalMethod;
+format_gif_DisposalMethod.RENDER_PREVIOUS = ["RENDER_PREVIOUS",3];
+format_gif_DisposalMethod.RENDER_PREVIOUS.toString = $estr;
+format_gif_DisposalMethod.RENDER_PREVIOUS.__enum__ = format_gif_DisposalMethod;
+format_gif_DisposalMethod.UNDEFINED = function(index) { var $x = ["UNDEFINED",4,index]; $x.__enum__ = format_gif_DisposalMethod; $x.toString = $estr; return $x; };
+format_gif_DisposalMethod.__empty_constructs__ = [format_gif_DisposalMethod.UNSPECIFIED,format_gif_DisposalMethod.NO_ACTION,format_gif_DisposalMethod.FILL_BACKGROUND,format_gif_DisposalMethod.RENDER_PREVIOUS];
+var format_gif_Reader = function(i) {
+	this.i = i;
+	i.set_bigEndian(false);
+};
+$hxClasses["format.gif.Reader"] = format_gif_Reader;
+format_gif_Reader.__name__ = ["format","gif","Reader"];
+format_gif_Reader.prototype = {
+	read: function() {
+		var _g = 0;
+		var _g1 = [71,73,70];
+		while(_g < _g1.length) {
+			var b = _g1[_g];
+			++_g;
+			if(this.i.readByte() != b) {
+				throw new js__$Boot_HaxeError("Invalid header");
+			}
+		}
+		var gifVer = this.i.readString(3);
+		var version = format_gif_Version.GIF89a;
+		switch(gifVer) {
+		case "87a":
+			version = format_gif_Version.GIF87a;
+			break;
+		case "89a":
+			version = format_gif_Version.GIF89a;
+			break;
+		default:
+			version = format_gif_Version.Unknown(gifVer);
+		}
+		var width = this.i.readUInt16();
+		var height = this.i.readUInt16();
+		var packedField = this.i.readByte();
+		var bgIndex = this.i.readByte();
+		var pixelAspectRatio = this.i.readByte();
+		if(pixelAspectRatio != 0) {
+			pixelAspectRatio = (pixelAspectRatio + 15) / 64;
+		} else {
+			pixelAspectRatio = 1;
+		}
+		var lsd = { width : width, height : height, hasGlobalColorTable : (packedField & 128) == 128, colorResolution : (packedField & 112) >>> 4, sorted : (packedField & 8) == 8, globalColorTableSize : 2 << (packedField & 7), backgroundColorIndex : bgIndex, pixelAspectRatio : pixelAspectRatio};
+		var gct = null;
+		if(lsd.hasGlobalColorTable) {
+			gct = this.readColorTable(lsd.globalColorTableSize);
+		}
+		var blocks = new List();
+		while(true) {
+			var b1 = this.readBlock();
+			blocks.add(b1);
+			if(b1 == format_gif_Block.BEOF) {
+				break;
+			}
+		}
+		return { version : version, logicalScreenDescriptor : lsd, globalColorTable : gct, blocks : blocks};
+	}
+	,readBlock: function() {
+		var blockID = this.i.readByte();
+		switch(blockID) {
+		case 33:
+			return this.readExtension();
+		case 44:
+			return this.readImage();
+		case 59:
+			return format_gif_Block.BEOF;
+		}
+		return format_gif_Block.BEOF;
+	}
+	,readImage: function() {
+		var x = this.i.readUInt16();
+		var y = this.i.readUInt16();
+		var width = this.i.readUInt16();
+		var height = this.i.readUInt16();
+		var packed = this.i.readByte();
+		var localColorTable = (packed & 128) == 128;
+		var interlaced = (packed & 64) == 64;
+		var sorted = (packed & 32) == 32;
+		var localColorTableSize = 2 << (packed & 7);
+		var lct = null;
+		if(localColorTable) {
+			lct = this.readColorTable(localColorTableSize);
+		}
+		return format_gif_Block.BFrame({ x : x, y : y, width : width, height : height, localColorTable : localColorTable, interlaced : interlaced, sorted : sorted, localColorTableSize : localColorTableSize, pixels : this.readPixels(width,height,interlaced), colorTable : lct});
+	}
+	,readPixels: function(width,height,interlaced) {
+		var input = this.i;
+		var pixelsCount = width * height;
+		var pixels = new haxe_io_Bytes(new ArrayBuffer(pixelsCount));
+		var minCodeSize = input.readByte();
+		var blockSize = input.readByte() - 1;
+		var bits = input.readByte();
+		var bitsCount = 8;
+		var clearCode = 1 << minCodeSize;
+		var eoiCode = clearCode + 1;
+		var codeSize = minCodeSize + 1;
+		var codeSizeLimit = 1 << codeSize;
+		var codeMask = codeSizeLimit - 1;
+		var baseDict = [];
+		var _g1 = 0;
+		var _g = clearCode;
+		while(_g1 < _g) {
+			var i = _g1++;
+			baseDict[i] = [i];
+		}
+		var dict = [];
+		var dictLen = clearCode + 2;
+		var newRecord;
+		var i1 = 0;
+		var code = 0;
+		var last;
+		while(i1 < pixelsCount) {
+			last = code;
+			while(bitsCount < codeSize) {
+				if(blockSize == 0) {
+					break;
+				}
+				bits |= input.readByte() << bitsCount;
+				bitsCount += 8;
+				--blockSize;
+				if(blockSize == 0) {
+					blockSize = input.readByte();
+				}
+			}
+			code = bits & codeMask;
+			bits >>= codeSize;
+			bitsCount -= codeSize;
+			if(code == clearCode) {
+				dict = baseDict.slice();
+				dictLen = clearCode + 2;
+				codeSize = minCodeSize + 1;
+				codeSizeLimit = 1 << codeSize;
+				codeMask = codeSizeLimit - 1;
+				continue;
+			}
+			if(code == eoiCode) {
+				break;
+			}
+			if(code < dictLen) {
+				if(last != clearCode) {
+					newRecord = dict[last].slice();
+					newRecord.push(dict[code][0]);
+					dict[dictLen++] = newRecord;
+				}
+			} else {
+				if(code != dictLen) {
+					throw new js__$Boot_HaxeError("Invalid LZW code. Excepted: " + dictLen + ", got: " + code);
+				}
+				newRecord = dict[last].slice();
+				newRecord.push(newRecord[0]);
+				dict[dictLen++] = newRecord;
+			}
+			newRecord = dict[code];
+			var _g2 = 0;
+			while(_g2 < newRecord.length) {
+				var item = newRecord[_g2];
+				++_g2;
+				pixels.b[i1++] = item & 255;
+			}
+			if(dictLen == codeSizeLimit && codeSize < 12) {
+				++codeSize;
+				codeSizeLimit = 1 << codeSize;
+				codeMask = codeSizeLimit - 1;
+			}
+		}
+		while(blockSize > 0) {
+			input.readByte();
+			--blockSize;
+			if(blockSize == 0) {
+				blockSize = input.readByte();
+			}
+		}
+		while(i1 < pixelsCount) pixels.b[i1++] = 0;
+		if(interlaced) {
+			var buffer = new haxe_io_Bytes(new ArrayBuffer(pixelsCount));
+			var offset = this.deinterlace(pixels,buffer,8,0,0,width,height);
+			offset = this.deinterlace(pixels,buffer,8,4,offset,width,height);
+			offset = this.deinterlace(pixels,buffer,4,2,offset,width,height);
+			this.deinterlace(pixels,buffer,2,1,offset,width,height);
+			pixels = buffer;
+		}
+		return pixels;
+	}
+	,deinterlace: function(input,output,step,y,offset,width,height) {
+		while(y < height) {
+			output.blit(y * width,input,offset,width);
+			offset += width;
+			y += step;
+		}
+		return offset;
+	}
+	,readExtension: function() {
+		var subId = this.i.readByte();
+		switch(subId) {
+		case 1:
+			if(this.i.readByte() != 12) {
+				throw new js__$Boot_HaxeError("Incorrect size of Plain Text Extension introducer block.");
+			}
+			var tmp = this.i.readUInt16();
+			var tmp1 = this.i.readUInt16();
+			var tmp2 = this.i.readUInt16();
+			var tmp3 = this.i.readUInt16();
+			var tmp4 = this.i.readByte();
+			var tmp5 = this.i.readByte();
+			var tmp6 = this.i.readByte();
+			var tmp7 = this.i.readByte();
+			var buffer = new haxe_io_BytesOutput();
+			var bytes = new haxe_io_Bytes(new ArrayBuffer(255));
+			var len = this.i.readByte();
+			while(len != 0) {
+				this.i.readBytes(bytes,0,len);
+				buffer.writeBytes(bytes,0,len);
+				len = this.i.readByte();
+			}
+			buffer.flush();
+			bytes = buffer.getBytes();
+			buffer.close();
+			return format_gif_Block.BExtension(format_gif_Extension.EText({ textGridX : tmp, textGridY : tmp1, textGridWidth : tmp2, textGridHeight : tmp3, charCellWidth : tmp4, charCellHeight : tmp5, textForegroundColorIndex : tmp6, textBackgroundColorIndex : tmp7, text : bytes.toString()}));
+		case 249:
+			if(this.i.readByte() != 4) {
+				throw new js__$Boot_HaxeError("Incorrect Graphic Control Extension block size!");
+			}
+			var packed = this.i.readByte();
+			var disposalMethod;
+			var _g = (packed & 28) >> 2;
+			switch(_g) {
+			case 0:
+				disposalMethod = format_gif_DisposalMethod.UNSPECIFIED;
+				break;
+			case 1:
+				disposalMethod = format_gif_DisposalMethod.NO_ACTION;
+				break;
+			case 2:
+				disposalMethod = format_gif_DisposalMethod.FILL_BACKGROUND;
+				break;
+			case 3:
+				disposalMethod = format_gif_DisposalMethod.RENDER_PREVIOUS;
+				break;
+			default:
+				disposalMethod = format_gif_DisposalMethod.UNDEFINED((packed & 28) >> 2);
+			}
+			var b = format_gif_Block.BExtension(format_gif_Extension.EGraphicControl({ disposalMethod : disposalMethod, userInput : (packed & 2) == 2, hasTransparentColor : (packed & 1) == 1, delay : this.i.readUInt16(), transparentIndex : this.i.readByte()}));
+			this.i.readByte();
+			return b;
+		case 254:
+			var buffer1 = new haxe_io_BytesOutput();
+			var bytes1 = new haxe_io_Bytes(new ArrayBuffer(255));
+			var len1 = this.i.readByte();
+			while(len1 != 0) {
+				this.i.readBytes(bytes1,0,len1);
+				buffer1.writeBytes(bytes1,0,len1);
+				len1 = this.i.readByte();
+			}
+			buffer1.flush();
+			bytes1 = buffer1.getBytes();
+			buffer1.close();
+			return format_gif_Block.BExtension(format_gif_Extension.EComment(bytes1.toString()));
+		case 255:
+			return this.readApplicationExtension();
+		default:
+			var buffer2 = new haxe_io_BytesOutput();
+			var bytes2 = new haxe_io_Bytes(new ArrayBuffer(255));
+			var len2 = this.i.readByte();
+			while(len2 != 0) {
+				this.i.readBytes(bytes2,0,len2);
+				buffer2.writeBytes(bytes2,0,len2);
+				len2 = this.i.readByte();
+			}
+			buffer2.flush();
+			bytes2 = buffer2.getBytes();
+			buffer2.close();
+			return format_gif_Block.BExtension(format_gif_Extension.EUnknown(subId,bytes2));
+		}
+	}
+	,readApplicationExtension: function() {
+		if(this.i.readByte() != 11) {
+			throw new js__$Boot_HaxeError("Incorrect size of Application Extension introducer block.");
+		}
+		var name = this.i.readString(8);
+		var version = this.i.readString(3);
+		var buffer = new haxe_io_BytesOutput();
+		var bytes = new haxe_io_Bytes(new ArrayBuffer(255));
+		var len = this.i.readByte();
+		while(len != 0) {
+			this.i.readBytes(bytes,0,len);
+			buffer.writeBytes(bytes,0,len);
+			len = this.i.readByte();
+		}
+		buffer.flush();
+		bytes = buffer.getBytes();
+		buffer.close();
+		var data = bytes;
+		if(name == "NETSCAPE" && version == "2.0" && data.b[0] == 1) {
+			return format_gif_Block.BExtension(format_gif_Extension.EApplicationExtension(format_gif_ApplicationExtension.AENetscapeLooping(data.b[1] | data.b[2] << 8)));
+		}
+		return format_gif_Block.BExtension(format_gif_Extension.EApplicationExtension(format_gif_ApplicationExtension.AEUnknown(name,version,data)));
+	}
+	,readBlocks: function() {
+		var buffer = new haxe_io_BytesOutput();
+		var bytes = new haxe_io_Bytes(new ArrayBuffer(255));
+		var len = this.i.readByte();
+		while(len != 0) {
+			this.i.readBytes(bytes,0,len);
+			buffer.writeBytes(bytes,0,len);
+			len = this.i.readByte();
+		}
+		buffer.flush();
+		bytes = buffer.getBytes();
+		buffer.close();
+		return bytes;
+	}
+	,readColorTable: function(size) {
+		size *= 3;
+		var output = new haxe_io_Bytes(new ArrayBuffer(size));
+		var c = 0;
+		while(c < size) {
+			var v = this.i.readByte();
+			output.b[c] = v & 255;
+			var v1 = this.i.readByte();
+			output.b[c + 1] = v1 & 255;
+			var v2 = this.i.readByte();
+			output.b[c + 2] = v2 & 255;
+			c += 3;
+		}
+		return output;
+	}
+	,__class__: format_gif_Reader
+};
+var format_gif_Tools = function() { };
+$hxClasses["format.gif.Tools"] = format_gif_Tools;
+format_gif_Tools.__name__ = ["format","gif","Tools"];
+format_gif_Tools.framesCount = function(data) {
+	var frames = 0;
+	var _g_head = data.blocks.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var block = val;
+		if(block[1] == 0) {
+			++frames;
+		}
+	}
+	return frames;
+};
+format_gif_Tools.frame = function(data,frameIndex) {
+	var counter = 0;
+	var _g_head = data.blocks.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var block = val;
+		if(block[1] == 0) {
+			var frame = block[2];
+			if(counter == frameIndex) {
+				return frame;
+			}
+			++counter;
+		}
+	}
+	return null;
+};
+format_gif_Tools.graphicControl = function(data,frameIndex) {
+	var counter = 0;
+	var gce = null;
+	var _g_head = data.blocks.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var block = val;
+		switch(block[1]) {
+		case 0:
+			var frame = block[2];
+			if(counter == frameIndex) {
+				return gce;
+			}
+			gce = null;
+			++counter;
+			break;
+		case 1:
+			if(block[2][1] == 0) {
+				var g = block[2][2];
+				gce = g;
+			}
+			break;
+		default:
+		}
+	}
+	return null;
+};
+format_gif_Tools.extractBGRA = function(data,frameIndex) {
+	var gce = null;
+	var frameCaret = 0;
+	var _g_head = data.blocks.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var block = val;
+		switch(block[1]) {
+		case 0:
+			var frame = block[2];
+			if(frameCaret == frameIndex) {
+				var bytes = new haxe_io_Bytes(new ArrayBuffer(frame.width * frame.height * 4));
+				var ct = frame.localColorTable ? frame.colorTable : data.globalColorTable;
+				if(ct == null) {
+					throw new js__$Boot_HaxeError("Frame does not have a color table!");
+				}
+				var transparentIndex = gce != null && gce.hasTransparentColor ? gce.transparentIndex * 3 : -1;
+				var writeCaret = 0;
+				var _g1 = 0;
+				var _g = frame.pixels.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					var index = frame.pixels.b[i] * 3;
+					bytes.b[writeCaret] = ct.b[index + 2] & 255;
+					bytes.b[writeCaret + 1] = ct.b[index + 1] & 255;
+					bytes.b[writeCaret + 2] = ct.b[index] & 255;
+					if(transparentIndex == index) {
+						bytes.b[writeCaret + 3] = 0;
+					} else {
+						bytes.b[writeCaret + 3] = 255;
+					}
+					writeCaret += 4;
+				}
+				return bytes;
+			}
+			++frameCaret;
+			gce = null;
+			break;
+		case 1:
+			var ext = block[2];
+			if(ext[1] == 0) {
+				var g = ext[2];
+				gce = g;
+			}
+			break;
+		default:
+		}
+	}
+	return null;
+};
+format_gif_Tools.extractRGBA = function(data,frameIndex) {
+	var gce = null;
+	var frameCaret = 0;
+	var _g_head = data.blocks.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var block = val;
+		switch(block[1]) {
+		case 0:
+			var frame = block[2];
+			if(frameCaret == frameIndex) {
+				var bytes = new haxe_io_Bytes(new ArrayBuffer(frame.width * frame.height * 4));
+				var ct = frame.localColorTable ? frame.colorTable : data.globalColorTable;
+				if(ct == null) {
+					throw new js__$Boot_HaxeError("Frame does not have a color table!");
+				}
+				var transparentIndex = gce != null && gce.hasTransparentColor ? gce.transparentIndex * 3 : -1;
+				var writeCaret = 0;
+				var _g1 = 0;
+				var _g = frame.pixels.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					var index = frame.pixels.b[i] * 3;
+					bytes.b[writeCaret] = ct.b[index] & 255;
+					bytes.b[writeCaret + 1] = ct.b[index + 1] & 255;
+					bytes.b[writeCaret + 2] = ct.b[index + 2] & 255;
+					if(transparentIndex == index) {
+						bytes.b[writeCaret + 3] = 0;
+					} else {
+						bytes.b[writeCaret + 3] = 255;
+					}
+					writeCaret += 4;
+				}
+				return bytes;
+			}
+			++frameCaret;
+			gce = null;
+			break;
+		case 1:
+			var ext = block[2];
+			if(ext[1] == 0) {
+				var g = ext[2];
+				gce = g;
+			}
+			break;
+		default:
+		}
+	}
+	return null;
+};
+format_gif_Tools.extractFullBGRA = function(data,frameIndex) {
+	var gce = null;
+	var frameCaret = 0;
+	var bytes = new haxe_io_Bytes(new ArrayBuffer(data.logicalScreenDescriptor.width * data.logicalScreenDescriptor.height * 4));
+	var _g_head = data.blocks.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var block = val;
+		switch(block[1]) {
+		case 0:
+			var frame = block[2];
+			var ct = frame.localColorTable ? frame.colorTable : data.globalColorTable;
+			if(ct == null) {
+				throw new js__$Boot_HaxeError("Frame does not have a color table!");
+			}
+			var transparentIndex = gce != null && gce.hasTransparentColor ? gce.transparentIndex * 3 : -1;
+			var pixels = frame.pixels;
+			var x = 0;
+			var writeCaret = (frame.y * data.logicalScreenDescriptor.width + frame.x) * 4;
+			var lineSkip = (data.logicalScreenDescriptor.width - frame.width) * 4 + 4;
+			var disposalMethod = frameCaret != frameIndex && gce != null ? gce.disposalMethod : format_gif_DisposalMethod.NO_ACTION;
+			switch(disposalMethod[1]) {
+			case 2:
+				var _g1 = 0;
+				var _g = pixels.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					bytes.b[writeCaret] = 0;
+					bytes.b[writeCaret + 1] = 0;
+					bytes.b[writeCaret + 2] = 0;
+					bytes.b[writeCaret + 3] = 0;
+					if(++x == frame.width) {
+						x = 0;
+						writeCaret += lineSkip;
+					} else {
+						writeCaret += 4;
+					}
+				}
+				break;
+			case 3:
+				break;
+			default:
+				var _g11 = 0;
+				var _g2 = pixels.length;
+				while(_g11 < _g2) {
+					var i1 = _g11++;
+					var index = pixels.b[i1] * 3;
+					if(transparentIndex != index) {
+						bytes.b[writeCaret] = ct.b[index + 2] & 255;
+						bytes.b[writeCaret + 1] = ct.b[index + 1] & 255;
+						bytes.b[writeCaret + 2] = ct.b[index] & 255;
+						bytes.b[writeCaret + 3] = 255;
+					}
+					if(++x == frame.width) {
+						x = 0;
+						writeCaret += lineSkip;
+					} else {
+						writeCaret += 4;
+					}
+				}
+			}
+			if(frameCaret == frameIndex) {
+				return bytes;
+			}
+			++frameCaret;
+			gce = null;
+			break;
+		case 1:
+			var ext = block[2];
+			if(ext[1] == 0) {
+				var g = ext[2];
+				gce = g;
+			}
+			break;
+		default:
+		}
+	}
+	return bytes;
+};
+format_gif_Tools.extractFullRGBA = function(data,frameIndex) {
+	var gce = null;
+	var frameCaret = 0;
+	var bytes = new haxe_io_Bytes(new ArrayBuffer(data.logicalScreenDescriptor.width * data.logicalScreenDescriptor.height * 4));
+	var _g_head = data.blocks.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var block = val;
+		switch(block[1]) {
+		case 0:
+			var frame = block[2];
+			var ct = frame.localColorTable ? frame.colorTable : data.globalColorTable;
+			if(ct == null) {
+				throw new js__$Boot_HaxeError("Frame does not have a color table!");
+			}
+			var transparentIndex = gce != null && gce.hasTransparentColor ? gce.transparentIndex * 3 : -1;
+			var pixels = frame.pixels;
+			var x = 0;
+			var writeCaret = (frame.y * data.logicalScreenDescriptor.width + frame.x) * 4;
+			var lineSkip = (data.logicalScreenDescriptor.width - frame.width) * 4 + 4;
+			var disposalMethod = frameCaret != frameIndex && gce != null ? gce.disposalMethod : format_gif_DisposalMethod.NO_ACTION;
+			switch(disposalMethod[1]) {
+			case 2:
+				var _g1 = 0;
+				var _g = pixels.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					bytes.b[writeCaret] = 0;
+					bytes.b[writeCaret + 1] = 0;
+					bytes.b[writeCaret + 2] = 0;
+					bytes.b[writeCaret + 3] = 0;
+					if(++x == frame.width) {
+						x = 0;
+						writeCaret += lineSkip;
+					} else {
+						writeCaret += 4;
+					}
+				}
+				break;
+			case 3:
+				break;
+			default:
+				var _g11 = 0;
+				var _g2 = pixels.length;
+				while(_g11 < _g2) {
+					var i1 = _g11++;
+					var index = pixels.b[i1] * 3;
+					if(transparentIndex != index) {
+						bytes.b[writeCaret] = ct.b[index] & 255;
+						bytes.b[writeCaret + 1] = ct.b[index + 1] & 255;
+						bytes.b[writeCaret + 2] = ct.b[index + 2] & 255;
+						bytes.b[writeCaret + 3] = 255;
+					}
+					if(++x == frame.width) {
+						x = 0;
+						writeCaret += lineSkip;
+					} else {
+						writeCaret += 4;
+					}
+				}
+			}
+			if(frameCaret == frameIndex) {
+				return bytes;
+			}
+			++frameCaret;
+			gce = null;
+			break;
+		case 1:
+			var ext = block[2];
+			if(ext[1] == 0) {
+				var g = ext[2];
+				gce = g;
+			}
+			break;
+		default:
+		}
+	}
+	return bytes;
+};
+format_gif_Tools.loopCount = function(data) {
+	var _g_head = data.blocks.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var block = val;
+		if(block[1] == 1) {
+			if(block[2][1] == 3) {
+				if(block[2][2][1] == 0) {
+					var loops = block[2][2][2];
+					return loops;
+				}
+			}
+		}
+	}
+	return 1;
+};
+format_gif_Tools.log2 = function(val) {
+	return Math.log(val) / format_gif_Tools.LN2;
+};
+var format_mp3_SamplingRate = $hxClasses["format.mp3.SamplingRate"] = { __ename__ : ["format","mp3","SamplingRate"], __constructs__ : ["SR_8000","SR_11025","SR_12000","SR_22050","SR_24000","SR_32000","SR_44100","SR_48000","SR_Bad"] };
+format_mp3_SamplingRate.SR_8000 = ["SR_8000",0];
+format_mp3_SamplingRate.SR_8000.toString = $estr;
+format_mp3_SamplingRate.SR_8000.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.SR_11025 = ["SR_11025",1];
+format_mp3_SamplingRate.SR_11025.toString = $estr;
+format_mp3_SamplingRate.SR_11025.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.SR_12000 = ["SR_12000",2];
+format_mp3_SamplingRate.SR_12000.toString = $estr;
+format_mp3_SamplingRate.SR_12000.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.SR_22050 = ["SR_22050",3];
+format_mp3_SamplingRate.SR_22050.toString = $estr;
+format_mp3_SamplingRate.SR_22050.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.SR_24000 = ["SR_24000",4];
+format_mp3_SamplingRate.SR_24000.toString = $estr;
+format_mp3_SamplingRate.SR_24000.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.SR_32000 = ["SR_32000",5];
+format_mp3_SamplingRate.SR_32000.toString = $estr;
+format_mp3_SamplingRate.SR_32000.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.SR_44100 = ["SR_44100",6];
+format_mp3_SamplingRate.SR_44100.toString = $estr;
+format_mp3_SamplingRate.SR_44100.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.SR_48000 = ["SR_48000",7];
+format_mp3_SamplingRate.SR_48000.toString = $estr;
+format_mp3_SamplingRate.SR_48000.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.SR_Bad = ["SR_Bad",8];
+format_mp3_SamplingRate.SR_Bad.toString = $estr;
+format_mp3_SamplingRate.SR_Bad.__enum__ = format_mp3_SamplingRate;
+format_mp3_SamplingRate.__empty_constructs__ = [format_mp3_SamplingRate.SR_8000,format_mp3_SamplingRate.SR_11025,format_mp3_SamplingRate.SR_12000,format_mp3_SamplingRate.SR_22050,format_mp3_SamplingRate.SR_24000,format_mp3_SamplingRate.SR_32000,format_mp3_SamplingRate.SR_44100,format_mp3_SamplingRate.SR_48000,format_mp3_SamplingRate.SR_Bad];
+var format_mp3_Bitrate = $hxClasses["format.mp3.Bitrate"] = { __ename__ : ["format","mp3","Bitrate"], __constructs__ : ["BR_8","BR_16","BR_24","BR_32","BR_40","BR_48","BR_56","BR_64","BR_80","BR_96","BR_112","BR_128","BR_144","BR_160","BR_176","BR_192","BR_224","BR_256","BR_288","BR_320","BR_352","BR_384","BR_416","BR_448","BR_Free","BR_Bad"] };
+format_mp3_Bitrate.BR_8 = ["BR_8",0];
+format_mp3_Bitrate.BR_8.toString = $estr;
+format_mp3_Bitrate.BR_8.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_16 = ["BR_16",1];
+format_mp3_Bitrate.BR_16.toString = $estr;
+format_mp3_Bitrate.BR_16.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_24 = ["BR_24",2];
+format_mp3_Bitrate.BR_24.toString = $estr;
+format_mp3_Bitrate.BR_24.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_32 = ["BR_32",3];
+format_mp3_Bitrate.BR_32.toString = $estr;
+format_mp3_Bitrate.BR_32.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_40 = ["BR_40",4];
+format_mp3_Bitrate.BR_40.toString = $estr;
+format_mp3_Bitrate.BR_40.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_48 = ["BR_48",5];
+format_mp3_Bitrate.BR_48.toString = $estr;
+format_mp3_Bitrate.BR_48.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_56 = ["BR_56",6];
+format_mp3_Bitrate.BR_56.toString = $estr;
+format_mp3_Bitrate.BR_56.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_64 = ["BR_64",7];
+format_mp3_Bitrate.BR_64.toString = $estr;
+format_mp3_Bitrate.BR_64.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_80 = ["BR_80",8];
+format_mp3_Bitrate.BR_80.toString = $estr;
+format_mp3_Bitrate.BR_80.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_96 = ["BR_96",9];
+format_mp3_Bitrate.BR_96.toString = $estr;
+format_mp3_Bitrate.BR_96.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_112 = ["BR_112",10];
+format_mp3_Bitrate.BR_112.toString = $estr;
+format_mp3_Bitrate.BR_112.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_128 = ["BR_128",11];
+format_mp3_Bitrate.BR_128.toString = $estr;
+format_mp3_Bitrate.BR_128.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_144 = ["BR_144",12];
+format_mp3_Bitrate.BR_144.toString = $estr;
+format_mp3_Bitrate.BR_144.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_160 = ["BR_160",13];
+format_mp3_Bitrate.BR_160.toString = $estr;
+format_mp3_Bitrate.BR_160.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_176 = ["BR_176",14];
+format_mp3_Bitrate.BR_176.toString = $estr;
+format_mp3_Bitrate.BR_176.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_192 = ["BR_192",15];
+format_mp3_Bitrate.BR_192.toString = $estr;
+format_mp3_Bitrate.BR_192.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_224 = ["BR_224",16];
+format_mp3_Bitrate.BR_224.toString = $estr;
+format_mp3_Bitrate.BR_224.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_256 = ["BR_256",17];
+format_mp3_Bitrate.BR_256.toString = $estr;
+format_mp3_Bitrate.BR_256.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_288 = ["BR_288",18];
+format_mp3_Bitrate.BR_288.toString = $estr;
+format_mp3_Bitrate.BR_288.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_320 = ["BR_320",19];
+format_mp3_Bitrate.BR_320.toString = $estr;
+format_mp3_Bitrate.BR_320.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_352 = ["BR_352",20];
+format_mp3_Bitrate.BR_352.toString = $estr;
+format_mp3_Bitrate.BR_352.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_384 = ["BR_384",21];
+format_mp3_Bitrate.BR_384.toString = $estr;
+format_mp3_Bitrate.BR_384.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_416 = ["BR_416",22];
+format_mp3_Bitrate.BR_416.toString = $estr;
+format_mp3_Bitrate.BR_416.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_448 = ["BR_448",23];
+format_mp3_Bitrate.BR_448.toString = $estr;
+format_mp3_Bitrate.BR_448.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_Free = ["BR_Free",24];
+format_mp3_Bitrate.BR_Free.toString = $estr;
+format_mp3_Bitrate.BR_Free.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.BR_Bad = ["BR_Bad",25];
+format_mp3_Bitrate.BR_Bad.toString = $estr;
+format_mp3_Bitrate.BR_Bad.__enum__ = format_mp3_Bitrate;
+format_mp3_Bitrate.__empty_constructs__ = [format_mp3_Bitrate.BR_8,format_mp3_Bitrate.BR_16,format_mp3_Bitrate.BR_24,format_mp3_Bitrate.BR_32,format_mp3_Bitrate.BR_40,format_mp3_Bitrate.BR_48,format_mp3_Bitrate.BR_56,format_mp3_Bitrate.BR_64,format_mp3_Bitrate.BR_80,format_mp3_Bitrate.BR_96,format_mp3_Bitrate.BR_112,format_mp3_Bitrate.BR_128,format_mp3_Bitrate.BR_144,format_mp3_Bitrate.BR_160,format_mp3_Bitrate.BR_176,format_mp3_Bitrate.BR_192,format_mp3_Bitrate.BR_224,format_mp3_Bitrate.BR_256,format_mp3_Bitrate.BR_288,format_mp3_Bitrate.BR_320,format_mp3_Bitrate.BR_352,format_mp3_Bitrate.BR_384,format_mp3_Bitrate.BR_416,format_mp3_Bitrate.BR_448,format_mp3_Bitrate.BR_Free,format_mp3_Bitrate.BR_Bad];
+var format_mp3_MPEG = function() { };
+$hxClasses["format.mp3.MPEG"] = format_mp3_MPEG;
+format_mp3_MPEG.__name__ = ["format","mp3","MPEG"];
+format_mp3_MPEG.enum2Num = function(m) {
+	switch(m[1]) {
+	case 0:
+		return 3;
+	case 1:
+		return 2;
+	case 2:
+		return 0;
+	case 3:
+		return format_mp3_MPEG.Reserved;
+	}
+};
+format_mp3_MPEG.num2Enum = function(m) {
+	switch(m) {
+	case 0:
+		return format_mp3_MPEGVersion.MPEG_V25;
+	case 2:
+		return format_mp3_MPEGVersion.MPEG_V2;
+	case 3:
+		return format_mp3_MPEGVersion.MPEG_V1;
+	default:
+		return format_mp3_MPEGVersion.MPEG_Reserved;
+	}
+};
+format_mp3_MPEG.srNum2Enum = function(sr) {
+	switch(sr) {
+	case 8000:
+		return format_mp3_SamplingRate.SR_8000;
+	case 11025:
+		return format_mp3_SamplingRate.SR_11025;
+	case 12000:
+		return format_mp3_SamplingRate.SR_12000;
+	case 22050:
+		return format_mp3_SamplingRate.SR_22050;
+	case 24000:
+		return format_mp3_SamplingRate.SR_24000;
+	case 32000:
+		return format_mp3_SamplingRate.SR_32000;
+	case 44100:
+		return format_mp3_SamplingRate.SR_44100;
+	case 48000:
+		return format_mp3_SamplingRate.SR_48000;
+	default:
+		return format_mp3_SamplingRate.SR_Bad;
+	}
+};
+format_mp3_MPEG.srEnum2Num = function(sr) {
+	switch(sr[1]) {
+	case 0:
+		return 8000;
+	case 1:
+		return 11025;
+	case 2:
+		return 12000;
+	case 3:
+		return 22050;
+	case 4:
+		return 24000;
+	case 5:
+		return 32000;
+	case 6:
+		return 44100;
+	case 7:
+		return 48000;
+	case 8:
+		return -1;
+	}
+};
+format_mp3_MPEG.getBitrateIdx = function(br,mpeg,layer) {
+	var arr = (mpeg == format_mp3_MPEGVersion.MPEG_V1 ? format_mp3_MPEG.V1_Bitrates : format_mp3_MPEG.V2_Bitrates)[format_mp3_CLayer.enum2Num(layer)];
+	var _g = 0;
+	while(_g < 16) {
+		var i = _g++;
+		if(arr[i] == br) {
+			return i;
+		}
+	}
+	throw new js__$Boot_HaxeError("Bitrate index not found");
+};
+format_mp3_MPEG.getSamplingRateIdx = function(sr,mpeg) {
+	var arr = format_mp3_MPEG.SamplingRates[format_mp3_MPEG.enum2Num(mpeg)];
+	var _g = 0;
+	while(_g < 4) {
+		var i = _g++;
+		if(arr[i] == sr) {
+			return i;
+		}
+	}
+	throw new js__$Boot_HaxeError("Sampling rate index not found");
+};
+format_mp3_MPEG.bitrateEnum2Num = function(br) {
+	switch(br[1]) {
+	case 0:
+		return 8;
+	case 1:
+		return 16;
+	case 2:
+		return 24;
+	case 3:
+		return 32;
+	case 4:
+		return 40;
+	case 5:
+		return 48;
+	case 6:
+		return 56;
+	case 7:
+		return 64;
+	case 8:
+		return 80;
+	case 9:
+		return 96;
+	case 10:
+		return 112;
+	case 11:
+		return 128;
+	case 12:
+		return 144;
+	case 13:
+		return 160;
+	case 14:
+		return 176;
+	case 15:
+		return 192;
+	case 16:
+		return 224;
+	case 17:
+		return 256;
+	case 18:
+		return 288;
+	case 19:
+		return 320;
+	case 20:
+		return 352;
+	case 21:
+		return 384;
+	case 22:
+		return 416;
+	case 23:
+		return 448;
+	case 24:
+		return 0;
+	case 25:
+		return -1;
+	}
+};
+format_mp3_MPEG.bitrateNum2Enum = function(br) {
+	switch(br) {
+	case 0:
+		return format_mp3_Bitrate.BR_Free;
+	case 8:
+		return format_mp3_Bitrate.BR_8;
+	case 16:
+		return format_mp3_Bitrate.BR_16;
+	case 24:
+		return format_mp3_Bitrate.BR_24;
+	case 32:
+		return format_mp3_Bitrate.BR_32;
+	case 40:
+		return format_mp3_Bitrate.BR_40;
+	case 48:
+		return format_mp3_Bitrate.BR_48;
+	case 56:
+		return format_mp3_Bitrate.BR_56;
+	case 64:
+		return format_mp3_Bitrate.BR_64;
+	case 80:
+		return format_mp3_Bitrate.BR_80;
+	case 96:
+		return format_mp3_Bitrate.BR_96;
+	case 112:
+		return format_mp3_Bitrate.BR_112;
+	case 128:
+		return format_mp3_Bitrate.BR_128;
+	case 144:
+		return format_mp3_Bitrate.BR_144;
+	case 160:
+		return format_mp3_Bitrate.BR_160;
+	case 176:
+		return format_mp3_Bitrate.BR_176;
+	case 192:
+		return format_mp3_Bitrate.BR_192;
+	case 224:
+		return format_mp3_Bitrate.BR_224;
+	case 256:
+		return format_mp3_Bitrate.BR_256;
+	case 288:
+		return format_mp3_Bitrate.BR_288;
+	case 320:
+		return format_mp3_Bitrate.BR_320;
+	case 352:
+		return format_mp3_Bitrate.BR_352;
+	case 384:
+		return format_mp3_Bitrate.BR_384;
+	case 416:
+		return format_mp3_Bitrate.BR_416;
+	case 448:
+		return format_mp3_Bitrate.BR_448;
+	default:
+		return format_mp3_Bitrate.BR_Bad;
+	}
+};
+var format_mp3_CLayer = function() { };
+$hxClasses["format.mp3.CLayer"] = format_mp3_CLayer;
+format_mp3_CLayer.__name__ = ["format","mp3","CLayer"];
+format_mp3_CLayer.enum2Num = function(l) {
+	switch(l[1]) {
+	case 0:
+		return format_mp3_CLayer.LReserved;
+	case 1:
+		return format_mp3_CLayer.LLayer3;
+	case 2:
+		return format_mp3_CLayer.LLayer2;
+	case 3:
+		return format_mp3_CLayer.LLayer1;
+	}
+};
+format_mp3_CLayer.num2Enum = function(l) {
+	switch(l) {
+	case 1:
+		return format_mp3_Layer.Layer3;
+	case 2:
+		return format_mp3_Layer.Layer2;
+	case 3:
+		return format_mp3_Layer.Layer1;
+	default:
+		return format_mp3_Layer.LayerReserved;
+	}
+};
+var format_mp3_CChannelMode = function() { };
+$hxClasses["format.mp3.CChannelMode"] = format_mp3_CChannelMode;
+format_mp3_CChannelMode.__name__ = ["format","mp3","CChannelMode"];
+format_mp3_CChannelMode.enum2Num = function(c) {
+	switch(c[1]) {
+	case 0:
+		return 0;
+	case 1:
+		return 1;
+	case 2:
+		return 2;
+	case 3:
+		return 3;
+	}
+};
+format_mp3_CChannelMode.num2Enum = function(c) {
+	switch(c) {
+	case 0:
+		return format_mp3_ChannelMode.Stereo;
+	case 1:
+		return format_mp3_ChannelMode.JointStereo;
+	case 2:
+		return format_mp3_ChannelMode.DualChannel;
+	case 3:
+		return format_mp3_ChannelMode.Mono;
+	default:
+		throw new js__$Boot_HaxeError("assert");
+	}
+};
+var format_mp3_CEmphasis = function() { };
+$hxClasses["format.mp3.CEmphasis"] = format_mp3_CEmphasis;
+format_mp3_CEmphasis.__name__ = ["format","mp3","CEmphasis"];
+format_mp3_CEmphasis.enum2Num = function(c) {
+	switch(c[1]) {
+	case 0:
+		return 0;
+	case 1:
+		return 1;
+	case 2:
+		return 3;
+	case 3:
+		return 2;
+	}
+};
+format_mp3_CEmphasis.num2Enum = function(c) {
+	switch(c) {
+	case 0:
+		return format_mp3_Emphasis.NoEmphasis;
+	case 1:
+		return format_mp3_Emphasis.Ms50_15;
+	case 2:
+		return format_mp3_Emphasis.InvalidEmphasis;
+	case 3:
+		return format_mp3_Emphasis.CCIT_J17;
+	default:
+		throw new js__$Boot_HaxeError("assert");
+	}
+};
+var format_mp3_MPEGVersion = $hxClasses["format.mp3.MPEGVersion"] = { __ename__ : ["format","mp3","MPEGVersion"], __constructs__ : ["MPEG_V1","MPEG_V2","MPEG_V25","MPEG_Reserved"] };
+format_mp3_MPEGVersion.MPEG_V1 = ["MPEG_V1",0];
+format_mp3_MPEGVersion.MPEG_V1.toString = $estr;
+format_mp3_MPEGVersion.MPEG_V1.__enum__ = format_mp3_MPEGVersion;
+format_mp3_MPEGVersion.MPEG_V2 = ["MPEG_V2",1];
+format_mp3_MPEGVersion.MPEG_V2.toString = $estr;
+format_mp3_MPEGVersion.MPEG_V2.__enum__ = format_mp3_MPEGVersion;
+format_mp3_MPEGVersion.MPEG_V25 = ["MPEG_V25",2];
+format_mp3_MPEGVersion.MPEG_V25.toString = $estr;
+format_mp3_MPEGVersion.MPEG_V25.__enum__ = format_mp3_MPEGVersion;
+format_mp3_MPEGVersion.MPEG_Reserved = ["MPEG_Reserved",3];
+format_mp3_MPEGVersion.MPEG_Reserved.toString = $estr;
+format_mp3_MPEGVersion.MPEG_Reserved.__enum__ = format_mp3_MPEGVersion;
+format_mp3_MPEGVersion.__empty_constructs__ = [format_mp3_MPEGVersion.MPEG_V1,format_mp3_MPEGVersion.MPEG_V2,format_mp3_MPEGVersion.MPEG_V25,format_mp3_MPEGVersion.MPEG_Reserved];
+var format_mp3_Layer = $hxClasses["format.mp3.Layer"] = { __ename__ : ["format","mp3","Layer"], __constructs__ : ["LayerReserved","Layer3","Layer2","Layer1"] };
+format_mp3_Layer.LayerReserved = ["LayerReserved",0];
+format_mp3_Layer.LayerReserved.toString = $estr;
+format_mp3_Layer.LayerReserved.__enum__ = format_mp3_Layer;
+format_mp3_Layer.Layer3 = ["Layer3",1];
+format_mp3_Layer.Layer3.toString = $estr;
+format_mp3_Layer.Layer3.__enum__ = format_mp3_Layer;
+format_mp3_Layer.Layer2 = ["Layer2",2];
+format_mp3_Layer.Layer2.toString = $estr;
+format_mp3_Layer.Layer2.__enum__ = format_mp3_Layer;
+format_mp3_Layer.Layer1 = ["Layer1",3];
+format_mp3_Layer.Layer1.toString = $estr;
+format_mp3_Layer.Layer1.__enum__ = format_mp3_Layer;
+format_mp3_Layer.__empty_constructs__ = [format_mp3_Layer.LayerReserved,format_mp3_Layer.Layer3,format_mp3_Layer.Layer2,format_mp3_Layer.Layer1];
+var format_mp3_ChannelMode = $hxClasses["format.mp3.ChannelMode"] = { __ename__ : ["format","mp3","ChannelMode"], __constructs__ : ["Stereo","JointStereo","DualChannel","Mono"] };
+format_mp3_ChannelMode.Stereo = ["Stereo",0];
+format_mp3_ChannelMode.Stereo.toString = $estr;
+format_mp3_ChannelMode.Stereo.__enum__ = format_mp3_ChannelMode;
+format_mp3_ChannelMode.JointStereo = ["JointStereo",1];
+format_mp3_ChannelMode.JointStereo.toString = $estr;
+format_mp3_ChannelMode.JointStereo.__enum__ = format_mp3_ChannelMode;
+format_mp3_ChannelMode.DualChannel = ["DualChannel",2];
+format_mp3_ChannelMode.DualChannel.toString = $estr;
+format_mp3_ChannelMode.DualChannel.__enum__ = format_mp3_ChannelMode;
+format_mp3_ChannelMode.Mono = ["Mono",3];
+format_mp3_ChannelMode.Mono.toString = $estr;
+format_mp3_ChannelMode.Mono.__enum__ = format_mp3_ChannelMode;
+format_mp3_ChannelMode.__empty_constructs__ = [format_mp3_ChannelMode.Stereo,format_mp3_ChannelMode.JointStereo,format_mp3_ChannelMode.DualChannel,format_mp3_ChannelMode.Mono];
+var format_mp3_Emphasis = $hxClasses["format.mp3.Emphasis"] = { __ename__ : ["format","mp3","Emphasis"], __constructs__ : ["NoEmphasis","Ms50_15","CCIT_J17","InvalidEmphasis"] };
+format_mp3_Emphasis.NoEmphasis = ["NoEmphasis",0];
+format_mp3_Emphasis.NoEmphasis.toString = $estr;
+format_mp3_Emphasis.NoEmphasis.__enum__ = format_mp3_Emphasis;
+format_mp3_Emphasis.Ms50_15 = ["Ms50_15",1];
+format_mp3_Emphasis.Ms50_15.toString = $estr;
+format_mp3_Emphasis.Ms50_15.__enum__ = format_mp3_Emphasis;
+format_mp3_Emphasis.CCIT_J17 = ["CCIT_J17",2];
+format_mp3_Emphasis.CCIT_J17.toString = $estr;
+format_mp3_Emphasis.CCIT_J17.__enum__ = format_mp3_Emphasis;
+format_mp3_Emphasis.InvalidEmphasis = ["InvalidEmphasis",3];
+format_mp3_Emphasis.InvalidEmphasis.toString = $estr;
+format_mp3_Emphasis.InvalidEmphasis.__enum__ = format_mp3_Emphasis;
+format_mp3_Emphasis.__empty_constructs__ = [format_mp3_Emphasis.NoEmphasis,format_mp3_Emphasis.Ms50_15,format_mp3_Emphasis.CCIT_J17,format_mp3_Emphasis.InvalidEmphasis];
+var format_mp3_FrameType = $hxClasses["format.mp3.FrameType"] = { __ename__ : ["format","mp3","FrameType"], __constructs__ : ["FT_MP3","FT_NONE"] };
+format_mp3_FrameType.FT_MP3 = ["FT_MP3",0];
+format_mp3_FrameType.FT_MP3.toString = $estr;
+format_mp3_FrameType.FT_MP3.__enum__ = format_mp3_FrameType;
+format_mp3_FrameType.FT_NONE = ["FT_NONE",1];
+format_mp3_FrameType.FT_NONE.toString = $estr;
+format_mp3_FrameType.FT_NONE.__enum__ = format_mp3_FrameType;
+format_mp3_FrameType.__empty_constructs__ = [format_mp3_FrameType.FT_MP3,format_mp3_FrameType.FT_NONE];
+var format_mp3_Reader = function(i) {
+	this.i = i;
+	i.set_bigEndian(true);
+	this.bits = new format_tools_BitsInput(i);
+	this.samples = 0;
+	this.sampleSize = 0;
+	this.any_read = false;
+};
+$hxClasses["format.mp3.Reader"] = format_mp3_Reader;
+format_mp3_Reader.__name__ = ["format","mp3","Reader"];
+format_mp3_Reader.prototype = {
+	skipID3v2: function() {
+		this.id3v2_version = this.i.readUInt16();
+		this.id3v2_flags = this.i.readByte();
+		var size = this.i.readByte() & 127;
+		size = size << 7 | this.i.readByte() & 127;
+		size = size << 7 | this.i.readByte() & 127;
+		size = size << 7 | this.i.readByte() & 127;
+		this.id3v2_data = this.i.read(size);
+	}
+	,seekFrame: function() {
+		var found = false;
+		try {
+			var b;
+			while(true) {
+				b = this.i.readByte();
+				if(!this.any_read) {
+					this.any_read = true;
+					if(b == 73) {
+						b = this.i.readByte();
+						if(b == 68) {
+							b = this.i.readByte();
+							if(b == 51) {
+								this.skipID3v2();
+							}
+						}
+					}
+				}
+				if(b == 255) {
+					this.bits.nbits = 0;
+					b = this.bits.readBits(3);
+					if(b == 7) {
+						return format_mp3_FrameType.FT_MP3;
+					}
+				}
+			}
+		} catch( ex ) {
+			if (ex instanceof js__$Boot_HaxeError) ex = ex.val;
+			if( js_Boot.__instanceof(ex,haxe_io_Eof) ) {
+				return format_mp3_FrameType.FT_NONE;
+			} else throw(ex);
+		}
+	}
+	,readFrames: function() {
+		var frames = [];
+		var ft;
+		while(true) {
+			ft = this.seekFrame();
+			if(!(ft != format_mp3_FrameType.FT_NONE)) {
+				break;
+			}
+			switch(ft[1]) {
+			case 0:
+				var f = this.readFrame();
+				if(f != null) {
+					frames.push(f);
+				}
+				break;
+			case 1:
+				break;
+			}
+		}
+		return frames;
+	}
+	,readFrameHeader: function() {
+		var version = this.bits.readBits(2);
+		var layer = this.bits.readBits(2);
+		var hasCrc = !this.bits.readBit();
+		if(version == format_mp3_MPEG.Reserved || layer == format_mp3_CLayer.LReserved) {
+			return null;
+		}
+		var bitrateIdx = this.bits.readBits(4);
+		var bitrate = format_mp3_Tools.getBitrate(version,layer,bitrateIdx);
+		var samplingRateIdx = this.bits.readBits(2);
+		var samplingRate = format_mp3_Tools.getSamplingRate(version,samplingRateIdx);
+		var isPadded = this.bits.readBit();
+		var privateBit = this.bits.readBit();
+		if(bitrate == format_mp3_Bitrate.BR_Bad || bitrate == format_mp3_Bitrate.BR_Free || samplingRate == format_mp3_SamplingRate.SR_Bad) {
+			return null;
+		}
+		var channelMode = this.bits.readBits(2);
+		var isIntensityStereo = this.bits.readBit();
+		var isMSStereo = this.bits.readBit();
+		var isCopyrighted = this.bits.readBit();
+		var isOriginal = this.bits.readBit();
+		var emphasis = this.bits.readBits(2);
+		var crc16 = 0;
+		if(hasCrc) {
+			crc16 = this.i.readUInt16();
+		}
+		return { version : format_mp3_MPEG.num2Enum(version), layer : format_mp3_CLayer.num2Enum(layer), hasCrc : hasCrc, crc16 : crc16, bitrate : bitrate, samplingRate : samplingRate, isPadded : isPadded, privateBit : privateBit, channelMode : format_mp3_CChannelMode.num2Enum(channelMode), isIntensityStereo : isIntensityStereo, isMSStereo : isMSStereo, isCopyrighted : isCopyrighted, isOriginal : isOriginal, emphasis : format_mp3_CEmphasis.num2Enum(emphasis)};
+	}
+	,readFrame: function() {
+		var header = this.readFrameHeader();
+		if(header == null || format_mp3_Tools.isInvalidFrameHeader(header)) {
+			return null;
+		}
+		try {
+			var data = this.i.read(format_mp3_Tools.getSampleDataSizeHdr(header));
+			this.samples += format_mp3_Tools.getSampleCountHdr(header);
+			this.sampleSize += data.length;
+			return { header : header, data : data};
+		} catch( e ) {
+			if (e instanceof js__$Boot_HaxeError) e = e.val;
+			if( js_Boot.__instanceof(e,haxe_io_Eof) ) {
+				return null;
+			} else throw(e);
+		}
+	}
+	,read: function() {
+		var fs = this.readFrames();
+		return { frames : fs, sampleCount : this.samples, sampleSize : this.sampleSize, id3v2 : this.id3v2_data == null ? null : { versionBytes : this.id3v2_version, flagByte : this.id3v2_flags, data : this.id3v2_data}};
+	}
+	,__class__: format_mp3_Reader
+};
+var format_mp3_Tools = function() { };
+$hxClasses["format.mp3.Tools"] = format_mp3_Tools;
+format_mp3_Tools.__name__ = ["format","mp3","Tools"];
+format_mp3_Tools.getBitrate = function(mpegVersion,layerIdx,bitrateIdx) {
+	if(mpegVersion == format_mp3_MPEG.Reserved || layerIdx == format_mp3_CLayer.LReserved) {
+		return format_mp3_Bitrate.BR_Bad;
+	}
+	return (mpegVersion == 3 ? format_mp3_MPEG.V1_Bitrates : format_mp3_MPEG.V2_Bitrates)[layerIdx][bitrateIdx];
+};
+format_mp3_Tools.getSamplingRate = function(mpegVersion,samplingRateIdx) {
+	return format_mp3_MPEG.SamplingRates[mpegVersion][samplingRateIdx];
+};
+format_mp3_Tools.isInvalidFrameHeader = function(hdr) {
+	if(!(hdr.version == format_mp3_MPEGVersion.MPEG_Reserved || hdr.layer == format_mp3_Layer.LayerReserved || hdr.bitrate == format_mp3_Bitrate.BR_Bad || hdr.bitrate == format_mp3_Bitrate.BR_Free)) {
+		return hdr.samplingRate == format_mp3_SamplingRate.SR_Bad;
+	} else {
+		return true;
+	}
+};
+format_mp3_Tools.getSampleDataSize = function(mpegVersion,bitrate,samplingRate,isPadded,hasCrc) {
+	return ((mpegVersion == 3 ? 144 : 72) * bitrate * 1000 / samplingRate | 0) + (isPadded ? 1 : 0) - (hasCrc ? 2 : 0) - 4;
+};
+format_mp3_Tools.getSampleDataSizeHdr = function(hdr) {
+	return format_mp3_Tools.getSampleDataSize(format_mp3_MPEG.enum2Num(hdr.version),format_mp3_MPEG.bitrateEnum2Num(hdr.bitrate),format_mp3_MPEG.srEnum2Num(hdr.samplingRate),hdr.isPadded,hdr.hasCrc);
+};
+format_mp3_Tools.getSampleCount = function(mpegVersion) {
+	if(mpegVersion == 3) {
+		return 1152;
+	} else {
+		return 576;
+	}
+};
+format_mp3_Tools.getSampleCountHdr = function(hdr) {
+	return format_mp3_Tools.getSampleCount(format_mp3_MPEG.enum2Num(hdr.version));
+};
+format_mp3_Tools.getFrameInfo = function(fr) {
+	return Std.string(fr.header.version) + ", " + Std.string(fr.header.layer) + ", " + Std.string(fr.header.channelMode) + ", " + Std.string(fr.header.samplingRate) + " Hz, " + Std.string(fr.header.bitrate) + " kbps " + "Emphasis: " + Std.string(fr.header.emphasis) + ", " + (fr.header.hasCrc ? "(CRC) " : "") + (fr.header.isPadded ? "(Padded) " : "") + (fr.header.isIntensityStereo ? "(Intensity Stereo) " : "") + (fr.header.isMSStereo ? "(MS Stereo) " : "") + (fr.header.isCopyrighted ? "(Copyrighted) " : "") + (fr.header.isOriginal ? "(Original) " : "");
+};
+var format_png_Color = $hxClasses["format.png.Color"] = { __ename__ : ["format","png","Color"], __constructs__ : ["ColGrey","ColTrue","ColIndexed"] };
+format_png_Color.ColGrey = function(alpha) { var $x = ["ColGrey",0,alpha]; $x.__enum__ = format_png_Color; $x.toString = $estr; return $x; };
+format_png_Color.ColTrue = function(alpha) { var $x = ["ColTrue",1,alpha]; $x.__enum__ = format_png_Color; $x.toString = $estr; return $x; };
+format_png_Color.ColIndexed = ["ColIndexed",2];
+format_png_Color.ColIndexed.toString = $estr;
+format_png_Color.ColIndexed.__enum__ = format_png_Color;
+format_png_Color.__empty_constructs__ = [format_png_Color.ColIndexed];
+var format_png_Chunk = $hxClasses["format.png.Chunk"] = { __ename__ : ["format","png","Chunk"], __constructs__ : ["CEnd","CHeader","CData","CPalette","CUnknown"] };
+format_png_Chunk.CEnd = ["CEnd",0];
+format_png_Chunk.CEnd.toString = $estr;
+format_png_Chunk.CEnd.__enum__ = format_png_Chunk;
+format_png_Chunk.CHeader = function(h) { var $x = ["CHeader",1,h]; $x.__enum__ = format_png_Chunk; $x.toString = $estr; return $x; };
+format_png_Chunk.CData = function(b) { var $x = ["CData",2,b]; $x.__enum__ = format_png_Chunk; $x.toString = $estr; return $x; };
+format_png_Chunk.CPalette = function(b) { var $x = ["CPalette",3,b]; $x.__enum__ = format_png_Chunk; $x.toString = $estr; return $x; };
+format_png_Chunk.CUnknown = function(id,data) { var $x = ["CUnknown",4,id,data]; $x.__enum__ = format_png_Chunk; $x.toString = $estr; return $x; };
+format_png_Chunk.__empty_constructs__ = [format_png_Chunk.CEnd];
+var format_png_Reader = function(i) {
+	this.i = i;
+	i.set_bigEndian(true);
+	this.checkCRC = true;
+};
+$hxClasses["format.png.Reader"] = format_png_Reader;
+format_png_Reader.__name__ = ["format","png","Reader"];
+format_png_Reader.prototype = {
+	read: function() {
+		var _g = 0;
+		var _g1 = [137,80,78,71,13,10,26,10];
+		while(_g < _g1.length) {
+			var b = _g1[_g];
+			++_g;
+			if(this.i.readByte() != b) {
+				throw new js__$Boot_HaxeError("Invalid header");
+			}
+		}
+		var l = new List();
+		while(true) {
+			var c = this.readChunk();
+			l.add(c);
+			if(c == format_png_Chunk.CEnd) {
+				break;
+			}
+		}
+		return l;
+	}
+	,readHeader: function(i) {
+		i.set_bigEndian(true);
+		var width = i.readInt32();
+		var height = i.readInt32();
+		var colbits = i.readByte();
+		var color = i.readByte();
+		var color1;
+		switch(color) {
+		case 0:
+			color1 = format_png_Color.ColGrey(false);
+			break;
+		case 2:
+			color1 = format_png_Color.ColTrue(false);
+			break;
+		case 3:
+			color1 = format_png_Color.ColIndexed;
+			break;
+		case 4:
+			color1 = format_png_Color.ColGrey(true);
+			break;
+		case 6:
+			color1 = format_png_Color.ColTrue(true);
+			break;
+		default:
+			throw new js__$Boot_HaxeError("Unknown color model " + color + ":" + colbits);
+		}
+		var compress = i.readByte();
+		var filter = i.readByte();
+		if(compress != 0 || filter != 0) {
+			throw new js__$Boot_HaxeError("Invalid header");
+		}
+		var interlace = i.readByte();
+		if(interlace != 0 && interlace != 1) {
+			throw new js__$Boot_HaxeError("Invalid header");
+		}
+		return { width : width, height : height, colbits : colbits, color : color1, interlaced : interlace == 1};
+	}
+	,readChunk: function() {
+		var dataLen = this.i.readInt32();
+		var id = this.i.readString(4);
+		var data = this.i.read(dataLen);
+		var crc = this.i.readInt32();
+		if(this.checkCRC) {
+			var c = new haxe_crypto_Crc32();
+			var _g = 0;
+			while(_g < 4) {
+				var i = _g++;
+				c["byte"](HxOverrides.cca(id,i));
+			}
+			c.update(data,0,data.length);
+			if(c.get() != crc) {
+				throw new js__$Boot_HaxeError("CRC check failure");
+			}
+		}
+		switch(id) {
+		case "IDAT":
+			return format_png_Chunk.CData(data);
+		case "IEND":
+			return format_png_Chunk.CEnd;
+		case "IHDR":
+			return format_png_Chunk.CHeader(this.readHeader(new haxe_io_BytesInput(data)));
+		case "PLTE":
+			return format_png_Chunk.CPalette(data);
+		default:
+			return format_png_Chunk.CUnknown(id,data);
+		}
+	}
+	,__class__: format_png_Reader
+};
+var format_png_Tools = function() { };
+$hxClasses["format.png.Tools"] = format_png_Tools;
+format_png_Tools.__name__ = ["format","png","Tools"];
+format_png_Tools.getHeader = function(d) {
+	var _g_head = d.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var c = val;
+		if(c[1] == 1) {
+			var h = c[2];
+			return h;
+		}
+	}
+	throw new js__$Boot_HaxeError("Header not found");
+};
+format_png_Tools.getPalette = function(d) {
+	var _g_head = d.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var c = val;
+		if(c[1] == 3) {
+			var b = c[2];
+			return b;
+		}
+	}
+	return null;
+};
+format_png_Tools.filter = function(data,x,y,stride,prev,p,numChannels) {
+	if(numChannels == null) {
+		numChannels = 4;
+	}
+	var b = y == 0 ? 0 : data.b[p - stride];
+	var c = x == 0 || y == 0 ? 0 : data.b[p - stride - numChannels];
+	var k = prev + b - c;
+	var pa = k - prev;
+	if(pa < 0) {
+		pa = -pa;
+	}
+	var pb = k - b;
+	if(pb < 0) {
+		pb = -pb;
+	}
+	var pc = k - c;
+	if(pc < 0) {
+		pc = -pc;
+	}
+	if(pa <= pb && pa <= pc) {
+		return prev;
+	} else if(pb <= pc) {
+		return b;
+	} else {
+		return c;
+	}
+};
+format_png_Tools.reverseBytes = function(b) {
+	var p = 0;
+	var _g1 = 0;
+	var _g = b.length >> 2;
+	while(_g1 < _g) {
+		var i = _g1++;
+		var b1 = b.b[p];
+		var g = b.b[p + 1];
+		var r = b.b[p + 2];
+		var a = b.b[p + 3];
+		b.b[p++] = a & 255;
+		b.b[p++] = r & 255;
+		b.b[p++] = g & 255;
+		b.b[p++] = b1 & 255;
+	}
+};
+format_png_Tools.extractGrey = function(d) {
+	var h = format_png_Tools.getHeader(d);
+	var grey = new haxe_io_Bytes(new ArrayBuffer(h.width * h.height));
+	var data = null;
+	var fullData = null;
+	var _g_head = d.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var c = val;
+		if(c[1] == 2) {
+			var b = c[2];
+			if(fullData != null) {
+				var b1 = fullData.b;
+				var b2 = b.b;
+				var _g1 = 0;
+				var _g = b.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					fullData.b.push(b2[i]);
+				}
+			} else if(data == null) {
+				data = b;
+			} else {
+				fullData = new haxe_io_BytesBuffer();
+				var b11 = fullData.b;
+				var b21 = data.b;
+				var _g11 = 0;
+				var _g2 = data.length;
+				while(_g11 < _g2) {
+					var i1 = _g11++;
+					fullData.b.push(b21[i1]);
+				}
+				var b12 = fullData.b;
+				var b22 = b.b;
+				var _g12 = 0;
+				var _g3 = b.length;
+				while(_g12 < _g3) {
+					var i2 = _g12++;
+					fullData.b.push(b22[i2]);
+				}
+				data = null;
+			}
+		}
+	}
+	if(fullData != null) {
+		data = fullData.getBytes();
+	}
+	if(data == null) {
+		throw new js__$Boot_HaxeError("Data not found");
+	}
+	data = format_tools_Inflate.run(data);
+	var r = 0;
+	var w = 0;
+	var _g4 = h.color;
+	if(_g4[1] == 0) {
+		var alpha = _g4[2];
+		if(h.colbits != 8) {
+			throw new js__$Boot_HaxeError("Unsupported color mode");
+		}
+		var width = h.width;
+		var stride = (alpha ? 2 : 1) * width + 1;
+		if(data.length < h.height * stride) {
+			throw new js__$Boot_HaxeError("Not enough data");
+		}
+		var rinc = alpha ? 2 : 1;
+		var _g13 = 0;
+		var _g5 = h.height;
+		while(_g13 < _g5) {
+			var y = _g13++;
+			var f = data.b[r++];
+			switch(f) {
+			case 0:
+				var _g31 = 0;
+				var _g21 = width;
+				while(_g31 < _g21) {
+					var x = _g31++;
+					var v = data.b[r];
+					r += rinc;
+					grey.b[w++] = v & 255;
+				}
+				break;
+			case 1:
+				var cv = 0;
+				var _g32 = 0;
+				var _g22 = width;
+				while(_g32 < _g22) {
+					var x1 = _g32++;
+					cv += data.b[r];
+					r += rinc;
+					grey.b[w++] = cv & 255;
+				}
+				break;
+			case 2:
+				var stride1 = y == 0 ? 0 : width;
+				var _g33 = 0;
+				var _g23 = width;
+				while(_g33 < _g23) {
+					var x2 = _g33++;
+					var v1 = data.b[r] + grey.b[w - stride1];
+					r += rinc;
+					grey.b[w++] = v1 & 255;
+				}
+				break;
+			case 3:
+				var cv1 = 0;
+				var stride2 = y == 0 ? 0 : width;
+				var _g34 = 0;
+				var _g24 = width;
+				while(_g34 < _g24) {
+					var x3 = _g34++;
+					cv1 = data.b[r] + (cv1 + grey.b[w - stride2] >> 1) & 255;
+					r += rinc;
+					grey.b[w++] = cv1 & 255;
+				}
+				break;
+			case 4:
+				var stride3 = width;
+				var cv2 = 0;
+				var _g35 = 0;
+				var _g25 = width;
+				while(_g35 < _g25) {
+					var x4 = _g35++;
+					var b3 = y == 0 ? 0 : grey.b[w - stride3];
+					var c1 = x4 == 0 || y == 0 ? 0 : grey.b[w - stride3 - 1];
+					var k = cv2 + b3 - c1;
+					var pa = k - cv2;
+					if(pa < 0) {
+						pa = -pa;
+					}
+					var pb = k - b3;
+					if(pb < 0) {
+						pb = -pb;
+					}
+					var pc = k - c1;
+					if(pc < 0) {
+						pc = -pc;
+					}
+					cv2 = (pa <= pb && pa <= pc ? cv2 : pb <= pc ? b3 : c1) + data.b[r] & 255;
+					r += rinc;
+					grey.b[w++] = cv2 & 255;
+				}
+				break;
+			default:
+				throw new js__$Boot_HaxeError("Invalid filter " + f);
+			}
+		}
+	} else {
+		throw new js__$Boot_HaxeError("Unsupported color mode");
+	}
+	return grey;
+};
+format_png_Tools.extract32 = function(d,bytes,flipY) {
+	var h = format_png_Tools.getHeader(d);
+	var bgra = bytes == null ? new haxe_io_Bytes(new ArrayBuffer(h.width * h.height * 4)) : bytes;
+	var data = null;
+	var fullData = null;
+	var _g_head = d.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var c = val;
+		if(c[1] == 2) {
+			var b = c[2];
+			if(fullData != null) {
+				var b1 = fullData.b;
+				var b2 = b.b;
+				var _g1 = 0;
+				var _g = b.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					fullData.b.push(b2[i]);
+				}
+			} else if(data == null) {
+				data = b;
+			} else {
+				fullData = new haxe_io_BytesBuffer();
+				var b11 = fullData.b;
+				var b21 = data.b;
+				var _g11 = 0;
+				var _g2 = data.length;
+				while(_g11 < _g2) {
+					var i1 = _g11++;
+					fullData.b.push(b21[i1]);
+				}
+				var b12 = fullData.b;
+				var b22 = b.b;
+				var _g12 = 0;
+				var _g3 = b.length;
+				while(_g12 < _g3) {
+					var i2 = _g12++;
+					fullData.b.push(b22[i2]);
+				}
+				data = null;
+			}
+		}
+	}
+	if(fullData != null) {
+		data = fullData.getBytes();
+	}
+	if(data == null) {
+		throw new js__$Boot_HaxeError("Data not found");
+	}
+	data = format_tools_Inflate.run(data);
+	var r = 0;
+	var w = 0;
+	var lineDelta = 0;
+	if(flipY) {
+		lineDelta = -h.width * 8;
+		w = (h.height - 1) * (h.width * 4);
+	}
+	var flipY1 = flipY ? -1 : 1;
+	var _g4 = h.color;
+	switch(_g4[1]) {
+	case 0:
+		var alpha = _g4[2];
+		if(h.colbits != 8) {
+			throw new js__$Boot_HaxeError("Unsupported color mode");
+		}
+		var width = h.width;
+		var stride = (alpha ? 2 : 1) * width + 1;
+		if(data.length < h.height * stride) {
+			throw new js__$Boot_HaxeError("Not enough data");
+		}
+		var alphvaIdx = -1;
+		if(!alpha) {
+			var _g_head1 = d.h;
+			while(_g_head1 != null) {
+				var val1 = _g_head1.item;
+				_g_head1 = _g_head1.next;
+				var t = val1;
+				if(t[1] == 4) {
+					if(t[2] == "tRNS") {
+						var data1 = t[3];
+						if(data1.length >= 2) {
+							alphvaIdx = data1.b[1];
+						}
+						break;
+					}
+				}
+			}
+		}
+		var _g13 = 0;
+		var _g5 = h.height;
+		while(_g13 < _g5) {
+			var y = _g13++;
+			var f = data.b[r++];
+			switch(f) {
+			case 0:
+				if(alpha) {
+					var _g31 = 0;
+					var _g21 = width;
+					while(_g31 < _g21) {
+						var x = _g31++;
+						var v = data.b[r++];
+						bgra.b[w++] = v & 255;
+						bgra.b[w++] = v & 255;
+						bgra.b[w++] = v & 255;
+						bgra.b[w++] = data.b[r++] & 255;
+					}
+				} else {
+					var _g32 = 0;
+					var _g22 = width;
+					while(_g32 < _g22) {
+						var x1 = _g32++;
+						var v1 = data.b[r++];
+						bgra.b[w++] = v1 & 255;
+						bgra.b[w++] = v1 & 255;
+						bgra.b[w++] = v1 & 255;
+						bgra.b[w++] = (v1 == alphvaIdx ? 0 : 255) & 255;
+					}
+				}
+				break;
+			case 1:
+				var cv = 0;
+				var ca = 0;
+				if(alpha) {
+					var _g33 = 0;
+					var _g23 = width;
+					while(_g33 < _g23) {
+						var x2 = _g33++;
+						cv += data.b[r++];
+						bgra.b[w++] = cv & 255;
+						bgra.b[w++] = cv & 255;
+						bgra.b[w++] = cv & 255;
+						ca += data.b[r++];
+						bgra.b[w++] = ca & 255;
+					}
+				} else {
+					var _g34 = 0;
+					var _g24 = width;
+					while(_g34 < _g24) {
+						var x3 = _g34++;
+						cv += data.b[r++];
+						bgra.b[w++] = cv & 255;
+						bgra.b[w++] = cv & 255;
+						bgra.b[w++] = cv & 255;
+						bgra.b[w++] = (cv == alphvaIdx ? 0 : 255) & 255;
+					}
+				}
+				break;
+			case 2:
+				var stride1 = y == 0 ? 0 : width * 4 * flipY1;
+				if(alpha) {
+					var _g35 = 0;
+					var _g25 = width;
+					while(_g35 < _g25) {
+						var x4 = _g35++;
+						var v2 = data.b[r++] + bgra.b[w - stride1];
+						bgra.b[w++] = v2 & 255;
+						bgra.b[w++] = v2 & 255;
+						bgra.b[w++] = v2 & 255;
+						bgra.b[w++] = data.b[r++] + bgra.b[w - stride1] & 255;
+					}
+				} else {
+					var _g36 = 0;
+					var _g26 = width;
+					while(_g36 < _g26) {
+						var x5 = _g36++;
+						var v3 = data.b[r++] + bgra.b[w - stride1];
+						bgra.b[w++] = v3 & 255;
+						bgra.b[w++] = v3 & 255;
+						bgra.b[w++] = v3 & 255;
+						bgra.b[w++] = (v3 == alphvaIdx ? 0 : 255) & 255;
+					}
+				}
+				break;
+			case 3:
+				var cv1 = 0;
+				var ca1 = 0;
+				var stride2 = y == 0 ? 0 : width * 4 * flipY1;
+				if(alpha) {
+					var _g37 = 0;
+					var _g27 = width;
+					while(_g37 < _g27) {
+						var x6 = _g37++;
+						cv1 = data.b[r++] + (cv1 + bgra.b[w - stride2] >> 1) & 255;
+						bgra.b[w++] = cv1 & 255;
+						bgra.b[w++] = cv1 & 255;
+						bgra.b[w++] = cv1 & 255;
+						ca1 = data.b[r++] + (ca1 + bgra.b[w - stride2] >> 1) & 255;
+						bgra.b[w++] = ca1 & 255;
+					}
+				} else {
+					var _g38 = 0;
+					var _g28 = width;
+					while(_g38 < _g28) {
+						var x7 = _g38++;
+						cv1 = data.b[r++] + (cv1 + bgra.b[w - stride2] >> 1) & 255;
+						bgra.b[w++] = cv1 & 255;
+						bgra.b[w++] = cv1 & 255;
+						bgra.b[w++] = cv1 & 255;
+						bgra.b[w++] = (cv1 == alphvaIdx ? 0 : 255) & 255;
+					}
+				}
+				break;
+			case 4:
+				var stride3 = width * 4 * flipY1;
+				var cv2 = 0;
+				var ca2 = 0;
+				if(alpha) {
+					var _g39 = 0;
+					var _g29 = width;
+					while(_g39 < _g29) {
+						var x8 = _g39++;
+						var b3 = y == 0 ? 0 : bgra.b[w - stride3];
+						var c1 = x8 == 0 || y == 0 ? 0 : bgra.b[w - stride3 - 4];
+						var k = cv2 + b3 - c1;
+						var pa = k - cv2;
+						if(pa < 0) {
+							pa = -pa;
+						}
+						var pb = k - b3;
+						if(pb < 0) {
+							pb = -pb;
+						}
+						var pc = k - c1;
+						if(pc < 0) {
+							pc = -pc;
+						}
+						cv2 = (pa <= pb && pa <= pc ? cv2 : pb <= pc ? b3 : c1) + data.b[r++] & 255;
+						bgra.b[w++] = cv2 & 255;
+						bgra.b[w++] = cv2 & 255;
+						bgra.b[w++] = cv2 & 255;
+						var b4 = y == 0 ? 0 : bgra.b[w - stride3];
+						var c2 = x8 == 0 || y == 0 ? 0 : bgra.b[w - stride3 - 4];
+						var k1 = ca2 + b4 - c2;
+						var pa1 = k1 - ca2;
+						if(pa1 < 0) {
+							pa1 = -pa1;
+						}
+						var pb1 = k1 - b4;
+						if(pb1 < 0) {
+							pb1 = -pb1;
+						}
+						var pc1 = k1 - c2;
+						if(pc1 < 0) {
+							pc1 = -pc1;
+						}
+						ca2 = (pa1 <= pb1 && pa1 <= pc1 ? ca2 : pb1 <= pc1 ? b4 : c2) + data.b[r++] & 255;
+						bgra.b[w++] = ca2 & 255;
+					}
+				} else {
+					var _g310 = 0;
+					var _g210 = width;
+					while(_g310 < _g210) {
+						var x9 = _g310++;
+						var b5 = y == 0 ? 0 : bgra.b[w - stride3];
+						var c3 = x9 == 0 || y == 0 ? 0 : bgra.b[w - stride3 - 4];
+						var k2 = cv2 + b5 - c3;
+						var pa2 = k2 - cv2;
+						if(pa2 < 0) {
+							pa2 = -pa2;
+						}
+						var pb2 = k2 - b5;
+						if(pb2 < 0) {
+							pb2 = -pb2;
+						}
+						var pc2 = k2 - c3;
+						if(pc2 < 0) {
+							pc2 = -pc2;
+						}
+						cv2 = (pa2 <= pb2 && pa2 <= pc2 ? cv2 : pb2 <= pc2 ? b5 : c3) + data.b[r++] & 255;
+						bgra.b[w++] = cv2 & 255;
+						bgra.b[w++] = cv2 & 255;
+						bgra.b[w++] = cv2 & 255;
+						bgra.b[w++] = (cv2 == alphvaIdx ? 0 : 255) & 255;
+					}
+				}
+				break;
+			default:
+				throw new js__$Boot_HaxeError("Invalid filter " + f);
+			}
+			w += lineDelta;
+		}
+		break;
+	case 1:
+		var alpha1 = _g4[2];
+		if(h.colbits != 8) {
+			throw new js__$Boot_HaxeError("Unsupported color mode");
+		}
+		var width1 = h.width;
+		var stride4 = (alpha1 ? 4 : 3) * width1 + 1;
+		if(data.length < h.height * stride4) {
+			throw new js__$Boot_HaxeError("Not enough data");
+		}
+		var alphaRed = -1;
+		var alphaGreen = -1;
+		var alphaBlue = -1;
+		if(!alpha1) {
+			var _g_head2 = d.h;
+			while(_g_head2 != null) {
+				var val2 = _g_head2.item;
+				_g_head2 = _g_head2.next;
+				var t1 = val2;
+				if(t1[1] == 4) {
+					if(t1[2] == "tRNS") {
+						var data2 = t1[3];
+						if(data2.length >= 6) {
+							alphaRed = data2.b[1];
+							alphaGreen = data2.b[3];
+							alphaBlue = data2.b[5];
+						}
+						break;
+					}
+				}
+			}
+		}
+		var cr = 0;
+		var cg = 0;
+		var cb = 0;
+		var ca3 = 0;
+		var _g14 = 0;
+		var _g6 = h.height;
+		while(_g14 < _g6) {
+			var y1 = _g14++;
+			var f1 = data.b[r++];
+			switch(f1) {
+			case 0:
+				if(alpha1) {
+					var _g311 = 0;
+					var _g211 = width1;
+					while(_g311 < _g211) {
+						var x10 = _g311++;
+						bgra.b[w++] = data.b[r + 2] & 255;
+						bgra.b[w++] = data.b[r + 1] & 255;
+						bgra.b[w++] = data.b[r] & 255;
+						bgra.b[w++] = data.b[r + 3] & 255;
+						r += 4;
+					}
+				} else {
+					var _g312 = 0;
+					var _g212 = width1;
+					while(_g312 < _g212) {
+						var x11 = _g312++;
+						cb = data.b[r + 2];
+						bgra.b[w++] = cb & 255;
+						cg = data.b[r + 1];
+						bgra.b[w++] = cg & 255;
+						cr = data.b[r];
+						bgra.b[w++] = cr & 255;
+						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
+						r += 3;
+					}
+				}
+				break;
+			case 1:
+				ca3 = 0;
+				cb = ca3;
+				cg = cb;
+				cr = cg;
+				if(alpha1) {
+					var _g313 = 0;
+					var _g213 = width1;
+					while(_g313 < _g213) {
+						var x12 = _g313++;
+						cb += data.b[r + 2];
+						bgra.b[w++] = cb & 255;
+						cg += data.b[r + 1];
+						bgra.b[w++] = cg & 255;
+						cr += data.b[r];
+						bgra.b[w++] = cr & 255;
+						ca3 += data.b[r + 3];
+						bgra.b[w++] = ca3 & 255;
+						r += 4;
+					}
+				} else {
+					var _g314 = 0;
+					var _g214 = width1;
+					while(_g314 < _g214) {
+						var x13 = _g314++;
+						cb += data.b[r + 2];
+						bgra.b[w++] = cb & 255;
+						cg += data.b[r + 1];
+						bgra.b[w++] = cg & 255;
+						cr += data.b[r];
+						bgra.b[w++] = cr & 255;
+						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
+						r += 3;
+					}
+				}
+				break;
+			case 2:
+				var stride5 = y1 == 0 ? 0 : width1 * 4 * flipY1;
+				if(alpha1) {
+					var _g315 = 0;
+					var _g215 = width1;
+					while(_g315 < _g215) {
+						var x14 = _g315++;
+						bgra.b[w] = data.b[r + 2] + bgra.b[w - stride5] & 255;
+						++w;
+						bgra.b[w] = data.b[r + 1] + bgra.b[w - stride5] & 255;
+						++w;
+						bgra.b[w] = data.b[r] + bgra.b[w - stride5] & 255;
+						++w;
+						bgra.b[w] = data.b[r + 3] + bgra.b[w - stride5] & 255;
+						++w;
+						r += 4;
+					}
+				} else {
+					var _g316 = 0;
+					var _g216 = width1;
+					while(_g316 < _g216) {
+						var x15 = _g316++;
+						cb = data.b[r + 2] + bgra.b[w - stride5];
+						bgra.b[w] = cb & 255;
+						++w;
+						cg = data.b[r + 1] + bgra.b[w - stride5];
+						bgra.b[w] = cg & 255;
+						++w;
+						cr = data.b[r] + bgra.b[w - stride5];
+						bgra.b[w] = cr & 255;
+						++w;
+						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
+						r += 3;
+					}
+				}
+				break;
+			case 3:
+				ca3 = 0;
+				cb = ca3;
+				cg = cb;
+				cr = cg;
+				var stride6 = y1 == 0 ? 0 : width1 * 4 * flipY1;
+				if(alpha1) {
+					var _g317 = 0;
+					var _g217 = width1;
+					while(_g317 < _g217) {
+						var x16 = _g317++;
+						cb = data.b[r + 2] + (cb + bgra.b[w - stride6] >> 1) & 255;
+						bgra.b[w++] = cb & 255;
+						cg = data.b[r + 1] + (cg + bgra.b[w - stride6] >> 1) & 255;
+						bgra.b[w++] = cg & 255;
+						cr = data.b[r] + (cr + bgra.b[w - stride6] >> 1) & 255;
+						bgra.b[w++] = cr & 255;
+						ca3 = data.b[r + 3] + (ca3 + bgra.b[w - stride6] >> 1) & 255;
+						bgra.b[w++] = ca3 & 255;
+						r += 4;
+					}
+				} else {
+					var _g318 = 0;
+					var _g218 = width1;
+					while(_g318 < _g218) {
+						var x17 = _g318++;
+						cb = data.b[r + 2] + (cb + bgra.b[w - stride6] >> 1) & 255;
+						bgra.b[w++] = cb & 255;
+						cg = data.b[r + 1] + (cg + bgra.b[w - stride6] >> 1) & 255;
+						bgra.b[w++] = cg & 255;
+						cr = data.b[r] + (cr + bgra.b[w - stride6] >> 1) & 255;
+						bgra.b[w++] = cr & 255;
+						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
+						r += 3;
+					}
+				}
+				break;
+			case 4:
+				var stride7 = width1 * 4 * flipY1;
+				ca3 = 0;
+				cb = ca3;
+				cg = cb;
+				cr = cg;
+				if(alpha1) {
+					var _g319 = 0;
+					var _g219 = width1;
+					while(_g319 < _g219) {
+						var x18 = _g319++;
+						var b6 = y1 == 0 ? 0 : bgra.b[w - stride7];
+						var c4 = x18 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
+						var k3 = cb + b6 - c4;
+						var pa3 = k3 - cb;
+						if(pa3 < 0) {
+							pa3 = -pa3;
+						}
+						var pb3 = k3 - b6;
+						if(pb3 < 0) {
+							pb3 = -pb3;
+						}
+						var pc3 = k3 - c4;
+						if(pc3 < 0) {
+							pc3 = -pc3;
+						}
+						cb = (pa3 <= pb3 && pa3 <= pc3 ? cb : pb3 <= pc3 ? b6 : c4) + data.b[r + 2] & 255;
+						bgra.b[w++] = cb & 255;
+						var b7 = y1 == 0 ? 0 : bgra.b[w - stride7];
+						var c5 = x18 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
+						var k4 = cg + b7 - c5;
+						var pa4 = k4 - cg;
+						if(pa4 < 0) {
+							pa4 = -pa4;
+						}
+						var pb4 = k4 - b7;
+						if(pb4 < 0) {
+							pb4 = -pb4;
+						}
+						var pc4 = k4 - c5;
+						if(pc4 < 0) {
+							pc4 = -pc4;
+						}
+						cg = (pa4 <= pb4 && pa4 <= pc4 ? cg : pb4 <= pc4 ? b7 : c5) + data.b[r + 1] & 255;
+						bgra.b[w++] = cg & 255;
+						var b8 = y1 == 0 ? 0 : bgra.b[w - stride7];
+						var c6 = x18 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
+						var k5 = cr + b8 - c6;
+						var pa5 = k5 - cr;
+						if(pa5 < 0) {
+							pa5 = -pa5;
+						}
+						var pb5 = k5 - b8;
+						if(pb5 < 0) {
+							pb5 = -pb5;
+						}
+						var pc5 = k5 - c6;
+						if(pc5 < 0) {
+							pc5 = -pc5;
+						}
+						cr = (pa5 <= pb5 && pa5 <= pc5 ? cr : pb5 <= pc5 ? b8 : c6) + data.b[r] & 255;
+						bgra.b[w++] = cr & 255;
+						var b9 = y1 == 0 ? 0 : bgra.b[w - stride7];
+						var c7 = x18 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
+						var k6 = ca3 + b9 - c7;
+						var pa6 = k6 - ca3;
+						if(pa6 < 0) {
+							pa6 = -pa6;
+						}
+						var pb6 = k6 - b9;
+						if(pb6 < 0) {
+							pb6 = -pb6;
+						}
+						var pc6 = k6 - c7;
+						if(pc6 < 0) {
+							pc6 = -pc6;
+						}
+						ca3 = (pa6 <= pb6 && pa6 <= pc6 ? ca3 : pb6 <= pc6 ? b9 : c7) + data.b[r + 3] & 255;
+						bgra.b[w++] = ca3 & 255;
+						r += 4;
+					}
+				} else {
+					var _g320 = 0;
+					var _g220 = width1;
+					while(_g320 < _g220) {
+						var x19 = _g320++;
+						var b10 = y1 == 0 ? 0 : bgra.b[w - stride7];
+						var c8 = x19 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
+						var k7 = cb + b10 - c8;
+						var pa7 = k7 - cb;
+						if(pa7 < 0) {
+							pa7 = -pa7;
+						}
+						var pb7 = k7 - b10;
+						if(pb7 < 0) {
+							pb7 = -pb7;
+						}
+						var pc7 = k7 - c8;
+						if(pc7 < 0) {
+							pc7 = -pc7;
+						}
+						cb = (pa7 <= pb7 && pa7 <= pc7 ? cb : pb7 <= pc7 ? b10 : c8) + data.b[r + 2] & 255;
+						bgra.b[w++] = cb & 255;
+						var b13 = y1 == 0 ? 0 : bgra.b[w - stride7];
+						var c9 = x19 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
+						var k8 = cg + b13 - c9;
+						var pa8 = k8 - cg;
+						if(pa8 < 0) {
+							pa8 = -pa8;
+						}
+						var pb8 = k8 - b13;
+						if(pb8 < 0) {
+							pb8 = -pb8;
+						}
+						var pc8 = k8 - c9;
+						if(pc8 < 0) {
+							pc8 = -pc8;
+						}
+						cg = (pa8 <= pb8 && pa8 <= pc8 ? cg : pb8 <= pc8 ? b13 : c9) + data.b[r + 1] & 255;
+						bgra.b[w++] = cg & 255;
+						var b14 = y1 == 0 ? 0 : bgra.b[w - stride7];
+						var c10 = x19 == 0 || y1 == 0 ? 0 : bgra.b[w - stride7 - 4];
+						var k9 = cr + b14 - c10;
+						var pa9 = k9 - cr;
+						if(pa9 < 0) {
+							pa9 = -pa9;
+						}
+						var pb9 = k9 - b14;
+						if(pb9 < 0) {
+							pb9 = -pb9;
+						}
+						var pc9 = k9 - c10;
+						if(pc9 < 0) {
+							pc9 = -pc9;
+						}
+						cr = (pa9 <= pb9 && pa9 <= pc9 ? cr : pb9 <= pc9 ? b14 : c10) + data.b[r] & 255;
+						bgra.b[w++] = cr & 255;
+						bgra.b[w++] = (cr == alphaRed && cg == alphaGreen && cb == alphaBlue ? 0 : 255) & 255;
+						r += 3;
+					}
+				}
+				break;
+			default:
+				throw new js__$Boot_HaxeError("Invalid filter " + f1);
+			}
+			w += lineDelta;
+		}
+		break;
+	case 2:
+		var pal = format_png_Tools.getPalette(d);
+		if(pal == null) {
+			throw new js__$Boot_HaxeError("PNG Palette is missing");
+		}
+		var alpha2 = null;
+		var _g_head3 = d.h;
+		while(_g_head3 != null) {
+			var val3 = _g_head3.item;
+			_g_head3 = _g_head3.next;
+			var t2 = val3;
+			if(t2[1] == 4) {
+				if(t2[2] == "tRNS") {
+					var data3 = t2[3];
+					alpha2 = data3;
+					break;
+				}
+			}
+		}
+		if(alpha2 != null && alpha2.length < 1 << h.colbits) {
+			var alpha21 = new haxe_io_Bytes(new ArrayBuffer(1 << h.colbits));
+			alpha21.blit(0,alpha2,0,alpha2.length);
+			alpha21.fill(alpha2.length,alpha21.length - alpha2.length,255);
+			alpha2 = alpha21;
+		}
+		var width2 = h.width;
+		var stride8 = Math.ceil(width2 * h.colbits / 8) + 1;
+		if(data.length < h.height * stride8) {
+			throw new js__$Boot_HaxeError("Not enough data");
+		}
+		var rline = h.width * h.colbits >> 3;
+		var _g15 = 0;
+		var _g7 = h.height;
+		while(_g15 < _g7) {
+			var y2 = _g15++;
+			var f2 = data.b[r++];
+			if(f2 == 0) {
+				r += rline;
+				continue;
+			}
+			switch(f2) {
+			case 1:
+				var c11 = 0;
+				var _g321 = 0;
+				var _g221 = width2;
+				while(_g321 < _g221) {
+					var x20 = _g321++;
+					var v4 = data.b[r];
+					c11 += v4;
+					data.b[r++] = c11 & 255 & 255;
+				}
+				break;
+			case 2:
+				var stride9 = y2 == 0 ? 0 : rline + 1;
+				var _g322 = 0;
+				var _g222 = width2;
+				while(_g322 < _g222) {
+					var x21 = _g322++;
+					var v5 = data.b[r];
+					data.b[r] = v5 + data.b[r - stride9] & 255;
+					++r;
+				}
+				break;
+			case 3:
+				var c12 = 0;
+				var stride10 = y2 == 0 ? 0 : rline + 1;
+				var _g323 = 0;
+				var _g223 = width2;
+				while(_g323 < _g223) {
+					var x22 = _g323++;
+					var v6 = data.b[r];
+					c12 = v6 + (c12 + data.b[r - stride10] >> 1) & 255;
+					data.b[r++] = c12 & 255;
+				}
+				break;
+			case 4:
+				var stride11 = rline + 1;
+				var c13 = 0;
+				var _g324 = 0;
+				var _g224 = width2;
+				while(_g324 < _g224) {
+					var x23 = _g324++;
+					var v7 = data.b[r];
+					var b15 = y2 == 0 ? 0 : data.b[r - stride11];
+					var c14 = x23 == 0 || y2 == 0 ? 0 : data.b[r - stride11 - 1];
+					var k10 = c13 + b15 - c14;
+					var pa10 = k10 - c13;
+					if(pa10 < 0) {
+						pa10 = -pa10;
+					}
+					var pb10 = k10 - b15;
+					if(pb10 < 0) {
+						pb10 = -pb10;
+					}
+					var pc10 = k10 - c14;
+					if(pc10 < 0) {
+						pc10 = -pc10;
+					}
+					c13 = (pa10 <= pb10 && pa10 <= pc10 ? c13 : pb10 <= pc10 ? b15 : c14) + v7 & 255;
+					data.b[r++] = c13 & 255;
+				}
+				break;
+			default:
+				throw new js__$Boot_HaxeError("Invalid filter " + f2);
+			}
+		}
+		var r1 = 0;
+		if(h.colbits == 8) {
+			var _g16 = 0;
+			var _g8 = h.height;
+			while(_g16 < _g8) {
+				var y3 = _g16++;
+				++r1;
+				var _g325 = 0;
+				var _g225 = h.width;
+				while(_g325 < _g225) {
+					var x24 = _g325++;
+					var c15 = data.b[r1++];
+					bgra.b[w++] = pal.b[c15 * 3 + 2] & 255;
+					bgra.b[w++] = pal.b[c15 * 3 + 1] & 255;
+					bgra.b[w++] = pal.b[c15 * 3] & 255;
+					bgra.b[w++] = (alpha2 != null ? alpha2.b[c15] : 255) & 255;
+				}
+				w += lineDelta;
+			}
+		} else if(h.colbits < 8) {
+			var req = h.colbits;
+			var mask = (1 << req) - 1;
+			var _g17 = 0;
+			var _g9 = h.height;
+			while(_g17 < _g9) {
+				var y4 = _g17++;
+				++r1;
+				var bits = 0;
+				var nbits = 0;
+				var v8;
+				var _g326 = 0;
+				var _g226 = h.width;
+				while(_g326 < _g226) {
+					var x25 = _g326++;
+					if(nbits < req) {
+						bits = bits << 8 | data.b[r1++];
+						nbits += 8;
+					}
+					var c16 = bits >>> nbits - req & mask;
+					nbits -= req;
+					bgra.b[w++] = pal.b[c16 * 3 + 2] & 255;
+					bgra.b[w++] = pal.b[c16 * 3 + 1] & 255;
+					bgra.b[w++] = pal.b[c16 * 3] & 255;
+					bgra.b[w++] = (alpha2 != null ? alpha2.b[c16] : 255) & 255;
+				}
+				w += lineDelta;
+			}
+		} else {
+			throw new js__$Boot_HaxeError(h.colbits + " indexed bits per pixel not supported");
+		}
+		break;
+	}
+	return bgra;
+};
+format_png_Tools.buildGrey = function(width,height,data,level) {
+	if(level == null) {
+		level = 9;
+	}
+	var rgb = new haxe_io_Bytes(new ArrayBuffer(width * height + height));
+	var w = 0;
+	var r = 0;
+	var _g1 = 0;
+	var _g = height;
+	while(_g1 < _g) {
+		var y = _g1++;
+		rgb.b[w++] = 0;
+		var _g3 = 0;
+		var _g2 = width;
+		while(_g3 < _g2) {
+			var x = _g3++;
+			rgb.b[w++] = data.b[r++] & 255;
+		}
+	}
+	var l = new List();
+	l.add(format_png_Chunk.CHeader({ width : width, height : height, colbits : 8, color : format_png_Color.ColGrey(false), interlaced : false}));
+	l.add(format_png_Chunk.CData(format_tools_Deflate.run(rgb,level)));
+	l.add(format_png_Chunk.CEnd);
+	return l;
+};
+format_png_Tools.buildRGB = function(width,height,data,level) {
+	if(level == null) {
+		level = 9;
+	}
+	var rgb = new haxe_io_Bytes(new ArrayBuffer(width * height * 3 + height));
+	var w = 0;
+	var r = 0;
+	var _g1 = 0;
+	var _g = height;
+	while(_g1 < _g) {
+		var y = _g1++;
+		rgb.b[w++] = 0;
+		var _g3 = 0;
+		var _g2 = width;
+		while(_g3 < _g2) {
+			var x = _g3++;
+			rgb.b[w++] = data.b[r + 2] & 255;
+			rgb.b[w++] = data.b[r + 1] & 255;
+			rgb.b[w++] = data.b[r] & 255;
+			r += 3;
+		}
+	}
+	var l = new List();
+	l.add(format_png_Chunk.CHeader({ width : width, height : height, colbits : 8, color : format_png_Color.ColTrue(false), interlaced : false}));
+	l.add(format_png_Chunk.CData(format_tools_Deflate.run(rgb,level)));
+	l.add(format_png_Chunk.CEnd);
+	return l;
+};
+format_png_Tools.build32ARGB = function(width,height,data,level) {
+	if(level == null) {
+		level = 9;
+	}
+	var rgba = new haxe_io_Bytes(new ArrayBuffer(width * height * 4 + height));
+	var w = 0;
+	var r = 0;
+	var _g1 = 0;
+	var _g = height;
+	while(_g1 < _g) {
+		var y = _g1++;
+		rgba.b[w++] = 0;
+		var _g3 = 0;
+		var _g2 = width;
+		while(_g3 < _g2) {
+			var x = _g3++;
+			rgba.b[w++] = data.b[r + 1] & 255;
+			rgba.b[w++] = data.b[r + 2] & 255;
+			rgba.b[w++] = data.b[r + 3] & 255;
+			rgba.b[w++] = data.b[r] & 255;
+			r += 4;
+		}
+	}
+	var l = new List();
+	l.add(format_png_Chunk.CHeader({ width : width, height : height, colbits : 8, color : format_png_Color.ColTrue(true), interlaced : false}));
+	l.add(format_png_Chunk.CData(format_tools_Deflate.run(rgba,level)));
+	l.add(format_png_Chunk.CEnd);
+	return l;
+};
+format_png_Tools.build32BGRA = function(width,height,data,level) {
+	if(level == null) {
+		level = 9;
+	}
+	var rgba = new haxe_io_Bytes(new ArrayBuffer(width * height * 4 + height));
+	var w = 0;
+	var r = 0;
+	var _g1 = 0;
+	var _g = height;
+	while(_g1 < _g) {
+		var y = _g1++;
+		rgba.b[w++] = 0;
+		var _g3 = 0;
+		var _g2 = width;
+		while(_g3 < _g2) {
+			var x = _g3++;
+			rgba.b[w++] = data.b[r + 2] & 255;
+			rgba.b[w++] = data.b[r + 1] & 255;
+			rgba.b[w++] = data.b[r] & 255;
+			rgba.b[w++] = data.b[r + 3] & 255;
+			r += 4;
+		}
+	}
+	var l = new List();
+	l.add(format_png_Chunk.CHeader({ width : width, height : height, colbits : 8, color : format_png_Color.ColTrue(true), interlaced : false}));
+	l.add(format_png_Chunk.CData(format_tools_Deflate.run(rgba,level)));
+	l.add(format_png_Chunk.CEnd);
+	return l;
+};
+var format_png_Writer = function(o) {
+	this.o = o;
+	o.set_bigEndian(true);
+};
+$hxClasses["format.png.Writer"] = format_png_Writer;
+format_png_Writer.__name__ = ["format","png","Writer"];
+format_png_Writer.prototype = {
+	write: function(png) {
+		var _g = 0;
+		var _g1 = [137,80,78,71,13,10,26,10];
+		while(_g < _g1.length) {
+			var b = _g1[_g];
+			++_g;
+			this.o.writeByte(b);
+		}
+		var _g_head = png.h;
+		while(_g_head != null) {
+			var val = _g_head.item;
+			_g_head = _g_head.next;
+			var c = val;
+			switch(c[1]) {
+			case 0:
+				this.writeChunk("IEND",new haxe_io_Bytes(new ArrayBuffer(0)));
+				break;
+			case 1:
+				var h = c[2];
+				var b1 = new haxe_io_BytesOutput();
+				b1.set_bigEndian(true);
+				b1.writeInt32(h.width);
+				b1.writeInt32(h.height);
+				b1.writeByte(h.colbits);
+				var _g2 = h.color;
+				var tmp;
+				switch(_g2[1]) {
+				case 0:
+					var alpha = _g2[2];
+					if(alpha) {
+						tmp = 4;
+					} else {
+						tmp = 0;
+					}
+					break;
+				case 1:
+					var alpha1 = _g2[2];
+					if(alpha1) {
+						tmp = 6;
+					} else {
+						tmp = 2;
+					}
+					break;
+				case 2:
+					tmp = 3;
+					break;
+				}
+				b1.writeByte(tmp);
+				b1.writeByte(0);
+				b1.writeByte(0);
+				b1.writeByte(h.interlaced ? 1 : 0);
+				this.writeChunk("IHDR",b1.getBytes());
+				break;
+			case 2:
+				var d = c[2];
+				this.writeChunk("IDAT",d);
+				break;
+			case 3:
+				var b2 = c[2];
+				this.writeChunk("PLTE",b2);
+				break;
+			case 4:
+				var data = c[3];
+				var id = c[2];
+				this.writeChunk(id,data);
+				break;
+			}
+		}
+	}
+	,writeChunk: function(id,data) {
+		this.o.writeInt32(data.length);
+		this.o.writeString(id);
+		this.o.write(data);
+		var crc = new haxe_crypto_Crc32();
+		var _g = 0;
+		while(_g < 4) {
+			var i = _g++;
+			crc["byte"](HxOverrides.cca(id,i));
+		}
+		crc.update(data,0,data.length);
+		this.o.writeInt32(crc.get());
+	}
+	,__class__: format_png_Writer
+};
+var format_tools_BitsInput = function(i) {
+	this.i = i;
+	this.nbits = 0;
+	this.bits = 0;
+};
+$hxClasses["format.tools.BitsInput"] = format_tools_BitsInput;
+format_tools_BitsInput.__name__ = ["format","tools","BitsInput"];
+format_tools_BitsInput.prototype = {
+	readBits: function(n) {
+		if(this.nbits >= n) {
+			var c = this.nbits - n;
+			var k = this.bits >>> c & (1 << n) - 1;
+			this.nbits = c;
+			return k;
+		}
+		var k1 = this.i.readByte();
+		if(this.nbits >= 24) {
+			if(n >= 31) {
+				throw new js__$Boot_HaxeError("Bits error");
+			}
+			var c1 = 8 + this.nbits - n;
+			var d = this.bits & (1 << this.nbits) - 1;
+			d = d << 8 - c1 | k1 << c1;
+			this.bits = k1;
+			this.nbits = c1;
+			return d;
+		}
+		this.bits = this.bits << 8 | k1;
+		this.nbits += 8;
+		return this.readBits(n);
+	}
+	,readBit: function() {
+		if(this.nbits == 0) {
+			this.bits = this.i.readByte();
+			this.nbits = 8;
+		}
+		this.nbits--;
+		return (this.bits >>> this.nbits & 1) == 1;
+	}
+	,reset: function() {
+		this.nbits = 0;
+	}
+	,__class__: format_tools_BitsInput
+};
+var format_tools_Deflate = function() { };
+$hxClasses["format.tools.Deflate"] = format_tools_Deflate;
+format_tools_Deflate.__name__ = ["format","tools","Deflate"];
+format_tools_Deflate.run = function(b,level) {
+	if(level == null) {
+		level = 9;
+	}
+	return haxe_zip_Compress.run(b,level);
+};
+var format_tools_Inflate = function() { };
+$hxClasses["format.tools.Inflate"] = format_tools_Inflate;
+format_tools_Inflate.__name__ = ["format","tools","Inflate"];
+format_tools_Inflate.run = function(bytes) {
+	return haxe_zip_Uncompress.run(bytes);
+};
+var format_wav_WAVEFormat = $hxClasses["format.wav.WAVEFormat"] = { __ename__ : ["format","wav","WAVEFormat"], __constructs__ : ["WF_PCM"] };
+format_wav_WAVEFormat.WF_PCM = ["WF_PCM",0];
+format_wav_WAVEFormat.WF_PCM.toString = $estr;
+format_wav_WAVEFormat.WF_PCM.__enum__ = format_wav_WAVEFormat;
+format_wav_WAVEFormat.__empty_constructs__ = [format_wav_WAVEFormat.WF_PCM];
+var format_wav_Reader = function(i) {
+	this.i = i;
+	i.set_bigEndian(false);
+};
+$hxClasses["format.wav.Reader"] = format_wav_Reader;
+format_wav_Reader.__name__ = ["format","wav","Reader"];
+format_wav_Reader.prototype = {
+	readInt: function() {
+		return this.i.readInt32();
+	}
+	,read: function() {
+		if(this.i.readString(4) != "RIFF") {
+			throw new js__$Boot_HaxeError("RIFF header expected");
+		}
+		var len = this.i.readInt32();
+		if(this.i.readString(4) != "WAVE") {
+			throw new js__$Boot_HaxeError("WAVE signature not found");
+		}
+		var fmt = this.i.readString(4);
+		try {
+			while(fmt != "fmt ") switch(fmt) {
+			case "JUNK":
+				var junkLen = this.i.readInt32();
+				this.i.read(junkLen);
+				fmt = this.i.readString(4);
+				break;
+			case "bext":
+				var bextLen = this.i.readInt32();
+				this.i.read(bextLen);
+				fmt = this.i.readString(4);
+				break;
+			default:
+				throw "__break__";
+			}
+		} catch( e ) { if( e != "__break__" ) throw e; }
+		if(fmt != "fmt ") {
+			throw new js__$Boot_HaxeError("unsupported wave chunk " + fmt);
+		}
+		var fmtlen = this.i.readInt32();
+		var format1;
+		var _g = this.i.readUInt16();
+		switch(_g) {
+		case 1:case 3:
+			format1 = format_wav_WAVEFormat.WF_PCM;
+			break;
+		default:
+			throw new js__$Boot_HaxeError("only PCM (uncompressed) WAV files are supported");
+		}
+		var channels = this.i.readUInt16();
+		var samplingRate = this.i.readInt32();
+		var byteRate = this.i.readInt32();
+		var blockAlign = this.i.readUInt16();
+		var bitsPerSample = this.i.readUInt16();
+		if(fmtlen > 16) {
+			this.i.read(fmtlen - 16);
+		}
+		var nextChunk = this.i.readString(4);
+		while(nextChunk != "data") {
+			this.i.read(this.i.readInt32());
+			nextChunk = this.i.readString(4);
+		}
+		if(nextChunk != "data") {
+			throw new js__$Boot_HaxeError("expected data subchunk");
+		}
+		var datalen = this.i.readInt32();
+		var data = this.i.readAll();
+		if(data.length > datalen) {
+			data = data.sub(0,datalen);
+		}
+		return { header : { format : format1, channels : channels, samplingRate : samplingRate, byteRate : byteRate, blockAlign : blockAlign, bitsPerSample : bitsPerSample}, data : data};
+	}
+	,__class__: format_wav_Reader
+};
+var h2d_Sprite = function(parent) {
+	this.alpha = 1.;
+	this.matA = 1;
+	this.matB = 0;
+	this.matC = 0;
+	this.matD = 1;
+	this.absX = 0;
+	this.absY = 0;
+	this.posChanged = true;
+	this.x = 0;
+	this.posChanged = true;
+	this.y = 0;
+	this.posChanged = true;
+	this.scaleX = 1;
+	this.posChanged = true;
+	this.scaleY = 1;
+	this.posChanged = true;
+	this.rotation = 0;
+	this.posChanged = parent != null;
+	this.set_visible(true);
+	this.children = [];
+	if(parent != null) {
+		parent.addChild(this);
+	}
+};
+$hxClasses["h2d.Sprite"] = h2d_Sprite;
+h2d_Sprite.__name__ = ["h2d","Sprite"];
+h2d_Sprite.prototype = {
+	getBounds: function(relativeTo,out) {
+		if(out == null) {
+			out = new h2d_col_Bounds();
+		} else {
+			out.xMin = 1e20;
+			out.yMin = 1e20;
+			out.xMax = -1e20;
+			out.yMax = -1e20;
+		}
+		if(relativeTo != null) {
+			relativeTo.syncPos();
+		}
+		if(relativeTo != this) {
+			this.syncPos();
+		}
+		this.getBoundsRec(relativeTo,out,false);
+		if(out.xMax <= out.xMin || out.yMax <= out.yMin) {
+			this.addBounds(relativeTo,out,-1,-1,2,2);
+			out.xMax = out.xMin = (out.xMax + out.xMin) * 0.5;
+			out.yMax = out.yMin = (out.yMax + out.yMin) * 0.5;
+		}
+		return out;
+	}
+	,getSize: function(out) {
+		if(out == null) {
+			out = new h2d_col_Bounds();
+		} else {
+			out.xMin = 1e20;
+			out.yMin = 1e20;
+			out.xMax = -1e20;
+			out.yMax = -1e20;
+		}
+		this.syncPos();
+		this.getBoundsRec(this.parent,out,true);
+		if(out.xMax <= out.xMin || out.yMax <= out.yMin) {
+			this.addBounds(this.parent,out,-1,-1,2,2);
+			out.xMax = out.xMin = (out.xMax + out.xMin) * 0.5;
+			out.yMax = out.yMin = (out.yMax + out.yMin) * 0.5;
+		}
+		var dx = -this.x;
+		var dy = -this.y;
+		out.xMin += dx;
+		out.xMax += dx;
+		out.yMin += dy;
+		out.yMax += dy;
+		return out;
+	}
+	,find: function(f) {
+		var v = f(this);
+		if(v != null) {
+			return v;
+		}
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var o = _g1[_g];
+			++_g;
+			var v1 = o.find(f);
+			if(v1 != null) {
+				return v1;
+			}
+		}
+		return null;
+	}
+	,findAll: function(f,arr) {
+		if(arr == null) {
+			arr = [];
+		}
+		var v = f(this);
+		if(v != null) {
+			arr.push(v);
+		}
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var o = _g1[_g];
+			++_g;
+			o.findAll(f,arr);
+		}
+		return arr;
+	}
+	,set_filter: function(f) {
+		if(this.filter != null && this.allocated) {
+			this.filter.unbind(this);
+		}
+		this.filter = f;
+		if(f != null && this.allocated) {
+			f.bind(this);
+		}
+		return f;
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		if(this.posChanged) {
+			this.calcAbsPos();
+			var _g = 0;
+			var _g1 = this.children;
+			while(_g < _g1.length) {
+				var c = _g1[_g];
+				++_g;
+				c.posChanged = true;
+			}
+			this.posChanged = false;
+		}
+		var n = this.children.length;
+		if(n == 0) {
+			out.xMin = 1e20;
+			out.yMin = 1e20;
+			out.xMax = -1e20;
+			out.yMax = -1e20;
+			return;
+		}
+		if(n == 1) {
+			var c1 = this.children[0];
+			if(c1.visible) {
+				c1.getBoundsRec(relativeTo,out,forSize);
+			} else {
+				out.xMin = 1e20;
+				out.yMin = 1e20;
+				out.xMax = -1e20;
+				out.yMax = -1e20;
+			}
+			return;
+		}
+		var xmin = Infinity;
+		var ymin = Infinity;
+		var xmax = -Infinity;
+		var ymax = -Infinity;
+		var _g2 = 0;
+		var _g11 = this.children;
+		while(_g2 < _g11.length) {
+			var c2 = _g11[_g2];
+			++_g2;
+			if(!c2.visible) {
+				continue;
+			}
+			c2.getBoundsRec(relativeTo,out,forSize);
+			if(out.xMin < xmin) {
+				xmin = out.xMin;
+			}
+			if(out.yMin < ymin) {
+				ymin = out.yMin;
+			}
+			if(out.xMax > xmax) {
+				xmax = out.xMax;
+			}
+			if(out.yMax > ymax) {
+				ymax = out.yMax;
+			}
+		}
+		out.xMin = xmin;
+		out.yMin = ymin;
+		out.xMax = xmax;
+		out.yMax = ymax;
+	}
+	,addBounds: function(relativeTo,out,dx,dy,width,height) {
+		if(width <= 0 || height <= 0) {
+			return;
+		}
+		if(relativeTo == null) {
+			var x;
+			var y;
+			var x1 = dx * this.matA + dy * this.matC + this.absX;
+			var y1 = dx * this.matB + dy * this.matD + this.absY;
+			if(x1 < out.xMin) {
+				out.xMin = x1;
+			}
+			if(x1 > out.xMax) {
+				out.xMax = x1;
+			}
+			if(y1 < out.yMin) {
+				out.yMin = y1;
+			}
+			if(y1 > out.yMax) {
+				out.yMax = y1;
+			}
+			var x2 = (dx + width) * this.matA + dy * this.matC + this.absX;
+			var y2 = (dx + width) * this.matB + dy * this.matD + this.absY;
+			if(x2 < out.xMin) {
+				out.xMin = x2;
+			}
+			if(x2 > out.xMax) {
+				out.xMax = x2;
+			}
+			if(y2 < out.yMin) {
+				out.yMin = y2;
+			}
+			if(y2 > out.yMax) {
+				out.yMax = y2;
+			}
+			var x3 = dx * this.matA + (dy + height) * this.matC + this.absX;
+			var y3 = dx * this.matB + (dy + height) * this.matD + this.absY;
+			if(x3 < out.xMin) {
+				out.xMin = x3;
+			}
+			if(x3 > out.xMax) {
+				out.xMax = x3;
+			}
+			if(y3 < out.yMin) {
+				out.yMin = y3;
+			}
+			if(y3 > out.yMax) {
+				out.yMax = y3;
+			}
+			var x4 = (dx + width) * this.matA + (dy + height) * this.matC + this.absX;
+			var y4 = (dx + width) * this.matB + (dy + height) * this.matD + this.absY;
+			if(x4 < out.xMin) {
+				out.xMin = x4;
+			}
+			if(x4 > out.xMax) {
+				out.xMax = x4;
+			}
+			if(y4 < out.yMin) {
+				out.yMin = y4;
+			}
+			if(y4 > out.yMax) {
+				out.yMax = y4;
+			}
+			return;
+		}
+		if(relativeTo == this) {
+			if(out.xMin > dx) {
+				out.xMin = dx;
+			}
+			if(out.yMin > dy) {
+				out.yMin = dy;
+			}
+			if(out.xMax < dx + width) {
+				out.xMax = dx + width;
+			}
+			if(out.yMax < dy + height) {
+				out.yMax = dy + height;
+			}
+			return;
+		}
+		var r = relativeTo.matA * relativeTo.matD - relativeTo.matB * relativeTo.matC;
+		if(r == 0) {
+			return;
+		}
+		var det = 1 / r;
+		var rA = relativeTo.matD * det;
+		var rB = -relativeTo.matB * det;
+		var rC = -relativeTo.matC * det;
+		var rD = relativeTo.matA * det;
+		var rX = this.absX - relativeTo.absX;
+		var rY = this.absY - relativeTo.absY;
+		var x5;
+		var y5;
+		x5 = dx * this.matA + dy * this.matC + rX;
+		y5 = dx * this.matB + dy * this.matD + rY;
+		var x6 = x5 * rA + y5 * rC;
+		var y6 = x5 * rB + y5 * rD;
+		if(x6 < out.xMin) {
+			out.xMin = x6;
+		}
+		if(x6 > out.xMax) {
+			out.xMax = x6;
+		}
+		if(y6 < out.yMin) {
+			out.yMin = y6;
+		}
+		if(y6 > out.yMax) {
+			out.yMax = y6;
+		}
+		x5 = (dx + width) * this.matA + dy * this.matC + rX;
+		y5 = (dx + width) * this.matB + dy * this.matD + rY;
+		var x7 = x5 * rA + y5 * rC;
+		var y7 = x5 * rB + y5 * rD;
+		if(x7 < out.xMin) {
+			out.xMin = x7;
+		}
+		if(x7 > out.xMax) {
+			out.xMax = x7;
+		}
+		if(y7 < out.yMin) {
+			out.yMin = y7;
+		}
+		if(y7 > out.yMax) {
+			out.yMax = y7;
+		}
+		x5 = dx * this.matA + (dy + height) * this.matC + rX;
+		y5 = dx * this.matB + (dy + height) * this.matD + rY;
+		var x8 = x5 * rA + y5 * rC;
+		var y8 = x5 * rB + y5 * rD;
+		if(x8 < out.xMin) {
+			out.xMin = x8;
+		}
+		if(x8 > out.xMax) {
+			out.xMax = x8;
+		}
+		if(y8 < out.yMin) {
+			out.yMin = y8;
+		}
+		if(y8 > out.yMax) {
+			out.yMax = y8;
+		}
+		x5 = (dx + width) * this.matA + (dy + height) * this.matC + rX;
+		y5 = (dx + width) * this.matB + (dy + height) * this.matD + rY;
+		var x9 = x5 * rA + y5 * rC;
+		var y9 = x5 * rB + y5 * rD;
+		if(x9 < out.xMin) {
+			out.xMin = x9;
+		}
+		if(x9 > out.xMax) {
+			out.xMax = x9;
+		}
+		if(y9 < out.yMin) {
+			out.yMin = y9;
+		}
+		if(y9 > out.yMax) {
+			out.yMax = y9;
+		}
+	}
+	,getSpritesCount: function() {
+		var k = 0;
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			k += c.getSpritesCount() + 1;
+		}
+		return k;
+	}
+	,localToGlobal: function(pt) {
+		this.syncPos();
+		if(pt == null) {
+			pt = new h2d_col_Point();
+		}
+		var px = pt.x * this.matA + pt.y * this.matC + this.absX;
+		var py = pt.x * this.matB + pt.y * this.matD + this.absY;
+		pt.x = px;
+		pt.y = py;
+		return pt;
+	}
+	,globalToLocal: function(pt) {
+		this.syncPos();
+		pt.x -= this.absX;
+		pt.y -= this.absY;
+		var invDet = 1 / (this.matA * this.matD - this.matB * this.matC);
+		var px = (pt.x * this.matD - pt.y * this.matC) * invDet;
+		var py = (-pt.x * this.matB + pt.y * this.matA) * invDet;
+		pt.x = px;
+		pt.y = py;
+		return pt;
+	}
+	,getScene: function() {
+		var p = this;
+		while(p.parent != null) p = p.parent;
+		return (p instanceof h2d_Scene) ? p : null;
+	}
+	,set_visible: function(b) {
+		if(this.visible == b) {
+			return b;
+		}
+		this.visible = b;
+		if(this.parentContainer != null) {
+			this.parentContainer.contentChanged(this);
+		}
+		return b;
+	}
+	,addChild: function(s) {
+		this.addChildAt(s,this.children.length);
+	}
+	,addChildAt: function(s,pos) {
+		if(pos < 0) {
+			pos = 0;
+		}
+		if(pos > this.children.length) {
+			pos = this.children.length;
+		}
+		var p = this;
+		while(p != null) {
+			if(p == s) {
+				throw new js__$Boot_HaxeError("Recursive addChild");
+			}
+			p = p.parent;
+		}
+		if(s.parent != null) {
+			var old = s.allocated;
+			s.allocated = false;
+			s.parent.removeChild(s);
+			s.allocated = old;
+		}
+		this.children.splice(pos,0,s);
+		if(!this.allocated && s.allocated) {
+			s.onRemove();
+		}
+		s.parent = this;
+		s.parentContainer = this.parentContainer;
+		s.posChanged = true;
+		if(this.allocated) {
+			if(!s.allocated) {
+				s.onAdd();
+			} else {
+				s.onParentChanged();
+			}
+		}
+		if(this.parentContainer != null) {
+			this.parentContainer.contentChanged(this);
+		}
+	}
+	,onContentChanged: function() {
+		if(this.parentContainer != null) {
+			this.parentContainer.contentChanged(this);
+		}
+	}
+	,onParentChanged: function() {
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			c.onParentChanged();
+		}
+	}
+	,onAdd: function() {
+		this.allocated = true;
+		if(this.filter != null) {
+			this.filter.bind(this);
+		}
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			c.onAdd();
+		}
+	}
+	,onRemove: function() {
+		this.allocated = false;
+		if(this.filter != null) {
+			this.filter.unbind(this);
+		}
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			c.onRemove();
+		}
+	}
+	,getMatrix: function(m) {
+		m.a = this.matA;
+		m.b = this.matB;
+		m.c = this.matC;
+		m.d = this.matD;
+		m.x = this.absX;
+		m.y = this.absY;
+	}
+	,removeChild: function(s) {
+		if(HxOverrides.remove(this.children,s)) {
+			if(s.allocated) {
+				s.onRemove();
+			}
+			s.parent = null;
+			if(s.parentContainer != null) {
+				s.setParentContainer(null);
+			}
+			s.posChanged = true;
+			if(this.parentContainer != null) {
+				this.parentContainer.contentChanged(this);
+			}
+		}
+	}
+	,setParentContainer: function(c) {
+		this.parentContainer = c;
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var s = _g1[_g];
+			++_g;
+			s.setParentContainer(c);
+		}
+	}
+	,removeChildren: function() {
+		while(this.children.length > 0) this.removeChild(this.children[0]);
+	}
+	,remove: function() {
+		if(this.parent != null) {
+			this.parent.removeChild(this);
+		}
+	}
+	,drawTo: function(t) {
+		var s = this.getScene();
+		var needDispose = s == null;
+		if(s == null) {
+			s = new h2d_Scene();
+		}
+		s.drawImplTo(this,t);
+		if(needDispose) {
+			s.dispose();
+		}
+	}
+	,draw: function(ctx) {
+	}
+	,sync: function(ctx) {
+		var changed = this.posChanged;
+		if(changed) {
+			this.calcAbsPos();
+			this.posChanged = false;
+		}
+		this.lastFrame = ctx.frame;
+		var p = 0;
+		var len = this.children.length;
+		while(p < len) {
+			var c = this.children[p];
+			if(c == null) {
+				break;
+			}
+			if(c.lastFrame != ctx.frame) {
+				if(changed) {
+					c.posChanged = true;
+				}
+				c.sync(ctx);
+			}
+			if(this.children[p] != c) {
+				p = 0;
+				len = this.children.length;
+			} else {
+				++p;
+			}
+		}
+	}
+	,syncPos: function() {
+		if(this.parent != null) {
+			this.parent.syncPos();
+		}
+		if(this.posChanged) {
+			this.calcAbsPos();
+			var _g = 0;
+			var _g1 = this.children;
+			while(_g < _g1.length) {
+				var c = _g1[_g];
+				++_g;
+				c.posChanged = true;
+			}
+			this.posChanged = false;
+		}
+	}
+	,calcAbsPos: function() {
+		if(this.parent == null) {
+			var cr;
+			var sr;
+			if(this.rotation == 0) {
+				cr = 1.;
+				sr = 0.;
+				this.matA = this.scaleX;
+				this.matB = 0;
+				this.matC = 0;
+				this.matD = this.scaleY;
+			} else {
+				cr = Math.cos(this.rotation);
+				sr = Math.sin(this.rotation);
+				this.matA = this.scaleX * cr;
+				this.matB = this.scaleX * sr;
+				this.matC = this.scaleY * -sr;
+				this.matD = this.scaleY * cr;
+			}
+			this.absX = this.x;
+			this.absY = this.y;
+		} else {
+			if(this.rotation == 0) {
+				this.matA = this.scaleX * this.parent.matA;
+				this.matB = this.scaleX * this.parent.matB;
+				this.matC = this.scaleY * this.parent.matC;
+				this.matD = this.scaleY * this.parent.matD;
+			} else {
+				var cr1 = Math.cos(this.rotation);
+				var sr1 = Math.sin(this.rotation);
+				var tmpA = this.scaleX * cr1;
+				var tmpB = this.scaleX * sr1;
+				var tmpC = this.scaleY * -sr1;
+				var tmpD = this.scaleY * cr1;
+				this.matA = tmpA * this.parent.matA + tmpB * this.parent.matC;
+				this.matB = tmpA * this.parent.matB + tmpB * this.parent.matD;
+				this.matC = tmpC * this.parent.matA + tmpD * this.parent.matC;
+				this.matD = tmpC * this.parent.matB + tmpD * this.parent.matD;
+			}
+			this.absX = this.x * this.parent.matA + this.y * this.parent.matC + this.parent.absX;
+			this.absY = this.x * this.parent.matB + this.y * this.parent.matD + this.parent.absY;
+		}
+	}
+	,emitTile: function(ctx,tile) {
+		if(h2d_Sprite.nullDrawable == null) {
+			h2d_Sprite.nullDrawable = new h2d_Drawable(null);
+		}
+		h2d_Sprite.nullDrawable.absX = this.absX;
+		h2d_Sprite.nullDrawable.absY = this.absY;
+		h2d_Sprite.nullDrawable.matA = this.matA;
+		h2d_Sprite.nullDrawable.matB = this.matB;
+		h2d_Sprite.nullDrawable.matC = this.matC;
+		h2d_Sprite.nullDrawable.matD = this.matD;
+		ctx.drawTile(h2d_Sprite.nullDrawable,tile);
+		return;
+	}
+	,clipBounds: function(ctx,bounds) {
+		var view = ctx.tmpBounds;
+		var matA;
+		var matB;
+		var matC;
+		var matD;
+		var absX;
+		var absY;
+		if(ctx.inFilter != null) {
+			var f1 = ctx.baseShader.filterMatrixA__;
+			var f2 = ctx.baseShader.filterMatrixB__;
+			matA = this.matA * f1.x + this.matB * f1.y;
+			matB = this.matA * f2.x + this.matB * f2.y;
+			matC = this.matC * f1.x + this.matD * f1.y;
+			matD = this.matC * f2.x + this.matD * f2.y;
+			absX = this.absX * f1.x + this.absY * f1.y + f1.z;
+			absY = this.absX * f2.x + this.absY * f2.y + f2.z;
+		} else {
+			matA = this.matA;
+			matB = this.matB;
+			matC = this.matC;
+			matD = this.matD;
+			absX = this.absX;
+			absY = this.absY;
+		}
+		view.xMin = 1e20;
+		view.yMin = 1e20;
+		view.xMax = -1e20;
+		view.yMax = -1e20;
+		var x = bounds.xMin;
+		var y = bounds.yMin;
+		var x1 = x * matA + y * matC + absX;
+		var y1 = x * matB + y * matD + absY;
+		if(x1 < view.xMin) {
+			view.xMin = x1;
+		}
+		if(x1 > view.xMax) {
+			view.xMax = x1;
+		}
+		if(y1 < view.yMin) {
+			view.yMin = y1;
+		}
+		if(y1 > view.yMax) {
+			view.yMax = y1;
+		}
+		var x2 = bounds.xMax;
+		var y2 = bounds.yMin;
+		var x3 = x2 * matA + y2 * matC + absX;
+		var y3 = x2 * matB + y2 * matD + absY;
+		if(x3 < view.xMin) {
+			view.xMin = x3;
+		}
+		if(x3 > view.xMax) {
+			view.xMax = x3;
+		}
+		if(y3 < view.yMin) {
+			view.yMin = y3;
+		}
+		if(y3 > view.yMax) {
+			view.yMax = y3;
+		}
+		var x4 = bounds.xMin;
+		var y4 = bounds.yMax;
+		var x5 = x4 * matA + y4 * matC + absX;
+		var y5 = x4 * matB + y4 * matD + absY;
+		if(x5 < view.xMin) {
+			view.xMin = x5;
+		}
+		if(x5 > view.xMax) {
+			view.xMax = x5;
+		}
+		if(y5 < view.yMin) {
+			view.yMin = y5;
+		}
+		if(y5 > view.yMax) {
+			view.yMax = y5;
+		}
+		var x6 = bounds.xMax;
+		var y6 = bounds.yMax;
+		var x7 = x6 * matA + y6 * matC + absX;
+		var y7 = x6 * matB + y6 * matD + absY;
+		if(x7 < view.xMin) {
+			view.xMin = x7;
+		}
+		if(x7 > view.xMax) {
+			view.xMax = x7;
+		}
+		if(y7 < view.yMin) {
+			view.yMin = y7;
+		}
+		if(y7 > view.yMax) {
+			view.yMax = y7;
+		}
+		if(view.xMin < ctx.curX) {
+			view.xMin = ctx.curX;
+		}
+		if(view.yMin < ctx.curY) {
+			view.yMin = ctx.curY;
+		}
+		if(view.xMax > ctx.curX + ctx.curWidth) {
+			view.xMax = ctx.curX + ctx.curWidth;
+		}
+		if(view.yMax > ctx.curY + ctx.curHeight) {
+			view.yMax = ctx.curY + ctx.curHeight;
+		}
+		var invDet = 1 / (matA * matD - matB * matC);
+		var sxMin = view.xMin;
+		var syMin = view.yMin;
+		var sxMax = view.xMax;
+		var syMax = view.yMax;
+		view.xMin = 1e20;
+		view.yMin = 1e20;
+		view.xMax = -1e20;
+		view.yMax = -1e20;
+		var x8 = sxMin;
+		var y8 = syMin;
+		x8 -= absX;
+		y8 -= absY;
+		var x9 = (x8 * matD - y8 * matC) * invDet;
+		var y9 = (-x8 * matB + y8 * matA) * invDet;
+		if(x9 < view.xMin) {
+			view.xMin = x9;
+		}
+		if(x9 > view.xMax) {
+			view.xMax = x9;
+		}
+		if(y9 < view.yMin) {
+			view.yMin = y9;
+		}
+		if(y9 > view.yMax) {
+			view.yMax = y9;
+		}
+		var x10 = sxMax;
+		var y10 = syMin;
+		x10 -= absX;
+		y10 -= absY;
+		var x11 = (x10 * matD - y10 * matC) * invDet;
+		var y11 = (-x10 * matB + y10 * matA) * invDet;
+		if(x11 < view.xMin) {
+			view.xMin = x11;
+		}
+		if(x11 > view.xMax) {
+			view.xMax = x11;
+		}
+		if(y11 < view.yMin) {
+			view.yMin = y11;
+		}
+		if(y11 > view.yMax) {
+			view.yMax = y11;
+		}
+		var x12 = sxMin;
+		var y12 = syMax;
+		x12 -= absX;
+		y12 -= absY;
+		var x13 = (x12 * matD - y12 * matC) * invDet;
+		var y13 = (-x12 * matB + y12 * matA) * invDet;
+		if(x13 < view.xMin) {
+			view.xMin = x13;
+		}
+		if(x13 > view.xMax) {
+			view.xMax = x13;
+		}
+		if(y13 < view.yMin) {
+			view.yMin = y13;
+		}
+		if(y13 > view.yMax) {
+			view.yMax = y13;
+		}
+		var x14 = sxMax;
+		var y14 = syMax;
+		x14 -= absX;
+		y14 -= absY;
+		var x15 = (x14 * matD - y14 * matC) * invDet;
+		var y15 = (-x14 * matB + y14 * matA) * invDet;
+		if(x15 < view.xMin) {
+			view.xMin = x15;
+		}
+		if(x15 > view.xMax) {
+			view.xMax = x15;
+		}
+		if(y15 < view.yMin) {
+			view.yMin = y15;
+		}
+		if(y15 > view.yMax) {
+			view.yMax = y15;
+		}
+		var a = bounds.xMin;
+		var b = view.xMin;
+		bounds.xMin = a < b ? b : a;
+		var a1 = bounds.yMin;
+		var b1 = view.yMin;
+		bounds.yMin = a1 < b1 ? b1 : a1;
+		var a2 = bounds.xMax;
+		var b2 = view.xMax;
+		bounds.xMax = a2 > b2 ? b2 : a2;
+		var a3 = bounds.yMax;
+		var b3 = view.yMax;
+		bounds.yMax = a3 > b3 ? b3 : a3;
+	}
+	,drawFilters: function(ctx) {
+		if(!ctx.pushFilter(this)) {
+			return;
+		}
+		var bounds = ctx.tmpBounds;
+		var total = new h2d_col_Bounds();
+		var maxExtent = -1.;
+		this.filter.sync(ctx,this);
+		if(this.filter.autoBounds) {
+			maxExtent = this.filter.boundsExtend;
+		} else {
+			this.filter.getBounds(this,bounds);
+			if(bounds.xMin < total.xMin) {
+				total.xMin = bounds.xMin;
+			}
+			if(bounds.xMax > total.xMax) {
+				total.xMax = bounds.xMax;
+			}
+			if(bounds.yMin < total.yMin) {
+				total.yMin = bounds.yMin;
+			}
+			if(bounds.yMax > total.yMax) {
+				total.yMax = bounds.yMax;
+			}
+		}
+		if(maxExtent >= 0) {
+			this.getBounds(this,bounds);
+			bounds.xMin -= maxExtent;
+			bounds.yMin -= maxExtent;
+			bounds.xMax += maxExtent;
+			bounds.yMax += maxExtent;
+			if(bounds.xMin < total.xMin) {
+				total.xMin = bounds.xMin;
+			}
+			if(bounds.xMax > total.xMax) {
+				total.xMax = bounds.xMax;
+			}
+			if(bounds.yMin < total.yMin) {
+				total.yMin = bounds.yMin;
+			}
+			if(bounds.yMax > total.yMax) {
+				total.yMax = bounds.yMax;
+			}
+		}
+		this.clipBounds(ctx,total);
+		var xMin = Math.floor(total.xMin + 1e-10);
+		var yMin = Math.floor(total.yMin + 1e-10);
+		var width = Math.ceil(total.xMax - xMin - 1e-10);
+		var height = Math.ceil(total.yMax - yMin - 1e-10);
+		if(width <= 0 || height <= 0 || total.xMax < total.xMin) {
+			return;
+		}
+		var t = ctx.textures.allocTarget("filterTemp",ctx,width,height,false);
+		ctx.pushTarget(t,xMin,yMin,width,height);
+		ctx.engine.clear(0);
+		var oldAlpha = ctx.globalAlpha;
+		var shader = ctx.baseShader;
+		var oldA_z;
+		var oldA_y;
+		var oldA_x;
+		var oldA_w;
+		var _this = shader.filterMatrixA__;
+		oldA_x = _this.x;
+		oldA_y = _this.y;
+		oldA_z = _this.z;
+		oldA_w = _this.w;
+		var oldB_z;
+		var oldB_y;
+		var oldB_x;
+		var oldB_w;
+		var _this1 = shader.filterMatrixB__;
+		oldB_x = _this1.x;
+		oldB_y = _this1.y;
+		oldB_z = _this1.z;
+		oldB_w = _this1.w;
+		var oldF = ctx.inFilter;
+		var invDet = 1 / (this.matA * this.matD - this.matB * this.matC);
+		var invA = this.matD * invDet;
+		var invB = -this.matB * invDet;
+		var invC = -this.matC * invDet;
+		var invD = this.matA * invDet;
+		var invX = -(this.absX * invA + this.absY * invC);
+		var invY = -(this.absX * invB + this.absY * invD);
+		var _this2 = shader.filterMatrixA__;
+		_this2.x = invA;
+		_this2.y = invC;
+		_this2.z = invX;
+		_this2.w = 1.;
+		var _this3 = shader.filterMatrixB__;
+		_this3.x = invB;
+		_this3.y = invD;
+		_this3.z = invY;
+		_this3.w = 1.;
+		ctx.globalAlpha = 1;
+		this.draw(ctx);
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			c.drawRec(ctx);
+		}
+		var finalTile = h2d_Tile.fromTexture(t);
+		finalTile.dx = xMin;
+		finalTile.dy = yMin;
+		var prev = finalTile;
+		finalTile = this.filter.draw(ctx,finalTile);
+		if(finalTile != prev && finalTile != null) {
+			finalTile.dx += xMin;
+			finalTile.dy += yMin;
+		}
+		var _this4 = shader.filterMatrixA__;
+		_this4.x = oldA_x;
+		_this4.y = oldA_y;
+		_this4.z = oldA_z;
+		_this4.w = oldA_w;
+		var _this5 = shader.filterMatrixB__;
+		_this5.x = oldB_x;
+		_this5.y = oldB_y;
+		_this5.z = oldB_z;
+		_this5.w = oldB_w;
+		ctx.popTarget();
+		ctx.popFilter();
+		if(finalTile == null) {
+			return;
+		}
+		ctx.globalAlpha = oldAlpha * this.alpha;
+		this.emitTile(ctx,finalTile);
+		ctx.globalAlpha = oldAlpha;
+	}
+	,drawRec: function(ctx) {
+		if(!this.visible) {
+			return;
+		}
+		if(this.posChanged) {
+			this.calcAbsPos();
+			var _g = 0;
+			var _g1 = this.children;
+			while(_g < _g1.length) {
+				var c = _g1[_g];
+				++_g;
+				c.posChanged = true;
+			}
+			this.posChanged = false;
+		}
+		if(this.filter != null) {
+			this.drawFilters(ctx);
+		} else {
+			var old = ctx.globalAlpha;
+			ctx.globalAlpha *= this.alpha;
+			if(ctx.front2back) {
+				var nchilds = this.children.length;
+				var _g11 = 0;
+				var _g2 = nchilds;
+				while(_g11 < _g2) {
+					var i = _g11++;
+					this.children[nchilds - 1 - i].drawRec(ctx);
+				}
+				this.draw(ctx);
+			} else {
+				this.draw(ctx);
+				var _g3 = 0;
+				var _g12 = this.children;
+				while(_g3 < _g12.length) {
+					var c1 = _g12[_g3];
+					++_g3;
+					c1.drawRec(ctx);
+				}
+			}
+			ctx.globalAlpha = old;
+		}
+	}
+	,set_x: function(v) {
+		this.posChanged = true;
+		return this.x = v;
+	}
+	,set_y: function(v) {
+		this.posChanged = true;
+		return this.y = v;
+	}
+	,set_scaleX: function(v) {
+		this.posChanged = true;
+		return this.scaleX = v;
+	}
+	,set_scaleY: function(v) {
+		this.posChanged = true;
+		return this.scaleY = v;
+	}
+	,set_rotation: function(v) {
+		this.posChanged = true;
+		return this.rotation = v;
+	}
+	,move: function(dx,dy) {
+		var _g = this;
+		var v = _g.x + dx * Math.cos(this.rotation);
+		_g.posChanged = true;
+		_g.x = v;
+		var _g1 = this;
+		var v1 = _g1.y + dy * Math.sin(this.rotation);
+		_g1.posChanged = true;
+		_g1.y = v1;
+	}
+	,setPos: function(x,y) {
+		this.posChanged = true;
+		this.x = x;
+		this.posChanged = true;
+		this.y = y;
+	}
+	,rotate: function(v) {
+		var _g = this;
+		_g.posChanged = true;
+		_g.rotation += v;
+	}
+	,scale: function(v) {
+		var _g = this;
+		_g.posChanged = true;
+		_g.scaleX *= v;
+		var _g1 = this;
+		_g1.posChanged = true;
+		_g1.scaleY *= v;
+	}
+	,setScale: function(v) {
+		this.posChanged = true;
+		this.scaleX = v;
+		this.posChanged = true;
+		this.scaleY = v;
+	}
+	,getChildAt: function(n) {
+		return this.children[n];
+	}
+	,getChildIndex: function(s) {
+		var _g1 = 0;
+		var _g = this.children.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(this.children[i] == s) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	,get_numChildren: function() {
+		return this.children.length;
+	}
+	,iterator: function() {
+		return new hxd_impl_ArrayIterator_$h2d_$Sprite(this.children);
+	}
+	,toString: function() {
+		var c = Type.getClassName(js_Boot.getClass(this));
+		if(this.name == null) {
+			return c;
+		} else {
+			return this.name + "(" + c + ")";
+		}
+	}
+	,contentChanged: function(s) {
+	}
+	,constraintSize: function(maxWidth,maxHeight) {
+	}
+	,__class__: h2d_Sprite
+};
+var h2d_Drawable = function(parent) {
+	h2d_Sprite.call(this,parent);
+	this.blendMode = h2d_BlendMode.Alpha;
+	this.color = new h3d_Vector(1,1,1,1);
+};
+$hxClasses["h2d.Drawable"] = h2d_Drawable;
+h2d_Drawable.__name__ = ["h2d","Drawable"];
+h2d_Drawable.__super__ = h2d_Sprite;
+h2d_Drawable.prototype = $extend(h2d_Sprite.prototype,{
+	set_tileWrap: function(b) {
+		return this.tileWrap = b;
+	}
+	,get_colorAdd: function() {
+		var s = this.getShader(h3d_shader_ColorAdd);
+		if(s == null) {
+			return null;
+		} else {
+			return s.color__;
+		}
+	}
+	,set_colorAdd: function(c) {
+		var s = this.getShader(h3d_shader_ColorAdd);
+		if(s == null) {
+			if(c != null) {
+				s = this.addShader(new h3d_shader_ColorAdd());
+				s.color__ = c;
+			}
+		} else if(c == null) {
+			this.removeShader(s);
+		} else {
+			s.color__ = c;
+		}
+		return c;
+	}
+	,set_colorKey: function(v) {
+		var s = this.getShader(h3d_shader_ColorKey);
+		if(s == null) {
+			if(v != null) {
+				s = this.addShader(new h3d_shader_ColorKey(-16777216 | v));
+			}
+		} else if(v == null) {
+			this.removeShader(s);
+		} else {
+			var _this = s.colorKey__;
+			var c = -16777216 | v;
+			_this.x = (c >> 16 & 255) / 255;
+			_this.y = (c >> 8 & 255) / 255;
+			_this.z = (c & 255) / 255;
+			_this.w = (c >>> 24) / 255;
+		}
+		return this.colorKey = v;
+	}
+	,adjustColor: function(col) {
+		if(col == null) {
+			this.set_colorMatrix(null);
+		} else {
+			var m = this.get_colorMatrix();
+			if(m == null) {
+				m = new h3d_Matrix();
+				this.set_colorMatrix(m);
+			}
+			m.identity();
+			if(col.hue != null) {
+				m.colorHue(col.hue);
+			}
+			if(col.saturation != null) {
+				m.colorSaturation(col.saturation);
+			}
+			if(col.contrast != null) {
+				m.colorContrast(col.contrast);
+			}
+			if(col.lightness != null) {
+				m.colorLightness(col.lightness);
+			}
+			if(col.gain != null) {
+				m.colorGain(col.gain.color,col.gain.alpha);
+			}
+		}
+	}
+	,get_colorMatrix: function() {
+		var s = this.getShader(h3d_shader_ColorMatrix);
+		if(s == null) {
+			return null;
+		} else {
+			return s.matrix__;
+		}
+	}
+	,set_colorMatrix: function(m) {
+		var s = this.getShader(h3d_shader_ColorMatrix);
+		if(s == null) {
+			if(m != null) {
+				s = this.addShader(new h3d_shader_ColorMatrix());
+				s.matrix__ = m;
+			}
+		} else if(m == null) {
+			this.removeShader(s);
+		} else {
+			s.matrix__ = m;
+		}
+		return m;
+	}
+	,getDebugShaderCode: function(toHxsl) {
+		if(toHxsl == null) {
+			toHxsl = true;
+		}
+		var ctx = this.getScene().ctx;
+		var shader = ctx.manager.compileShaders(new hxsl_ShaderList(ctx.baseShader,this.shaders));
+		if(toHxsl) {
+			var toString = function(s) {
+				return hxsl_Printer.shaderToString(s,true);
+			};
+			return "// vertex:\n" + toString(shader.vertex.data) + "\n\nfragment:\n" + toString(shader.fragment.data);
+		} else {
+			return h3d_Engine.CURRENT.driver.getNativeShaderCode(shader);
+		}
+	}
+	,getShader: function(stype) {
+		if(this.shaders != null) {
+			var _g_last;
+			var _g_l = this.shaders;
+			_g_last = null;
+			while(_g_l != _g_last) {
+				var s = _g_l.s;
+				_g_l = _g_l.next;
+				var s1 = s;
+				var s2 = (s1 instanceof stype) ? s1 : null;
+				if(s2 != null) {
+					return s2;
+				}
+			}
+		}
+		return null;
+	}
+	,getShaders: function() {
+		return new hxsl__$ShaderList_ShaderIterator(this.shaders,null);
+	}
+	,addShader: function(s) {
+		if(s == null) {
+			throw new js__$Boot_HaxeError("Can't add null shader");
+		}
+		this.shaders = new hxsl_ShaderList(s,this.shaders);
+		return s;
+	}
+	,removeShader: function(s) {
+		var prev = null;
+		var cur = this.shaders;
+		while(cur != null) {
+			if(cur.s == s) {
+				if(prev == null) {
+					this.shaders = cur.next;
+				} else {
+					prev.next = cur.next;
+				}
+				return true;
+			}
+			prev = cur;
+			cur = cur.next;
+		}
+		return false;
+	}
+	,emitTile: function(ctx,tile) {
+		if(tile == null) {
+			tile = new h2d_Tile(null,0,0,5,5);
+		}
+		if(!ctx.drawTile(this,tile)) {
+			return;
+		}
+		return;
+	}
+	,__class__: h2d_Drawable
+});
+var h2d_Bitmap = function(tile,parent) {
+	h2d_Drawable.call(this,parent);
+	this.tile = tile;
+};
+$hxClasses["h2d.Bitmap"] = h2d_Bitmap;
+h2d_Bitmap.__name__ = ["h2d","Bitmap"];
+h2d_Bitmap.__super__ = h2d_Drawable;
+h2d_Bitmap.prototype = $extend(h2d_Drawable.prototype,{
+	set_tileWrap: function(b) {
+		if(b && this.tile != null && (this.tile.innerTex.flags & 1 << h3d_mat_TextureFlags.IsNPOT[1]) != 0) {
+			throw new js__$Boot_HaxeError("Cannot set tileWrap on a non power-of-two texture");
+		}
+		return this.tileWrap = b;
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		if(this.tile != null) {
+			this.addBounds(relativeTo,out,this.tile.dx,this.tile.dy,this.tile.width,this.tile.height);
+		}
+	}
+	,draw: function(ctx) {
+		this.emitTile(ctx,this.tile);
+	}
+	,__class__: h2d_Bitmap
+});
+var h2d_BlendMode = $hxClasses["h2d.BlendMode"] = { __ename__ : ["h2d","BlendMode"], __constructs__ : ["None","Alpha","Add","SoftAdd","Multiply","Erase","Screen"] };
+h2d_BlendMode.None = ["None",0];
+h2d_BlendMode.None.toString = $estr;
+h2d_BlendMode.None.__enum__ = h2d_BlendMode;
+h2d_BlendMode.Alpha = ["Alpha",1];
+h2d_BlendMode.Alpha.toString = $estr;
+h2d_BlendMode.Alpha.__enum__ = h2d_BlendMode;
+h2d_BlendMode.Add = ["Add",2];
+h2d_BlendMode.Add.toString = $estr;
+h2d_BlendMode.Add.__enum__ = h2d_BlendMode;
+h2d_BlendMode.SoftAdd = ["SoftAdd",3];
+h2d_BlendMode.SoftAdd.toString = $estr;
+h2d_BlendMode.SoftAdd.__enum__ = h2d_BlendMode;
+h2d_BlendMode.Multiply = ["Multiply",4];
+h2d_BlendMode.Multiply.toString = $estr;
+h2d_BlendMode.Multiply.__enum__ = h2d_BlendMode;
+h2d_BlendMode.Erase = ["Erase",5];
+h2d_BlendMode.Erase.toString = $estr;
+h2d_BlendMode.Erase.__enum__ = h2d_BlendMode;
+h2d_BlendMode.Screen = ["Screen",6];
+h2d_BlendMode.Screen.toString = $estr;
+h2d_BlendMode.Screen.__enum__ = h2d_BlendMode;
+h2d_BlendMode.__empty_constructs__ = [h2d_BlendMode.None,h2d_BlendMode.Alpha,h2d_BlendMode.Add,h2d_BlendMode.SoftAdd,h2d_BlendMode.Multiply,h2d_BlendMode.Erase,h2d_BlendMode.Screen];
+var h2d_FlowAlign = $hxClasses["h2d.FlowAlign"] = { __ename__ : ["h2d","FlowAlign"], __constructs__ : ["Top","Left","Right","Middle","Bottom"] };
+h2d_FlowAlign.Top = ["Top",0];
+h2d_FlowAlign.Top.toString = $estr;
+h2d_FlowAlign.Top.__enum__ = h2d_FlowAlign;
+h2d_FlowAlign.Left = ["Left",1];
+h2d_FlowAlign.Left.toString = $estr;
+h2d_FlowAlign.Left.__enum__ = h2d_FlowAlign;
+h2d_FlowAlign.Right = ["Right",2];
+h2d_FlowAlign.Right.toString = $estr;
+h2d_FlowAlign.Right.__enum__ = h2d_FlowAlign;
+h2d_FlowAlign.Middle = ["Middle",3];
+h2d_FlowAlign.Middle.toString = $estr;
+h2d_FlowAlign.Middle.__enum__ = h2d_FlowAlign;
+h2d_FlowAlign.Bottom = ["Bottom",4];
+h2d_FlowAlign.Bottom.toString = $estr;
+h2d_FlowAlign.Bottom.__enum__ = h2d_FlowAlign;
+h2d_FlowAlign.__empty_constructs__ = [h2d_FlowAlign.Top,h2d_FlowAlign.Left,h2d_FlowAlign.Right,h2d_FlowAlign.Middle,h2d_FlowAlign.Bottom];
+var h2d_FlowProperties = function(elt) {
+	this.constraint = true;
+	this.calculatedHeight = 0.;
+	this.calculatedWidth = 0.;
+	this.offsetY = 0;
+	this.offsetX = 0;
+	this.isAbsolute = false;
+	this.paddingBottom = 0;
+	this.paddingRight = 0;
+	this.paddingTop = 0;
+	this.paddingLeft = 0;
+	this.elt = elt;
+};
+$hxClasses["h2d.FlowProperties"] = h2d_FlowProperties;
+h2d_FlowProperties.__name__ = ["h2d","FlowProperties"];
+h2d_FlowProperties.prototype = {
+	align: function(vertical,horizontal) {
+		this.verticalAlign = vertical;
+		this.horizontalAlign = horizontal;
+	}
+	,set_isAbsolute: function(a) {
+		if(a) {
+			this.elt.constraintSize(-1,-1);
+		}
+		return this.isAbsolute = a;
+	}
+	,__class__: h2d_FlowProperties
+};
+var h2d_col_Bounds = function() {
+	this.xMin = 1e20;
+	this.yMin = 1e20;
+	this.xMax = -1e20;
+	this.yMax = -1e20;
+};
+$hxClasses["h2d.col.Bounds"] = h2d_col_Bounds;
+h2d_col_Bounds.__name__ = ["h2d","col","Bounds"];
+h2d_col_Bounds.fromValues = function(x0,y0,width,height) {
+	var b = new h2d_col_Bounds();
+	b.xMin = x0;
+	b.yMin = y0;
+	b.xMax = x0 + width;
+	b.yMax = y0 + height;
+	return b;
+};
+h2d_col_Bounds.fromPoints = function(min,max) {
+	var b = new h2d_col_Bounds();
+	b.xMin = min.x;
+	b.yMin = min.y;
+	b.xMax = max.x;
+	b.yMax = max.y;
+	return b;
+};
+h2d_col_Bounds.prototype = {
+	toIBounds: function(scale) {
+		if(scale == null) {
+			scale = 1.;
+		}
+		var x0 = Math.floor(this.xMin * scale);
+		var y0 = Math.floor(this.yMin * scale);
+		var width = Math.floor((this.xMax - this.xMin) * scale);
+		var height = Math.floor((this.yMax - this.yMin) * scale);
+		var b = new h2d_col_IBounds();
+		b.xMin = x0;
+		b.yMin = y0;
+		b.xMax = x0 + width;
+		b.yMax = y0 + height;
+		return b;
+	}
+	,intersects: function(b) {
+		return !(this.xMin > b.xMax || this.yMin > b.yMax || this.xMax < b.xMin || this.yMax < b.yMin);
+	}
+	,contains: function(p) {
+		if(p.x >= this.xMin && p.x < this.xMax && p.y >= this.yMin) {
+			return p.y < this.yMax;
+		} else {
+			return false;
+		}
+	}
+	,addBounds: function(b) {
+		if(b.xMin < this.xMin) {
+			this.xMin = b.xMin;
+		}
+		if(b.xMax > this.xMax) {
+			this.xMax = b.xMax;
+		}
+		if(b.yMin < this.yMin) {
+			this.yMin = b.yMin;
+		}
+		if(b.yMax > this.yMax) {
+			this.yMax = b.yMax;
+		}
+	}
+	,addPoint: function(p) {
+		if(p.x < this.xMin) {
+			this.xMin = p.x;
+		}
+		if(p.x > this.xMax) {
+			this.xMax = p.x;
+		}
+		if(p.y < this.yMin) {
+			this.yMin = p.y;
+		}
+		if(p.y > this.yMax) {
+			this.yMax = p.y;
+		}
+	}
+	,addPos: function(x,y) {
+		if(x < this.xMin) {
+			this.xMin = x;
+		}
+		if(x > this.xMax) {
+			this.xMax = x;
+		}
+		if(y < this.yMin) {
+			this.yMin = y;
+		}
+		if(y > this.yMax) {
+			this.yMax = y;
+		}
+	}
+	,set: function(x,y,width,height) {
+		this.xMin = x;
+		this.yMin = y;
+		this.xMax = x + width;
+		this.yMax = y + height;
+	}
+	,setMin: function(p) {
+		this.xMin = p.x;
+		this.yMin = p.y;
+	}
+	,setMax: function(p) {
+		this.xMax = p.x;
+		this.yMax = p.y;
+	}
+	,doIntersect: function(b) {
+		var a = this.xMin;
+		var b1 = b.xMin;
+		this.xMin = a < b1 ? b1 : a;
+		var a1 = this.yMin;
+		var b2 = b.yMin;
+		this.yMin = a1 < b2 ? b2 : a1;
+		var a2 = this.xMax;
+		var b3 = b.xMax;
+		this.xMax = a2 > b3 ? b3 : a2;
+		var a3 = this.yMax;
+		var b4 = b.yMax;
+		this.yMax = a3 > b4 ? b4 : a3;
+	}
+	,doUnion: function(b) {
+		var a = this.xMin;
+		var b1 = b.xMin;
+		this.xMin = a > b1 ? b1 : a;
+		var a1 = this.yMin;
+		var b2 = b.yMin;
+		this.yMin = a1 > b2 ? b2 : a1;
+		var a2 = this.xMax;
+		var b3 = b.xMax;
+		this.xMax = a2 < b3 ? b3 : a2;
+		var a3 = this.yMax;
+		var b4 = b.yMax;
+		this.yMax = a3 < b4 ? b4 : a3;
+	}
+	,intersection: function(b) {
+		var i = new h2d_col_Bounds();
+		var a = this.xMin;
+		var b1 = b.xMin;
+		i.xMin = a < b1 ? b1 : a;
+		var a1 = this.yMin;
+		var b2 = b.yMin;
+		i.yMin = a1 < b2 ? b2 : a1;
+		var a2 = this.xMax;
+		var b3 = b.xMax;
+		i.xMax = a2 > b3 ? b3 : a2;
+		var a3 = this.yMax;
+		var b4 = b.yMax;
+		i.yMax = a3 > b4 ? b4 : a3;
+		if(i.xMax < i.xMin) {
+			i.xMax = i.xMin;
+		}
+		if(i.yMax < i.yMin) {
+			i.yMax = i.yMin;
+		}
+		return i;
+	}
+	,union: function(b) {
+		var i = new h2d_col_Bounds();
+		var a = this.xMin;
+		var b1 = b.xMin;
+		i.xMin = a > b1 ? b1 : a;
+		var a1 = this.yMin;
+		var b2 = b.yMin;
+		i.yMin = a1 > b2 ? b2 : a1;
+		var a2 = this.xMax;
+		var b3 = b.xMax;
+		i.xMax = a2 < b3 ? b3 : a2;
+		var a3 = this.yMax;
+		var b4 = b.yMax;
+		i.yMax = a3 < b4 ? b4 : a3;
+		return i;
+	}
+	,load: function(b) {
+		this.xMin = b.xMin;
+		this.yMin = b.yMin;
+		this.xMax = b.xMax;
+		this.yMax = b.yMax;
+	}
+	,scalePivot: function(v) {
+		this.xMin *= v;
+		this.yMin *= v;
+		this.xMax *= v;
+		this.yMax *= v;
+	}
+	,scaleCenter: function(v) {
+		var dx = (this.xMax - this.xMin) * 0.5 * v;
+		var dy = (this.yMax - this.yMin) * 0.5 * v;
+		var mx = (this.xMax + this.xMin) * 0.5;
+		var my = (this.yMax + this.yMin) * 0.5;
+		this.xMin = mx - dx;
+		this.yMin = my - dy;
+		this.xMax = mx + dx;
+		this.yMax = my + dy;
+	}
+	,rotate: function(angle) {
+		var cos = Math.cos(angle);
+		var sin = Math.sin(angle);
+		var x0 = this.xMin;
+		var y0 = this.yMin;
+		var x1 = this.xMax;
+		var y1 = this.yMax;
+		this.xMin = 1e20;
+		this.yMin = 1e20;
+		this.xMax = -1e20;
+		this.yMax = -1e20;
+		var x = x0 * cos - y0 * sin;
+		var y = x0 * sin + y0 * cos;
+		if(x < this.xMin) {
+			this.xMin = x;
+		}
+		if(x > this.xMax) {
+			this.xMax = x;
+		}
+		if(y < this.yMin) {
+			this.yMin = y;
+		}
+		if(y > this.yMax) {
+			this.yMax = y;
+		}
+		var x2 = x1 * cos - y0 * sin;
+		var y2 = x1 * sin + y0 * cos;
+		if(x2 < this.xMin) {
+			this.xMin = x2;
+		}
+		if(x2 > this.xMax) {
+			this.xMax = x2;
+		}
+		if(y2 < this.yMin) {
+			this.yMin = y2;
+		}
+		if(y2 > this.yMax) {
+			this.yMax = y2;
+		}
+		var x3 = x0 * cos - y1 * sin;
+		var y3 = x0 * sin + y1 * cos;
+		if(x3 < this.xMin) {
+			this.xMin = x3;
+		}
+		if(x3 > this.xMax) {
+			this.xMax = x3;
+		}
+		if(y3 < this.yMin) {
+			this.yMin = y3;
+		}
+		if(y3 > this.yMax) {
+			this.yMax = y3;
+		}
+		var x4 = x1 * cos - y1 * sin;
+		var y4 = x1 * sin + y1 * cos;
+		if(x4 < this.xMin) {
+			this.xMin = x4;
+		}
+		if(x4 > this.xMax) {
+			this.xMax = x4;
+		}
+		if(y4 < this.yMin) {
+			this.yMin = y4;
+		}
+		if(y4 > this.yMax) {
+			this.yMax = y4;
+		}
+	}
+	,offset: function(dx,dy) {
+		this.xMin += dx;
+		this.xMax += dx;
+		this.yMin += dy;
+		this.yMax += dy;
+	}
+	,getMin: function() {
+		return new h2d_col_Point(this.xMin,this.yMin);
+	}
+	,getCenter: function() {
+		return new h2d_col_Point((this.xMin + this.xMax) * 0.5,(this.yMin + this.yMax) * 0.5);
+	}
+	,getSize: function() {
+		return new h2d_col_Point(this.xMax - this.xMin,this.yMax - this.yMin);
+	}
+	,getMax: function() {
+		return new h2d_col_Point(this.xMax,this.yMax);
+	}
+	,isEmpty: function() {
+		if(!(this.xMax <= this.xMin)) {
+			return this.yMax <= this.yMin;
+		} else {
+			return true;
+		}
+	}
+	,empty: function() {
+		this.xMin = 1e20;
+		this.yMin = 1e20;
+		this.xMax = -1e20;
+		this.yMax = -1e20;
+	}
+	,all: function() {
+		this.xMin = -1e20;
+		this.yMin = -1e20;
+		this.xMax = 1e20;
+		this.yMax = 1e20;
+	}
+	,clone: function() {
+		var b = new h2d_col_Bounds();
+		b.xMin = this.xMin;
+		b.yMin = this.yMin;
+		b.xMax = this.xMax;
+		b.yMax = this.yMax;
+		return b;
+	}
+	,get_x: function() {
+		return this.xMin;
+	}
+	,get_y: function() {
+		return this.yMin;
+	}
+	,set_x: function(x) {
+		this.xMax += x - this.xMin;
+		return this.xMin = x;
+	}
+	,set_y: function(y) {
+		this.yMax += y - this.yMin;
+		return this.yMin = y;
+	}
+	,get_width: function() {
+		return this.xMax - this.xMin;
+	}
+	,get_height: function() {
+		return this.yMax - this.yMin;
+	}
+	,set_width: function(w) {
+		this.xMax = this.xMin + w;
+		return w;
+	}
+	,set_height: function(h) {
+		this.yMax = this.yMin + h;
+		return h;
+	}
+	,toString: function() {
+		return "{" + Std.string(new h2d_col_Point(this.xMin,this.yMin)) + "," + Std.string(new h2d_col_Point(this.xMax - this.xMin,this.yMax - this.yMin)) + "}";
+	}
+	,__class__: h2d_col_Bounds
+};
+var h2d_Flow = function(parent) {
+	this.realMaxHeight = -1;
+	this.realMaxWidth = -1;
+	this.constraintHeight = -1;
+	this.constraintWidth = -1;
+	this.calculatedHeight = 0.;
+	this.calculatedWidth = 0.;
+	this.properties = [];
+	this.multiline = false;
+	this.isInline = true;
+	this.borderHeight = 0;
+	this.borderWidth = 0;
+	this.verticalSpacing = 0;
+	this.horizontalSpacing = 0;
+	this.paddingBottom = 0;
+	this.paddingTop = 0;
+	this.paddingRight = 0;
+	this.paddingLeft = 0;
+	this.overflow = false;
+	this.needReflow = true;
+	h2d_Sprite.call(this,parent);
+};
+$hxClasses["h2d.Flow"] = h2d_Flow;
+h2d_Flow.__name__ = ["h2d","Flow"];
+h2d_Flow.__super__ = h2d_Sprite;
+h2d_Flow.prototype = $extend(h2d_Sprite.prototype,{
+	getProperties: function(e) {
+		this.set_needReflow(true);
+		return this.properties[this.getChildIndex(e)];
+	}
+	,set_isVertical: function(v) {
+		if(this.isVertical == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.isVertical = v;
+	}
+	,set_horizontalAlign: function(v) {
+		if(this.horizontalAlign == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.horizontalAlign = v;
+	}
+	,set_debug: function(v) {
+		if(this.debug == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		if(v) {
+			this.debugGraphics = new h2d_Graphics(this);
+			this.getProperties(this.debugGraphics).set_isAbsolute(true);
+		} else {
+			var _this = this.debugGraphics;
+			if(_this != null && _this.parent != null) {
+				_this.parent.removeChild(_this);
+			}
+			this.debugGraphics = null;
+		}
+		return this.debug = v;
+	}
+	,set_verticalAlign: function(v) {
+		if(this.verticalAlign == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.verticalAlign = v;
+	}
+	,set_overflow: function(v) {
+		if(this.overflow == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.overflow = v;
+	}
+	,set_multiline: function(v) {
+		if(this.multiline == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.multiline = v;
+	}
+	,set_needReflow: function(v) {
+		if(this.needReflow == v) {
+			return v;
+		}
+		if(v) {
+			if(this.parentContainer != null) {
+				this.parentContainer.contentChanged(this);
+			}
+		}
+		return this.needReflow = v;
+	}
+	,set_lineHeight: function(v) {
+		if(this.lineHeight == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.lineHeight = v;
+	}
+	,set_colWidth: function(v) {
+		if(this.colWidth == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.colWidth = v;
+	}
+	,set_padding: function(v) {
+		this.set_paddingLeft(v);
+		this.set_paddingTop(v);
+		this.set_paddingRight(v);
+		this.set_paddingBottom(v);
+		return v;
+	}
+	,set_paddingHorizontal: function(v) {
+		this.set_paddingLeft(v);
+		this.set_paddingRight(v);
+		return v;
+	}
+	,set_paddingVertical: function(v) {
+		this.set_paddingTop(v);
+		this.set_paddingBottom(v);
+		return v;
+	}
+	,get_outerWidth: function() {
+		if(this.needReflow) {
+			this.reflow();
+		}
+		return Math.ceil(this.calculatedWidth);
+	}
+	,get_outerHeight: function() {
+		if(this.needReflow) {
+			this.reflow();
+		}
+		return Math.ceil(this.calculatedHeight);
+	}
+	,get_innerWidth: function() {
+		if(this.needReflow) {
+			this.reflow();
+		}
+		return Math.ceil(this.calculatedWidth) - (this.paddingLeft + this.paddingRight + this.borderWidth * 2);
+	}
+	,get_innerHeight: function() {
+		if(this.needReflow) {
+			this.reflow();
+		}
+		return Math.ceil(this.calculatedHeight) - (this.paddingTop + this.paddingBottom + this.borderHeight * 2);
+	}
+	,set_paddingLeft: function(v) {
+		if(this.paddingLeft == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.paddingLeft = v;
+	}
+	,set_paddingRight: function(v) {
+		if(this.paddingRight == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.paddingRight = v;
+	}
+	,set_paddingTop: function(v) {
+		if(this.paddingTop == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.paddingTop = v;
+	}
+	,set_paddingBottom: function(v) {
+		if(this.paddingBottom == v) {
+			return v;
+		}
+		this.set_needReflow(true);
+		return this.paddingBottom = v;
+	}
+	,constraintSize: function(width,height) {
+		this.constraintWidth = width;
+		this.constraintHeight = height;
+		this.updateConstraint();
+	}
+	,contentChanged: function(s) {
+		while(s.parent != this) s = s.parent;
+		if(this.getProperties(s).isAbsolute) {
+			return;
+		}
+		this.set_needReflow(true);
+		if(this.parentContainer != null) {
+			this.parentContainer.contentChanged(this);
+		}
+	}
+	,addSpacing: function(v) {
+		var last = this.properties.length - 1;
+		while(last >= 0 && this.properties[last].isAbsolute) --last;
+		if(this.isVertical) {
+			if(last >= 0) {
+				this.properties[last].paddingBottom += v;
+			} else {
+				var _g = this;
+				_g.set_paddingTop(_g.paddingTop + v);
+			}
+		} else if(last >= 0) {
+			this.properties[last].paddingRight += v;
+		} else {
+			var _g1 = this;
+			_g1.set_paddingLeft(_g1.paddingLeft + v);
+		}
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		if(this.needReflow) {
+			this.reflow();
+		}
+		if(forSize) {
+			if(!this.isInline) {
+				h2d_Sprite.prototype.getBoundsRec.call(this,relativeTo,out,true);
+			}
+			if(this.calculatedWidth != 0) {
+				this.addBounds(relativeTo,out,0,0,this.calculatedWidth,this.calculatedHeight);
+			}
+		} else {
+			h2d_Sprite.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		}
+	}
+	,setParentContainer: function(c) {
+		this.parentContainer = c;
+	}
+	,addChildAt: function(s,pos) {
+		if(this.background != null) {
+			++pos;
+		}
+		var fp = this.getProperties(s);
+		h2d_Sprite.prototype.addChildAt.call(this,s,pos);
+		if(fp == null) {
+			fp = new h2d_FlowProperties(s);
+		} else {
+			HxOverrides.remove(this.properties,fp);
+		}
+		this.properties.splice(pos,0,fp);
+		this.set_needReflow(true);
+		s.setParentContainer(this);
+	}
+	,removeChild: function(s) {
+		var index = this.getChildIndex(s);
+		h2d_Sprite.prototype.removeChild.call(this,s);
+		if(index >= 0) {
+			this.set_needReflow(true);
+			this.properties.splice(index,1);
+			s.constraintSize(-1,-1);
+		}
+		if(s != null) {
+			if(s == this.background) {
+				this.set_backgroundTile(null);
+			}
+			if(s == this.interactive) {
+				this.set_enableInteractive(false);
+			}
+		}
+	}
+	,sync: function(ctx) {
+		if(this.needReflow) {
+			this.reflow();
+		}
+		h2d_Sprite.prototype.sync.call(this,ctx);
+	}
+	,set_maxWidth: function(w) {
+		if(this.maxWidth == w) {
+			return w;
+		}
+		this.maxWidth = w;
+		this.updateConstraint();
+		return w;
+	}
+	,set_maxHeight: function(h) {
+		if(this.maxHeight == h) {
+			return h;
+		}
+		this.maxHeight = h;
+		this.updateConstraint();
+		return h;
+	}
+	,updateConstraint: function() {
+		var oldW = this.realMaxWidth;
+		var oldH = this.realMaxHeight;
+		var tmp;
+		if(this.maxWidth == null) {
+			tmp = this.constraintWidth;
+		} else if(this.constraintWidth < 0) {
+			tmp = this.maxWidth;
+		} else {
+			var a = this.maxWidth;
+			var b = this.constraintWidth;
+			if(a > b) {
+				tmp = b;
+			} else {
+				tmp = a;
+			}
+		}
+		this.realMaxWidth = tmp;
+		var tmp1;
+		if(this.maxHeight == null) {
+			tmp1 = this.constraintHeight;
+		} else if(this.constraintHeight < 0) {
+			tmp1 = this.maxHeight;
+		} else {
+			var a1 = this.maxHeight;
+			var b1 = this.constraintHeight;
+			if(a1 > b1) {
+				tmp1 = b1;
+			} else {
+				tmp1 = a1;
+			}
+		}
+		this.realMaxHeight = tmp1;
+		if(this.realMaxWidth != oldW || this.realMaxHeight != oldH) {
+			this.set_needReflow(true);
+		}
+	}
+	,set_minWidth: function(w) {
+		if(this.minWidth == w) {
+			return w;
+		}
+		this.set_needReflow(true);
+		return this.minWidth = w;
+	}
+	,set_minHeight: function(h) {
+		if(this.minHeight == h) {
+			return h;
+		}
+		this.set_needReflow(true);
+		return this.minHeight = h;
+	}
+	,set_horizontalSpacing: function(s) {
+		if(this.horizontalSpacing == s) {
+			return s;
+		}
+		this.set_needReflow(true);
+		return this.horizontalSpacing = s;
+	}
+	,set_verticalSpacing: function(s) {
+		if(this.verticalSpacing == s) {
+			return s;
+		}
+		this.set_needReflow(true);
+		return this.verticalSpacing = s;
+	}
+	,set_enableInteractive: function(b) {
+		if(this.enableInteractive == b) {
+			return b;
+		}
+		if(b) {
+			if(this.interactive == null) {
+				this.interactive = new h2d_Interactive(0,0,this);
+				this.interactive.set_cursor(hxd_Cursor.Default);
+				this.properties[this.properties.length - 1].set_isAbsolute(true);
+				if(!this.needReflow) {
+					this.interactive.width = this.calculatedWidth;
+					this.interactive.height = this.calculatedHeight;
+				}
+			}
+		} else if(this.interactive != null) {
+			var _this = this.interactive;
+			if(_this != null && _this.parent != null) {
+				_this.parent.removeChild(_this);
+			}
+			this.interactive = null;
+		}
+		return this.enableInteractive = b;
+	}
+	,set_backgroundTile: function(t) {
+		if(this.backgroundTile == t) {
+			return t;
+		}
+		if(t != null) {
+			if(this.background == null) {
+				var background = new h2d_ScaleGrid(t,this.borderWidth,this.borderHeight);
+				this.addChildAt(background,0);
+				this.properties[0].set_isAbsolute(true);
+				this.background = background;
+				if(!this.needReflow) {
+					background.set_width(Math.ceil(this.calculatedWidth));
+					background.set_height(Math.ceil(this.calculatedHeight));
+				}
+			}
+			this.background.tile = t;
+		} else if(this.background != null) {
+			var _this = this.background;
+			if(_this != null && _this.parent != null) {
+				_this.parent.removeChild(_this);
+			}
+			this.background = null;
+		}
+		return this.backgroundTile = t;
+	}
+	,set_borderWidth: function(v) {
+		if(this.borderWidth == v) {
+			return v;
+		}
+		if(this.background != null) {
+			this.background.set_borderWidth(v);
+		}
+		this.set_needReflow(true);
+		return this.borderWidth = v;
+	}
+	,set_borderHeight: function(v) {
+		if(this.borderHeight == v) {
+			return v;
+		}
+		if(this.background != null) {
+			this.background.set_borderHeight(v);
+		}
+		this.set_needReflow(true);
+		return this.borderHeight = v;
+	}
+	,reflow: function() {
+		var _gthis = this;
+		this.onBeforeReflow();
+		var isConstraintWidth = this.realMaxWidth >= 0;
+		var isConstraintHeight = this.realMaxHeight >= 0;
+		var maxTotWidth = this.realMaxWidth < 0 ? 100000000 : this.realMaxWidth;
+		var maxTotHeight = this.realMaxHeight < 0 ? 100000000 : this.realMaxHeight;
+		var maxWidth = maxTotWidth - (this.paddingLeft + this.paddingRight + this.borderWidth * 2);
+		var maxHeight = maxTotHeight - (this.paddingTop + this.paddingBottom + this.borderHeight * 2);
+		var cw;
+		var ch;
+		if(!this.isVertical) {
+			var halign = this.horizontalAlign == null ? h2d_FlowAlign.Left : this.horizontalAlign;
+			var valign = this.verticalAlign == null ? h2d_FlowAlign.Bottom : this.verticalAlign;
+			var startX = this.paddingLeft + this.borderWidth;
+			var x = startX;
+			var y = this.paddingTop + this.borderHeight;
+			cw = x;
+			var maxLineHeight = 0.;
+			var minLineHeight = this.lineHeight != null ? this.lineHeight : this.minHeight != null && !this.multiline ? this.minHeight - (this.paddingTop + this.paddingBottom + this.borderHeight * 2) : 0;
+			var tmpBounds = h2d_Flow.tmpBounds;
+			var lastIndex = 0;
+			var _g1 = 0;
+			var _g = this.children.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				var p = this.properties[i];
+				if(p.isAbsolute) {
+					continue;
+				}
+				var c = this.children[i];
+				if(!c.visible) {
+					continue;
+				}
+				c.constraintSize(isConstraintWidth && p.constraint ? maxWidth - (p.paddingLeft + p.paddingRight) : -1,isConstraintHeight && p.constraint ? maxHeight - (p.paddingTop + p.paddingBottom) : -1);
+				var b = c.getSize(tmpBounds);
+				var br = false;
+				p.calculatedWidth = b.xMax + p.paddingLeft + p.paddingRight;
+				p.calculatedHeight = b.yMax + p.paddingTop + p.paddingBottom;
+				if(p.minWidth != null && p.calculatedWidth < p.minWidth) {
+					p.calculatedWidth = p.minWidth;
+				}
+				if(p.minHeight != null && p.calculatedHeight < p.minHeight) {
+					p.calculatedHeight = p.minHeight;
+				}
+				if(this.multiline && x + p.calculatedWidth > maxWidth && x > startX) {
+					br = true;
+					if(maxLineHeight < minLineHeight) {
+						maxLineHeight = minLineHeight;
+					} else if(_gthis.overflow && minLineHeight != 0) {
+						maxLineHeight = minLineHeight;
+					}
+					var _g11 = lastIndex;
+					var _g2 = i;
+					while(_g11 < _g2) {
+						var i1 = _g11++;
+						var p1 = _gthis.properties[i1];
+						if(p1.isAbsolute) {
+							continue;
+						}
+						var c1 = _gthis.children[i1];
+						if(!c1.visible) {
+							continue;
+						}
+						var a = p1.verticalAlign != null ? p1.verticalAlign : valign;
+						c1.posChanged = true;
+						c1.y = y + p1.offsetY + p1.paddingTop;
+						switch(a[1]) {
+						case 3:
+							var _g21 = c1;
+							_g21.posChanged = true;
+							_g21.y += (maxLineHeight - p1.calculatedHeight) * 0.5 | 0;
+							break;
+						case 4:
+							var _g22 = c1;
+							_g22.posChanged = true;
+							_g22.y += maxLineHeight - p1.calculatedHeight;
+							break;
+						default:
+						}
+					}
+					lastIndex = i;
+					y += maxLineHeight + this.verticalSpacing;
+					maxLineHeight = 0;
+					x = startX;
+				}
+				p.isBreak = br;
+				x += p.calculatedWidth;
+				if(x > cw) {
+					cw = x;
+				}
+				x += this.horizontalSpacing;
+				if(p.calculatedHeight > maxLineHeight) {
+					maxLineHeight = p.calculatedHeight;
+				}
+			}
+			var maxIndex = this.children.length;
+			if(maxLineHeight < minLineHeight) {
+				maxLineHeight = minLineHeight;
+			} else if(_gthis.overflow && minLineHeight != 0) {
+				maxLineHeight = minLineHeight;
+			}
+			var _g12 = lastIndex;
+			var _g3 = maxIndex;
+			while(_g12 < _g3) {
+				var i2 = _g12++;
+				var p2 = _gthis.properties[i2];
+				if(p2.isAbsolute) {
+					continue;
+				}
+				var c2 = _gthis.children[i2];
+				if(!c2.visible) {
+					continue;
+				}
+				var a1 = p2.verticalAlign != null ? p2.verticalAlign : valign;
+				c2.posChanged = true;
+				c2.y = y + p2.offsetY + p2.paddingTop;
+				switch(a1[1]) {
+				case 3:
+					var _g23 = c2;
+					_g23.posChanged = true;
+					_g23.y += (maxLineHeight - p2.calculatedHeight) * 0.5 | 0;
+					break;
+				case 4:
+					var _g24 = c2;
+					_g24.posChanged = true;
+					_g24.y += maxLineHeight - p2.calculatedHeight;
+					break;
+				default:
+				}
+			}
+			lastIndex = maxIndex;
+			cw += this.paddingRight + this.borderWidth;
+			ch = y + maxLineHeight + this.paddingBottom + this.borderHeight;
+			if(this.minWidth != null && cw < this.minWidth) {
+				cw = this.minWidth;
+			}
+			var endX = cw - (this.paddingRight + this.borderWidth);
+			var xmin = startX;
+			var xmax = endX;
+			var midSpace = 0;
+			var _g13 = 0;
+			var _g4 = this.children.length;
+			while(_g13 < _g4) {
+				var i3 = _g13++;
+				var p3 = this.properties[i3];
+				if(p3.isAbsolute || !this.children[i3].visible) {
+					continue;
+				}
+				if(p3.isBreak) {
+					xmin = startX;
+					xmax = endX;
+					midSpace = 0;
+				}
+				var px;
+				var align = p3.horizontalAlign == null ? halign : p3.horizontalAlign;
+				switch(align[1]) {
+				case 2:
+					if(midSpace != 0) {
+						xmin += midSpace;
+						midSpace = 0;
+					}
+					xmax -= p3.calculatedWidth;
+					px = xmax;
+					xmax -= this.horizontalSpacing;
+					break;
+				case 3:
+					if(midSpace == 0) {
+						var remSize = p3.calculatedWidth;
+						var _g31 = i3 + 1;
+						var _g25 = this.children.length;
+						while(_g31 < _g25) {
+							var j = _g31++;
+							var p4 = this.properties[j];
+							if(p4.isAbsolute || !this.children[j].visible) {
+								continue;
+							}
+							if(p4.isBreak) {
+								break;
+							}
+							remSize += this.horizontalSpacing + p4.calculatedWidth;
+						}
+						midSpace = (xmax - xmin - remSize) * 0.5 | 0;
+						xmin += midSpace;
+					}
+					px = xmin;
+					xmin += p3.calculatedWidth + this.horizontalSpacing;
+					break;
+				default:
+					if(midSpace != 0) {
+						xmin += midSpace;
+						midSpace = 0;
+					}
+					px = xmin;
+					xmin += p3.calculatedWidth + this.horizontalSpacing;
+				}
+				var _this = this.children[i3];
+				_this.posChanged = true;
+				_this.x = px + p3.offsetX + p3.paddingLeft;
+			}
+		} else {
+			var halign1 = this.horizontalAlign == null ? h2d_FlowAlign.Left : this.horizontalAlign;
+			var valign1 = this.verticalAlign == null ? h2d_FlowAlign.Top : this.verticalAlign;
+			var startY = this.paddingTop + this.borderHeight;
+			var y1 = startY;
+			var x1 = this.paddingLeft + this.borderWidth;
+			ch = y1;
+			var maxColWidth = 0.;
+			var minColWidth = this.colWidth != null ? this.colWidth : this.minWidth != null && !this.multiline ? this.minWidth - (this.paddingLeft + this.paddingRight + this.borderWidth * 2) : 0;
+			var tmpBounds1 = h2d_Flow.tmpBounds;
+			var lastIndex1 = 0;
+			var _g14 = 0;
+			var _g5 = this.children.length;
+			while(_g14 < _g5) {
+				var i4 = _g14++;
+				var p5 = this.properties[i4];
+				if(p5.isAbsolute) {
+					continue;
+				}
+				var c3 = this.children[i4];
+				if(!c3.visible) {
+					continue;
+				}
+				c3.constraintSize(isConstraintWidth && p5.constraint ? maxWidth - (p5.paddingLeft + p5.paddingRight) : -1,isConstraintHeight && p5.constraint ? maxHeight - (p5.paddingTop + p5.paddingBottom) : -1);
+				var b1 = c3.getSize(tmpBounds1);
+				var br1 = false;
+				p5.calculatedWidth = b1.xMax + p5.paddingLeft + p5.paddingRight;
+				p5.calculatedHeight = b1.yMax + p5.paddingTop + p5.paddingBottom;
+				if(p5.minWidth != null && p5.calculatedWidth < p5.minWidth) {
+					p5.calculatedWidth = p5.minWidth;
+				}
+				if(p5.minHeight != null && p5.calculatedHeight < p5.minHeight) {
+					p5.calculatedHeight = p5.minHeight;
+				}
+				if(this.multiline && y1 + p5.calculatedHeight > maxHeight && y1 > startY) {
+					br1 = true;
+					if(maxColWidth < minColWidth) {
+						maxColWidth = minColWidth;
+					} else if(_gthis.overflow && minColWidth != 0) {
+						maxColWidth = minColWidth;
+					}
+					var _g15 = lastIndex1;
+					var _g6 = i4;
+					while(_g15 < _g6) {
+						var i5 = _g15++;
+						var p6 = _gthis.properties[i5];
+						if(p6.isAbsolute) {
+							continue;
+						}
+						var c4 = _gthis.children[i5];
+						if(!c4.visible) {
+							continue;
+						}
+						var a2 = p6.horizontalAlign != null ? p6.horizontalAlign : halign1;
+						c4.posChanged = true;
+						c4.x = x1 + p6.offsetX + p6.paddingLeft;
+						switch(a2[1]) {
+						case 2:
+							var _g26 = c4;
+							_g26.posChanged = true;
+							_g26.x += maxColWidth - p6.calculatedWidth;
+							break;
+						case 3:
+							var _g27 = c4;
+							_g27.posChanged = true;
+							_g27.x += (maxColWidth - p6.calculatedWidth) * 0.5 | 0;
+							break;
+						default:
+						}
+					}
+					lastIndex1 = i4;
+					x1 += maxColWidth + this.horizontalSpacing;
+					maxColWidth = 0;
+					y1 = startY;
+				}
+				p5.isBreak = br1;
+				c3.posChanged = true;
+				c3.y = y1 + p5.offsetY + p5.paddingTop;
+				y1 += p5.calculatedHeight;
+				if(y1 > ch) {
+					ch = y1;
+				}
+				y1 += this.verticalSpacing;
+				if(p5.calculatedWidth > maxColWidth) {
+					maxColWidth = p5.calculatedWidth;
+				}
+			}
+			var maxIndex1 = this.children.length;
+			if(maxColWidth < minColWidth) {
+				maxColWidth = minColWidth;
+			} else if(_gthis.overflow && minColWidth != 0) {
+				maxColWidth = minColWidth;
+			}
+			var _g16 = lastIndex1;
+			var _g7 = maxIndex1;
+			while(_g16 < _g7) {
+				var i6 = _g16++;
+				var p7 = _gthis.properties[i6];
+				if(p7.isAbsolute) {
+					continue;
+				}
+				var c5 = _gthis.children[i6];
+				if(!c5.visible) {
+					continue;
+				}
+				var a3 = p7.horizontalAlign != null ? p7.horizontalAlign : halign1;
+				c5.posChanged = true;
+				c5.x = x1 + p7.offsetX + p7.paddingLeft;
+				switch(a3[1]) {
+				case 2:
+					var _g28 = c5;
+					_g28.posChanged = true;
+					_g28.x += maxColWidth - p7.calculatedWidth;
+					break;
+				case 3:
+					var _g29 = c5;
+					_g29.posChanged = true;
+					_g29.x += (maxColWidth - p7.calculatedWidth) * 0.5 | 0;
+					break;
+				default:
+				}
+			}
+			lastIndex1 = maxIndex1;
+			ch += this.paddingBottom + this.borderHeight;
+			cw = x1 + maxColWidth + this.paddingRight + this.borderWidth;
+			if(this.minHeight != null && ch < this.minHeight) {
+				ch = this.minHeight;
+			}
+			var endY = ch - (this.paddingBottom + this.borderHeight);
+			var ymin = startY;
+			var ymax = endY;
+			var midSpace1 = 0;
+			var _g17 = 0;
+			var _g8 = this.children.length;
+			while(_g17 < _g8) {
+				var i7 = _g17++;
+				var p8 = this.properties[i7];
+				if(p8.isAbsolute || !this.children[i7].visible) {
+					continue;
+				}
+				if(p8.isBreak) {
+					ymin = startY;
+					ymax = endY;
+					midSpace1 = 0;
+				}
+				var py;
+				var align1 = p8.verticalAlign == null ? valign1 : p8.verticalAlign;
+				switch(align1[1]) {
+				case 3:
+					if(midSpace1 == 0) {
+						var remSize1 = p8.calculatedHeight;
+						var _g32 = i7 + 1;
+						var _g210 = this.children.length;
+						while(_g32 < _g210) {
+							var j1 = _g32++;
+							var p9 = this.properties[j1];
+							if(p9.isAbsolute || !this.children[j1].visible) {
+								continue;
+							}
+							if(p9.isBreak) {
+								break;
+							}
+							remSize1 += this.verticalSpacing + p9.calculatedHeight;
+						}
+						midSpace1 = (ymax - ymin - remSize1) * 0.5 | 0;
+						ymin += midSpace1;
+					}
+					py = ymin;
+					ymin += p8.calculatedHeight + this.verticalSpacing;
+					break;
+				case 4:
+					if(midSpace1 != 0) {
+						ymin += midSpace1;
+						midSpace1 = 0;
+					}
+					ymax -= p8.calculatedHeight;
+					py = ymax;
+					ymax -= this.verticalSpacing;
+					break;
+				default:
+					if(midSpace1 != 0) {
+						ymin += midSpace1;
+						midSpace1 = 0;
+					}
+					py = ymin;
+					ymin += p8.calculatedHeight + this.verticalSpacing;
+				}
+				var _this1 = this.children[i7];
+				_this1.posChanged = true;
+				_this1.y = py + p8.offsetY + p8.paddingTop;
+			}
+		}
+		if(this.minWidth != null && cw < this.minWidth) {
+			cw = this.minWidth;
+		}
+		if(this.minHeight != null && ch < this.minHeight) {
+			ch = this.minHeight;
+		}
+		if(this.overflow) {
+			if(isConstraintWidth && cw > maxTotWidth) {
+				cw = maxTotWidth;
+			}
+			if(isConstraintHeight && ch > maxTotHeight) {
+				ch = maxTotHeight;
+			}
+		}
+		if(this.interactive != null) {
+			this.interactive.width = cw;
+			this.interactive.height = ch;
+		}
+		if(this.background != null) {
+			this.background.set_width(Math.ceil(cw));
+			this.background.set_height(Math.ceil(ch));
+		}
+		this.calculatedWidth = cw;
+		this.calculatedHeight = ch;
+		this.set_needReflow(false);
+		if(this.debug) {
+			this.debugGraphics.clear();
+			if(this.debugGraphics != this.children[this.children.length - 1]) {
+				this.addChild(this.debugGraphics);
+				this.set_needReflow(false);
+			}
+			if(this.paddingLeft != 0 || this.paddingRight != 0 || this.paddingTop != 0 || this.paddingBottom != 0 || this.borderWidth != 0 || this.borderHeight != 0) {
+				this.debugGraphics.lineStyle(1,65280);
+				this.debugGraphics.drawRect(this.paddingLeft + this.borderWidth,this.paddingTop + this.borderHeight,this.get_innerWidth(),this.get_innerHeight());
+			}
+			this.debugGraphics.lineStyle(1,33023);
+			var _g18 = 0;
+			var _g9 = this.children.length;
+			while(_g18 < _g9) {
+				var i8 = _g18++;
+				var p10 = this.properties[i8];
+				var c6 = this.children[i8];
+				if(p10.isAbsolute || !c6.visible) {
+					continue;
+				}
+				this.debugGraphics.drawRect(c6.x,c6.y,p10.calculatedWidth,p10.calculatedHeight);
+			}
+			this.debugGraphics.lineStyle(1,16711680);
+			this.debugGraphics.drawRect(0,0,cw,ch);
+		}
+		this.onAfterReflow();
+	}
+	,onBeforeReflow: function() {
+	}
+	,onAfterReflow: function() {
+	}
+	,__class__: h2d_Flow
+});
+var h2d_Kerning = function(c,o) {
+	this.prevChar = c;
+	this.offset = o;
+};
+$hxClasses["h2d.Kerning"] = h2d_Kerning;
+h2d_Kerning.__name__ = ["h2d","Kerning"];
+h2d_Kerning.prototype = {
+	__class__: h2d_Kerning
+};
+var h2d_FontChar = function(t,w) {
+	this.t = t;
+	this.width = w;
+};
+$hxClasses["h2d.FontChar"] = h2d_FontChar;
+h2d_FontChar.__name__ = ["h2d","FontChar"];
+h2d_FontChar.prototype = {
+	addKerning: function(prevChar,offset) {
+		var k = new h2d_Kerning(prevChar,offset);
+		k.next = this.kerning;
+		this.kerning = k;
+	}
+	,getKerningOffset: function(prevChar) {
+		var k = this.kerning;
+		while(k != null) {
+			if(k.prevChar == prevChar) {
+				return k.offset;
+			}
+			k = k.next;
+		}
+		return 0;
+	}
+	,clone: function() {
+		var c = new h2d_FontChar(this.t.clone(),this.width);
+		c.kerning = this.kerning;
+		return c;
+	}
+	,__class__: h2d_FontChar
+};
+var h2d_Font = function(name,size) {
+	this.name = name;
+	this.size = size;
+	this.glyphs = new haxe_ds_IntMap();
+	this.defaultChar = new h2d_FontChar(new h2d_Tile(null,0,0,0,0),0);
+	this.charset = hxd_Charset.getDefault();
+};
+$hxClasses["h2d.Font"] = h2d_Font;
+h2d_Font.__name__ = ["h2d","Font"];
+h2d_Font.prototype = {
+	getChar: function(code) {
+		var c = this.glyphs.h[code];
+		if(c == null) {
+			c = this.charset.resolveChar(code,this.glyphs);
+			if(c == null) {
+				c = this.defaultChar;
+			}
+		}
+		return c;
+	}
+	,clone: function() {
+		var f = new h2d_Font(this.name,this.size);
+		f.baseLine = this.baseLine;
+		f.lineHeight = this.lineHeight;
+		f.tile = this.tile.clone();
+		f.charset = this.charset;
+		f.defaultChar = this.defaultChar.clone();
+		var g = this.glyphs.keys();
+		while(g.hasNext()) {
+			var g1 = g.next();
+			var c = this.glyphs.h[g1];
+			var c2 = c.clone();
+			if(c == this.defaultChar) {
+				f.defaultChar = c2;
+			}
+			f.glyphs.h[g1] = c2;
+		}
+		return f;
+	}
+	,resizeTo: function(size) {
+		var ratio = size / this.size;
+		var c = this.glyphs.iterator();
+		while(c.hasNext()) {
+			var c1 = c.next();
+			c1.width = c1.width * ratio | 0;
+			c1.t.scaleToSize(c1.t.width * ratio | 0,c1.t.height * ratio | 0);
+			c1.t.dx = c1.t.dx * ratio | 0;
+			c1.t.dy = c1.t.dy * ratio | 0;
+		}
+		this.lineHeight = this.lineHeight * ratio | 0;
+		this.baseLine = this.baseLine * ratio | 0;
+		this.size = size;
+	}
+	,hasChar: function(code) {
+		return this.glyphs.h[code] != null;
+	}
+	,dispose: function() {
+		this.tile.dispose();
+	}
+	,__class__: h2d_Font
+};
+var h2d__$Graphics_GPoint = function(x,y,r,g,b,a) {
+	this.x = x;
+	this.y = y;
+	this.r = r;
+	this.g = g;
+	this.b = b;
+	this.a = a;
+};
+$hxClasses["h2d._Graphics.GPoint"] = h2d__$Graphics_GPoint;
+h2d__$Graphics_GPoint.__name__ = ["h2d","_Graphics","GPoint"];
+h2d__$Graphics_GPoint.prototype = {
+	__class__: h2d__$Graphics_GPoint
 };
 var h3d_prim_Primitive = function() {
 	this.__uid = hxbit_Serializer.SEQ << 24 | ++hxbit_Serializer.UID;
@@ -11450,432 +11713,6 @@ h2d_Scene.prototype = $extend(h2d_Layers.prototype,{
 	}
 	,__class__: h2d_Scene
 });
-var h2d_Align = $hxClasses["h2d.Align"] = { __ename__ : true, __constructs__ : ["Left","Right","Center"] };
-h2d_Align.Left = ["Left",0];
-h2d_Align.Left.toString = $estr;
-h2d_Align.Left.__enum__ = h2d_Align;
-h2d_Align.Right = ["Right",1];
-h2d_Align.Right.toString = $estr;
-h2d_Align.Right.__enum__ = h2d_Align;
-h2d_Align.Center = ["Center",2];
-h2d_Align.Center.toString = $estr;
-h2d_Align.Center.__enum__ = h2d_Align;
-h2d_Align.__empty_constructs__ = [h2d_Align.Left,h2d_Align.Right,h2d_Align.Center];
-var h2d_Text = function(font,parent) {
-	this.realMaxWidth = -1;
-	this.constraintWidth = -1;
-	h2d_Drawable.call(this,parent);
-	this.set_font(font);
-	this.set_textAlign(h2d_Align.Left);
-	this.set_letterSpacing(1);
-	this.set_lineSpacing(0);
-	this.set_text("");
-	this.set_textColor(16777215);
-};
-$hxClasses["h2d.Text"] = h2d_Text;
-h2d_Text.__name__ = ["h2d","Text"];
-h2d_Text.__super__ = h2d_Drawable;
-h2d_Text.prototype = $extend(h2d_Drawable.prototype,{
-	set_font: function(font) {
-		if(this.font == font) {
-			return font;
-		}
-		this.font = font;
-		if(this.glyphs != null) {
-			var _this = this.glyphs;
-			if(_this != null && _this.parent != null) {
-				_this.parent.removeChild(_this);
-			}
-		}
-		this.glyphs = new h2d_TileGroup(font == null ? null : font.tile,this);
-		this.glyphs.set_visible(false);
-		this.rebuild();
-		return font;
-	}
-	,set_textAlign: function(a) {
-		if(this.textAlign == a) {
-			return a;
-		}
-		this.textAlign = a;
-		this.rebuild();
-		return a;
-	}
-	,set_letterSpacing: function(s) {
-		if(this.letterSpacing == s) {
-			return s;
-		}
-		this.letterSpacing = s;
-		this.rebuild();
-		return s;
-	}
-	,set_lineSpacing: function(s) {
-		if(this.lineSpacing == s) {
-			return s;
-		}
-		this.lineSpacing = s;
-		this.rebuild();
-		return s;
-	}
-	,constraintSize: function(width,height) {
-		this.constraintWidth = width;
-		this.updateConstraint();
-	}
-	,onAdd: function() {
-		h2d_Drawable.prototype.onAdd.call(this);
-		this.rebuild();
-	}
-	,draw: function(ctx) {
-		if(this.glyphs == null) {
-			this.emitTile(ctx,h2d_Tile.fromColor(16711935,16,16));
-			return;
-		}
-		if(this.dropShadow != null) {
-			var oldX = this.absX;
-			var oldY = this.absY;
-			this.absX += this.dropShadow.dx * this.matA + this.dropShadow.dy * this.matC;
-			this.absY += this.dropShadow.dx * this.matB + this.dropShadow.dy * this.matD;
-			var oldR = this.color.x;
-			var oldG = this.color.y;
-			var oldB = this.color.z;
-			var oldA = this.color.w;
-			var _this = this.color;
-			var c = this.dropShadow.color;
-			_this.x = (c >> 16 & 255) / 255;
-			_this.y = (c >> 8 & 255) / 255;
-			_this.z = (c & 255) / 255;
-			_this.w = (c >>> 24) / 255;
-			this.color.w = this.dropShadow.alpha * oldA;
-			this.glyphs.drawWith(ctx,this);
-			this.absX = oldX;
-			this.absY = oldY;
-			var _this1 = this.color;
-			_this1.x = oldR;
-			_this1.y = oldG;
-			_this1.z = oldB;
-			_this1.w = oldA;
-		}
-		this.glyphs.drawWith(ctx,this);
-	}
-	,set_text: function(t) {
-		var t1 = t == null ? "null" : t;
-		if(t1 == this.text) {
-			return t1;
-		}
-		this.text = t1;
-		this.rebuild();
-		return t1;
-	}
-	,rebuild: function() {
-		this.calcDone = false;
-		if(this.allocated && this.text != null && this.font != null) {
-			this.initGlyphs(this.text);
-		}
-		if(this.parentContainer != null) {
-			this.parentContainer.contentChanged(this);
-		}
-	}
-	,calcTextWidth: function(text) {
-		if(this.calcDone) {
-			var ow = this.calcWidth;
-			var oh = this.calcHeight;
-			var osh = this.calcSizeHeight;
-			var ox = this.calcXMin;
-			var oy = this.calcYMin;
-			this.initGlyphs(text,false);
-			var w = this.calcWidth;
-			this.calcWidth = ow;
-			this.calcHeight = oh;
-			this.calcSizeHeight = osh;
-			this.calcXMin = ox;
-			this.calcYMin = oy;
-			return w;
-		} else {
-			this.initGlyphs(text,false);
-			this.calcDone = false;
-			return this.calcWidth;
-		}
-	}
-	,splitText: function(text,leftMargin,afterData) {
-		if(afterData == null) {
-			afterData = 0;
-		}
-		if(leftMargin == null) {
-			leftMargin = 0;
-		}
-		if(this.realMaxWidth < 0) {
-			return text;
-		}
-		var lines = [];
-		var rest = text;
-		var restPos = 0;
-		var x = leftMargin;
-		var prevChar = -1;
-		var _g1 = 0;
-		var _g = text.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var cc = HxOverrides.cca(text,i);
-			var _this = this.font;
-			var c = _this.glyphs.get(cc);
-			if(c == null) {
-				c = _this.charset.resolveChar(cc,_this.glyphs);
-				if(c == null) {
-					c = _this.defaultChar;
-				}
-			}
-			var e = c;
-			var newline = cc == 10;
-			var esize = e.width + e.getKerningOffset(prevChar);
-			if(this.font.charset.isBreakChar(cc)) {
-				if(lines.length == 0 && leftMargin > 0 && x > this.realMaxWidth) {
-					lines.push("");
-					x -= leftMargin;
-				}
-				var size = x + esize + this.letterSpacing;
-				var k = i + 1;
-				var max = text.length;
-				var prevChar1 = prevChar;
-				var breakFound = false;
-				while(size <= this.realMaxWidth && k < max) {
-					var cc1 = HxOverrides.cca(text,k++);
-					if(this.font.charset.isSpace(cc1) || cc1 == 10) {
-						breakFound = true;
-						break;
-					}
-					var _this1 = this.font;
-					var c1 = _this1.glyphs.get(cc1);
-					if(c1 == null) {
-						c1 = _this1.charset.resolveChar(cc1,_this1.glyphs);
-						if(c1 == null) {
-							c1 = _this1.defaultChar;
-						}
-					}
-					var e1 = c1;
-					size += e1.width + this.letterSpacing + e1.getKerningOffset(prevChar1);
-					prevChar1 = cc1;
-					if(this.font.charset.isBreakChar(cc1)) {
-						break;
-					}
-				}
-				if(size > this.realMaxWidth || !breakFound && size + afterData > this.realMaxWidth) {
-					newline = true;
-					if(this.font.charset.isSpace(cc)) {
-						lines.push(HxOverrides.substr(text,restPos,i - restPos));
-						e = null;
-					} else {
-						lines.push(HxOverrides.substr(text,restPos,i + 1 - restPos));
-					}
-					restPos = i + 1;
-				}
-			}
-			if(e != null) {
-				x += esize + this.letterSpacing;
-			}
-			if(newline) {
-				x = 0;
-				prevChar = -1;
-			} else {
-				prevChar = cc;
-			}
-		}
-		if(restPos < text.length) {
-			if(lines.length == 0 && leftMargin > 0 && x + afterData - this.letterSpacing > this.realMaxWidth) {
-				lines.push("");
-			}
-			lines.push(HxOverrides.substr(text,restPos,text.length - restPos));
-		}
-		return lines.join("\n");
-	}
-	,initGlyphs: function(text,rebuild,handleAlign,lines) {
-		if(handleAlign == null) {
-			handleAlign = true;
-		}
-		if(rebuild == null) {
-			rebuild = true;
-		}
-		if(rebuild) {
-			this.glyphs.clear();
-		}
-		var x = 0;
-		var y = 0;
-		var xMax = 0;
-		var xMin = 0;
-		var prevChar = -1;
-		var align = handleAlign ? this.textAlign : h2d_Align.Left;
-		switch(align[1]) {
-		case 1:case 2:
-			lines = [];
-			this.initGlyphs(text,false,false,lines);
-			var max = this.realMaxWidth < 0 ? 0 : this.realMaxWidth | 0;
-			var k = align == h2d_Align.Center ? 1 : 0;
-			var _g1 = 0;
-			var _g = lines.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				lines[i] = max - lines[i] >> k;
-			}
-			x = lines.shift();
-			xMin = x;
-			break;
-		default:
-		}
-		var dl = this.font.lineHeight + this.lineSpacing;
-		var calcLines = !handleAlign && !rebuild && lines != null;
-		var yMin = 0;
-		var t = this.splitText(text);
-		var _g11 = 0;
-		var _g2 = t.length;
-		while(_g11 < _g2) {
-			var i1 = _g11++;
-			var cc = HxOverrides.cca(t,i1);
-			var _this = this.font;
-			var c = _this.glyphs.get(cc);
-			if(c == null) {
-				c = _this.charset.resolveChar(cc,_this.glyphs);
-				if(c == null) {
-					c = _this.defaultChar;
-				}
-			}
-			var e = c;
-			var offs = e.getKerningOffset(prevChar);
-			var esize = e.width + offs;
-			if(e != null) {
-				if(rebuild) {
-					var _this1 = this.glyphs;
-					_this1.content.add(x + offs,y,_this1.curColor.x,_this1.curColor.y,_this1.curColor.z,_this1.curColor.w,e.t);
-				}
-				if(y == 0 && e.t.dy < yMin) {
-					yMin = e.t.dy;
-				}
-				x += esize + this.letterSpacing;
-			}
-			if(cc == 10) {
-				if(x > xMax) {
-					xMax = x;
-				}
-				if(calcLines) {
-					lines.push(x);
-				}
-				switch(align[1]) {
-				case 0:
-					x = 0;
-					break;
-				case 1:case 2:
-					x = lines.shift();
-					if(x < xMin) {
-						xMin = x;
-					}
-					break;
-				}
-				y += dl;
-				prevChar = -1;
-			} else {
-				prevChar = cc;
-			}
-		}
-		if(calcLines) {
-			lines.push(x);
-		}
-		if(x > xMax) {
-			xMax = x;
-		}
-		this.calcXMin = xMin;
-		this.calcYMin = yMin;
-		this.calcWidth = xMax - xMin;
-		this.calcHeight = y + this.font.lineHeight;
-		this.calcSizeHeight = y + (this.font.baseLine > 0 ? this.font.baseLine : this.font.lineHeight);
-		this.calcDone = true;
-	}
-	,updateSize: function() {
-		if(!this.calcDone) {
-			this.initGlyphs(this.text,false);
-		}
-	}
-	,get_textHeight: function() {
-		if(!this.calcDone) {
-			this.initGlyphs(this.text,false);
-		}
-		return this.calcHeight;
-	}
-	,get_textWidth: function() {
-		if(!this.calcDone) {
-			this.initGlyphs(this.text,false);
-		}
-		if(this.realMaxWidth >= 0) {
-			return this.realMaxWidth | 0;
-		} else {
-			return this.calcWidth;
-		}
-	}
-	,set_maxWidth: function(w) {
-		if(this.maxWidth == w) {
-			return w;
-		}
-		this.maxWidth = w;
-		this.updateConstraint();
-		return w;
-	}
-	,updateConstraint: function() {
-		var old = this.realMaxWidth;
-		if(this.maxWidth == null) {
-			this.realMaxWidth = this.constraintWidth;
-		} else if(this.constraintWidth < 0) {
-			this.realMaxWidth = this.maxWidth;
-		} else {
-			var a = this.maxWidth;
-			var b = this.constraintWidth;
-			this.realMaxWidth = a > b ? b : a;
-		}
-		if(this.realMaxWidth != old) {
-			this.rebuild();
-		}
-	}
-	,set_textColor: function(c) {
-		if(this.textColor == c) {
-			return c;
-		}
-		this.textColor = c;
-		var a = this.color.w;
-		var _this = this.color;
-		_this.x = (c >> 16 & 255) / 255;
-		_this.y = (c >> 8 & 255) / 255;
-		_this.z = (c & 255) / 255;
-		_this.w = (c >>> 24) / 255;
-		this.color.w = a;
-		return c;
-	}
-	,getBoundsRec: function(relativeTo,out,forSize) {
-		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
-		if(!this.calcDone) {
-			this.initGlyphs(this.text,false);
-		}
-		var x;
-		var y;
-		var w;
-		var h;
-		if(forSize) {
-			x = this.calcXMin;
-			y = this.calcYMin;
-			w = this.calcWidth;
-			h = this.calcSizeHeight;
-		} else {
-			if(this.realMaxWidth >= 0) {
-				x = 0;
-			} else {
-				x = this.calcXMin;
-			}
-			y = this.calcYMin;
-			if(this.realMaxWidth >= 0) {
-				w = this.realMaxWidth;
-			} else {
-				w = this.calcWidth;
-			}
-			h = this.calcHeight;
-		}
-		this.addBounds(relativeTo,out,x,y,w,h);
-	}
-	,__class__: h2d_Text
-});
 var h2d_Tile = function(tex,x,y,w,h,dx,dy) {
 	if(dy == null) {
 		dy = 0;
@@ -14642,7 +14479,7 @@ h2d_filter_Filter.prototype = {
 	}
 	,__class__: h2d_filter_Filter
 };
-var h3d_BufferFlag = $hxClasses["h3d.BufferFlag"] = { __ename__ : true, __constructs__ : ["Dynamic","Triangles","Quads","Managed","RawFormat","NoAlloc"] };
+var h3d_BufferFlag = $hxClasses["h3d.BufferFlag"] = { __ename__ : ["h3d","BufferFlag"], __constructs__ : ["Dynamic","Triangles","Quads","Managed","RawFormat","NoAlloc"] };
 h3d_BufferFlag.Dynamic = ["Dynamic",0];
 h3d_BufferFlag.Dynamic.toString = $estr;
 h3d_BufferFlag.Dynamic.__enum__ = h3d_BufferFlag;
@@ -21575,7 +21412,7 @@ h3d_col_Sphere.prototype = {
 	}
 	,__class__: h3d_col_Sphere
 };
-var h3d_impl_Feature = $hxClasses["h3d.impl.Feature"] = { __ename__ : true, __constructs__ : ["StandardDerivatives","FloatTextures","AllocDepthBuffer","HardwareAccelerated","MultipleRenderTargets","Queries"] };
+var h3d_impl_Feature = $hxClasses["h3d.impl.Feature"] = { __ename__ : ["h3d","impl","Feature"], __constructs__ : ["StandardDerivatives","FloatTextures","AllocDepthBuffer","HardwareAccelerated","MultipleRenderTargets","Queries"] };
 h3d_impl_Feature.StandardDerivatives = ["StandardDerivatives",0];
 h3d_impl_Feature.StandardDerivatives.toString = $estr;
 h3d_impl_Feature.StandardDerivatives.__enum__ = h3d_impl_Feature;
@@ -21595,7 +21432,7 @@ h3d_impl_Feature.Queries = ["Queries",5];
 h3d_impl_Feature.Queries.toString = $estr;
 h3d_impl_Feature.Queries.__enum__ = h3d_impl_Feature;
 h3d_impl_Feature.__empty_constructs__ = [h3d_impl_Feature.StandardDerivatives,h3d_impl_Feature.FloatTextures,h3d_impl_Feature.AllocDepthBuffer,h3d_impl_Feature.HardwareAccelerated,h3d_impl_Feature.MultipleRenderTargets,h3d_impl_Feature.Queries];
-var h3d_impl_QueryKind = $hxClasses["h3d.impl.QueryKind"] = { __ename__ : true, __constructs__ : ["TimeStamp","Samples"] };
+var h3d_impl_QueryKind = $hxClasses["h3d.impl.QueryKind"] = { __ename__ : ["h3d","impl","QueryKind"], __constructs__ : ["TimeStamp","Samples"] };
 h3d_impl_QueryKind.TimeStamp = ["TimeStamp",0];
 h3d_impl_QueryKind.TimeStamp.toString = $estr;
 h3d_impl_QueryKind.TimeStamp.__enum__ = h3d_impl_QueryKind;
@@ -23348,7 +23185,7 @@ h3d_mat_BaseMaterial.prototype = {
 	}
 	,__class__: h3d_mat_BaseMaterial
 };
-var h3d_mat_Face = $hxClasses["h3d.mat.Face"] = { __ename__ : true, __constructs__ : ["None","Back","Front","Both"] };
+var h3d_mat_Face = $hxClasses["h3d.mat.Face"] = { __ename__ : ["h3d","mat","Face"], __constructs__ : ["None","Back","Front","Both"] };
 h3d_mat_Face.None = ["None",0];
 h3d_mat_Face.None.toString = $estr;
 h3d_mat_Face.None.__enum__ = h3d_mat_Face;
@@ -23362,7 +23199,7 @@ h3d_mat_Face.Both = ["Both",3];
 h3d_mat_Face.Both.toString = $estr;
 h3d_mat_Face.Both.__enum__ = h3d_mat_Face;
 h3d_mat_Face.__empty_constructs__ = [h3d_mat_Face.None,h3d_mat_Face.Back,h3d_mat_Face.Front,h3d_mat_Face.Both];
-var h3d_mat_Blend = $hxClasses["h3d.mat.Blend"] = { __ename__ : true, __constructs__ : ["One","Zero","SrcAlpha","SrcColor","DstAlpha","DstColor","OneMinusSrcAlpha","OneMinusSrcColor","OneMinusDstAlpha","OneMinusDstColor","ConstantColor","ConstantAlpha","OneMinusConstantColor","OneMinusConstantAlpha","SrcAlphaSaturate"] };
+var h3d_mat_Blend = $hxClasses["h3d.mat.Blend"] = { __ename__ : ["h3d","mat","Blend"], __constructs__ : ["One","Zero","SrcAlpha","SrcColor","DstAlpha","DstColor","OneMinusSrcAlpha","OneMinusSrcColor","OneMinusDstAlpha","OneMinusDstColor","ConstantColor","ConstantAlpha","OneMinusConstantColor","OneMinusConstantAlpha","SrcAlphaSaturate"] };
 h3d_mat_Blend.One = ["One",0];
 h3d_mat_Blend.One.toString = $estr;
 h3d_mat_Blend.One.__enum__ = h3d_mat_Blend;
@@ -23409,7 +23246,7 @@ h3d_mat_Blend.SrcAlphaSaturate = ["SrcAlphaSaturate",14];
 h3d_mat_Blend.SrcAlphaSaturate.toString = $estr;
 h3d_mat_Blend.SrcAlphaSaturate.__enum__ = h3d_mat_Blend;
 h3d_mat_Blend.__empty_constructs__ = [h3d_mat_Blend.One,h3d_mat_Blend.Zero,h3d_mat_Blend.SrcAlpha,h3d_mat_Blend.SrcColor,h3d_mat_Blend.DstAlpha,h3d_mat_Blend.DstColor,h3d_mat_Blend.OneMinusSrcAlpha,h3d_mat_Blend.OneMinusSrcColor,h3d_mat_Blend.OneMinusDstAlpha,h3d_mat_Blend.OneMinusDstColor,h3d_mat_Blend.ConstantColor,h3d_mat_Blend.ConstantAlpha,h3d_mat_Blend.OneMinusConstantColor,h3d_mat_Blend.OneMinusConstantAlpha,h3d_mat_Blend.SrcAlphaSaturate];
-var h3d_mat_Compare = $hxClasses["h3d.mat.Compare"] = { __ename__ : true, __constructs__ : ["Always","Never","Equal","NotEqual","Greater","GreaterEqual","Less","LessEqual"] };
+var h3d_mat_Compare = $hxClasses["h3d.mat.Compare"] = { __ename__ : ["h3d","mat","Compare"], __constructs__ : ["Always","Never","Equal","NotEqual","Greater","GreaterEqual","Less","LessEqual"] };
 h3d_mat_Compare.Always = ["Always",0];
 h3d_mat_Compare.Always.toString = $estr;
 h3d_mat_Compare.Always.__enum__ = h3d_mat_Compare;
@@ -23435,7 +23272,7 @@ h3d_mat_Compare.LessEqual = ["LessEqual",7];
 h3d_mat_Compare.LessEqual.toString = $estr;
 h3d_mat_Compare.LessEqual.__enum__ = h3d_mat_Compare;
 h3d_mat_Compare.__empty_constructs__ = [h3d_mat_Compare.Always,h3d_mat_Compare.Never,h3d_mat_Compare.Equal,h3d_mat_Compare.NotEqual,h3d_mat_Compare.Greater,h3d_mat_Compare.GreaterEqual,h3d_mat_Compare.Less,h3d_mat_Compare.LessEqual];
-var h3d_mat_StencilOp = $hxClasses["h3d.mat.StencilOp"] = { __ename__ : true, __constructs__ : ["Keep","Zero","Replace","Increment","IncrementWrap","Decrement","DecrementWrap","Invert"] };
+var h3d_mat_StencilOp = $hxClasses["h3d.mat.StencilOp"] = { __ename__ : ["h3d","mat","StencilOp"], __constructs__ : ["Keep","Zero","Replace","Increment","IncrementWrap","Decrement","DecrementWrap","Invert"] };
 h3d_mat_StencilOp.Keep = ["Keep",0];
 h3d_mat_StencilOp.Keep.toString = $estr;
 h3d_mat_StencilOp.Keep.__enum__ = h3d_mat_StencilOp;
@@ -23461,7 +23298,7 @@ h3d_mat_StencilOp.Invert = ["Invert",7];
 h3d_mat_StencilOp.Invert.toString = $estr;
 h3d_mat_StencilOp.Invert.__enum__ = h3d_mat_StencilOp;
 h3d_mat_StencilOp.__empty_constructs__ = [h3d_mat_StencilOp.Keep,h3d_mat_StencilOp.Zero,h3d_mat_StencilOp.Replace,h3d_mat_StencilOp.Increment,h3d_mat_StencilOp.IncrementWrap,h3d_mat_StencilOp.Decrement,h3d_mat_StencilOp.DecrementWrap,h3d_mat_StencilOp.Invert];
-var h3d_mat_MipMap = $hxClasses["h3d.mat.MipMap"] = { __ename__ : true, __constructs__ : ["None","Nearest","Linear"] };
+var h3d_mat_MipMap = $hxClasses["h3d.mat.MipMap"] = { __ename__ : ["h3d","mat","MipMap"], __constructs__ : ["None","Nearest","Linear"] };
 h3d_mat_MipMap.None = ["None",0];
 h3d_mat_MipMap.None.toString = $estr;
 h3d_mat_MipMap.None.__enum__ = h3d_mat_MipMap;
@@ -23472,7 +23309,7 @@ h3d_mat_MipMap.Linear = ["Linear",2];
 h3d_mat_MipMap.Linear.toString = $estr;
 h3d_mat_MipMap.Linear.__enum__ = h3d_mat_MipMap;
 h3d_mat_MipMap.__empty_constructs__ = [h3d_mat_MipMap.None,h3d_mat_MipMap.Nearest,h3d_mat_MipMap.Linear];
-var h3d_mat_Filter = $hxClasses["h3d.mat.Filter"] = { __ename__ : true, __constructs__ : ["Nearest","Linear"] };
+var h3d_mat_Filter = $hxClasses["h3d.mat.Filter"] = { __ename__ : ["h3d","mat","Filter"], __constructs__ : ["Nearest","Linear"] };
 h3d_mat_Filter.Nearest = ["Nearest",0];
 h3d_mat_Filter.Nearest.toString = $estr;
 h3d_mat_Filter.Nearest.__enum__ = h3d_mat_Filter;
@@ -23480,7 +23317,7 @@ h3d_mat_Filter.Linear = ["Linear",1];
 h3d_mat_Filter.Linear.toString = $estr;
 h3d_mat_Filter.Linear.__enum__ = h3d_mat_Filter;
 h3d_mat_Filter.__empty_constructs__ = [h3d_mat_Filter.Nearest,h3d_mat_Filter.Linear];
-var h3d_mat_Wrap = $hxClasses["h3d.mat.Wrap"] = { __ename__ : true, __constructs__ : ["Clamp","Repeat"] };
+var h3d_mat_Wrap = $hxClasses["h3d.mat.Wrap"] = { __ename__ : ["h3d","mat","Wrap"], __constructs__ : ["Clamp","Repeat"] };
 h3d_mat_Wrap.Clamp = ["Clamp",0];
 h3d_mat_Wrap.Clamp.toString = $estr;
 h3d_mat_Wrap.Clamp.__enum__ = h3d_mat_Wrap;
@@ -23488,7 +23325,7 @@ h3d_mat_Wrap.Repeat = ["Repeat",1];
 h3d_mat_Wrap.Repeat.toString = $estr;
 h3d_mat_Wrap.Repeat.__enum__ = h3d_mat_Wrap;
 h3d_mat_Wrap.__empty_constructs__ = [h3d_mat_Wrap.Clamp,h3d_mat_Wrap.Repeat];
-var h3d_mat_Operation = $hxClasses["h3d.mat.Operation"] = { __ename__ : true, __constructs__ : ["Add","Sub","ReverseSub"] };
+var h3d_mat_Operation = $hxClasses["h3d.mat.Operation"] = { __ename__ : ["h3d","mat","Operation"], __constructs__ : ["Add","Sub","ReverseSub"] };
 h3d_mat_Operation.Add = ["Add",0];
 h3d_mat_Operation.Add.toString = $estr;
 h3d_mat_Operation.Add.__enum__ = h3d_mat_Operation;
@@ -23499,7 +23336,7 @@ h3d_mat_Operation.ReverseSub = ["ReverseSub",2];
 h3d_mat_Operation.ReverseSub.toString = $estr;
 h3d_mat_Operation.ReverseSub.__enum__ = h3d_mat_Operation;
 h3d_mat_Operation.__empty_constructs__ = [h3d_mat_Operation.Add,h3d_mat_Operation.Sub,h3d_mat_Operation.ReverseSub];
-var h3d_mat_TextureFlags = $hxClasses["h3d.mat.TextureFlags"] = { __ename__ : true, __constructs__ : ["Target","Cube","MipMapped","ManualMipMapGen","IsNPOT","NoAlloc","Dynamic","AlphaPremultiplied","WasCleared","Loading","Serialize"] };
+var h3d_mat_TextureFlags = $hxClasses["h3d.mat.TextureFlags"] = { __ename__ : ["h3d","mat","TextureFlags"], __constructs__ : ["Target","Cube","MipMapped","ManualMipMapGen","IsNPOT","NoAlloc","Dynamic","AlphaPremultiplied","WasCleared","Loading","Serialize"] };
 h3d_mat_TextureFlags.Target = ["Target",0];
 h3d_mat_TextureFlags.Target.toString = $estr;
 h3d_mat_TextureFlags.Target.__enum__ = h3d_mat_TextureFlags;
@@ -24716,7 +24553,7 @@ h3d_mat_Stencil.prototype = {
 	}
 	,__class__: h3d_mat_Stencil
 };
-var hxd_PixelFormat = $hxClasses["hxd.PixelFormat"] = { __ename__ : true, __constructs__ : ["ARGB","BGRA","RGBA","RGBA16F","RGBA32F","ALPHA8","ALPHA16F","ALPHA32F"] };
+var hxd_PixelFormat = $hxClasses["hxd.PixelFormat"] = { __ename__ : ["hxd","PixelFormat"], __constructs__ : ["ARGB","BGRA","RGBA","RGBA16F","RGBA32F","ALPHA8","ALPHA16F","ALPHA32F"] };
 hxd_PixelFormat.ARGB = ["ARGB",0];
 hxd_PixelFormat.ARGB.toString = $estr;
 hxd_PixelFormat.ARGB.__enum__ = hxd_PixelFormat;
@@ -35056,23 +34893,315 @@ haxe_MainLoop.tick = function() {
 	}
 	return wait;
 };
-var haxe_Resource = function() { };
-$hxClasses["haxe.Resource"] = haxe_Resource;
-haxe_Resource.__name__ = ["haxe","Resource"];
-haxe_Resource.getBytes = function(name) {
-	var _g = 0;
-	var _g1 = haxe_Resource.content;
-	while(_g < _g1.length) {
-		var x = _g1[_g];
-		++_g;
-		if(x.name == name) {
-			if(x.str != null) {
-				return haxe_io_Bytes.ofString(x.str);
+var haxe_Serializer = function() {
+	this.buf = new StringBuf();
+	this.cache = [];
+	this.useCache = haxe_Serializer.USE_CACHE;
+	this.useEnumIndex = haxe_Serializer.USE_ENUM_INDEX;
+	this.shash = new haxe_ds_StringMap();
+	this.scount = 0;
+};
+$hxClasses["haxe.Serializer"] = haxe_Serializer;
+haxe_Serializer.__name__ = ["haxe","Serializer"];
+haxe_Serializer.run = function(v) {
+	var s = new haxe_Serializer();
+	s.serialize(v);
+	return s.toString();
+};
+haxe_Serializer.prototype = {
+	toString: function() {
+		return this.buf.b;
+	}
+	,serializeString: function(s) {
+		var _this = this.shash;
+		var x = __map_reserved[s] != null ? _this.getReserved(s) : _this.h[s];
+		if(x != null) {
+			this.buf.b += "R";
+			this.buf.b += x == null ? "null" : "" + x;
+			return;
+		}
+		var _this1 = this.shash;
+		var value = this.scount++;
+		if(__map_reserved[s] != null) {
+			_this1.setReserved(s,value);
+		} else {
+			_this1.h[s] = value;
+		}
+		this.buf.b += "y";
+		s = encodeURIComponent(s);
+		this.buf.b += Std.string(s.length);
+		this.buf.b += ":";
+		this.buf.b += s == null ? "null" : "" + s;
+	}
+	,serializeRef: function(v) {
+		var vt = typeof(v);
+		var _g1 = 0;
+		var _g = this.cache.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var ci = this.cache[i];
+			if(typeof(ci) == vt && ci == v) {
+				this.buf.b += "r";
+				this.buf.b += i == null ? "null" : "" + i;
+				return true;
 			}
-			return haxe_crypto_Base64.decode(x.data);
+		}
+		this.cache.push(v);
+		return false;
+	}
+	,serializeFields: function(v) {
+		var _g = 0;
+		var _g1 = Reflect.fields(v);
+		while(_g < _g1.length) {
+			var f = _g1[_g];
+			++_g;
+			this.serializeString(f);
+			this.serialize(Reflect.field(v,f));
+		}
+		this.buf.b += "g";
+	}
+	,serialize: function(v) {
+		var _g = Type["typeof"](v);
+		switch(_g[1]) {
+		case 0:
+			this.buf.b += "n";
+			break;
+		case 1:
+			var v1 = v;
+			if(v1 == 0) {
+				this.buf.b += "z";
+				return;
+			}
+			this.buf.b += "i";
+			this.buf.b += v1 == null ? "null" : "" + v1;
+			break;
+		case 2:
+			var v2 = v;
+			if(isNaN(v2)) {
+				this.buf.b += "k";
+			} else if(!isFinite(v2)) {
+				this.buf.b += v2 < 0 ? "m" : "p";
+			} else {
+				this.buf.b += "d";
+				this.buf.b += v2 == null ? "null" : "" + v2;
+			}
+			break;
+		case 3:
+			this.buf.b += v ? "t" : "f";
+			break;
+		case 4:
+			if(js_Boot.__instanceof(v,Class)) {
+				var className = Type.getClassName(v);
+				this.buf.b += "A";
+				this.serializeString(className);
+			} else if(js_Boot.__instanceof(v,Enum)) {
+				this.buf.b += "B";
+				this.serializeString(Type.getEnumName(v));
+			} else {
+				if(this.useCache && this.serializeRef(v)) {
+					return;
+				}
+				this.buf.b += "o";
+				this.serializeFields(v);
+			}
+			break;
+		case 5:
+			throw new js__$Boot_HaxeError("Cannot serialize function");
+			break;
+		case 6:
+			var c = _g[2];
+			if(c == String) {
+				this.serializeString(v);
+				return;
+			}
+			if(this.useCache && this.serializeRef(v)) {
+				return;
+			}
+			switch(c) {
+			case Array:
+				var ucount = 0;
+				this.buf.b += "a";
+				var l = v["length"];
+				var _g1 = 0;
+				var _g2 = l;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					if(v[i] == null) {
+						++ucount;
+					} else {
+						if(ucount > 0) {
+							if(ucount == 1) {
+								this.buf.b += "n";
+							} else {
+								this.buf.b += "u";
+								this.buf.b += ucount == null ? "null" : "" + ucount;
+							}
+							ucount = 0;
+						}
+						this.serialize(v[i]);
+					}
+				}
+				if(ucount > 0) {
+					if(ucount == 1) {
+						this.buf.b += "n";
+					} else {
+						this.buf.b += "u";
+						this.buf.b += ucount == null ? "null" : "" + ucount;
+					}
+				}
+				this.buf.b += "h";
+				break;
+			case Date:
+				var d = v;
+				this.buf.b += "v";
+				this.buf.b += Std.string(d.getTime());
+				break;
+			case List:
+				this.buf.b += "l";
+				var v3 = v;
+				var _g_head = v3.h;
+				while(_g_head != null) {
+					var val = _g_head.item;
+					_g_head = _g_head.next;
+					var i1 = val;
+					this.serialize(i1);
+				}
+				this.buf.b += "h";
+				break;
+			case haxe_ds_IntMap:
+				this.buf.b += "q";
+				var v4 = v;
+				var k = v4.keys();
+				while(k.hasNext()) {
+					var k1 = k.next();
+					this.buf.b += ":";
+					this.buf.b += k1 == null ? "null" : "" + k1;
+					this.serialize(v4.h[k1]);
+				}
+				this.buf.b += "h";
+				break;
+			case haxe_ds_ObjectMap:
+				this.buf.b += "M";
+				var v5 = v;
+				var k2 = v5.keys();
+				while(k2.hasNext()) {
+					var k3 = k2.next();
+					var id = Reflect.field(k3,"__id__");
+					Reflect.deleteField(k3,"__id__");
+					this.serialize(k3);
+					k3["__id__"] = id;
+					this.serialize(v5.h[k3.__id__]);
+				}
+				this.buf.b += "h";
+				break;
+			case haxe_ds_StringMap:
+				this.buf.b += "b";
+				var v6 = v;
+				var k4 = v6.keys();
+				while(k4.hasNext()) {
+					var k5 = k4.next();
+					this.serializeString(k5);
+					this.serialize(__map_reserved[k5] != null ? v6.getReserved(k5) : v6.h[k5]);
+				}
+				this.buf.b += "h";
+				break;
+			case haxe_io_Bytes:
+				var v7 = v;
+				this.buf.b += "s";
+				this.buf.b += Std.string(Math.ceil(v7.length * 8 / 6));
+				this.buf.b += ":";
+				var i2 = 0;
+				var max = v7.length - 2;
+				var b64 = haxe_Serializer.BASE64_CODES;
+				if(b64 == null) {
+					var length = haxe_Serializer.BASE64.length;
+					var this1 = new Array(length);
+					b64 = this1;
+					var _g11 = 0;
+					var _g3 = haxe_Serializer.BASE64.length;
+					while(_g11 < _g3) {
+						var i3 = _g11++;
+						b64[i3] = HxOverrides.cca(haxe_Serializer.BASE64,i3);
+					}
+					haxe_Serializer.BASE64_CODES = b64;
+				}
+				while(i2 < max) {
+					var b1 = v7.b[i2++];
+					var b2 = v7.b[i2++];
+					var b3 = v7.b[i2++];
+					this.buf.b += String.fromCharCode(b64[b1 >> 2]);
+					this.buf.b += String.fromCharCode(b64[(b1 << 4 | b2 >> 4) & 63]);
+					this.buf.b += String.fromCharCode(b64[(b2 << 2 | b3 >> 6) & 63]);
+					this.buf.b += String.fromCharCode(b64[b3 & 63]);
+				}
+				if(i2 == max) {
+					var b11 = v7.b[i2++];
+					var b21 = v7.b[i2++];
+					this.buf.b += String.fromCharCode(b64[b11 >> 2]);
+					this.buf.b += String.fromCharCode(b64[(b11 << 4 | b21 >> 4) & 63]);
+					this.buf.b += String.fromCharCode(b64[b21 << 2 & 63]);
+				} else if(i2 == max + 1) {
+					var b12 = v7.b[i2++];
+					this.buf.b += String.fromCharCode(b64[b12 >> 2]);
+					this.buf.b += String.fromCharCode(b64[b12 << 4 & 63]);
+				}
+				break;
+			default:
+				if(this.useCache) {
+					this.cache.pop();
+				}
+				if(v.hxSerialize != null) {
+					this.buf.b += "C";
+					this.serializeString(Type.getClassName(c));
+					if(this.useCache) {
+						this.cache.push(v);
+					}
+					v.hxSerialize(this);
+					this.buf.b += "g";
+				} else {
+					this.buf.b += "c";
+					this.serializeString(Type.getClassName(c));
+					if(this.useCache) {
+						this.cache.push(v);
+					}
+					this.serializeFields(v);
+				}
+			}
+			break;
+		case 7:
+			var e = _g[2];
+			if(this.useCache) {
+				if(this.serializeRef(v)) {
+					return;
+				}
+				this.cache.pop();
+			}
+			this.buf.b += Std.string(this.useEnumIndex ? "j" : "w");
+			this.serializeString(Type.getEnumName(e));
+			if(this.useEnumIndex) {
+				this.buf.b += ":";
+				this.buf.b += Std.string(v[1]);
+			} else {
+				this.serializeString(v[0]);
+			}
+			this.buf.b += ":";
+			var l1 = v["length"];
+			this.buf.b += Std.string(l1 - 2);
+			var _g12 = 2;
+			var _g4 = l1;
+			while(_g12 < _g4) {
+				var i4 = _g12++;
+				this.serialize(v[i4]);
+			}
+			if(this.useCache) {
+				this.cache.push(v);
+			}
+			break;
+		default:
+			throw new js__$Boot_HaxeError("Cannot serialize " + Std.string(v));
 		}
 	}
-	return null;
+	,__class__: haxe_Serializer
 };
 var haxe_Timer = function(time_ms) {
 	var me = this;
@@ -35489,173 +35618,6 @@ haxe_crypto_Adler32.prototype = {
 		}
 	}
 	,__class__: haxe_crypto_Adler32
-};
-var haxe_io_Bytes = function(data) {
-	this.length = data.byteLength;
-	this.b = new Uint8Array(data);
-	this.b.bufferValue = data;
-	data.hxBytes = this;
-	data.bytes = this.b;
-};
-$hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
-haxe_io_Bytes.__name__ = ["haxe","io","Bytes"];
-haxe_io_Bytes.alloc = function(length) {
-	return new haxe_io_Bytes(new ArrayBuffer(length));
-};
-haxe_io_Bytes.ofString = function(s) {
-	var a = [];
-	var i = 0;
-	while(i < s.length) {
-		var c = s.charCodeAt(i++);
-		if(55296 <= c && c <= 56319) {
-			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
-		}
-		if(c <= 127) {
-			a.push(c);
-		} else if(c <= 2047) {
-			a.push(192 | c >> 6);
-			a.push(128 | c & 63);
-		} else if(c <= 65535) {
-			a.push(224 | c >> 12);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		} else {
-			a.push(240 | c >> 18);
-			a.push(128 | c >> 12 & 63);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		}
-	}
-	return new haxe_io_Bytes(new Uint8Array(a).buffer);
-};
-haxe_io_Bytes.ofData = function(b) {
-	var hb = b.hxBytes;
-	if(hb != null) {
-		return hb;
-	}
-	return new haxe_io_Bytes(b);
-};
-haxe_io_Bytes.fastGet = function(b,pos) {
-	return b.bytes[pos];
-};
-haxe_io_Bytes.prototype = {
-	blit: function(pos,src,srcpos,len) {
-		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
-		}
-		if(srcpos == 0 && len == src.b.byteLength) {
-			this.b.set(src.b,pos);
-		} else {
-			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
-		}
-	}
-	,fill: function(pos,len,value) {
-		var _g1 = 0;
-		var _g = len;
-		while(_g1 < _g) {
-			var i = _g1++;
-			this.b[pos++] = value & 255;
-		}
-	}
-	,sub: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
-		}
-		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
-	}
-	,getDouble: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getFloat64(pos,true);
-	}
-	,getFloat: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getFloat32(pos,true);
-	}
-	,setFloat: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setFloat32(pos,v,true);
-	}
-	,getUInt16: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getUint16(pos,true);
-	}
-	,setUInt16: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setUint16(pos,v,true);
-	}
-	,getInt32: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getInt32(pos,true);
-	}
-	,setInt32: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setInt32(pos,v,true);
-	}
-	,getInt64: function(pos) {
-		var this1 = new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
-		return this1;
-	}
-	,getString: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
-		}
-		var s = "";
-		var b = this.b;
-		var fcc = String.fromCharCode;
-		var i = pos;
-		var max = pos + len;
-		while(i < max) {
-			var c = b[i++];
-			if(c < 128) {
-				if(c == 0) {
-					break;
-				}
-				s += fcc(c);
-			} else if(c < 224) {
-				s += fcc((c & 63) << 6 | b[i++] & 127);
-			} else if(c < 240) {
-				var c2 = b[i++];
-				s += fcc((c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127);
-			} else {
-				var c21 = b[i++];
-				var c3 = b[i++];
-				var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
-				s += fcc((u >> 10) + 55232);
-				s += fcc(u & 1023 | 56320);
-			}
-		}
-		return s;
-	}
-	,toString: function() {
-		return this.getString(0,this.length);
-	}
-	,__class__: haxe_io_Bytes
-};
-var haxe_crypto_Base64 = function() { };
-$hxClasses["haxe.crypto.Base64"] = haxe_crypto_Base64;
-haxe_crypto_Base64.__name__ = ["haxe","crypto","Base64"];
-haxe_crypto_Base64.decode = function(str,complement) {
-	if(complement == null) {
-		complement = true;
-	}
-	if(complement) {
-		while(HxOverrides.cca(str,str.length - 1) == 61) str = HxOverrides.substr(str,0,-1);
-	}
-	return new haxe_crypto_BaseCode(haxe_crypto_Base64.BYTES).decodeBytes(haxe_io_Bytes.ofString(str));
 };
 var haxe_crypto_BaseCode = function(base) {
 	var len = base.length;
@@ -36371,6 +36333,12 @@ var haxe_ds_ObjectMap = function() {
 $hxClasses["haxe.ds.ObjectMap"] = haxe_ds_ObjectMap;
 haxe_ds_ObjectMap.__name__ = ["haxe","ds","ObjectMap"];
 haxe_ds_ObjectMap.__interfaces__ = [haxe_IMap];
+haxe_ds_ObjectMap.assignId = function(obj) {
+	return obj.__id__ = ++haxe_ds_ObjectMap.count;
+};
+haxe_ds_ObjectMap.getId = function(obj) {
+	return obj.__id__;
+};
 haxe_ds_ObjectMap.prototype = {
 	set: function(key,value) {
 		var id = key.__id__ || (key.__id__ = ++haxe_ds_ObjectMap.count);
@@ -36547,6 +36515,181 @@ haxe_ds__$Vector_Vector_$Impl_$.blit = function(src,srcPos,dest,destPos,len) {
 			dest[destPos + i2] = src[srcPos + i2];
 		}
 	}
+};
+var haxe_io_Bytes = function(data) {
+	this.length = data.byteLength;
+	this.b = new Uint8Array(data);
+	this.b.bufferValue = data;
+	data.hxBytes = this;
+	data.bytes = this.b;
+};
+$hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
+haxe_io_Bytes.__name__ = ["haxe","io","Bytes"];
+haxe_io_Bytes.alloc = function(length) {
+	return new haxe_io_Bytes(new ArrayBuffer(length));
+};
+haxe_io_Bytes.ofString = function(s) {
+	var a = [];
+	var i = 0;
+	while(i < s.length) {
+		var c = s.charCodeAt(i++);
+		if(55296 <= c && c <= 56319) {
+			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
+		}
+		if(c <= 127) {
+			a.push(c);
+		} else if(c <= 2047) {
+			a.push(192 | c >> 6);
+			a.push(128 | c & 63);
+		} else if(c <= 65535) {
+			a.push(224 | c >> 12);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		} else {
+			a.push(240 | c >> 18);
+			a.push(128 | c >> 12 & 63);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		}
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
+};
+haxe_io_Bytes.ofData = function(b) {
+	var hb = b.hxBytes;
+	if(hb != null) {
+		return hb;
+	}
+	return new haxe_io_Bytes(b);
+};
+haxe_io_Bytes.fastGet = function(b,pos) {
+	return b.bytes[pos];
+};
+haxe_io_Bytes.prototype = {
+	blit: function(pos,src,srcpos,len) {
+		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
+			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
+		}
+		if(srcpos == 0 && len == src.b.byteLength) {
+			this.b.set(src.b,pos);
+		} else {
+			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
+		}
+	}
+	,fill: function(pos,len,value) {
+		var _g1 = 0;
+		var _g = len;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this.b[pos++] = value & 255;
+		}
+	}
+	,sub: function(pos,len) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
+		}
+		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
+	}
+	,getDouble: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getFloat64(pos,true);
+	}
+	,getFloat: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getFloat32(pos,true);
+	}
+	,setFloat: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setFloat32(pos,v,true);
+	}
+	,getUInt16: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getUint16(pos,true);
+	}
+	,setUInt16: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setUint16(pos,v,true);
+	}
+	,getInt32: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getInt32(pos,true);
+	}
+	,setInt32: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setInt32(pos,v,true);
+	}
+	,getInt64: function(pos) {
+		var this1 = new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
+		return this1;
+	}
+	,getString: function(pos,len) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw new js__$Boot_HaxeError(haxe_io_Error.OutsideBounds);
+		}
+		var s = "";
+		var b = this.b;
+		var fcc = String.fromCharCode;
+		var i = pos;
+		var max = pos + len;
+		while(i < max) {
+			var c = b[i++];
+			if(c < 128) {
+				if(c == 0) {
+					break;
+				}
+				s += fcc(c);
+			} else if(c < 224) {
+				s += fcc((c & 63) << 6 | b[i++] & 127);
+			} else if(c < 240) {
+				var c2 = b[i++];
+				s += fcc((c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127);
+			} else {
+				var c21 = b[i++];
+				var c3 = b[i++];
+				var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
+				s += fcc((u >> 10) + 55232);
+				s += fcc(u & 1023 | 56320);
+			}
+		}
+		return s;
+	}
+	,toString: function() {
+		return this.getString(0,this.length);
+	}
+	,toHex: function() {
+		var s_b = "";
+		var chars = [];
+		var str = "0123456789abcdef";
+		var _g1 = 0;
+		var _g = str.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			chars.push(HxOverrides.cca(str,i));
+		}
+		var _g11 = 0;
+		var _g2 = this.length;
+		while(_g11 < _g2) {
+			var i1 = _g11++;
+			var c = this.b[i1];
+			s_b += String.fromCharCode(chars[c >> 4]);
+			s_b += String.fromCharCode(chars[c & 15]);
+		}
+		return s_b;
+	}
+	,__class__: haxe_io_Bytes
 };
 var haxe_io_BytesBuffer = function() {
 	this.b = [];
@@ -36859,7 +37002,7 @@ haxe_io_Eof.prototype = {
 	}
 	,__class__: haxe_io_Eof
 };
-var haxe_io_Error = $hxClasses["haxe.io.Error"] = { __ename__ : true, __constructs__ : ["Blocked","Overflow","OutsideBounds","Custom"] };
+var haxe_io_Error = $hxClasses["haxe.io.Error"] = { __ename__ : ["haxe","io","Error"], __constructs__ : ["Blocked","Overflow","OutsideBounds","Custom"] };
 haxe_io_Error.Blocked = ["Blocked",0];
 haxe_io_Error.Blocked.toString = $estr;
 haxe_io_Error.Blocked.__enum__ = haxe_io_Error;
@@ -36934,7 +37077,7 @@ haxe_io_FPHelper.doubleToI64 = function(v) {
 	}
 	return i64;
 };
-var haxe_macro_Binop = $hxClasses["haxe.macro.Binop"] = { __ename__ : true, __constructs__ : ["OpAdd","OpMult","OpDiv","OpSub","OpAssign","OpEq","OpNotEq","OpGt","OpGte","OpLt","OpLte","OpAnd","OpOr","OpXor","OpBoolAnd","OpBoolOr","OpShl","OpShr","OpUShr","OpMod","OpAssignOp","OpInterval","OpArrow"] };
+var haxe_macro_Binop = $hxClasses["haxe.macro.Binop"] = { __ename__ : ["haxe","macro","Binop"], __constructs__ : ["OpAdd","OpMult","OpDiv","OpSub","OpAssign","OpEq","OpNotEq","OpGt","OpGte","OpLt","OpLte","OpAnd","OpOr","OpXor","OpBoolAnd","OpBoolOr","OpShl","OpShr","OpUShr","OpMod","OpAssignOp","OpInterval","OpArrow"] };
 haxe_macro_Binop.OpAdd = ["OpAdd",0];
 haxe_macro_Binop.OpAdd.toString = $estr;
 haxe_macro_Binop.OpAdd.__enum__ = haxe_macro_Binop;
@@ -37003,7 +37146,7 @@ haxe_macro_Binop.OpArrow = ["OpArrow",22];
 haxe_macro_Binop.OpArrow.toString = $estr;
 haxe_macro_Binop.OpArrow.__enum__ = haxe_macro_Binop;
 haxe_macro_Binop.__empty_constructs__ = [haxe_macro_Binop.OpAdd,haxe_macro_Binop.OpMult,haxe_macro_Binop.OpDiv,haxe_macro_Binop.OpSub,haxe_macro_Binop.OpAssign,haxe_macro_Binop.OpEq,haxe_macro_Binop.OpNotEq,haxe_macro_Binop.OpGt,haxe_macro_Binop.OpGte,haxe_macro_Binop.OpLt,haxe_macro_Binop.OpLte,haxe_macro_Binop.OpAnd,haxe_macro_Binop.OpOr,haxe_macro_Binop.OpXor,haxe_macro_Binop.OpBoolAnd,haxe_macro_Binop.OpBoolOr,haxe_macro_Binop.OpShl,haxe_macro_Binop.OpShr,haxe_macro_Binop.OpUShr,haxe_macro_Binop.OpMod,haxe_macro_Binop.OpInterval,haxe_macro_Binop.OpArrow];
-var haxe_macro_Unop = $hxClasses["haxe.macro.Unop"] = { __ename__ : true, __constructs__ : ["OpIncrement","OpDecrement","OpNot","OpNeg","OpNegBits"] };
+var haxe_macro_Unop = $hxClasses["haxe.macro.Unop"] = { __ename__ : ["haxe","macro","Unop"], __constructs__ : ["OpIncrement","OpDecrement","OpNot","OpNeg","OpNegBits"] };
 haxe_macro_Unop.OpIncrement = ["OpIncrement",0];
 haxe_macro_Unop.OpIncrement.toString = $estr;
 haxe_macro_Unop.OpIncrement.__enum__ = haxe_macro_Unop;
@@ -37594,7 +37737,7 @@ haxe_zip_Compress.__name__ = ["haxe","zip","Compress"];
 haxe_zip_Compress.run = function(s,level) {
 	throw new js__$Boot_HaxeError("Not implemented for this platform");
 };
-var haxe_zip_Huffman = $hxClasses["haxe.zip.Huffman"] = { __ename__ : true, __constructs__ : ["Found","NeedBit","NeedBits"] };
+var haxe_zip_Huffman = $hxClasses["haxe.zip.Huffman"] = { __ename__ : ["haxe","zip","Huffman"], __constructs__ : ["Found","NeedBit","NeedBits"] };
 haxe_zip_Huffman.Found = function(i) { var $x = ["Found",0,i]; $x.__enum__ = haxe_zip_Huffman; $x.toString = $estr; return $x; };
 haxe_zip_Huffman.NeedBit = function(left,right) { var $x = ["NeedBit",1,left,right]; $x.__enum__ = haxe_zip_Huffman; $x.toString = $estr; return $x; };
 haxe_zip_Huffman.NeedBits = function(n,table) { var $x = ["NeedBits",2,n,table]; $x.__enum__ = haxe_zip_Huffman; $x.toString = $estr; return $x; };
@@ -37764,7 +37907,7 @@ haxe_zip__$InflateImpl_Window.prototype = {
 	}
 	,__class__: haxe_zip__$InflateImpl_Window
 };
-var haxe_zip__$InflateImpl_State = $hxClasses["haxe.zip._InflateImpl.State"] = { __ename__ : true, __constructs__ : ["Head","Block","CData","Flat","Crc","Dist","DistOne","Done"] };
+var haxe_zip__$InflateImpl_State = $hxClasses["haxe.zip._InflateImpl.State"] = { __ename__ : ["haxe","zip","_InflateImpl","State"], __constructs__ : ["Head","Block","CData","Flat","Crc","Dist","DistOne","Done"] };
 haxe_zip__$InflateImpl_State.Head = ["Head",0];
 haxe_zip__$InflateImpl_State.Head.toString = $estr;
 haxe_zip__$InflateImpl_State.Head.__enum__ = haxe_zip__$InflateImpl_State;
@@ -38376,7 +38519,7 @@ hxbit_Convert.prototype = {
 	}
 	,__class__: hxbit_Convert
 };
-var hxbit_RpcMode = $hxClasses["hxbit.RpcMode"] = { __ename__ : true, __constructs__ : ["All","Clients","Server","Owner","Immediate"] };
+var hxbit_RpcMode = $hxClasses["hxbit.RpcMode"] = { __ename__ : ["hxbit","RpcMode"], __constructs__ : ["All","Clients","Server","Owner","Immediate"] };
 hxbit_RpcMode.All = ["All",0];
 hxbit_RpcMode.All.toString = $estr;
 hxbit_RpcMode.All.__enum__ = hxbit_RpcMode;
@@ -38393,7 +38536,7 @@ hxbit_RpcMode.Immediate = ["Immediate",4];
 hxbit_RpcMode.Immediate.toString = $estr;
 hxbit_RpcMode.Immediate.__enum__ = hxbit_RpcMode;
 hxbit_RpcMode.__empty_constructs__ = [hxbit_RpcMode.All,hxbit_RpcMode.Clients,hxbit_RpcMode.Server,hxbit_RpcMode.Owner,hxbit_RpcMode.Immediate];
-var hxbit_PropTypeDesc = $hxClasses["hxbit.PropTypeDesc"] = { __ename__ : true, __constructs__ : ["PInt","PFloat","PBool","PString","PBytes","PSerializable","PEnum","PMap","PArray","PObj","PAlias","PVector","PNull","PUnknown","PDynamic","PInt64","PFlags","PStruct"] };
+var hxbit_PropTypeDesc = $hxClasses["hxbit.PropTypeDesc"] = { __ename__ : ["hxbit","PropTypeDesc"], __constructs__ : ["PInt","PFloat","PBool","PString","PBytes","PSerializable","PEnum","PMap","PArray","PObj","PAlias","PVector","PNull","PUnknown","PDynamic","PInt64","PFlags","PStruct"] };
 hxbit_PropTypeDesc.PInt = ["PInt",0];
 hxbit_PropTypeDesc.PInt.toString = $estr;
 hxbit_PropTypeDesc.PInt.__enum__ = hxbit_PropTypeDesc;
@@ -38434,6 +38577,1439 @@ hxbit_PropTypeDesc.__empty_constructs__ = [hxbit_PropTypeDesc.PInt,hxbit_PropTyp
 var hxbit_Macros = function() { };
 $hxClasses["hxbit.Macros"] = hxbit_Macros;
 hxbit_Macros.__name__ = ["hxbit","Macros"];
+var hxbit_NetworkClient = function(h) {
+	this.messageLength = -1;
+	this.host = h;
+	this.lastMessage = new Date().getTime() / 1000;
+};
+$hxClasses["hxbit.NetworkClient"] = hxbit_NetworkClient;
+hxbit_NetworkClient.__name__ = ["hxbit","NetworkClient"];
+hxbit_NetworkClient.prototype = {
+	sync: function() {
+		this.host.fullSync(this);
+	}
+	,send: function(bytes) {
+	}
+	,sendMessage: function(msg) {
+		this.host.sendMessage(msg,this);
+	}
+	,error: function(msg) {
+		throw new js__$Boot_HaxeError(msg);
+	}
+	,processMessage: function(bytes,pos) {
+		var ctx = this.host.ctx;
+		ctx.setInput(bytes,pos);
+		if(ctx.get_error()) {
+			this.host.logError("Unhandled previous error");
+		}
+		var mid = ctx.input.b[ctx.inPos++];
+		switch(mid) {
+		case 1:
+			var v = ctx.input.b[ctx.inPos++];
+			if(v == 128) {
+				v = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var oid = v;
+			var o = ctx.refs.get(oid);
+			if(o == null) {
+				this.host.logError("Could not sync object",oid);
+				return -1;
+			}
+			var v1 = ctx.input.b[ctx.inPos++];
+			if(v1 == 128) {
+				v1 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var bits = v1;
+			if(this.host.isAuth) {
+				var _g = 0;
+				while(_g < 32) {
+					var i = _g++;
+					if((bits & 1 << i) != 0 && !o.networkAllow(3,i,this.ownerObject)) {
+						this.host.logError("Client setting unallowed property " + o.networkGetName(i) + " on " + Std.string(o),o.__uid);
+						return -1;
+					}
+				}
+			}
+			if(this.host.logger != null) {
+				var props = [];
+				var i1 = 0;
+				while(1 << i1 <= bits) {
+					if((bits & 1 << i1) != 0) {
+						props.push(o.networkGetName(i1));
+					}
+					++i1;
+				}
+				this.host.logger("SYNC< " + Std.string(o) + "#" + o.__uid + " " + props.join("|"));
+			}
+			var old = o.__bits;
+			var oldH = o.__host;
+			o.__host = null;
+			o.__bits = bits;
+			this.host.syncingProperties = true;
+			o.networkSync(ctx);
+			this.host.syncingProperties = false;
+			o.__host = oldH;
+			o.__bits = old;
+			if(this.host.isAuth && (o.__next != null || this.host.mark(o))) {
+				o.__bits |= bits;
+			}
+			if(ctx.get_error()) {
+				this.host.logError("Found unreferenced object while syncing " + Std.string(o));
+			}
+			break;
+		case 2:
+			var o1 = ctx.getAnyRef();
+			if(ctx.get_error()) {
+				this.host.logError("Found unreferenced object while registering " + Std.string(o1));
+			}
+			this.host.makeAlive();
+			break;
+		case 3:
+			var v2 = ctx.input.b[ctx.inPos++];
+			if(v2 == 128) {
+				v2 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var oid1 = v2;
+			var o2 = ctx.refs.get(oid1);
+			if(o2 == null) {
+				this.host.logError("Could not unregister object",oid1);
+			} else {
+				o2.__host = null;
+				ctx.refs.remove(o2.__uid);
+			}
+			break;
+		case 4:
+			ctx.refs = new haxe_ds_IntMap();
+			hxbit_Serializer.UID = 0;
+			hxbit_Serializer.SEQ = ctx.input.b[ctx.inPos++];
+			ctx.newObjects = [];
+			ctx.enableChecks = false;
+			while(true) {
+				var o3 = ctx.getAnyRef();
+				if(o3 == null) {
+					break;
+				}
+			}
+			ctx.enableChecks = true;
+			this.host.makeAlive();
+			break;
+		case 5:
+			var v3 = ctx.input.b[ctx.inPos++];
+			if(v3 == 128) {
+				v3 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var oid2 = v3;
+			var o4 = ctx.refs.get(oid2);
+			var v4 = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+			var size = v4;
+			var fid = ctx.input.b[ctx.inPos++];
+			if(o4 == null) {
+				if(size < 0) {
+					throw new js__$Boot_HaxeError("RPC on unreferenced object cannot be skip on this platform");
+				}
+				if(!this.host.isAuth) {
+					this.host.logError("RPC @" + fid + " on unreferenced object",oid2);
+				}
+				ctx.inPos += size;
+			} else if(!this.host.isAuth) {
+				var old1 = o4.__host;
+				o4.__host = null;
+				if(!o4.networkRPC(ctx,fid,this)) {
+					this.host.logError("RPC @" + fid + " on " + Std.string(o4) + " has unreferenced object parameter");
+				}
+				o4.__host = old1;
+			} else {
+				this.host.rpcClientValue = this;
+				o4.networkRPC(ctx,fid,this);
+				this.host.rpcClientValue = null;
+			}
+			break;
+		case 6:
+			var old2 = this.resultID;
+			var v5 = ctx.input.b[ctx.inPos++];
+			if(v5 == 128) {
+				v5 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			this.resultID = v5;
+			var v6 = ctx.input.b[ctx.inPos++];
+			if(v6 == 128) {
+				v6 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var oid3 = v6;
+			var o5 = ctx.refs.get(oid3);
+			var v7 = ctx.input.getInt32(ctx.inPos);
+			ctx.inPos += 4;
+			var size1 = v7;
+			var fid1 = ctx.input.b[ctx.inPos++];
+			if(o5 == null) {
+				if(size1 < 0) {
+					throw new js__$Boot_HaxeError("RPC on unreferenced object cannot be skip on this platform");
+				}
+				if(!this.host.isAuth) {
+					this.host.logError("RPC @" + fid1 + " on unreferenced object",oid3);
+				}
+				ctx.inPos += size1;
+				ctx.out.b.push(12);
+				var v8 = this.resultID;
+				if(v8 >= 0 && v8 < 128) {
+					ctx.out.b.push(v8);
+				} else {
+					ctx.out.b.push(128);
+					ctx.out.addInt32(v8);
+				}
+			} else if(!this.host.isAuth) {
+				var old3 = o5.__host;
+				o5.__host = null;
+				if(!o5.networkRPC(ctx,fid1,this)) {
+					this.host.logError("RPC @" + fid1 + " on " + Std.string(o5) + " has unreferenced object parameter");
+					ctx.out.b.push(12);
+					var v9 = this.resultID;
+					if(v9 >= 0 && v9 < 128) {
+						ctx.out.b.push(v9);
+					} else {
+						ctx.out.b.push(128);
+						ctx.out.addInt32(v9);
+					}
+				}
+				o5.__host = old3;
+			} else {
+				this.host.rpcClientValue = this;
+				if(!o5.networkRPC(ctx,fid1,this)) {
+					ctx.out.b.push(12);
+					var v10 = this.resultID;
+					if(v10 >= 0 && v10 < 128) {
+						ctx.out.b.push(v10);
+					} else {
+						ctx.out.b.push(128);
+						ctx.out.addInt32(v10);
+					}
+				}
+				this.host.rpcClientValue = null;
+			}
+			var _this = this.host;
+			ctx.out.b.push(255);
+			this.host.doSend();
+			this.host.targetClient = null;
+			this.resultID = old2;
+			break;
+		case 7:
+			var v11 = ctx.input.b[ctx.inPos++];
+			if(v11 == 128) {
+				v11 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var resultID = v11;
+			var callb = this.host.rpcWaits.get(resultID);
+			this.host.rpcWaits.remove(resultID);
+			callb(ctx);
+			break;
+		case 8:
+			var v12 = ctx.input.b[ctx.inPos++];
+			if(v12 == 128) {
+				v12 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var len = v12;
+			var msg;
+			if(len == 0) {
+				msg = null;
+			} else {
+				--len;
+				var s = ctx.input.getString(ctx.inPos,len);
+				ctx.inPos += len;
+				msg = s;
+			}
+			var msg1 = haxe_Unserializer.run(msg);
+			this.host.onMessage(this,msg1);
+			break;
+		case 9:
+			var v13 = ctx.input.b[ctx.inPos++];
+			if(v13 == 128) {
+				v13 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var len1 = v13;
+			var msg2;
+			if(len1 == 0) {
+				msg2 = null;
+			} else {
+				--len1;
+				var s1 = ctx.input.sub(ctx.inPos,len1);
+				ctx.inPos += len1;
+				msg2 = s1;
+			}
+			this.host.onMessage(this,msg2);
+			break;
+		case 10:
+			var tmp = this.host;
+			var v14 = ctx.input.b[ctx.inPos++];
+			if(v14 == 128) {
+				v14 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			tmp.onCustom(this,v14,null);
+			break;
+		case 11:
+			var v15 = ctx.input.b[ctx.inPos++];
+			if(v15 == 128) {
+				v15 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var id = v15;
+			var tmp1 = this.host;
+			var v16 = ctx.input.b[ctx.inPos++];
+			if(v16 == 128) {
+				v16 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var len2 = v16;
+			var tmp2;
+			if(len2 == 0) {
+				tmp2 = null;
+			} else {
+				--len2;
+				var s2 = ctx.input.sub(ctx.inPos,len2);
+				ctx.inPos += len2;
+				tmp2 = s2;
+			}
+			tmp1.onCustom(this,id,tmp2);
+			break;
+		case 12:
+			var v17 = ctx.input.b[ctx.inPos++];
+			if(v17 == 128) {
+				v17 = ctx.input.getInt32(ctx.inPos);
+				ctx.inPos += 4;
+			}
+			var resultID1 = v17;
+			this.host.rpcWaits.remove(resultID1);
+			break;
+		default:
+			var x = mid;
+			this.error("Unknown message code " + x + " @" + pos + ":" + bytes.toHex());
+		}
+		return ctx.inPos;
+	}
+	,beginRPCResult: function() {
+		this.host.flush();
+		if(this.host.logger != null) {
+			this.host.logger("RPC RESULT #" + this.resultID);
+		}
+		var ctx = this.host.ctx;
+		this.host.targetClient = this;
+		ctx.out.b.push(7);
+		var v = this.resultID;
+		if(v >= 0 && v < 128) {
+			ctx.out.b.push(v);
+		} else {
+			ctx.out.b.push(128);
+			ctx.out.addInt32(v);
+		}
+	}
+	,readData: function(input,available) {
+		if(this.messageLength < 0) {
+			if(available < 4) {
+				return false;
+			}
+			this.messageLength = input.readInt32();
+			if(this.pendingBuffer == null || this.pendingBuffer.length < this.messageLength) {
+				this.pendingBuffer = new haxe_io_Bytes(new ArrayBuffer(this.messageLength));
+			}
+			this.pendingPos = 0;
+		}
+		var len = input.readBytes(this.pendingBuffer,this.pendingPos,this.messageLength - this.pendingPos);
+		this.pendingPos += len;
+		if(this.pendingPos == this.messageLength) {
+			this.processMessagesData(this.pendingBuffer,0,this.messageLength);
+			this.messageLength = -1;
+			return true;
+		}
+		return false;
+	}
+	,processMessagesData: function(data,pos,length) {
+		if(length > 0) {
+			this.lastMessage = new Date().getTime() / 1000;
+		}
+		while(pos < length) {
+			var oldPos = pos;
+			pos = this.processMessage(data,pos);
+			if(pos < 0) {
+				break;
+			}
+			var _this = this.host;
+			if(data.b[pos] != 255) {
+				var len = length - oldPos;
+				if(len > 128) {
+					len = 128;
+				}
+				throw new js__$Boot_HaxeError("Message missing EOM @" + (pos - oldPos) + ":" + data.sub(oldPos,len).toHex());
+			}
+			++pos;
+		}
+	}
+	,stop: function() {
+		if(this.host == null) {
+			return;
+		}
+		HxOverrides.remove(this.host.clients,this);
+		HxOverrides.remove(this.host.pendingClients,this);
+		this.host = null;
+	}
+	,__class__: hxbit_NetworkClient
+};
+var hxbit_NetworkHost = function() {
+	this.rpcWaits = new haxe_ds_IntMap();
+	this.rpcUID = Std.random(16777216);
+	this.lastSentBytes = 0;
+	this.lastSentTime = 0.;
+	this.perPacketBytes = 20;
+	this.syncingProperties = false;
+	this.totalSentBytes = 0;
+	this.sendRate = 0.;
+	hxbit_NetworkHost.current = this;
+	this.isAuth = true;
+	this.self = new hxbit_NetworkClient(this);
+	this.clients = [];
+	this.aliveEvents = [];
+	this.pendingClients = [];
+	this.resetState();
+};
+$hxClasses["hxbit.NetworkHost"] = hxbit_NetworkHost;
+hxbit_NetworkHost.__name__ = ["hxbit","NetworkHost"];
+hxbit_NetworkHost.sortByUID = function(o1,o2) {
+	return o1.__uid - o2.__uid;
+};
+hxbit_NetworkHost.sortByUIDDesc = function(o1,o2) {
+	return o2.__uid - o1.__uid;
+};
+hxbit_NetworkHost.enableReplication = function(o,b) {
+	if(b) {
+		if(o.__host != null) {
+			return;
+		}
+		if(hxbit_NetworkHost.current == null) {
+			throw new js__$Boot_HaxeError("No NetworkHost defined");
+		}
+		hxbit_NetworkHost.current.register(o);
+	} else {
+		if(o.__host == null) {
+			return;
+		}
+		o.__host.unregister(o);
+	}
+};
+hxbit_NetworkHost.prototype = {
+	get_checkEOM: function() {
+		return true;
+	}
+	,dispose: function() {
+		if(hxbit_NetworkHost.current == this) {
+			hxbit_NetworkHost.current = null;
+		}
+	}
+	,isConnected: function(owner) {
+		return this.resolveClient(owner) != null;
+	}
+	,resolveClient: function(owner) {
+		if(this.self.ownerObject == owner) {
+			return this.self;
+		}
+		var _g = 0;
+		var _g1 = this.clients;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			if(c.ownerObject == owner) {
+				return c;
+			}
+		}
+		return null;
+	}
+	,resetState: function() {
+		hxbit_Serializer.resetCounters();
+		this.ctx = new hxbit_NetworkSerializer();
+		this.ctx.newObjects = [];
+		this.ctx.begin();
+	}
+	,saveState: function() {
+		var s = new hxbit_Serializer();
+		s.beginSave();
+		var _g = [];
+		var r = this.ctx.refs.iterator();
+		while(r.hasNext()) {
+			var r1 = r.next();
+			_g.push(r1);
+		}
+		var refs = _g;
+		refs.sort(hxbit_NetworkHost.sortByUID);
+		var _g1 = 0;
+		while(_g1 < refs.length) {
+			var r2 = refs[_g1];
+			++_g1;
+			if(!s.refs.h.hasOwnProperty(r2.__uid)) {
+				s.addAnyRef(r2);
+			}
+		}
+		s.addAnyRef(null);
+		return s.endSave();
+	}
+	,loadSave: function(bytes) {
+		this.ctx.enableChecks = false;
+		this.ctx.refs = new haxe_ds_IntMap();
+		this.ctx.newObjects = [];
+		this.ctx.beginLoad(bytes);
+		while(true) {
+			var v = this.ctx.getAnyRef();
+			if(v == null) {
+				break;
+			}
+		}
+		this.ctx.endLoad();
+		this.ctx.enableChecks = true;
+	}
+	,checkWrite: function(o,vid) {
+		if(!this.isAuth && !o.networkAllow(3,vid,this.self.ownerObject)) {
+			this.logError("Setting a property on a not allowed object",o.__uid);
+			return false;
+		}
+		return true;
+	}
+	,mark: function(o) {
+		o.__next = this.markHead;
+		this.markHead = o;
+		return true;
+	}
+	,get_rpcClient: function() {
+		if(this.rpcClientValue == null) {
+			return this.self;
+		} else {
+			return this.rpcClientValue;
+		}
+	}
+	,logError: function(msg,objectId) {
+		throw new js__$Boot_HaxeError(msg + (objectId == null ? "" : "(" + objectId + ")"));
+	}
+	,onMessage: function(from,msg) {
+	}
+	,onCustom: function(from,id,data) {
+	}
+	,sendMessage: function(msg,to) {
+		this.flush();
+		var prev = this.targetClient;
+		this.targetClient = to;
+		if(js_Boot.__instanceof(msg,haxe_io_Bytes)) {
+			this.ctx.out.b.push(9);
+			var _this = this.ctx;
+			var b = msg;
+			if(b == null) {
+				_this.out.b.push(0);
+			} else {
+				var v = b.length + 1;
+				if(v >= 0 && v < 128) {
+					_this.out.b.push(v);
+				} else {
+					_this.out.b.push(128);
+					_this.out.addInt32(v);
+				}
+				var _this1 = _this.out;
+				var b1 = _this1.b;
+				var b2 = b.b;
+				var _g1 = 0;
+				var _g = b.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					_this1.b.push(b2[i]);
+				}
+			}
+		} else {
+			this.ctx.out.b.push(8);
+			var _this2 = this.ctx;
+			var s = haxe_Serializer.run(msg);
+			if(s == null) {
+				_this2.out.b.push(0);
+			} else {
+				var b3 = haxe_io_Bytes.ofString(s);
+				var v1 = b3.length + 1;
+				if(v1 >= 0 && v1 < 128) {
+					_this2.out.b.push(v1);
+				} else {
+					_this2.out.b.push(128);
+					_this2.out.addInt32(v1);
+				}
+				var _this3 = _this2.out;
+				var b11 = _this3.b;
+				var b21 = b3.b;
+				var _g11 = 0;
+				var _g2 = b3.length;
+				while(_g11 < _g2) {
+					var i1 = _g11++;
+					_this3.b.push(b21[i1]);
+				}
+			}
+		}
+		this.ctx.out.b.push(255);
+		this.doSend();
+		this.targetClient = prev;
+	}
+	,sendCustom: function(id,data,to) {
+		this.flush();
+		var prev = this.targetClient;
+		this.targetClient = to;
+		this.ctx.out.b.push(data == null ? 10 : 11);
+		var _this = this.ctx;
+		if(id >= 0 && id < 128) {
+			_this.out.b.push(id);
+		} else {
+			_this.out.b.push(128);
+			_this.out.addInt32(id);
+		}
+		if(data != null) {
+			var _this1 = this.ctx;
+			if(data == null) {
+				_this1.out.b.push(0);
+			} else {
+				var v = data.length + 1;
+				if(v >= 0 && v < 128) {
+					_this1.out.b.push(v);
+				} else {
+					_this1.out.b.push(128);
+					_this1.out.addInt32(v);
+				}
+				var _this2 = _this1.out;
+				var b1 = _this2.b;
+				var b2 = data.b;
+				var _g1 = 0;
+				var _g = data.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					_this2.b.push(b2[i]);
+				}
+			}
+		}
+		this.ctx.out.b.push(255);
+		this.doSend();
+		this.targetClient = prev;
+	}
+	,setTargetOwner: function(owner) {
+		if(!this.isAuth) {
+			return true;
+		}
+		if(owner == null) {
+			this.doSend();
+			this.targetClient = null;
+			return true;
+		}
+		this.flush();
+		this.targetClient = null;
+		var _g = 0;
+		var _g1 = this.clients;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			if(c.ownerObject == owner) {
+				this.targetClient = c;
+				break;
+			}
+		}
+		return this.targetClient != null;
+	}
+	,beginRPC: function(o,id,onResult) {
+		this.flushProps();
+		if(this.ctx.refs.h[o.__uid] == null) {
+			throw new js__$Boot_HaxeError("Can't call RPC on an object not previously transferred");
+		}
+		if(onResult != null) {
+			var id1 = this.rpcUID++;
+			this.ctx.out.b.push(6);
+			var _this = this.ctx;
+			if(id1 >= 0 && id1 < 128) {
+				_this.out.b.push(id1);
+			} else {
+				_this.out.b.push(128);
+				_this.out.addInt32(id1);
+			}
+			this.rpcWaits.h[id1] = onResult;
+		} else {
+			this.ctx.out.b.push(5);
+		}
+		var _this1 = this.ctx;
+		var v = o.__uid;
+		if(v >= 0 && v < 128) {
+			_this1.out.b.push(v);
+		} else {
+			_this1.out.b.push(128);
+			_this1.out.addInt32(v);
+		}
+		this.ctx.out.addInt32(-1);
+		this.ctx.out.b.push(id);
+		if(this.logger != null) {
+			this.logger("RPC " + Std.string(o) + "." + o.networkGetName(id,true) + "()");
+		}
+		if(this.stats != null) {
+			this.stats.beginRPC(o,id);
+		}
+		return this.ctx;
+	}
+	,endRPC: function() {
+		this.ctx.out.b.push(255);
+	}
+	,fullSync: function(c) {
+		if(!HxOverrides.remove(this.pendingClients,c)) {
+			return;
+		}
+		this.flush();
+		var seq = this.clients.length + 1;
+		while(true) {
+			var found = false;
+			var _g = 0;
+			var _g1 = this.clients;
+			while(_g < _g1.length) {
+				var c1 = _g1[_g];
+				++_g;
+				if(c1.seqID == seq) {
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				break;
+			}
+			++seq;
+		}
+		this.ctx.out.b.push(seq);
+		c.seqID = seq;
+		this.clients.push(c);
+		var refs = this.ctx.refs;
+		this.ctx.enableChecks = false;
+		this.ctx.begin();
+		this.ctx.out.b.push(4);
+		this.ctx.out.b.push(c.seqID);
+		var _g2 = [];
+		var o = refs.iterator();
+		while(o.hasNext()) {
+			var o1 = o.next();
+			if(o1 != null) {
+				_g2.push(o1);
+			}
+		}
+		var objs = _g2;
+		objs.sort(hxbit_NetworkHost.sortByUID);
+		var _g11 = 0;
+		while(_g11 < objs.length) {
+			var o2 = objs[_g11];
+			++_g11;
+			this.ctx.addAnyRef(o2);
+		}
+		this.ctx.addAnyRef(null);
+		this.ctx.out.b.push(255);
+		this.ctx.enableChecks = true;
+		this.targetClient = c;
+		this.doSend();
+		this.targetClient = null;
+	}
+	,defaultLogger: function(filter) {
+		var _gthis = this;
+		var t0 = new Date().getTime() / 1000;
+		this.setLogger(function(str) {
+			if(filter != null && !filter(str)) {
+				return;
+			}
+			str = (_gthis.isAuth ? "[S] " : "[C] ") + str;
+			str = ((new Date().getTime() / 1000 - t0) * 100 | 0) / 100 + " " + str;
+			haxe_Log.trace(str,{ fileName : "NetworkHost.hx", lineNumber : 556, className : "hxbit.NetworkHost", methodName : "defaultLogger"});
+		});
+	}
+	,addAliveEvent: function(f) {
+		this.aliveEvents.push(f);
+	}
+	,isAliveComplete: function() {
+		if(this.ctx.newObjects.length == 0) {
+			return this.aliveEvents.length == 0;
+		} else {
+			return false;
+		}
+	}
+	,makeAlive: function() {
+		var objs = this.ctx.newObjects;
+		if(objs.length == 0) {
+			return;
+		}
+		objs.sort(hxbit_NetworkHost.sortByUIDDesc);
+		while(true) {
+			var o = objs.pop();
+			if(o == null) {
+				break;
+			}
+			var n = (o instanceof hxbit_NetworkSerializable) ? o : null;
+			if(n == null) {
+				continue;
+			}
+			if(this.logger != null) {
+				this.logger("Alive " + Std.string(n) + "#" + n.__uid);
+			}
+			n.__host = this;
+			n.alive();
+		}
+		while(this.aliveEvents.length > 0) (this.aliveEvents.shift())();
+	}
+	,setLogger: function(log) {
+		this.logger = log;
+	}
+	,setStats: function(stats) {
+		this.stats = stats;
+	}
+	,dispatchClients: function(callb) {
+		var old = this.targetClient;
+		var _g = 0;
+		var _g1 = this.clients;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			callb(c);
+		}
+		this.targetClient = old;
+	}
+	,register: function(o) {
+		o.__host = this;
+		var o2 = this.ctx.refs.h[o.__uid];
+		if(o2 != null) {
+			if(o2 != o) {
+				this.logError("Register conflict between objects " + Std.string(o) + " and " + Std.string(o2),o.__uid);
+			}
+			return;
+		}
+		if(!this.isAuth && !o.networkAllow(4,0,this.self.ownerObject)) {
+			throw new js__$Boot_HaxeError("Can't register " + Std.string(o) + " without ownership");
+		}
+		if(this.logger != null) {
+			this.logger("Register " + Std.string(o) + "#" + o.__uid);
+		}
+		this.ctx.out.b.push(2);
+		this.ctx.addAnyRef(o);
+		this.ctx.out.b.push(255);
+	}
+	,unmark: function(o) {
+		if(o.__next == null) {
+			return;
+		}
+		var prev = null;
+		var h = this.markHead;
+		while(h != o) {
+			prev = h;
+			h = h.__next;
+		}
+		if(prev == null) {
+			this.markHead = o.__next;
+		} else {
+			prev.__next = o.__next;
+		}
+		o.__next = null;
+	}
+	,unregister: function(o) {
+		if(o.__host == null) {
+			return;
+		}
+		if(!this.isAuth && !o.networkAllow(5,0,this.self.ownerObject)) {
+			throw new js__$Boot_HaxeError("Can't unregister " + Std.string(o) + " without ownership");
+		}
+		this.flushProps();
+		o.__host = null;
+		o.__bits = 0;
+		this.unmark(o);
+		if(this.logger != null) {
+			this.logger("Unregister " + Std.string(o) + "#" + o.__uid);
+		}
+		this.ctx.out.b.push(3);
+		var _this = this.ctx;
+		var v = o.__uid;
+		if(v >= 0 && v < 128) {
+			_this.out.b.push(v);
+		} else {
+			_this.out.b.push(128);
+			_this.out.addInt32(v);
+		}
+		this.ctx.out.b.push(255);
+		this.ctx.refs.remove(o.__uid);
+	}
+	,doSend: function() {
+		var bytes;
+		bytes = this.ctx.out.getBytes();
+		this.ctx.out = new haxe_io_BytesBuffer();
+		this.send(bytes);
+	}
+	,send: function(bytes) {
+		if(this.targetClient != null) {
+			this.totalSentBytes += bytes.length + this.perPacketBytes;
+			this.targetClient.send(bytes);
+		} else {
+			this.totalSentBytes += (bytes.length + this.perPacketBytes) * this.clients.length;
+			if(this.clients.length == 0) {
+				this.totalSentBytes += bytes.length + this.perPacketBytes;
+			}
+			var _g = 0;
+			var _g1 = this.clients;
+			while(_g < _g1.length) {
+				var c = _g1[_g];
+				++_g;
+				c.send(bytes);
+			}
+		}
+	}
+	,flushProps: function() {
+		var o = this.markHead;
+		while(o != null) {
+			if(o.__bits != 0) {
+				if(this.logger != null) {
+					var props = [];
+					var i = 0;
+					while(1 << i <= o.__bits) {
+						if((o.__bits & 1 << i) != 0) {
+							props.push(o.networkGetName(i));
+						}
+						++i;
+					}
+					this.logger("SYNC> " + Std.string(o) + "#" + o.__uid + " " + props.join("|"));
+				}
+				if(this.stats != null) {
+					this.stats.sync(o);
+				}
+				this.ctx.out.b.push(1);
+				var _this = this.ctx;
+				var v = o.__uid;
+				if(v >= 0 && v < 128) {
+					_this.out.b.push(v);
+				} else {
+					_this.out.b.push(128);
+					_this.out.addInt32(v);
+				}
+				o.networkFlush(this.ctx);
+				this.ctx.out.b.push(255);
+			}
+			var n = o.__next;
+			o.__next = null;
+			o = n;
+		}
+		this.markHead = null;
+	}
+	,isCustomMessage: function(bytes,id,pos) {
+		if(pos == null) {
+			pos = 0;
+		}
+		if(bytes.length - pos < 2) {
+			return false;
+		}
+		this.ctx.setInput(bytes,pos);
+		var _this = this.ctx;
+		var k = _this.input.b[_this.inPos++];
+		if(k != 10 && k != 11) {
+			return false;
+		}
+		var _this1 = this.ctx;
+		var v = _this1.input.b[_this1.inPos++];
+		if(v == 128) {
+			v = _this1.input.getInt32(_this1.inPos);
+			_this1.inPos += 4;
+		}
+		return v == id;
+	}
+	,flush: function() {
+		this.flushProps();
+		if(this.ctx.out.b.length > 0) {
+			this.doSend();
+		}
+		var now = new Date().getTime() / 1000;
+		var dt = now - this.lastSentTime;
+		if(dt < 1) {
+			return;
+		}
+		var db = this.totalSentBytes - this.lastSentBytes;
+		var rate = db / dt;
+		if(this.sendRate == 0 || rate == 0 || rate / this.sendRate > 3 || this.sendRate / rate > 3) {
+			this.sendRate = rate;
+		} else {
+			this.sendRate = this.sendRate * 0.8 + rate * 0.2;
+		}
+		this.lastSentTime = now;
+		this.lastSentBytes = this.totalSentBytes;
+		var _g = 0;
+		var _g1 = this.clients;
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			if(now - c.lastMessage > hxbit_NetworkHost.CLIENT_TIMEOUT) {
+				c.stop();
+			}
+		}
+	}
+	,__class__: hxbit_NetworkHost
+};
+var hxbit_ProxyChild = function() { };
+$hxClasses["hxbit.ProxyChild"] = hxbit_ProxyChild;
+hxbit_ProxyChild.__name__ = ["hxbit","ProxyChild"];
+hxbit_ProxyChild.prototype = {
+	__class__: hxbit_ProxyChild
+};
+var hxbit_BaseProxy = function() { };
+$hxClasses["hxbit.BaseProxy"] = hxbit_BaseProxy;
+hxbit_BaseProxy.__name__ = ["hxbit","BaseProxy"];
+hxbit_BaseProxy.__interfaces__ = [hxbit_ProxyChild,hxbit_ProxyHost];
+hxbit_BaseProxy.objToString = function(o) {
+	var fl = Reflect.fields(o);
+	HxOverrides.remove(fl,"obj");
+	HxOverrides.remove(fl,"bit");
+	var _g = 0;
+	var _g1 = fl.slice();
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		if(StringTools.startsWith(f,"__ref_") || Reflect.field(o,f) == null) {
+			HxOverrides.remove(fl,f);
+		}
+	}
+	var _g2 = [];
+	var _g11 = 0;
+	while(_g11 < fl.length) {
+		var f1 = fl[_g11];
+		++_g11;
+		_g2.push(f1 + " : " + Std.string(Reflect.field(o,f1)));
+	}
+	return "{" + _g2.join(",") + "}";
+};
+hxbit_BaseProxy.prototype = {
+	networkSetBit: function(_) {
+		if(this.obj != null) {
+			this.obj.networkSetBit(this.bit);
+		}
+	}
+	,mark: function() {
+		if(this.obj != null) {
+			this.obj.networkSetBit(this.bit);
+		}
+	}
+	,bindHost: function(o,bit) {
+		this.obj = o;
+		this.bit = bit;
+	}
+	,unbindHost: function() {
+		this.obj = null;
+	}
+	,__class__: hxbit_BaseProxy
+};
+var hxbit__$NetworkSerializable_NetworkProperty_$Impl_$ = {};
+$hxClasses["hxbit._NetworkSerializable.NetworkProperty_Impl_"] = hxbit__$NetworkSerializable_NetworkProperty_$Impl_$;
+hxbit__$NetworkSerializable_NetworkProperty_$Impl_$.__name__ = ["hxbit","_NetworkSerializable","NetworkProperty_Impl_"];
+hxbit__$NetworkSerializable_NetworkProperty_$Impl_$._new = function(x) {
+	var this1 = x;
+	return this1;
+};
+hxbit__$NetworkSerializable_NetworkProperty_$Impl_$.toInt = function(this1) {
+	return this1;
+};
+hxbit__$NetworkSerializable_NetworkProperty_$Impl_$.opOr = function(this1,a) {
+	var this2 = this1 | a;
+	return this2;
+};
+var hxbit_NetworkSerializer = function() {
+	this.enableChecks = true;
+	this.hasError = false;
+	hxbit_Serializer.call(this);
+};
+$hxClasses["hxbit.NetworkSerializer"] = hxbit_NetworkSerializer;
+hxbit_NetworkSerializer.__name__ = ["hxbit","NetworkSerializer"];
+hxbit_NetworkSerializer.__super__ = hxbit_Serializer;
+hxbit_NetworkSerializer.prototype = $extend(hxbit_Serializer.prototype,{
+	get_error: function() {
+		if(!this.hasError) {
+			return false;
+		}
+		this.hasError = false;
+		return true;
+	}
+	,addObjRef: function(s) {
+		if(!this.enableChecks) {
+			hxbit_Serializer.prototype.addObjRef.call(this,s);
+			return;
+		}
+		var v = s.__uid;
+		if(v >= 0 && v < 128) {
+			this.out.b.push(v);
+		} else {
+			this.out.b.push(128);
+			this.out.addInt32(v);
+		}
+		var ns = (s instanceof hxbit_NetworkSerializable) ? s : null;
+		if(ns != null && ns.__host == null) {
+			throw new js__$Boot_HaxeError("Can't send unbound object " + Std.string(s) + " over network");
+		}
+		var v1 = this.refs.h.hasOwnProperty(s.__uid);
+		this.out.b.push(v1 ? 1 : 0);
+	}
+	,getObjRef: function() {
+		if(!this.enableChecks) {
+			return hxbit_Serializer.prototype.getObjRef.call(this);
+		}
+		var v = this.input.b[this.inPos++];
+		if(v == 128) {
+			v = this.input.getInt32(this.inPos);
+			this.inPos += 4;
+		}
+		var id = v;
+		if(id == 0) {
+			return 0;
+		}
+		var b = this.input.b[this.inPos++] != 0;
+		if(b && !this.refs.h.hasOwnProperty(id)) {
+			this.hasError = true;
+			return 0;
+		}
+		return id;
+	}
+	,__class__: hxbit_NetworkSerializer
+});
+var hxbit__$NetworkStats_EmptyEnum = $hxClasses["hxbit._NetworkStats.EmptyEnum"] = { __ename__ : ["hxbit","_NetworkStats","EmptyEnum"], __constructs__ : [] };
+hxbit__$NetworkStats_EmptyEnum.__empty_constructs__ = [];
+var hxbit_NetworkStats = function() {
+	this.classes = new haxe_ds_IntMap();
+};
+$hxClasses["hxbit.NetworkStats"] = hxbit_NetworkStats;
+hxbit_NetworkStats.__name__ = ["hxbit","NetworkStats"];
+hxbit_NetworkStats.prototype = {
+	getClass: function(o) {
+		var cid = o.getCLID();
+		var c = this.classes.h[cid];
+		if(c == null) {
+			c = { name : Type.getClassName(o == null ? null : js_Boot.getClass(o)), props : [], rpcs : [], schema : o.getSerializeSchema()};
+			this.classes.h[cid] = c;
+		}
+		return c;
+	}
+	,intSize: function(v) {
+		if(v >= 0 && v < 128) {
+			return 1;
+		} else {
+			return 5;
+		}
+	}
+	,isNullable: function(t) {
+		switch(t[1]) {
+		case 0:case 1:case 2:
+			return false;
+		default:
+			return true;
+		}
+	}
+	,calcPropSize: function(t,v) {
+		var size = 0;
+		switch(t[1]) {
+		case 0:
+			var v1 = v;
+			size += v1 >= 0 && v1 < 128 ? 1 : 5;
+			break;
+		case 1:
+			size += 4;
+			break;
+		case 2:
+			++size;
+			break;
+		case 3:
+			if(v == null) {
+				++size;
+			} else {
+				var b = haxe_io_Bytes.ofString(v);
+				var v2 = b.length + 1;
+				size += (v2 >= 0 && v2 < 128 ? 1 : 5) + b.length;
+			}
+			break;
+		case 4:
+			if(v == null) {
+				++size;
+			} else {
+				var b1 = v;
+				var v3 = b1.length + 1;
+				size += (v3 >= 0 && v3 < 128 ? 1 : 5) + b1.length;
+			}
+			break;
+		case 5:
+			var size1;
+			if(v == null) {
+				size1 = 1;
+			} else {
+				var v4 = v.__uid;
+				if(v4 >= 0 && v4 < 128) {
+					size1 = 1;
+				} else {
+					size1 = 5;
+				}
+			}
+			size += size1;
+			break;
+		case 6:
+			var size2;
+			if(v == null) {
+				size2 = 1;
+			} else {
+				var v5 = v[1] + 1;
+				if(v5 >= 0 && v5 < 128) {
+					size2 = 1;
+				} else {
+					size2 = 5;
+				}
+			}
+			size += size2;
+			break;
+		case 7:
+			var vt = t[3];
+			var kt = t[2];
+			if(v == null) {
+				++size;
+			} else {
+				if(js_Boot.__instanceof(v,hxbit_BaseProxy)) {
+					v = v.map;
+				}
+				switch(kt[1]) {
+				case 0:
+					var m = v;
+					var _e = m;
+					var keys = Lambda.array({ iterator : function() {
+						return _e.keys();
+					}});
+					var v6 = keys.length + 1;
+					size += v6 >= 0 && v6 < 128 ? 1 : 5;
+					var _g = 0;
+					while(_g < keys.length) {
+						var v7 = keys[_g];
+						++_g;
+						size += (v7 >= 0 && v7 < 128 ? 1 : 5) + this.calcPropSize(vt,m.h[v7]);
+					}
+					break;
+				case 3:
+					var m1 = v;
+					var _e1 = m1;
+					var keys1 = Lambda.array({ iterator : function() {
+						return _e1.keys();
+					}});
+					var v8 = keys1.length + 1;
+					size += v8 >= 0 && v8 < 128 ? 1 : 5;
+					var _g1 = 0;
+					while(_g1 < keys1.length) {
+						var v9 = keys1[_g1];
+						++_g1;
+						size += this.calcPropSize(kt,v9) + this.calcPropSize(vt,__map_reserved[v9] != null ? m1.getReserved(v9) : m1.h[v9]);
+					}
+					break;
+				default:
+					var m2 = v;
+					var keys2 = Lambda.array({ iterator : function() {
+						return m2.keys();
+					}});
+					var v10 = keys2.length + 1;
+					size += v10 >= 0 && v10 < 128 ? 1 : 5;
+					var _g2 = 0;
+					while(_g2 < keys2.length) {
+						var v11 = keys2[_g2];
+						++_g2;
+						size += this.calcPropSize(kt,v11) + this.calcPropSize(vt,m2.get(v11));
+					}
+				}
+			}
+			break;
+		case 8:
+			var at = t[2];
+			if(js_Boot.__instanceof(v,hxbit_BaseProxy)) {
+				v = v.array;
+			}
+			var a = v;
+			if(a == null) {
+				++size;
+			} else {
+				var v12 = a.length + 1;
+				size += v12 >= 0 && v12 < 128 ? 1 : 5;
+				var _g3 = 0;
+				while(_g3 < a.length) {
+					var v13 = a[_g3];
+					++_g3;
+					size += this.calcPropSize(at,v13);
+				}
+			}
+			break;
+		case 9:
+			var fields = t[2];
+			if(v == null) {
+				++size;
+			} else {
+				var fbits = 0;
+				var _g4 = [];
+				var _g11 = 0;
+				while(_g11 < fields.length) {
+					var f = fields[_g11];
+					++_g11;
+					if(this.isNullable(f.type)) {
+						_g4.push(f);
+					}
+				}
+				var nullables = _g4;
+				var _g21 = 0;
+				var _g12 = nullables.length;
+				while(_g21 < _g12) {
+					var i = _g21++;
+					if(Reflect.field(v,nullables[i].name) != null) {
+						fbits |= 1 << i;
+					}
+				}
+				var v14 = fbits + 1;
+				size += v14 >= 0 && v14 < 128 ? 1 : 5;
+				var _g13 = 0;
+				while(_g13 < fields.length) {
+					var f1 = fields[_g13];
+					++_g13;
+					var nidx = nullables.indexOf(f1);
+					if(nidx >= 0 && (fbits & 1 << nidx) == 0) {
+						continue;
+					}
+					size += this.calcPropSize(f1.type,Reflect.field(v,f1.name));
+				}
+			}
+			break;
+		case 10:
+			var t1 = t[2];
+			return this.calcPropSize(t1,v);
+		case 11:
+			var t2 = t[2];
+			if(v == null) {
+				++size;
+			} else {
+				var v15 = v;
+				var v16 = v15.length + 1;
+				size += v16 >= 0 && v16 < 128 ? 1 : 5;
+				var _g5 = 0;
+				while(_g5 < v15.length) {
+					var e = v15[_g5];
+					++_g5;
+					size += this.calcPropSize(t2,e);
+				}
+			}
+			break;
+		case 12:
+			var t3 = t[2];
+			size += 1 + this.calcPropSize(t3,v);
+			break;
+		case 13:
+			throw new js__$Boot_HaxeError("assert");
+			break;
+		case 14:
+			var s = new hxbit_Serializer();
+			s.begin();
+			s.addDynamic(v);
+			size += s.out.b.length;
+			break;
+		case 15:
+			size += 8;
+			break;
+		case 16:
+			if(js_Boot.__instanceof(v,hxbit_BaseProxy)) {
+				v = v.value;
+			}
+			var v17 = v;
+			size += v17 >= 0 && v17 < 128 ? 1 : 5;
+			break;
+		case 17:
+			break;
+		}
+		return size;
+	}
+	,sync: function(o) {
+		var c = this.getClass(o);
+		var i = 0;
+		while(1 << i <= o.__bits) {
+			if((o.__bits & 1 << i) != 0) {
+				var p = c.props[i];
+				if(p == null) {
+					p = { cl : c, name : o.networkGetName(i), count : 0, bytes : 0, size : 0};
+					c.props[i] = p;
+				}
+				p.count++;
+				p.bytes += this.calcPropSize(c.schema.fieldsTypes[i],Reflect.field(o,p.name));
+			}
+			++i;
+		}
+	}
+	,beginRPC: function(o,id) {
+		var c = this.getClass(o);
+		var r = c.rpcs[id];
+		if(r == null) {
+			r = { cl : c, name : o.networkGetName(id,true), count : 0, bytes : 0, size : 0};
+			c.rpcs[id] = r;
+		}
+		this.curRPC = r;
+		r.count++;
+		return r;
+	}
+	,endRPC: function(size) {
+		this.curRPC.bytes += size;
+		this.curRPC = null;
+	}
+	,scoreSort: function(p) {
+		return p.count * 4 + p.bytes;
+	}
+	,dump: function(print) {
+		var _gthis = this;
+		var all = [];
+		var c = this.classes.iterator();
+		while(c.hasNext()) {
+			var c1 = c.next();
+			var _g1 = 0;
+			var _g = c1.props.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				var p = c1.props[i];
+				if(p != null && p.count > 0) {
+					all.push(p);
+				}
+			}
+			var _g11 = 0;
+			var _g2 = c1.rpcs.length;
+			while(_g11 < _g2) {
+				var i1 = _g11++;
+				var p1 = c1.rpcs[i1];
+				if(p1 != null && p1.count > 0) {
+					all.push(p1);
+				}
+			}
+		}
+		all.sort(function(p11,p2) {
+			return _gthis.scoreSort(p11) - _gthis.scoreSort(p2);
+		});
+		var tot = 0;
+		var _g3 = 0;
+		while(_g3 < all.length) {
+			var p3 = all[_g3];
+			++_g3;
+			tot += p3.bytes;
+		}
+		if(print == null) {
+			print = function(str) {
+				haxe_Log.trace(str,{ fileName : "NetworkStats.hx", lineNumber : 220, className : "hxbit.NetworkStats", methodName : "dump"});
+			};
+		}
+		print("Network stats:");
+		var _g4 = 0;
+		while(_g4 < all.length) {
+			var p4 = all[_g4];
+			++_g4;
+			print("  " + p4.cl.name + "." + p4.name + " count = " + p4.count + ", bytes = " + p4.bytes + " " + (p4.bytes * 1000.0 / tot | 0) / 10 + "%");
+		}
+	}
+	,reset: function() {
+		this.classes = new haxe_ds_IntMap();
+	}
+	,__class__: hxbit_NetworkStats
+};
 var hxbit_Schema = function() {
 	this.__uid = hxbit_Serializer.SEQ << 24 | ++hxbit_Serializer.UID;
 	this.fieldsNames = [];
@@ -39368,7 +40944,7 @@ hxd_Charset.prototype = {
 	}
 	,__class__: hxd_Charset
 };
-var hxd_Cursor = $hxClasses["hxd.Cursor"] = { __ename__ : true, __constructs__ : ["Default","Button","Move","TextInput","Hide","Custom"] };
+var hxd_Cursor = $hxClasses["hxd.Cursor"] = { __ename__ : ["hxd","Cursor"], __constructs__ : ["Default","Button","Move","TextInput","Hide","Custom"] };
 hxd_Cursor.Default = ["Default",0];
 hxd_Cursor.Default.toString = $estr;
 hxd_Cursor.Default.__enum__ = hxd_Cursor;
@@ -39411,7 +40987,7 @@ hxd_CustomCursor.prototype = {
 	}
 	,__class__: hxd_CustomCursor
 };
-var hxd_EventKind = $hxClasses["hxd.EventKind"] = { __ename__ : true, __constructs__ : ["EPush","ERelease","EMove","EOver","EOut","EWheel","EFocus","EFocusLost","EKeyDown","EKeyUp","EReleaseOutside","ETextInput","ECheck"] };
+var hxd_EventKind = $hxClasses["hxd.EventKind"] = { __ename__ : ["hxd","EventKind"], __constructs__ : ["EPush","ERelease","EMove","EOver","EOut","EWheel","EFocus","EFocusLost","EKeyDown","EKeyUp","EReleaseOutside","ETextInput","ECheck"] };
 hxd_EventKind.EPush = ["EPush",0];
 hxd_EventKind.EPush.toString = $estr;
 hxd_EventKind.EPush.__enum__ = hxd_EventKind;
@@ -39981,7 +41557,7 @@ hxd_Math.ufmod = function(value,modulo) {
 		return r + modulo;
 	}
 };
-var hxd_Flags = $hxClasses["hxd.Flags"] = { __ename__ : true, __constructs__ : ["ReadOnly","AlphaPremultiplied","FlipY"] };
+var hxd_Flags = $hxClasses["hxd.Flags"] = { __ename__ : ["hxd","Flags"], __constructs__ : ["ReadOnly","AlphaPremultiplied","FlipY"] };
 hxd_Flags.ReadOnly = ["ReadOnly",0];
 hxd_Flags.ReadOnly.toString = $estr;
 hxd_Flags.ReadOnly.__enum__ = hxd_Flags;
@@ -40538,18 +42114,6 @@ hxd_Pixels.prototype = {
 		return p;
 	}
 	,__class__: hxd_Pixels
-};
-var hxd_Res = function() { };
-$hxClasses["hxd.Res"] = hxd_Res;
-hxd_Res.__name__ = ["hxd","Res"];
-hxd_Res.load = function(name) {
-	return hxd_Res.get_loader().load(name);
-};
-hxd_Res.get_loader = function() {
-	return hxd_res_Loader.currentInstance;
-};
-hxd_Res.set_loader = function(l) {
-	return hxd_res_Loader.currentInstance = l;
 };
 var hxd_SceneEvents = function(stage) {
 	this.onOut = new hxd_Event(hxd_EventKind.EOut);
@@ -41139,7 +42703,7 @@ hxd_Stage.prototype = {
 	}
 	,__class__: hxd_Stage
 };
-var hxd_Platform = $hxClasses["hxd.Platform"] = { __ename__ : true, __constructs__ : ["IOS","Android","WebGL","PC","Console","FlashPlayer"] };
+var hxd_Platform = $hxClasses["hxd.Platform"] = { __ename__ : ["hxd","Platform"], __constructs__ : ["IOS","Android","WebGL","PC","Console","FlashPlayer"] };
 hxd_Platform.IOS = ["IOS",0];
 hxd_Platform.IOS.toString = $estr;
 hxd_Platform.IOS.__enum__ = hxd_Platform;
@@ -41159,7 +42723,7 @@ hxd_Platform.FlashPlayer = ["FlashPlayer",5];
 hxd_Platform.FlashPlayer.toString = $estr;
 hxd_Platform.FlashPlayer.__enum__ = hxd_Platform;
 hxd_Platform.__empty_constructs__ = [hxd_Platform.IOS,hxd_Platform.Android,hxd_Platform.WebGL,hxd_Platform.PC,hxd_Platform.Console,hxd_Platform.FlashPlayer];
-var hxd_SystemValue = $hxClasses["hxd.SystemValue"] = { __ename__ : true, __constructs__ : ["IsTouch","IsWindowed","IsMobile"] };
+var hxd_SystemValue = $hxClasses["hxd.SystemValue"] = { __ename__ : ["hxd","SystemValue"], __constructs__ : ["IsTouch","IsWindowed","IsMobile"] };
 hxd_SystemValue.IsTouch = ["IsTouch",0];
 hxd_SystemValue.IsTouch.toString = $estr;
 hxd_SystemValue.IsTouch.__enum__ = hxd_SystemValue;
@@ -41280,16 +42844,64 @@ hxd_Timer.reset = function() {
 	hxd_Timer.oldTime = new Date().getTime() / 1000;
 	hxd_Timer.calc_tmod = 1.;
 };
-var hxd_res_Embed = function() { };
-$hxClasses["hxd.res.Embed"] = hxd_res_Embed;
-hxd_res_Embed.__name__ = ["hxd","res","Embed"];
-var hxd__$res_R_$trueTypeFont_$ttf = function() { };
-$hxClasses["hxd._res.R_trueTypeFont_ttf"] = hxd__$res_R_$trueTypeFont_$ttf;
-hxd__$res_R_$trueTypeFont_$ttf.__name__ = ["hxd","_res","R_trueTypeFont_ttf"];
-hxd__$res_R_$trueTypeFont_$ttf.__super__ = hxd_res_Embed;
-hxd__$res_R_$trueTypeFont_$ttf.prototype = $extend(hxd_res_Embed.prototype,{
-	__class__: hxd__$res_R_$trueTypeFont_$ttf
-});
+var hxd_WaitEvent = function() {
+	this.updateList = [];
+};
+$hxClasses["hxd.WaitEvent"] = hxd_WaitEvent;
+hxd_WaitEvent.__name__ = ["hxd","WaitEvent"];
+hxd_WaitEvent.prototype = {
+	hasEvent: function() {
+		return this.updateList.length > 0;
+	}
+	,clear: function() {
+		this.updateList = [];
+	}
+	,add: function(callb) {
+		this.updateList.push(callb);
+	}
+	,remove: function(callb) {
+		var _g = 0;
+		var _g1 = this.updateList;
+		while(_g < _g1.length) {
+			var e = _g1[_g];
+			++_g;
+			if(Reflect.compareMethods(e,callb)) {
+				HxOverrides.remove(this.updateList,e);
+				return true;
+			}
+		}
+		return false;
+	}
+	,wait: function(time,callb) {
+		var tmp = function(dt) {
+			time -= dt / hxd_Timer.wantedFPS;
+			if(time < 0) {
+				callb();
+				return true;
+			}
+			return false;
+		};
+		this.updateList.push(tmp);
+	}
+	,waitUntil: function(callb) {
+		this.updateList.push(callb);
+	}
+	,update: function(dt) {
+		if(this.updateList.length == 0) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.updateList.slice();
+		while(_g < _g1.length) {
+			var f = _g1[_g];
+			++_g;
+			if(f(dt)) {
+				HxOverrides.remove(this.updateList,f);
+			}
+		}
+	}
+	,__class__: hxd_WaitEvent
+};
 var hxd_earcut_EarNode = function() {
 };
 $hxClasses["hxd.earcut.EarNode"] = hxd_earcut_EarNode;
@@ -42378,7 +43990,7 @@ hxd_fmt_grd_ColorStop.__name__ = ["hxd","fmt","grd","ColorStop"];
 hxd_fmt_grd_ColorStop.prototype = {
 	__class__: hxd_fmt_grd_ColorStop
 };
-var hxd_fmt_grd_ColorStopType = $hxClasses["hxd.fmt.grd.ColorStopType"] = { __ename__ : true, __constructs__ : ["User","Background","Foreground"] };
+var hxd_fmt_grd_ColorStopType = $hxClasses["hxd.fmt.grd.ColorStopType"] = { __ename__ : ["hxd","fmt","grd","ColorStopType"], __constructs__ : ["User","Background","Foreground"] };
 hxd_fmt_grd_ColorStopType.User = ["User",0];
 hxd_fmt_grd_ColorStopType.User.toString = $estr;
 hxd_fmt_grd_ColorStopType.User.__enum__ = hxd_fmt_grd_ColorStopType;
@@ -42396,7 +44008,7 @@ hxd_fmt_grd_TransparencyStop.__name__ = ["hxd","fmt","grd","TransparencyStop"];
 hxd_fmt_grd_TransparencyStop.prototype = {
 	__class__: hxd_fmt_grd_TransparencyStop
 };
-var hxd_fmt_grd_Color = $hxClasses["hxd.fmt.grd.Color"] = { __ename__ : true, __constructs__ : ["RGB","HSB"] };
+var hxd_fmt_grd_Color = $hxClasses["hxd.fmt.grd.Color"] = { __ename__ : ["hxd","fmt","grd","Color"], __constructs__ : ["RGB","HSB"] };
 hxd_fmt_grd_Color.RGB = function(r,g,b) { var $x = ["RGB",0,r,g,b]; $x.__enum__ = hxd_fmt_grd_Color; $x.toString = $estr; return $x; };
 hxd_fmt_grd_Color.HSB = function(h,s,b) { var $x = ["HSB",1,h,s,b]; $x.__enum__ = hxd_fmt_grd_Color; $x.toString = $estr; return $x; };
 hxd_fmt_grd_Color.__empty_constructs__ = [];
@@ -42680,7 +44292,7 @@ hxd_fmt_hmd__$Data_GeometryDataFormat_$Impl_$.fromInt = function(v) {
 	var this1 = v;
 	return this1;
 };
-var hxd_fmt_hmd_Property = $hxClasses["hxd.fmt.hmd.Property"] = { __ename__ : true, __constructs__ : ["CameraFOVY","HasMaterialFlags"] };
+var hxd_fmt_hmd_Property = $hxClasses["hxd.fmt.hmd.Property"] = { __ename__ : ["hxd","fmt","hmd","Property"], __constructs__ : ["CameraFOVY","HasMaterialFlags"] };
 hxd_fmt_hmd_Property.CameraFOVY = function(v) { var $x = ["CameraFOVY",0,v]; $x.__enum__ = hxd_fmt_hmd_Property; $x.toString = $estr; return $x; };
 hxd_fmt_hmd_Property.HasMaterialFlags = ["HasMaterialFlags",1];
 hxd_fmt_hmd_Property.HasMaterialFlags.toString = $estr;
@@ -42762,7 +44374,7 @@ hxd_fmt_hmd_Geometry.prototype = {
 	}
 	,__class__: hxd_fmt_hmd_Geometry
 };
-var hxd_fmt_hmd_MaterialFlag = $hxClasses["hxd.fmt.hmd.MaterialFlag"] = { __ename__ : true, __constructs__ : ["HasLighting","CastShadows","ReceiveShadows","TextureWrap","IsVolumeDecal"] };
+var hxd_fmt_hmd_MaterialFlag = $hxClasses["hxd.fmt.hmd.MaterialFlag"] = { __ename__ : ["hxd","fmt","hmd","MaterialFlag"], __constructs__ : ["HasLighting","CastShadows","ReceiveShadows","TextureWrap","IsVolumeDecal"] };
 hxd_fmt_hmd_MaterialFlag.HasLighting = ["HasLighting",0];
 hxd_fmt_hmd_MaterialFlag.HasLighting.toString = $estr;
 hxd_fmt_hmd_MaterialFlag.HasLighting.__enum__ = hxd_fmt_hmd_MaterialFlag;
@@ -42814,7 +44426,7 @@ hxd_fmt_hmd_Model.__name__ = ["hxd","fmt","hmd","Model"];
 hxd_fmt_hmd_Model.prototype = {
 	__class__: hxd_fmt_hmd_Model
 };
-var hxd_fmt_hmd_AnimationFlag = $hxClasses["hxd.fmt.hmd.AnimationFlag"] = { __ename__ : true, __constructs__ : ["HasPosition","HasRotation","HasScale","HasUV","HasAlpha","SinglePosition","HasProps","Reserved"] };
+var hxd_fmt_hmd_AnimationFlag = $hxClasses["hxd.fmt.hmd.AnimationFlag"] = { __ename__ : ["hxd","fmt","hmd","AnimationFlag"], __constructs__ : ["HasPosition","HasRotation","HasScale","HasUV","HasAlpha","SinglePosition","HasProps","Reserved"] };
 hxd_fmt_hmd_AnimationFlag.HasPosition = ["HasPosition",0];
 hxd_fmt_hmd_AnimationFlag.HasPosition.toString = $estr;
 hxd_fmt_hmd_AnimationFlag.HasPosition.__enum__ = hxd_fmt_hmd_AnimationFlag;
@@ -45094,195 +46706,6 @@ hxd_fs_BytesFileSystem.prototype = {
 	}
 	,__class__: hxd_fs_BytesFileSystem
 };
-var hxd_fs__$EmbedFileSystem_EmbedEntry = function(fs,name,relPath,data) {
-	this.fs = fs;
-	this.name = name;
-	this.relPath = relPath;
-	this.data = data;
-};
-$hxClasses["hxd.fs._EmbedFileSystem.EmbedEntry"] = hxd_fs__$EmbedFileSystem_EmbedEntry;
-hxd_fs__$EmbedFileSystem_EmbedEntry.__name__ = ["hxd","fs","_EmbedFileSystem","EmbedEntry"];
-hxd_fs__$EmbedFileSystem_EmbedEntry.__super__ = hxd_fs_FileEntry;
-hxd_fs__$EmbedFileSystem_EmbedEntry.prototype = $extend(hxd_fs_FileEntry.prototype,{
-	getSign: function() {
-		var old = this.readPos;
-		this.open();
-		this.readPos = old;
-		return this.bytes.b[0] | this.bytes.b[1] << 8 | this.bytes.b[2] << 16 | this.bytes.b[3] << 24;
-	}
-	,getBytes: function() {
-		if(this.bytes == null) {
-			this.open();
-		}
-		return this.bytes;
-	}
-	,open: function() {
-		if(this.bytes == null) {
-			this.bytes = haxe_Resource.getBytes(this.data);
-			if(this.bytes == null) {
-				throw new js__$Boot_HaxeError("Missing resource " + this.data);
-			}
-		}
-		this.readPos = 0;
-	}
-	,skip: function(nbytes) {
-		this.readPos += nbytes;
-	}
-	,readByte: function() {
-		return this.bytes.b[this.readPos++];
-	}
-	,read: function(out,pos,size) {
-		out.blit(pos,this.bytes,this.readPos,size);
-		this.readPos += size;
-	}
-	,close: function() {
-		this.bytes = null;
-		this.readPos = 0;
-	}
-	,load: function(onReady) {
-		if(onReady != null) {
-			haxe_Timer.delay(onReady,1);
-		}
-	}
-	,loadBitmap: function(onLoaded) {
-		var rawData = null;
-		var _g = 0;
-		var _g1 = haxe_Resource.content;
-		while(_g < _g1.length) {
-			var res = _g1[_g];
-			++_g;
-			if(res.name == this.data) {
-				rawData = res.data;
-				break;
-			}
-		}
-		if(rawData == null) {
-			throw new js__$Boot_HaxeError("Missing resource " + this.data);
-		}
-		var image = new Image();
-		image.onload = function(_) {
-			var this1 = image;
-			onLoaded(this1);
-		};
-		var extra = "";
-		var bytes = rawData.length * 6 >> 3;
-		var _g11 = 0;
-		var _g2 = (3 - bytes * 4 % 3) % 3;
-		while(_g11 < _g2) {
-			var i = _g11++;
-			extra += "=";
-		}
-		var tmp = "data:image/" + this.get_extension() + ";base64," + rawData;
-		image.src = tmp + extra;
-	}
-	,get_isDirectory: function() {
-		return this.fs.isDirectory(this.relPath);
-	}
-	,get_path: function() {
-		if(this.relPath == ".") {
-			return "<root>";
-		} else {
-			return this.relPath;
-		}
-	}
-	,exists: function(name) {
-		return this.fs.exists(this.relPath == "." ? name : this.relPath + "/" + name);
-	}
-	,get: function(name) {
-		return this.fs.get(this.relPath == "." ? name : this.relPath + "/" + name);
-	}
-	,get_size: function() {
-		this.open();
-		return this.bytes.length;
-	}
-	,iterator: function() {
-		return new hxd_impl_ArrayIterator_$hxd_$fs_$FileEntry(this.fs.subFiles(this.relPath));
-	}
-	,__class__: hxd_fs__$EmbedFileSystem_EmbedEntry
-});
-var hxd_fs_EmbedFileSystem = function(root) {
-	this.root = root;
-};
-$hxClasses["hxd.fs.EmbedFileSystem"] = hxd_fs_EmbedFileSystem;
-hxd_fs_EmbedFileSystem.__name__ = ["hxd","fs","EmbedFileSystem"];
-hxd_fs_EmbedFileSystem.__interfaces__ = [hxd_fs_FileSystem];
-hxd_fs_EmbedFileSystem.resolve = function(path) {
-	return "R_" + path.replace(hxd_fs_EmbedFileSystem.invalidChars.r,"_");
-};
-hxd_fs_EmbedFileSystem.prototype = {
-	getRoot: function() {
-		return new hxd_fs__$EmbedFileSystem_EmbedEntry(this,"root",".",null);
-	}
-	,splitPath: function(path) {
-		if(path == ".") {
-			return [];
-		} else {
-			return path.split("/");
-		}
-	}
-	,subFiles: function(path) {
-		var r = this.root;
-		var _g = 0;
-		var _g1 = this.splitPath(path);
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			r = Reflect.field(r,p);
-		}
-		if(r == null) {
-			throw new js__$Boot_HaxeError(path + " is not a directory");
-		}
-		var fields = Reflect.fields(r);
-		fields.sort(Reflect.compare);
-		var _g2 = [];
-		var _g11 = 0;
-		while(_g11 < fields.length) {
-			var name = fields[_g11];
-			++_g11;
-			_g2.push(this.get(path == "." ? name : path + "/" + name));
-		}
-		return _g2;
-	}
-	,isDirectory: function(path) {
-		var r = this.root;
-		var _g = 0;
-		var _g1 = this.splitPath(path);
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			r = Reflect.field(r,p);
-		}
-		if(r != null) {
-			return r != true;
-		} else {
-			return false;
-		}
-	}
-	,exists: function(path) {
-		var r = this.root;
-		var _g = 0;
-		var _g1 = this.splitPath(path);
-		while(_g < _g1.length) {
-			var p = _g1[_g];
-			++_g;
-			r = Reflect.field(r,p);
-			if(r == null) {
-				return false;
-			}
-		}
-		return true;
-	}
-	,get: function(path) {
-		if(!this.exists(path)) {
-			throw new js__$Boot_HaxeError(new hxd_fs_NotFound(path));
-		}
-		var id = hxd_fs_EmbedFileSystem.resolve(path);
-		return new hxd_fs__$EmbedFileSystem_EmbedEntry(this,path.split("/").pop(),path,id);
-	}
-	,dispose: function() {
-	}
-	,__class__: hxd_fs_EmbedFileSystem
-};
 var hxd_fs_FileInput = function(f) {
 	this.f = f;
 	f.open();
@@ -45508,6 +46931,178 @@ hxd_impl_Tmp.saveBytes = function(b) {
 	}
 	hxd_impl_Tmp.bytes.push(b);
 };
+var hxd_net__$Socket_SocketOutput = function() {
+};
+$hxClasses["hxd.net._Socket.SocketOutput"] = hxd_net__$Socket_SocketOutput;
+hxd_net__$Socket_SocketOutput.__name__ = ["hxd","net","_Socket","SocketOutput"];
+hxd_net__$Socket_SocketOutput.__super__ = haxe_io_Output;
+hxd_net__$Socket_SocketOutput.prototype = $extend(haxe_io_Output.prototype,{
+	wait: function() {
+	}
+	,writeByte: function(c) {
+	}
+	,writeBytes: function(s,pos,len) {
+		return len;
+	}
+	,__class__: hxd_net__$Socket_SocketOutput
+});
+var hxd_net__$Socket_SocketInput = function() { };
+$hxClasses["hxd.net._Socket.SocketInput"] = hxd_net__$Socket_SocketInput;
+hxd_net__$Socket_SocketInput.__name__ = ["hxd","net","_Socket","SocketInput"];
+hxd_net__$Socket_SocketInput.__super__ = haxe_io_Input;
+hxd_net__$Socket_SocketInput.prototype = $extend(haxe_io_Input.prototype,{
+	get_available: function() {
+		return 0;
+	}
+	,__class__: hxd_net__$Socket_SocketInput
+});
+var hxd_net_Socket = function() {
+	this.out = new hxd_net__$Socket_SocketOutput();
+};
+$hxClasses["hxd.net.Socket"] = hxd_net_Socket;
+hxd_net_Socket.__name__ = ["hxd","net","Socket"];
+hxd_net_Socket.prototype = {
+	set_timeout: function(t) {
+		return this.timeout = t;
+	}
+	,connect: function(host,port,onConnect) {
+		this.close();
+		hxd_net_Socket.openedSocks.push(this);
+		throw new js__$Boot_HaxeError("Not implemented");
+	}
+	,bind: function(host,port,onConnect,listenCount) {
+		if(listenCount == null) {
+			listenCount = 5;
+		}
+		this.close();
+		hxd_net_Socket.openedSocks.push(this);
+		throw new js__$Boot_HaxeError("Not implemented");
+	}
+	,close: function() {
+		HxOverrides.remove(hxd_net_Socket.openedSocks,this);
+	}
+	,onError: function(msg) {
+		throw new js__$Boot_HaxeError("Socket Error " + msg);
+	}
+	,onData: function() {
+	}
+	,__class__: hxd_net_Socket
+};
+var hxd_net_SocketClient = function(host,s) {
+	var _gthis = this;
+	hxbit_NetworkClient.call(this,host);
+	this.socket = s;
+	if(s != null) {
+		s.onData = function() {
+			while(true) {
+				var tmp;
+				if(_gthis.socket != null) {
+					var _gthis1 = _gthis.socket.input;
+					var tmp1 = _gthis.socket.input.get_available();
+					tmp = _gthis.readData(_gthis1,tmp1);
+				} else {
+					tmp = false;
+				}
+				if(!tmp) {
+					break;
+				}
+			}
+		};
+	}
+};
+$hxClasses["hxd.net.SocketClient"] = hxd_net_SocketClient;
+hxd_net_SocketClient.__name__ = ["hxd","net","SocketClient"];
+hxd_net_SocketClient.__super__ = hxbit_NetworkClient;
+hxd_net_SocketClient.prototype = $extend(hxbit_NetworkClient.prototype,{
+	error: function(msg) {
+		this.socket.close();
+		hxbit_NetworkClient.prototype.error.call(this,msg);
+	}
+	,send: function(bytes) {
+		this.socket.out.wait();
+		this.socket.out.writeInt32(bytes.length);
+		this.socket.out.write(bytes);
+		this.socket.out.flush();
+	}
+	,stop: function() {
+		hxbit_NetworkClient.prototype.stop.call(this);
+		if(this.socket != null) {
+			this.socket.close();
+			this.socket = null;
+		}
+	}
+	,__class__: hxd_net_SocketClient
+});
+var hxd_net_SocketHost = function() {
+	this.enableSound = true;
+	this.connected = false;
+	hxbit_NetworkHost.call(this);
+	this.isAuth = false;
+};
+$hxClasses["hxd.net.SocketHost"] = hxd_net_SocketHost;
+hxd_net_SocketHost.__name__ = ["hxd","net","SocketHost"];
+hxd_net_SocketHost.__super__ = hxbit_NetworkHost;
+hxd_net_SocketHost.prototype = $extend(hxbit_NetworkHost.prototype,{
+	dispose: function() {
+		hxbit_NetworkHost.prototype.dispose.call(this);
+		this.close();
+	}
+	,close: function() {
+		if(this.socket != null) {
+			this.socket.close();
+			this.socket = null;
+		}
+		this.connected = false;
+	}
+	,connect: function(host,port,onConnect) {
+		var _gthis = this;
+		this.close();
+		this.isAuth = false;
+		this.socket = new hxd_net_Socket();
+		this.socket.onError = function(msg) {
+			if(!_gthis.connected) {
+				_gthis.socket.onError = function(_) {
+				};
+				onConnect(false);
+			} else {
+				throw new js__$Boot_HaxeError(msg);
+			}
+		};
+		this.self = new hxd_net_SocketClient(this,this.socket);
+		this.socket.connect(host,port,function() {
+			_gthis.connected = true;
+			if(host == "127.0.0.1") {
+				_gthis.enableSound = false;
+			}
+			_gthis.clients = [_gthis.self];
+			onConnect(true);
+		});
+	}
+	,wait: function(host,port,onConnected) {
+		var _gthis = this;
+		this.close();
+		this.isAuth = false;
+		this.socket = new hxd_net_Socket();
+		this.self = new hxd_net_SocketClient(this,null);
+		this.socket.bind(host,port,function(s) {
+			var c = new hxd_net_SocketClient(_gthis,s);
+			_gthis.pendingClients.push(c);
+			s.onError = function(_) {
+				c.stop();
+			};
+			if(onConnected != null) {
+				onConnected(c);
+			}
+		});
+		this.isAuth = true;
+	}
+	,offlineServer: function() {
+		this.close();
+		this.self = new hxd_net_SocketClient(this,null);
+		this.isAuth = true;
+	}
+	,__class__: hxd_net_SocketHost
+});
 var hxd_poly2tri_Edge = function(p1,p2) {
 	if(p1 == null || p2 == null) {
 		throw new js__$Boot_HaxeError("Edge::new p1 or p2 is null");
@@ -46679,7 +48274,7 @@ hxd_res_Model.prototype = $extend(hxd_res_Resource.prototype,{
 	}
 	,__class__: hxd_res_Model
 });
-var hxd_res_Filter = $hxClasses["hxd.res.Filter"] = { __ename__ : true, __constructs__ : ["Fast","Chromatic"] };
+var hxd_res_Filter = $hxClasses["hxd.res.Filter"] = { __ename__ : ["hxd","res","Filter"], __constructs__ : ["Fast","Chromatic"] };
 hxd_res_Filter.Fast = ["Fast",0];
 hxd_res_Filter.Fast.toString = $estr;
 hxd_res_Filter.Fast.__enum__ = hxd_res_Filter;
@@ -47845,7 +49440,7 @@ hxd_res_NanoJpeg.prototype = {
 	}
 	,__class__: hxd_res_NanoJpeg
 };
-var hxd_res_SoundFormat = $hxClasses["hxd.res.SoundFormat"] = { __ename__ : true, __constructs__ : ["Wav","Mp3","OggVorbis"] };
+var hxd_res_SoundFormat = $hxClasses["hxd.res.SoundFormat"] = { __ename__ : ["hxd","res","SoundFormat"], __constructs__ : ["Wav","Mp3","OggVorbis"] };
 hxd_res_SoundFormat.Wav = ["Wav",0];
 hxd_res_SoundFormat.Wav.toString = $estr;
 hxd_res_SoundFormat.Wav.__enum__ = hxd_res_SoundFormat;
@@ -48849,7 +50444,7 @@ hxd_snd_ChannelGroup.__super__ = hxd_snd_ChannelBase;
 hxd_snd_ChannelGroup.prototype = $extend(hxd_snd_ChannelBase.prototype,{
 	__class__: hxd_snd_ChannelGroup
 });
-var hxd_snd_SampleFormat = $hxClasses["hxd.snd.SampleFormat"] = { __ename__ : true, __constructs__ : ["UI8","I16","F32"] };
+var hxd_snd_SampleFormat = $hxClasses["hxd.snd.SampleFormat"] = { __ename__ : ["hxd","snd","SampleFormat"], __constructs__ : ["UI8","I16","F32"] };
 hxd_snd_SampleFormat.UI8 = ["UI8",0];
 hxd_snd_SampleFormat.UI8.toString = $estr;
 hxd_snd_SampleFormat.UI8.__enum__ = hxd_snd_SampleFormat;
@@ -50103,7 +51698,7 @@ hxd_snd_WavData.prototype = $extend(hxd_snd_Data.prototype,{
 	}
 	,__class__: hxd_snd_WavData
 });
-var hxsl_Type = $hxClasses["hxsl.Type"] = { __ename__ : true, __constructs__ : ["TVoid","TInt","TBool","TFloat","TString","TVec","TMat3","TMat4","TMat3x4","TBytes","TSampler2D","TSamplerCube","TStruct","TFun","TArray","TChannel"] };
+var hxsl_Type = $hxClasses["hxsl.Type"] = { __ename__ : ["hxsl","Type"], __constructs__ : ["TVoid","TInt","TBool","TFloat","TString","TVec","TMat3","TMat4","TMat3x4","TBytes","TSampler2D","TSamplerCube","TStruct","TFun","TArray","TChannel"] };
 hxsl_Type.TVoid = ["TVoid",0];
 hxsl_Type.TVoid.toString = $estr;
 hxsl_Type.TVoid.__enum__ = hxsl_Type;
@@ -50141,7 +51736,7 @@ hxsl_Type.TFun = function(variants) { var $x = ["TFun",13,variants]; $x.__enum__
 hxsl_Type.TArray = function(t,size) { var $x = ["TArray",14,t,size]; $x.__enum__ = hxsl_Type; $x.toString = $estr; return $x; };
 hxsl_Type.TChannel = function(size) { var $x = ["TChannel",15,size]; $x.__enum__ = hxsl_Type; $x.toString = $estr; return $x; };
 hxsl_Type.__empty_constructs__ = [hxsl_Type.TVoid,hxsl_Type.TInt,hxsl_Type.TBool,hxsl_Type.TFloat,hxsl_Type.TString,hxsl_Type.TMat3,hxsl_Type.TMat4,hxsl_Type.TMat3x4,hxsl_Type.TSampler2D,hxsl_Type.TSamplerCube];
-var hxsl_VecType = $hxClasses["hxsl.VecType"] = { __ename__ : true, __constructs__ : ["VInt","VFloat","VBool"] };
+var hxsl_VecType = $hxClasses["hxsl.VecType"] = { __ename__ : ["hxsl","VecType"], __constructs__ : ["VInt","VFloat","VBool"] };
 hxsl_VecType.VInt = ["VInt",0];
 hxsl_VecType.VInt.toString = $estr;
 hxsl_VecType.VInt.__enum__ = hxsl_VecType;
@@ -50152,7 +51747,7 @@ hxsl_VecType.VBool = ["VBool",2];
 hxsl_VecType.VBool.toString = $estr;
 hxsl_VecType.VBool.__enum__ = hxsl_VecType;
 hxsl_VecType.__empty_constructs__ = [hxsl_VecType.VInt,hxsl_VecType.VFloat,hxsl_VecType.VBool];
-var hxsl_SizeDecl = $hxClasses["hxsl.SizeDecl"] = { __ename__ : true, __constructs__ : ["SConst","SVar"] };
+var hxsl_SizeDecl = $hxClasses["hxsl.SizeDecl"] = { __ename__ : ["hxsl","SizeDecl"], __constructs__ : ["SConst","SVar"] };
 hxsl_SizeDecl.SConst = function(v) { var $x = ["SConst",0,v]; $x.__enum__ = hxsl_SizeDecl; $x.toString = $estr; return $x; };
 hxsl_SizeDecl.SVar = function(v) { var $x = ["SVar",1,v]; $x.__enum__ = hxsl_SizeDecl; $x.toString = $estr; return $x; };
 hxsl_SizeDecl.__empty_constructs__ = [];
@@ -50171,7 +51766,7 @@ hxsl_Error.prototype = {
 	}
 	,__class__: hxsl_Error
 };
-var hxsl_VarKind = $hxClasses["hxsl.VarKind"] = { __ename__ : true, __constructs__ : ["Global","Input","Param","Var","Local","Output","Function"] };
+var hxsl_VarKind = $hxClasses["hxsl.VarKind"] = { __ename__ : ["hxsl","VarKind"], __constructs__ : ["Global","Input","Param","Var","Local","Output","Function"] };
 hxsl_VarKind.Global = ["Global",0];
 hxsl_VarKind.Global.toString = $estr;
 hxsl_VarKind.Global.__enum__ = hxsl_VarKind;
@@ -50194,7 +51789,7 @@ hxsl_VarKind.Function = ["Function",6];
 hxsl_VarKind.Function.toString = $estr;
 hxsl_VarKind.Function.__enum__ = hxsl_VarKind;
 hxsl_VarKind.__empty_constructs__ = [hxsl_VarKind.Global,hxsl_VarKind.Input,hxsl_VarKind.Param,hxsl_VarKind.Var,hxsl_VarKind.Local,hxsl_VarKind.Output,hxsl_VarKind.Function];
-var hxsl_VarQualifier = $hxClasses["hxsl.VarQualifier"] = { __ename__ : true, __constructs__ : ["Const","Private","Nullable","PerObject","Name","Shared","Precision","Range","Ignore"] };
+var hxsl_VarQualifier = $hxClasses["hxsl.VarQualifier"] = { __ename__ : ["hxsl","VarQualifier"], __constructs__ : ["Const","Private","Nullable","PerObject","Name","Shared","Precision","Range","Ignore"] };
 hxsl_VarQualifier.Const = function(max) { var $x = ["Const",0,max]; $x.__enum__ = hxsl_VarQualifier; $x.toString = $estr; return $x; };
 hxsl_VarQualifier.Private = ["Private",1];
 hxsl_VarQualifier.Private.toString = $estr;
@@ -50215,7 +51810,7 @@ hxsl_VarQualifier.Ignore = ["Ignore",8];
 hxsl_VarQualifier.Ignore.toString = $estr;
 hxsl_VarQualifier.Ignore.__enum__ = hxsl_VarQualifier;
 hxsl_VarQualifier.__empty_constructs__ = [hxsl_VarQualifier.Private,hxsl_VarQualifier.Nullable,hxsl_VarQualifier.PerObject,hxsl_VarQualifier.Shared,hxsl_VarQualifier.Ignore];
-var hxsl_Prec = $hxClasses["hxsl.Prec"] = { __ename__ : true, __constructs__ : ["Low","Medium","High"] };
+var hxsl_Prec = $hxClasses["hxsl.Prec"] = { __ename__ : ["hxsl","Prec"], __constructs__ : ["Low","Medium","High"] };
 hxsl_Prec.Low = ["Low",0];
 hxsl_Prec.Low.toString = $estr;
 hxsl_Prec.Low.__enum__ = hxsl_Prec;
@@ -50226,7 +51821,7 @@ hxsl_Prec.High = ["High",2];
 hxsl_Prec.High.toString = $estr;
 hxsl_Prec.High.__enum__ = hxsl_Prec;
 hxsl_Prec.__empty_constructs__ = [hxsl_Prec.Low,hxsl_Prec.Medium,hxsl_Prec.High];
-var hxsl_Const = $hxClasses["hxsl.Const"] = { __ename__ : true, __constructs__ : ["CNull","CBool","CInt","CFloat","CString"] };
+var hxsl_Const = $hxClasses["hxsl.Const"] = { __ename__ : ["hxsl","Const"], __constructs__ : ["CNull","CBool","CInt","CFloat","CString"] };
 hxsl_Const.CNull = ["CNull",0];
 hxsl_Const.CNull.toString = $estr;
 hxsl_Const.CNull.__enum__ = hxsl_Const;
@@ -50235,7 +51830,7 @@ hxsl_Const.CInt = function(v) { var $x = ["CInt",2,v]; $x.__enum__ = hxsl_Const;
 hxsl_Const.CFloat = function(v) { var $x = ["CFloat",3,v]; $x.__enum__ = hxsl_Const; $x.toString = $estr; return $x; };
 hxsl_Const.CString = function(v) { var $x = ["CString",4,v]; $x.__enum__ = hxsl_Const; $x.toString = $estr; return $x; };
 hxsl_Const.__empty_constructs__ = [hxsl_Const.CNull];
-var hxsl_ExprDef = $hxClasses["hxsl.ExprDef"] = { __ename__ : true, __constructs__ : ["EConst","EIdent","EParenthesis","EField","EBinop","EUnop","ECall","EBlock","EVars","EFunction","EIf","EDiscard","EFor","EReturn","EBreak","EContinue","EArray","EArrayDecl","ESwitch","EWhile","EMeta"] };
+var hxsl_ExprDef = $hxClasses["hxsl.ExprDef"] = { __ename__ : ["hxsl","ExprDef"], __constructs__ : ["EConst","EIdent","EParenthesis","EField","EBinop","EUnop","ECall","EBlock","EVars","EFunction","EIf","EDiscard","EFor","EReturn","EBreak","EContinue","EArray","EArrayDecl","ESwitch","EWhile","EMeta"] };
 hxsl_ExprDef.EConst = function(c) { var $x = ["EConst",0,c]; $x.__enum__ = hxsl_ExprDef; $x.toString = $estr; return $x; };
 hxsl_ExprDef.EIdent = function(i) { var $x = ["EIdent",1,i]; $x.__enum__ = hxsl_ExprDef; $x.toString = $estr; return $x; };
 hxsl_ExprDef.EParenthesis = function(e) { var $x = ["EParenthesis",2,e]; $x.__enum__ = hxsl_ExprDef; $x.toString = $estr; return $x; };
@@ -50264,7 +51859,7 @@ hxsl_ExprDef.ESwitch = function(e,cases,def) { var $x = ["ESwitch",18,e,cases,de
 hxsl_ExprDef.EWhile = function(cond,loop,normalWhile) { var $x = ["EWhile",19,cond,loop,normalWhile]; $x.__enum__ = hxsl_ExprDef; $x.toString = $estr; return $x; };
 hxsl_ExprDef.EMeta = function(name,args,e) { var $x = ["EMeta",20,name,args,e]; $x.__enum__ = hxsl_ExprDef; $x.toString = $estr; return $x; };
 hxsl_ExprDef.__empty_constructs__ = [hxsl_ExprDef.EDiscard,hxsl_ExprDef.EBreak,hxsl_ExprDef.EContinue];
-var hxsl_FunctionKind = $hxClasses["hxsl.FunctionKind"] = { __ename__ : true, __constructs__ : ["Vertex","Fragment","Init","Helper"] };
+var hxsl_FunctionKind = $hxClasses["hxsl.FunctionKind"] = { __ename__ : ["hxsl","FunctionKind"], __constructs__ : ["Vertex","Fragment","Init","Helper"] };
 hxsl_FunctionKind.Vertex = ["Vertex",0];
 hxsl_FunctionKind.Vertex.toString = $estr;
 hxsl_FunctionKind.Vertex.__enum__ = hxsl_FunctionKind;
@@ -50278,7 +51873,7 @@ hxsl_FunctionKind.Helper = ["Helper",3];
 hxsl_FunctionKind.Helper.toString = $estr;
 hxsl_FunctionKind.Helper.__enum__ = hxsl_FunctionKind;
 hxsl_FunctionKind.__empty_constructs__ = [hxsl_FunctionKind.Vertex,hxsl_FunctionKind.Fragment,hxsl_FunctionKind.Init,hxsl_FunctionKind.Helper];
-var hxsl_TGlobal = $hxClasses["hxsl.TGlobal"] = { __ename__ : true, __constructs__ : ["Radians","Degrees","Sin","Cos","Tan","Asin","Acos","Atan","Pow","Exp","Log","Exp2","Log2","Sqrt","Inversesqrt","Abs","Sign","Floor","Ceil","Fract","Mod","Min","Max","Clamp","Mix","Step","Smoothstep","Length","Distance","Dot","Cross","Normalize","LReflect","Texture2D","TextureCube","ToInt","ToFloat","ToBool","Vec2","Vec3","Vec4","IVec2","IVec3","IVec4","BVec2","BVec3","BVec4","Mat2","Mat3","Mat4","Mat3x4","Saturate","Pack","Unpack","PackNormal","UnpackNormal","DFdx","DFdy","Fwidth","TextureCubeLod","Texture2DLod","ChannelRead","Trace"] };
+var hxsl_TGlobal = $hxClasses["hxsl.TGlobal"] = { __ename__ : ["hxsl","TGlobal"], __constructs__ : ["Radians","Degrees","Sin","Cos","Tan","Asin","Acos","Atan","Pow","Exp","Log","Exp2","Log2","Sqrt","Inversesqrt","Abs","Sign","Floor","Ceil","Fract","Mod","Min","Max","Clamp","Mix","Step","Smoothstep","Length","Distance","Dot","Cross","Normalize","LReflect","Texture2D","TextureCube","ToInt","ToFloat","ToBool","Vec2","Vec3","Vec4","IVec2","IVec3","IVec4","BVec2","BVec3","BVec4","Mat2","Mat3","Mat4","Mat3x4","Saturate","Pack","Unpack","PackNormal","UnpackNormal","DFdx","DFdy","Fwidth","TextureCubeLod","Texture2DLod","ChannelRead","Trace"] };
 hxsl_TGlobal.Radians = ["Radians",0];
 hxsl_TGlobal.Radians.toString = $estr;
 hxsl_TGlobal.Radians.__enum__ = hxsl_TGlobal;
@@ -50469,7 +52064,7 @@ hxsl_TGlobal.Trace = ["Trace",62];
 hxsl_TGlobal.Trace.toString = $estr;
 hxsl_TGlobal.Trace.__enum__ = hxsl_TGlobal;
 hxsl_TGlobal.__empty_constructs__ = [hxsl_TGlobal.Radians,hxsl_TGlobal.Degrees,hxsl_TGlobal.Sin,hxsl_TGlobal.Cos,hxsl_TGlobal.Tan,hxsl_TGlobal.Asin,hxsl_TGlobal.Acos,hxsl_TGlobal.Atan,hxsl_TGlobal.Pow,hxsl_TGlobal.Exp,hxsl_TGlobal.Log,hxsl_TGlobal.Exp2,hxsl_TGlobal.Log2,hxsl_TGlobal.Sqrt,hxsl_TGlobal.Inversesqrt,hxsl_TGlobal.Abs,hxsl_TGlobal.Sign,hxsl_TGlobal.Floor,hxsl_TGlobal.Ceil,hxsl_TGlobal.Fract,hxsl_TGlobal.Mod,hxsl_TGlobal.Min,hxsl_TGlobal.Max,hxsl_TGlobal.Clamp,hxsl_TGlobal.Mix,hxsl_TGlobal.Step,hxsl_TGlobal.Smoothstep,hxsl_TGlobal.Length,hxsl_TGlobal.Distance,hxsl_TGlobal.Dot,hxsl_TGlobal.Cross,hxsl_TGlobal.Normalize,hxsl_TGlobal.LReflect,hxsl_TGlobal.Texture2D,hxsl_TGlobal.TextureCube,hxsl_TGlobal.ToInt,hxsl_TGlobal.ToFloat,hxsl_TGlobal.ToBool,hxsl_TGlobal.Vec2,hxsl_TGlobal.Vec3,hxsl_TGlobal.Vec4,hxsl_TGlobal.IVec2,hxsl_TGlobal.IVec3,hxsl_TGlobal.IVec4,hxsl_TGlobal.BVec2,hxsl_TGlobal.BVec3,hxsl_TGlobal.BVec4,hxsl_TGlobal.Mat2,hxsl_TGlobal.Mat3,hxsl_TGlobal.Mat4,hxsl_TGlobal.Mat3x4,hxsl_TGlobal.Saturate,hxsl_TGlobal.Pack,hxsl_TGlobal.Unpack,hxsl_TGlobal.PackNormal,hxsl_TGlobal.UnpackNormal,hxsl_TGlobal.DFdx,hxsl_TGlobal.DFdy,hxsl_TGlobal.Fwidth,hxsl_TGlobal.TextureCubeLod,hxsl_TGlobal.Texture2DLod,hxsl_TGlobal.ChannelRead,hxsl_TGlobal.Trace];
-var hxsl_Component = $hxClasses["hxsl.Component"] = { __ename__ : true, __constructs__ : ["X","Y","Z","W"] };
+var hxsl_Component = $hxClasses["hxsl.Component"] = { __ename__ : ["hxsl","Component"], __constructs__ : ["X","Y","Z","W"] };
 hxsl_Component.X = ["X",0];
 hxsl_Component.X.toString = $estr;
 hxsl_Component.X.__enum__ = hxsl_Component;
@@ -50483,7 +52078,7 @@ hxsl_Component.W = ["W",3];
 hxsl_Component.W.toString = $estr;
 hxsl_Component.W.__enum__ = hxsl_Component;
 hxsl_Component.__empty_constructs__ = [hxsl_Component.X,hxsl_Component.Y,hxsl_Component.Z,hxsl_Component.W];
-var hxsl_TExprDef = $hxClasses["hxsl.TExprDef"] = { __ename__ : true, __constructs__ : ["TConst","TVar","TGlobal","TParenthesis","TBlock","TBinop","TUnop","TVarDecl","TCall","TSwiz","TIf","TDiscard","TReturn","TFor","TContinue","TBreak","TArray","TArrayDecl","TSwitch","TWhile","TMeta"] };
+var hxsl_TExprDef = $hxClasses["hxsl.TExprDef"] = { __ename__ : ["hxsl","TExprDef"], __constructs__ : ["TConst","TVar","TGlobal","TParenthesis","TBlock","TBinop","TUnop","TVarDecl","TCall","TSwiz","TIf","TDiscard","TReturn","TFor","TContinue","TBreak","TArray","TArrayDecl","TSwitch","TWhile","TMeta"] };
 hxsl_TExprDef.TConst = function(c) { var $x = ["TConst",0,c]; $x.__enum__ = hxsl_TExprDef; $x.toString = $estr; return $x; };
 hxsl_TExprDef.TVar = function(v) { var $x = ["TVar",1,v]; $x.__enum__ = hxsl_TExprDef; $x.toString = $estr; return $x; };
 hxsl_TExprDef.TGlobal = function(g) { var $x = ["TGlobal",2,g]; $x.__enum__ = hxsl_TExprDef; $x.toString = $estr; return $x; };
@@ -51521,7 +53116,7 @@ hxsl_Cache.prototype = {
 	}
 	,__class__: hxsl_Cache
 };
-var hxsl_Channel = $hxClasses["hxsl.Channel"] = { __ename__ : true, __constructs__ : ["Unknown","R","G","B","A","PackedFloat","PackedNormal"] };
+var hxsl_Channel = $hxClasses["hxsl.Channel"] = { __ename__ : ["hxsl","Channel"], __constructs__ : ["Unknown","R","G","B","A","PackedFloat","PackedNormal"] };
 hxsl_Channel.Unknown = ["Unknown",0];
 hxsl_Channel.Unknown.toString = $estr;
 hxsl_Channel.Unknown.__enum__ = hxsl_Channel;
@@ -54174,7 +55769,7 @@ hxsl__$Flatten_Alloc.__name__ = ["hxsl","_Flatten","Alloc"];
 hxsl__$Flatten_Alloc.prototype = {
 	__class__: hxsl__$Flatten_Alloc
 };
-var hxsl_ARead = $hxClasses["hxsl.ARead"] = { __ename__ : true, __constructs__ : ["AIndex","AOffset"] };
+var hxsl_ARead = $hxClasses["hxsl.ARead"] = { __ename__ : ["hxsl","ARead"], __constructs__ : ["AIndex","AOffset"] };
 hxsl_ARead.AIndex = function(a) { var $x = ["AIndex",0,a]; $x.__enum__ = hxsl_ARead; $x.toString = $estr; return $x; };
 hxsl_ARead.AOffset = function(a,stride,delta) { var $x = ["AOffset",1,a,stride,delta]; $x.__enum__ = hxsl_ARead; $x.toString = $estr; return $x; };
 hxsl_ARead.__empty_constructs__ = [];
@@ -57358,7 +58953,7 @@ hxsl_Linker.prototype = {
 	}
 	,__class__: hxsl_Linker
 };
-var hxsl_Output = $hxClasses["hxsl.Output"] = { __ename__ : true, __constructs__ : ["Const","Value","PackNormal","PackFloat","Vec2","Vec3","Vec4","Swiz"] };
+var hxsl_Output = $hxClasses["hxsl.Output"] = { __ename__ : ["hxsl","Output"], __constructs__ : ["Const","Value","PackNormal","PackFloat","Vec2","Vec3","Vec4","Swiz"] };
 hxsl_Output.Const = function(v) { var $x = ["Const",0,v]; $x.__enum__ = hxsl_Output; $x.toString = $estr; return $x; };
 hxsl_Output.Value = function(v,size) { var $x = ["Value",1,v,size]; $x.__enum__ = hxsl_Output; $x.toString = $estr; return $x; };
 hxsl_Output.PackNormal = function(v) { var $x = ["PackNormal",2,v]; $x.__enum__ = hxsl_Output; $x.toString = $estr; return $x; };
@@ -59024,27 +60619,7 @@ var Bool = $hxClasses["Bool"] = Boolean;
 Bool.__ename__ = ["Bool"];
 var Class = $hxClasses["Class"] = { __name__ : ["Class"]};
 var Enum = { };
-haxe_Resource.content = [{ name : "R_gravityFont_png", data : "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"},{ name : "R_customFont_png", data : "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"},{ name : "R_hxlogo_png", data : "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P+/cwTIA5Bb8C94ZvEi82nCXZrx7c2F9fvitW59///3987xRJyb6ngGMMY1Goz7LV5qms33QA+AbWknSaDbr9Xp40Wq18HWtVmu1kvmc/flt219+5RX8IH5N12rNZjPNMjxIbRp/oh/Hxyc2btx01ON88YtfVFpOTk3WGrVmq1HHK2rS92ariavD4/zhD39ATjvygy/t2rV9xw46Wb1OC6F3t/D9+O/09DT+e8opp3z6058u3o9vm5qezheO76nV8Gu2uzfbF94m/CwtsNG0tpfDmI8ffc8Aot26/kjwmNJZK/byOWK+PYI61EYeetijYu+ePW+//XbxI5XlU/+s/ICO8eqrrx71ONdff/3lV1xRHa0iP4detvlXe2XIyRvWb9i586XOT7362p5du/4wOTkZLti1e71RzwrqDwPLl590442fX7lyZfERyQhvoKm/NPpXHoPmcPA29XlroL5ngPAwxEwAMVfBp6P5jKL4ePgRybcgiPmc/Y033sCNMHw20FxxVeEa8E/4hkceefSoh/q7//gfPvqxj0gq0+dm62HGHjju7UBHQ2UP9ZnOj2zd+tyLL77Y1nDyll0+L1z01Wr1sssuu/HGG448V8H84cWMd28OFDdtnnfpREbfM8DcvZzmnrJYEEGhJYfXYY886ok3btr89jvv0pY/E8NIqbiTusuMQXvgqEdD3P6128dGx3DfV1JxO6NQuJxLJ2Pts1u2PLc1V4R2vLATFfqpqamCKAPLM/MIrfXZZ5/9uc997sglFwuHDqFXcMIhPxZcdehX5+FcT0dxHj8GgAFgNh7g+URzsYfokOCd21uQHkc96+uv73n33XcLLaKQA0EbKSgDtZc9e/e+8ebbcx8NcdWVV9zw2RsqlREe8Moztn0ulAJP4um2b98e3rxt27a9e/fCQSI+2K0f34mq/w033LB69aqjnhQ6BGAhEwolarb3Q1vKzX2HT3wMBgPMjKDdz/WG9vavlApPff4Hfx2Jeu9etJhFh/3QuaFCm6nwl2gWP/fcc/M57F/91V+cd955THw+UKDg8S3h8hDPPvvs+g3PrFu/Abd/VK6gg3WLVS1btuyyyy797Gevn+dawsIL3e+Qo82CwhTodyVokBkA6NHO+nyOVGrn2POOxJ49e9555x1oE71iBDLF7ywGRDg7vsiybPPmzfM88pe+9KWTTz45bPls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"},{ name : "R_gravityFont_fnt", data : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPEZvbnQgc2l6ZT0iMTQiIGZhbWlseT0iR3Jhdml0eSIgaGVpZ2h0PSIyMiIgc3R5bGU9IlJlZ3VsYXIiPgogPENoYXIgd2lkdGg9IjQiIG9mZnNldD0iLTEgMTgiIHJlY3Q9IjAgMTYgMiAyIiBjb2RlPSIgIi8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjIgMiA0IDE2IiBjb2RlPSIhIi8+CiA8Q2hhciB3aWR0aD0iOSIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjYgMiA4IDciIGNvZGU9IiZxdW90OyIvPgogPENoYXIgd2lkdGg9IjE0IiBvZmZzZXQ9Ii0xIDQiIHJlY3Q9IjE0IDIgMTYgMTYiIGNvZGU9IiMiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSItMSAyIiByZWN0PSIzMCAwIDEzIDIwIiBjb2RlPSIkIi8+CiA8Q2hhciB3aWR0aD0iMTUiIG9mZnNldD0iMCA0IiByZWN0PSI0MyAyIDE1IDE2IiBjb2RlPSIlIi8+CiA8Q2hhciB3aWR0aD0iMTMiIG9mZnNldD0iMCA0IiByZWN0PSI1OCAyIDE0IDE2IiBjb2RlPSImYW1wOyIvPgogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMSA0IiByZWN0PSI3MiAyIDUgNyIgY29kZT0iJyIvPgogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMSA0IiByZWN0PSI3NyAyIDcgMjAiIGNvZGU9IigiLz4KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjAgNCIgcmVjdD0iODQgMiA3IDIwIiBjb2RlPSIpIi8+CiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjkxIDIgOCA4IiBjb2RlPSIqIi8+CiA8Q2hhciB3aWR0aD0iMTMiIG9mZnNldD0iMSA5IiByZWN0PSI5OSA3IDExIDExIiBjb2RlPSIrIi8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDE2IiByZWN0PSIxMTAgMTQgNCA3IiBjb2RlPSIsIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMSAxMSIgcmVjdD0iMTE0IDkgOSA1IiBjb2RlPSItIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDE2IiByZWN0PSIxMjMgMTQgNCA0IiBjb2RlPSIuIi8+CiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSItMSA0IiByZWN0PSIxMjcgMiA5IDE2IiBjb2RlPSIvIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCA0IiByZWN0PSIxMzYgMiAxMiAxNiIgY29kZT0iMCIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMTQ4IDIgOSAxNiIgY29kZT0iMSIvPgogPENoYXIgd2lkdGg9IjEyIiBvZmZzZXQ9IjEgNCIgcmVjdD0iMTU3IDIgMTEgMTYiIGNvZGU9IjIiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSItMSA0IiByZWN0PSIxNjggMiAxMiAxNiIgY29kZT0iMyIvPgogPENoYXIgd2lkdGg9IjEyIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMTgwIDIgMTIgMTYiIGNvZGU9IjQiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjE5MiAyIDEyIDE2IiBjb2RlPSI1Ii8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCA0IiByZWN0PSIyMDQgMiAxMiAxNiIgY29kZT0iNiIvPgogPENoYXIgd2lkdGg9IjExIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMjE2IDIgMTEgMTYiIGNvZGU9IjciLz4KIDxDaGFyIHdpZHRoPSIxMiIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjIyNyAyIDEyIDE2IiBjb2RlPSI4Ii8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCA0IiByZWN0PSIyMzkgMiAxMiAxNiIgY29kZT0iOSIvPgogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMSA4IiByZWN0PSIyNTEgNiA0IDEyIiBjb2RlPSI6Ii8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDgiIHJlY3Q9IjAgMjYgNCAxNSIgY29kZT0iOyIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjEgOCIgcmVjdD0iNCAyNiAxMSAxMiIgY29kZT0iJmx0OyIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjEgMTAiIHJlY3Q9IjE1IDI4IDExIDkiIGNvZGU9Ij0iLz4KIDxDaGFyIHdpZHRoPSIxMyIgb2Zmc2V0PSIxIDgiIHJlY3Q9IjI2IDI2IDExIDEyIiBjb2RlPSI+Ii8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCA0IiByZWN0PSIzNyAyMiAxMSAxNiIgY29kZT0iPyIvPgogPENoYXIgd2lkdGg9IjE2IiBvZmZzZXQ9IjAgNiIgcmVjdD0iNDggMjQgMTYgMTciIGNvZGU9IkAiLz4KIDxDaGFyIHdpZHRoPSIxMiIgb2Zmc2V0PSItMSA0IiByZWN0PSI2NCAyMiAxNSAxNiIgY29kZT0iQSIvPgogPENoYXIgd2lkdGg9IjEyIiBvZmZzZXQ9IjAgNCIgcmVjdD0iNzkgMjIgMTIgMTYiIGNvZGU9IkIiLz4KIDxDaGFyIHdpZHRoPSIxNCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjkxIDIyIDE1IDE2IiBjb2RlPSJDIi8+CiA8Q2hhciB3aWR0aD0iMTMiIG9mZnNldD0iMCA0IiByZWN0PSIxMDYgMjIgMTMgMTYiIGNvZGU9IkQiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjExOSAyMiAxMSAxNiIgY29kZT0iRSIvPgogPENoYXIgd2lkdGg9IjExIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMTMwIDIyIDExIDE2IiBjb2RlPSJGIi8+CiA8Q2hhciB3aWR0aD0iMTQiIG9mZnNldD0iMCA0IiByZWN0PSIxNDEgMjIgMTQgMTYiIGNvZGU9IkciLz4KIDxDaGFyIHdpZHRoPSIxMyIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjE1NSAyMiAxMyAxNiIgY29kZT0iSCIvPgogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSA0IiByZWN0PSIxNjggMjIgNCAxNiIgY29kZT0iSSIvPgogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMCA0IiByZWN0PSIxNzIgMjIgOCAxNiIgY29kZT0iSiIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMTgwIDIyIDE0IDE2IiBjb2RlPSJLIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA0IiByZWN0PSIxOTQgMjIgMTEgMTYiIGNvZGU9IkwiLz4KIDxDaGFyIHdpZHRoPSIxNyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjIwNSAyMiAxNSAxNiIgY29kZT0iTSIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMjIwIDIyIDEzIDE2IiBjb2RlPSJOIi8+CiA8Q2hhciB3aWR0aD0iMTQiIG9mZnNldD0iMCA0IiByZWN0PSIyMzMgMjIgMTUgMTYiIGNvZGU9Ik8iLz4KIDxDaGFyIHdpZHRoPSIxMiIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjAgNDEgMTIgMTYiIGNvZGU9IlAiLz4KIDxDaGFyIHdpZHRoPSIxNCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjEyIDQxIDE1IDE3IiBjb2RlPSJRIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCA0IiByZWN0PSIyNyA0MSAxMyAxNiIgY29kZT0iUiIvPgogPENoYXIgd2lkdGg9IjEyIiBvZmZzZXQ9Ii0xIDQiIHJlY3Q9IjQwIDQxIDEzIDE2IiBjb2RlPSJTIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCA0IiByZWN0PSI1MyA0MSAxMiAxNiIgY29kZT0iVCIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjAgNCIgcmVjdD0iNjUgNDEgMTMgMTYiIGNvZGU9IlUiLz4KIDxDaGFyIHdpZHRoPSIxMiIgb2Zmc2V0PSItMSA0IiByZWN0PSI3OCA0MSAxNCAxNiIgY29kZT0iViIvPgogPENoYXIgd2lkdGg9IjE4IiBvZmZzZXQ9Ii0xIDQiIHJlY3Q9IjkyIDQxIDIxIDE2IiBjb2RlPSJXIi8+CiA8Q2hhciB3aWR0aD0iMTMiIG9mZnNldD0iLTEgNCIgcmVjdD0iMTEzIDQxIDE1IDE2IiBjb2RlPSJYIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iLTEgNCIgcmVjdD0iMTI4IDQxIDE0IDE2IiBjb2RlPSJZIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCA0IiByZWN0PSIxNDIgNDEgMTIgMTYiIGNvZGU9IloiLz4KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgNCIgcmVjdD0iMTU0IDQxIDcgMjAiIGNvZGU9IlsiLz4KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9Ii0xIDQiIHJlY3Q9IjE2MSA0MSA5IDE2IiBjb2RlPSJcIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSItMSA0IiByZWN0PSIxNzAgNDEgOCAyMCIgY29kZT0iXSIvPgogPENoYXIgd2lkdGg9IjE0IiBvZmZzZXQ9IjMgNSIgcmVjdD0iMTc4IDQyIDggMTEiIGNvZGU9Il4iLz4KIDxDaGFyIHdpZHRoPSIxMiIgb2Zmc2V0PSIwIDE4IiByZWN0PSIxODYgNTUgMTIgNSIgY29kZT0iXyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSA0IiByZWN0PSIxOTggNDEgNiA1IiBjb2RlPSJgIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA4IiByZWN0PSIyMDQgNDUgMTAgMTIiIGNvZGU9ImEiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjIxNCA0MSAxMSAxNiIgY29kZT0iYiIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9IjAgOCIgcmVjdD0iMjI1IDQ1IDExIDEyIiBjb2RlPSJjIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCA0IiByZWN0PSIyMzYgNDEgMTEgMTYiIGNvZGU9ImQiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDgiIHJlY3Q9IjAgNjUgMTEgMTIiIGNvZGU9ImUiLz4KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjAgNCIgcmVjdD0iMTEgNjEgOSAxNiIgY29kZT0iZiIvPgogPENoYXIgd2lkdGg9IjExIiBvZmZzZXQ9IjAgOCIgcmVjdD0iMjAgNjUgMTEgMTYiIGNvZGU9ImciLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjMxIDYxIDEwIDE2IiBjb2RlPSJoIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjQxIDYxIDQgMTYiIGNvZGU9ImkiLz4KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9Ii0yIDQiIHJlY3Q9IjQ1IDYxIDcgMjAiIGNvZGU9ImoiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjUyIDYxIDExIDE2IiBjb2RlPSJrIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjYzIDYxIDQgMTYiIGNvZGU9ImwiLz4KIDxDaGFyIHdpZHRoPSIxNiIgb2Zmc2V0PSIwIDgiIHJlY3Q9IjY3IDY1IDE2IDEyIiBjb2RlPSJtIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA4IiByZWN0PSI4MyA2NSAxMCAxMiIgY29kZT0ibiIvPgogPENoYXIgd2lkdGg9IjExIiBvZmZzZXQ9IjAgOCIgcmVjdD0iOTMgNjUgMTIgMTIiIGNvZGU9Im8iLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDgiIHJlY3Q9IjEwNSA2NSAxMSAxNiIgY29kZT0icCIvPgogPENoYXIgd2lkdGg9IjExIiBvZmZzZXQ9IjAgOCIgcmVjdD0iMTE2IDY1IDExIDE2IiBjb2RlPSJxIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIwIDciIHJlY3Q9IjEyNyA2NCA3IDEzIiBjb2RlPSJyIi8+CiA8Q2hhciB3aWR0aD0iOSIgb2Zmc2V0PSItMSA4IiByZWN0PSIxMzQgNjUgMTEgMTIiIGNvZGU9InMiLz4KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjAgNCIgcmVjdD0iMTQ1IDYxIDggMTYiIGNvZGU9InQiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDgiIHJlY3Q9IjE1MyA2NSAxMCAxMiIgY29kZT0idSIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9Ii0xIDgiIHJlY3Q9IjE2MyA2NSAxMiAxMiIgY29kZT0idiIvPgogPENoYXIgd2lkdGg9IjE0IiBvZmZzZXQ9Ii0xIDgiIHJlY3Q9IjE3NSA2NSAxNiAxMiIgY29kZT0idyIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9Ii0xIDgiIHJlY3Q9IjE5MSA2NSAxMiAxMiIgY29kZT0ieCIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9Ii0xIDgiIHJlY3Q9IjIwMyA2NSAxMiAxNiIgY29kZT0ieSIvPgogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMCA4IiByZWN0PSIyMTUgNjUgOSAxMiIgY29kZT0ieiIvPgogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMCA0IiByZWN0PSIyMjQgNjEgOCAyMCIgY29kZT0ieyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMiA0IiByZWN0PSIyMzIgNjEgNCAyMSIgY29kZT0ifCIvPgogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMCA0IiByZWN0PSIyMzYgNjEgOCAyMCIgY29kZT0ifSIvPgogPENoYXIgd2lkdGg9IjExIiBvZmZzZXQ9IjEgMTEiIHJlY3Q9IjI0NCA2OCAxMCA2IiBjb2RlPSJ+Ii8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iLTEgMCIgcmVjdD0iMCA4MiAxNCAyMCIgY29kZT0ixIAiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjE0IDg2IDEwIDE2IiBjb2RlPSLEgSIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9Ii0xIDEiIHJlY3Q9IjI0IDgzIDE1IDE5IiBjb2RlPSLEgiIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMzkgODYgMTAgMTYiIGNvZGU9IsSDIi8+CiA8Q2hhciB3aWR0aD0iMTMiIG9mZnNldD0iLTEgNCIgcmVjdD0iNDkgODYgMTUgMjAiIGNvZGU9IsSEIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA4IiByZWN0PSI2NCA5MCAxMSAxNiIgY29kZT0ixIUiLz4KIDxDaGFyIHdpZHRoPSIxNCIgb2Zmc2V0PSIwIDAiIHJlY3Q9Ijc1IDgyIDE1IDIwIiBjb2RlPSLEhiIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9IjAgNCIgcmVjdD0iOTAgODYgMTEgMTYiIGNvZGU9IsSHIi8+CiA8Q2hhciB3aWR0aD0iMTQiIG9mZnNldD0iMCAwIiByZWN0PSIxMDEgODIgMTUgMjAiIGNvZGU9IsSKIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA0IiByZWN0PSIxMTYgODYgMTEgMTYiIGNvZGU9IsSLIi8+CiA8Q2hhciB3aWR0aD0iMTQiIG9mZnNldD0iMCAwIiByZWN0PSIxMjcgODIgMTUgMjAiIGNvZGU9IsSMIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA0IiByZWN0PSIxNDIgODYgMTEgMTYiIGNvZGU9IsSNIi8+CiA8Q2hhciB3aWR0aD0iMTMiIG9mZnNldD0iMCAwIiByZWN0PSIxNTMgODIgMTMgMjAiIGNvZGU9IsSOIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCA0IiByZWN0PSIxNjYgODYgMTQgMTYiIGNvZGU9IsSPIi8+CiA8Q2hhciB3aWR0aD0iMTQiIG9mZnNldD0iMCA0IiByZWN0PSIxODAgODYgMTUgMTYiIGNvZGU9IsSQIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCA0IiByZWN0PSIxOTUgODYgMTMgMTYiIGNvZGU9IsSRIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCAwIiByZWN0PSIyMDggODIgMTEgMjAiIGNvZGU9IsSSIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCA0IiByZWN0PSIyMTkgODYgMTEgMTYiIGNvZGU9IsSTIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCAwIiByZWN0PSIyMzAgODIgMTEgMjAiIGNvZGU9IsSWIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCA0IiByZWN0PSIyNDEgODYgMTEgMTYiIGNvZGU9IsSXIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA0IiByZWN0PSIwIDExMCAxMSAyMCIgY29kZT0ixJgiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDgiIHJlY3Q9IjExIDExNCAxMSAxNiIgY29kZT0ixJkiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDAiIHJlY3Q9IjIyIDEwNiAxMSAyMCIgY29kZT0ixJoiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjMzIDExMCAxMSAxNiIgY29kZT0ixJsiLz4KIDxDaGFyIHdpZHRoPSIxNCIgb2Zmc2V0PSIwIDAiIHJlY3Q9IjQ0IDEwNiAxNCAyMCIgY29kZT0ixJ4iLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjU4IDExMCAxMSAyMCIgY29kZT0ixJ8iLz4KIDxDaGFyIHdpZHRoPSIxNCIgb2Zmc2V0PSIwIDAiIHJlY3Q9IjY5IDEwNiAxNCAyMCIgY29kZT0ixKAiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjgzIDExMCAxMSAyMCIgY29kZT0ixKEiLz4KIDxDaGFyIHdpZHRoPSIxNCIgb2Zmc2V0PSIwIDQiIHJlY3Q9Ijk0IDExMCAxNCAyMCIgY29kZT0ixKIiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDMiIHJlY3Q9IjEwOCAxMDkgMTEgMjEiIGNvZGU9IsSjIi8+CiA8Q2hhciB3aWR0aD0iMTQiIG9mZnNldD0iLTEgNCIgcmVjdD0iMTE5IDExMCAxNiAxNiIgY29kZT0ixKYiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSItMiA0IiByZWN0PSIxMzUgMTEwIDEyIDE2IiBjb2RlPSLEpyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iLTEgMCIgcmVjdD0iMTQ3IDEwNiA5IDIwIiBjb2RlPSLEqCIvPgogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iLTIgNCIgcmVjdD0iMTU2IDExMCA5IDE2IiBjb2RlPSLEqSIvPgogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMCAwIiByZWN0PSIxNjUgMTA2IDYgMjAiIGNvZGU9IsSqIi8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjE3MSAxMTAgNiAxNiIgY29kZT0ixKsiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjAgNCIgcmVjdD0iMTc3IDExMCA2IDIwIiBjb2RlPSLEriIvPgogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iLTEgNCIgcmVjdD0iMTgzIDExMCA2IDIwIiBjb2RlPSLEryIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMiAwIiByZWN0PSIxODkgMTA2IDQgMjAiIGNvZGU9IsSwIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDgiIHJlY3Q9IjE5MyAxMTQgNCAxMiIgY29kZT0ixLEiLz4KIDxDaGFyIHdpZHRoPSIxMyIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjE5NyAxMTAgMTEgMjAiIGNvZGU9IsSyIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMSA0IiByZWN0PSIyMDggMTEwIDkgMjAiIGNvZGU9IsSzIi8+CiA8Q2hhciB3aWR0aD0iMTMiIG9mZnNldD0iMCA0IiByZWN0PSIyMTcgMTEwIDE0IDIxIiBjb2RlPSLEtiIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMjMxIDExMCAxMSAyMSIgY29kZT0ixLciLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDAiIHJlY3Q9IjI0MiAxMDYgMTEgMjAiIGNvZGU9IsS5Ii8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDAiIHJlY3Q9IjAgMTMxIDYgMjAiIGNvZGU9IsS6Ii8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCA0IiByZWN0PSI2IDEzNSAxMSAyMSIgY29kZT0ixLsiLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgNCIgcmVjdD0iMTcgMTM1IDUgMjEiIGNvZGU9IsS8Ii8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA0IiByZWN0PSIyMiAxMzUgMTEgMTYiIGNvZGU9IsS9Ii8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDQiIHJlY3Q9IjMzIDEzNSA3IDE2IiBjb2RlPSLEviIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9IjAgNCIgcmVjdD0iNDAgMTM1IDExIDE2IiBjb2RlPSLEvyIvPgogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSA0IiByZWN0PSI1MSAxMzUgNyAxNiIgY29kZT0ixYAiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSItMiA0IiByZWN0PSI1OCAxMzUgMTMgMTYiIGNvZGU9IsWBIi8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSItMSA0IiByZWN0PSI3MSAxMzUgOCAxNiIgY29kZT0ixYIiLz4KIDxDaGFyIHdpZHRoPSIxMyIgb2Zmc2V0PSIwIDAiIHJlY3Q9Ijc5IDEzMSAxMyAyMCIgY29kZT0ixYMiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjkyIDEzNSAxMCAxNiIgY29kZT0ixYQiLz4KIDxDaGFyIHdpZHRoPSIxMyIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjEwMiAxMzUgMTMgMjEiIGNvZGU9IsWFIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA4IiByZWN0PSIxMTUgMTM5IDEwIDE3IiBjb2RlPSLFhiIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjAgMCIgcmVjdD0iMTI1IDEzMSAxMyAyMCIgY29kZT0ixYciLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjEzOCAxMzUgMTAgMTYiIGNvZGU9IsWIIi8+CiA8Q2hhciB3aWR0aD0iMTMiIG9mZnNldD0iMCA0IiByZWN0PSIxNDggMTM1IDEzIDIwIiBjb2RlPSLFiiIvPgogPENoYXIgd2lkdGg9IjEwIiBvZmZzZXQ9IjAgOCIgcmVjdD0iMTYxIDEzOSAxMCAxNiIgY29kZT0ixYsiLz4KIDxDaGFyIHdpZHRoPSIxNCIgb2Zmc2V0PSIwIDAiIHJlY3Q9IjE3MSAxMzEgMTUgMjAiIGNvZGU9IsWMIi8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iMCA0IiByZWN0PSIxODYgMTM1IDEyIDE2IiBjb2RlPSLFjSIvPgogPENoYXIgd2lkdGg9IjE0IiBvZmZzZXQ9IjAgMCIgcmVjdD0iMTk4IDEzMSAxNSAyMCIgY29kZT0ixZAiLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjIxMyAxMzUgMTIgMTYiIGNvZGU9IsWRIi8+CiA8Q2hhciB3aWR0aD0iMTciIG9mZnNldD0iMCA0IiByZWN0PSIyMjUgMTM1IDE4IDE2IiBjb2RlPSLFkiIvPgogPENoYXIgd2lkdGg9IjE4IiBvZmZzZXQ9IjAgOCIgcmVjdD0iMCAxNjUgMTkgMTIiIGNvZGU9IsWTIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCAwIiByZWN0PSIxOSAxNTcgMTMgMjAiIGNvZGU9IsWUIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjMyIDE2MSA3IDE2IiBjb2RlPSLFlSIvPgogPENoYXIgd2lkdGg9IjEyIiBvZmZzZXQ9IjAgNCIgcmVjdD0iMzkgMTYxIDEzIDIxIiBjb2RlPSLFliIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iLTEgNyIgcmVjdD0iNTIgMTY0IDggMTgiIGNvZGU9IsWXIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCAwIiByZWN0PSI2MCAxNTcgMTMgMjAiIGNvZGU9IsWYIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSItMSA0IiByZWN0PSI3MyAxNjEgOCAxNiIgY29kZT0ixZkiLz4KIDxDaGFyIHdpZHRoPSIxMiIgb2Zmc2V0PSItMSAwIiByZWN0PSI4MSAxNTcgMTMgMjAiIGNvZGU9IsWaIi8+CiA8Q2hhciB3aWR0aD0iOSIgb2Zmc2V0PSItMSA0IiByZWN0PSI5NCAxNjEgMTEgMTYiIGNvZGU9IsWbIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iLTEgNCIgcmVjdD0iMTA1IDE2MSAxMyAyMCIgY29kZT0ixZ4iLz4KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9Ii0xIDgiIHJlY3Q9IjExOCAxNjUgMTEgMTYiIGNvZGU9IsWfIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iLTEgMCIgcmVjdD0iMTI5IDE1NyAxMyAyMCIgY29kZT0ixaAiLz4KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9Ii0xIDQiIHJlY3Q9IjE0MiAxNjEgMTEgMTYiIGNvZGU9IsWhIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCA0IiByZWN0PSIxNTMgMTYxIDEyIDIwIiBjb2RlPSLFoiIvPgogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMCA0IiByZWN0PSIxNjUgMTYxIDggMjAiIGNvZGU9IsWjIi8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCAwIiByZWN0PSIxNzMgMTU3IDEyIDIwIiBjb2RlPSLFpCIvPgogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMCA0IiByZWN0PSIxODUgMTYxIDEwIDE2IiBjb2RlPSLFpSIvPgogPENoYXIgd2lkdGg9IjEyIiBvZmZzZXQ9IjAgMCIgcmVjdD0iMTk1IDE1NyAxMiAyMCIgY29kZT0ixaYiLz4KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjAgNCIgcmVjdD0iMjA3IDE2MSA4IDE2IiBjb2RlPSLFpyIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjAgLTEiIHJlY3Q9IjIxNSAxNTYgMTMgMjEiIGNvZGU9IsWoIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMCA0IiByZWN0PSIyMjggMTYxIDEwIDE2IiBjb2RlPSLFqSIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjAgMCIgcmVjdD0iMjM4IDE1NyAxMyAyMCIgY29kZT0ixaoiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjAgMTg3IDEwIDE2IiBjb2RlPSLFqyIvPgogPENoYXIgd2lkdGg9IjEzIiBvZmZzZXQ9IjAgLTEiIHJlY3Q9IjEwIDE4MiAxMyAyMSIgY29kZT0ixa4iLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjIzIDE4NyAxMCAxNiIgY29kZT0ixa8iLz4KIDxDaGFyIHdpZHRoPSIxMyIgb2Zmc2V0PSIwIDAiIHJlY3Q9IjMzIDE4MyAxMyAyMCIgY29kZT0ixbAiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjQ2IDE4NyAxMSAxNiIgY29kZT0ixbEiLz4KIDxDaGFyIHdpZHRoPSIxNCIgb2Zmc2V0PSIwIDQiIHJlY3Q9IjU3IDE4NyAxNCAyMCIgY29kZT0ixbIiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIwIDgiIHJlY3Q9IjcxIDE5MSAxMSAxNiIgY29kZT0ixbMiLz4KIDxDaGFyIHdpZHRoPSIxOCIgb2Zmc2V0PSItMSAtMSIgcmVjdD0iODIgMTgyIDIxIDIxIiBjb2RlPSLFtCIvPgogPENoYXIgd2lkdGg9IjE0IiBvZmZzZXQ9Ii0xIDQiIHJlY3Q9IjEwMyAxODcgMTYgMTYiIGNvZGU9IsW1Ii8+CiA8Q2hhciB3aWR0aD0iMTEiIG9mZnNldD0iLTEgLTEiIHJlY3Q9IjExOSAxODIgMTQgMjEiIGNvZGU9IsW2Ii8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iLTEgNCIgcmVjdD0iMTMzIDE4NyAxMiAyMCIgY29kZT0ixbciLz4KIDxDaGFyIHdpZHRoPSIxMSIgb2Zmc2V0PSIwIDAiIHJlY3Q9IjE0NSAxODMgMTMgMjAiIGNvZGU9IsW4Ii8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCAwIiByZWN0PSIxNTggMTgzIDEyIDIwIiBjb2RlPSLFuSIvPgogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMCA0IiByZWN0PSIxNzAgMTg3IDkgMTYiIGNvZGU9IsW6Ii8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCAwIiByZWN0PSIxNzkgMTgzIDEyIDIwIiBjb2RlPSLFuyIvPgogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMCA0IiByZWN0PSIxOTEgMTg3IDkgMTYiIGNvZGU9IsW8Ii8+CiA8Q2hhciB3aWR0aD0iMTIiIG9mZnNldD0iMCAwIiByZWN0PSIyMDAgMTgzIDEyIDIwIiBjb2RlPSLFvSIvPgogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMCA0IiByZWN0PSIyMTIgMTg3IDkgMTYiIGNvZGU9IsW+Ii8+CjwvRm9udD4K"},{ name : "R_normalmap_png", data : "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"},{ name : "R_customFont_fnt", data : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPEZvbnQgc2l6ZT0iMTIiIGZhbWlseT0iOC1iaXQgT3BlcmF0b3IrIDgiIGhlaWdodD0iMTQiIHN0eWxlPSJSZWd1bGFyIj4KIDxDaGFyIHdpZHRoPSI0IiBvZmZzZXQ9IjAgOCIgcmVjdD0iMSA4IDAgMCIgY29kZT0iICIvPgogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMSAxIiByZWN0PSIyIDEgMSA3IiBjb2RlPSIhIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQgMSA1IDMiIGNvZGU9IiZxdW90OyIvPgogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMSAyIiByZWN0PSIxMCAyIDYgNiIgY29kZT0iIyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxNyAxIDUgNyIgY29kZT0iJCIvPgogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMSAyIiByZWN0PSIyMyAyIDYgNiIgY29kZT0iJSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIzMCAxIDUgNyIgY29kZT0iJmFtcDsiLz4KIDxDaGFyIHdpZHRoPSI0IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMzYgMSAyIDMiIGNvZGU9IiciLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMzkgMSAzIDciIGNvZGU9IigiLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDMgMSAzIDciIGNvZGU9IikiLz4KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9IjEgMiIgcmVjdD0iNDcgMiA3IDUiIGNvZGU9IioiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iNTUgMiA1IDUiIGNvZGU9IisiLz4KIDxDaGFyIHdpZHRoPSI0IiBvZmZzZXQ9IjEgNiIgcmVjdD0iNjEgNiAyIDMiIGNvZGU9IiwiLz4KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgNCIgcmVjdD0iNjQgNCA0IDEiIGNvZGU9Ii0iLz4KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgNyIgcmVjdD0iNjkgNyAxIDEiIGNvZGU9Ii4iLz4KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNzEgMSA0IDgiIGNvZGU9Ii8iLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNzYgMSA1IDciIGNvZGU9IjAiLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iODIgMSAzIDciIGNvZGU9IjEiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iODYgMSA1IDciIGNvZGU9IjIiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iOTIgMSA1IDciIGNvZGU9IjMiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iOTggMSA1IDciIGNvZGU9IjQiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTA0IDEgNSA3IiBjb2RlPSI1Ii8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExMCAxIDUgNyIgY29kZT0iNiIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMCAxIiByZWN0PSIxMTYgMSA2IDciIGNvZGU9IjciLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMSAxMCA1IDciIGNvZGU9IjgiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNyAxMCA1IDciIGNvZGU9IjkiLz4KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgMyIgcmVjdD0iMTMgMTIgMSA1IiBjb2RlPSI6Ii8+CiA8Q2hhciB3aWR0aD0iNCIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjE1IDEyIDIgNiIgY29kZT0iOyIvPgogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSAxIiByZWN0PSIxOCAxMCA0IDciIGNvZGU9IiZsdDsiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMjMgMTIgNSAzIiBjb2RlPSI9Ii8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjI5IDEwIDQgNyIgY29kZT0iPiIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIzNCAxMCA1IDciIGNvZGU9Ij8iLz4KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDAgMTAgNiA4IiBjb2RlPSJAIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQ3IDEwIDUgNyIgY29kZT0iQSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI1MyAxMCA1IDciIGNvZGU9IkIiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNTkgMTAgNSA3IiBjb2RlPSJDIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjY1IDEwIDUgNyIgY29kZT0iRCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI3MSAxMCA2IDciIGNvZGU9IkUiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNzggMTAgNiA3IiBjb2RlPSJGIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijg1IDEwIDUgNyIgY29kZT0iRyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI5MSAxMCA1IDciIGNvZGU9IkgiLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iOTcgMTAgMyA3IiBjb2RlPSJJIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEwMSAxMCA1IDciIGNvZGU9IkoiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTA3IDEwIDUgNyIgY29kZT0iSyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMTMgMTAgNiA3IiBjb2RlPSJMIi8+CiA8Q2hhciB3aWR0aD0iOSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEgMTkgNyA3IiBjb2RlPSJNIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjkgMTkgNSA3IiBjb2RlPSJOIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjE1IDE5IDUgNyIgY29kZT0iTyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIyMSAxOSA1IDciIGNvZGU9IlAiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMjcgMTkgNiA4IiBjb2RlPSJRIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM0IDE5IDUgNyIgY29kZT0iUiIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI0MCAxOSA1IDciIGNvZGU9IlMiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDYgMTkgNSA3IiBjb2RlPSJUIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjUyIDE5IDUgNyIgY29kZT0iVSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI1OCAxOSA1IDciIGNvZGU9IlYiLz4KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNjQgMTkgNyA3IiBjb2RlPSJXIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjcyIDE5IDUgNyIgY29kZT0iWCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI3OCAxOSA1IDciIGNvZGU9IlkiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iODQgMTkgNSA3IiBjb2RlPSJaIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjkwIDE5IDQgNyIgY29kZT0iWyIvPgogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSAxIiByZWN0PSI5NSAxOSA0IDgiIGNvZGU9IlwiLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgMSIgcmVjdD0iMTAwIDE5IDQgNyIgY29kZT0iXSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMDUgMTkgNSAzIiBjb2RlPSJeIi8+CiA8Q2hhciB3aWR0aD0iNCIgb2Zmc2V0PSIwIDgiIHJlY3Q9IjExMSAyNiA0IDEiIGNvZGU9Il8iLz4KIDxDaGFyIHdpZHRoPSI0IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTE2IDE5IDIgMiIgY29kZT0iYCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIxMTkgMjEgNSA1IiBjb2RlPSJhIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEgMjggNSA3IiBjb2RlPSJiIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjcgMzAgNSA1IiBjb2RlPSJjIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEzIDI4IDUgNyIgY29kZT0iZCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIxOSAzMCA1IDUiIGNvZGU9ImUiLz4KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMjUgMjggNCA3IiBjb2RlPSJmIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjMwIDMwIDUgNiIgY29kZT0iZyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIzNiAyOCA1IDciIGNvZGU9ImgiLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDIgMjggMyA3IiBjb2RlPSJpIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQ2IDI4IDUgOCIgY29kZT0iaiIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI1MiAyOCA1IDciIGNvZGU9ImsiLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNTggMjggMyA3IiBjb2RlPSJsIi8+CiA8Q2hhciB3aWR0aD0iOSIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjYyIDMwIDcgNSIgY29kZT0ibSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSI3MCAzMCA1IDUiIGNvZGU9Im4iLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iNzYgMzAgNSA1IiBjb2RlPSJvIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjgyIDMwIDUgNiIgY29kZT0icCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSI4OCAzMCA1IDYiIGNvZGU9InEiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iOTQgMzAgNSA1IiBjb2RlPSJyIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjEwMCAzMCA1IDUiIGNvZGU9InMiLz4KIDxDaGFyIHdpZHRoPSI2IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTA2IDI4IDQgNyIgY29kZT0idCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAzIiByZWN0PSIxMTEgMzAgNSA1IiBjb2RlPSJ1Ii8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjExNyAzMCA1IDUiIGNvZGU9InYiLz4KIDxDaGFyIHdpZHRoPSI5IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMSAzOSA3IDUiIGNvZGU9InciLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iOSAzOSA1IDUiIGNvZGU9IngiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMyIgcmVjdD0iMTUgMzkgNSA2IiBjb2RlPSJ5Ii8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjIxIDM5IDUgNSIgY29kZT0ieiIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIyNyAzNyA1IDciIGNvZGU9InsiLz4KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgMSIgcmVjdD0iMzMgMzcgMSA3IiBjb2RlPSJ8Ii8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM1IDM3IDUgNyIgY29kZT0ifSIvPgogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMSAzIiByZWN0PSI0MSAzOSA2IDIiIGNvZGU9In4iLz4KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgMiIgcmVjdD0iNDggMzggMSA3IiBjb2RlPSLCoSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI1MCAzNyA1IDciIGNvZGU9IsKiIi8+CiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjU2IDM3IDYgNyIgY29kZT0iwqMiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNjMgMzcgNSA4IiBjb2RlPSLCpSIvPgogPENoYXIgd2lkdGg9IjMiIG9mZnNldD0iMSAxIiByZWN0PSI2OSAzNyAxIDciIGNvZGU9IsKmIi8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjcxIDM3IDQgMSIgY29kZT0iwqgiLz4KIDxDaGFyIHdpZHRoPSIxMCIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijc2IDM3IDggOCIgY29kZT0iwqkiLz4KIDxDaGFyIHdpZHRoPSI4IiBvZmZzZXQ9IjEgMiIgcmVjdD0iODUgMzggNiA1IiBjb2RlPSLCqyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMCA0IiByZWN0PSI5MiA0MCA2IDMiIGNvZGU9IsKsIi8+CiA8Q2hhciB3aWR0aD0iMTAiIG9mZnNldD0iMSAxIiByZWN0PSI5OSAzNyA4IDgiIGNvZGU9IsKuIi8+CiA8Q2hhciB3aWR0aD0iNiIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEwOCAzNyA0IDQiIGNvZGU9IsKwIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExMyAzNyA1IDciIGNvZGU9IsKxIi8+CiA8Q2hhciB3aWR0aD0iNCIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExOSAzNyAyIDIiIGNvZGU9IsK0Ii8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDMiIHJlY3Q9IjEgNDggNSA2IiBjb2RlPSLCtSIvPgogPENoYXIgd2lkdGg9IjgiIG9mZnNldD0iMSAxIiByZWN0PSI3IDQ2IDYgNyIgY29kZT0iwrYiLz4KIDxDaGFyIHdpZHRoPSIzIiBvZmZzZXQ9IjEgNCIgcmVjdD0iMTQgNDkgMSAxIiBjb2RlPSLCtyIvPgogPENoYXIgd2lkdGg9IjYiIG9mZnNldD0iMSA2IiByZWN0PSIxNiA1MSA0IDMiIGNvZGU9IsK4Ii8+CiA8Q2hhciB3aWR0aD0iOCIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjIxIDQ3IDYgNSIgY29kZT0iwrsiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iMjggNDcgNSA3IiBjb2RlPSLCvyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIzNCA0NiA1IDciIGNvZGU9IsOAIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQwIDQ2IDUgNyIgY29kZT0iw4EiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDYgNDYgNSA3IiBjb2RlPSLDgiIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI1MiA0NiA2IDciIGNvZGU9IsODIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjU5IDQ2IDUgNyIgY29kZT0iw4QiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNjUgNDYgNSA3IiBjb2RlPSLDhSIvPgogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSAxIiByZWN0PSI3MSA0NiA3IDciIGNvZGU9IsOGIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijc5IDQ2IDUgOCIgY29kZT0iw4ciLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iODUgNDYgNiA3IiBjb2RlPSLDiCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAtMSIgcmVjdD0iOTIgNDQgNiA5IiBjb2RlPSLDiSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI5OSA0NiA2IDciIGNvZGU9IsOKIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEwNiA0NiA1IDciIGNvZGU9IsOLIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExMiA0NiAzIDciIGNvZGU9IsOMIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExNiA0NiAzIDciIGNvZGU9IsONIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIwIDEiIHJlY3Q9IjEyMCA0NiA1IDciIGNvZGU9IsOOIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIwIDEiIHJlY3Q9IjEgNTUgNSA3IiBjb2RlPSLDjyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMCAxIiByZWN0PSI3IDU1IDYgNyIgY29kZT0iw5AiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTQgNTUgNiA3IiBjb2RlPSLDkSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIyMSA1NSA1IDciIGNvZGU9IsOSIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjI3IDU1IDUgNyIgY29kZT0iw5MiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMzMgNTUgNSA3IiBjb2RlPSLDlCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIzOSA1NSA2IDciIGNvZGU9IsOVIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQ2IDU1IDUgNyIgY29kZT0iw5YiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iNTIgNTYgNSA1IiBjb2RlPSLDlyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMCAxIiByZWN0PSI1OCA1NSA3IDciIGNvZGU9IsOYIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjY2IDU1IDUgNyIgY29kZT0iw5kiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNzIgNTUgNSA3IiBjb2RlPSLDmiIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI3OCA1NSA1IDciIGNvZGU9IsObIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijg0IDU1IDUgNyIgY29kZT0iw5wiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iOTAgNTUgNSA3IiBjb2RlPSLDnSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI5NiA1NSA1IDciIGNvZGU9IsOeIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEwMiA1NSA1IDciIGNvZGU9IsOfIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEwOCA1NSA1IDciIGNvZGU9IsOgIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjExNCA1NSA1IDciIGNvZGU9IsOhIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEyMCA1NSA1IDciIGNvZGU9IsOiIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjEgNjMgNiA3IiBjb2RlPSLDoyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI4IDYzIDUgNyIgY29kZT0iw6QiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTQgNjMgNSA3IiBjb2RlPSLDpSIvPgogPENoYXIgd2lkdGg9IjkiIG9mZnNldD0iMSAzIiByZWN0PSIyMCA2NSA3IDUiIGNvZGU9IsOmIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIwIDMiIHJlY3Q9IjI4IDY0IDYgNyIgY29kZT0iw6ciLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMzUgNjMgNSA3IiBjb2RlPSLDqCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI0MSA2MyA1IDciIGNvZGU9IsOpIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjQ3IDYzIDUgNyIgY29kZT0iw6oiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNTMgNjMgNSA3IiBjb2RlPSLDqyIvPgogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMSAxIiByZWN0PSI1OSA2MyAzIDciIGNvZGU9IsOsIi8+CiA8Q2hhciB3aWR0aD0iNSIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjYzIDYzIDMgNyIgY29kZT0iw60iLz4KIDxDaGFyIHdpZHRoPSI1IiBvZmZzZXQ9IjAgMSIgcmVjdD0iNjcgNjMgNSA3IiBjb2RlPSLDriIvPgogPENoYXIgd2lkdGg9IjUiIG9mZnNldD0iMCAxIiByZWN0PSI3MyA2MyA1IDciIGNvZGU9IsOvIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijc5IDYzIDYgNyIgY29kZT0iw7AiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iODYgNjMgNiA3IiBjb2RlPSLDsSIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI5MyA2MyA1IDciIGNvZGU9IsOyIi8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9Ijk5IDYzIDUgNyIgY29kZT0iw7MiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTA1IDYzIDUgNyIgY29kZT0iw7QiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTExIDYzIDYgNyIgY29kZT0iw7UiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMTE4IDYzIDUgNyIgY29kZT0iw7YiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMiIgcmVjdD0iMSA3MyA1IDUiIGNvZGU9IsO3Ii8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDIiIHJlY3Q9IjcgNzMgNSA3IiBjb2RlPSLDuCIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIxMyA3MiA1IDciIGNvZGU9IsO5Ii8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjE5IDcyIDUgNyIgY29kZT0iw7oiLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iMjUgNzIgNSA3IiBjb2RlPSLDuyIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSIzMSA3MiA1IDciIGNvZGU9IsO8Ii8+CiA8Q2hhciB3aWR0aD0iNyIgb2Zmc2V0PSIxIDEiIHJlY3Q9IjM3IDcyIDUgOCIgY29kZT0iw70iLz4KIDxDaGFyIHdpZHRoPSI3IiBvZmZzZXQ9IjEgMSIgcmVjdD0iNDMgNzIgNSA4IiBjb2RlPSLDviIvPgogPENoYXIgd2lkdGg9IjciIG9mZnNldD0iMSAxIiByZWN0PSI0OSA3MiA1IDgiIGNvZGU9IsO/Ii8+CjwvRm9udD4K"}];
 var __map_reserved = {};
-var hx__registerFont;
-hx__registerFont = function(name,data) {
-	var s = window.document.createElement("style");
-	s.type = "text/css";
-	s.innerHTML = "@font-face{ font-family: " + name + "; src: url('data:font/ttf;base64," + data + "') format('truetype'); }";
-	window.document.getElementsByTagName("head")[0].appendChild(s);
-	var div = window.document.createElement("div");
-	div.style.fontFamily = name;
-	div.style.opacity = 0;
-	div.style.width = "1px";
-	div.style.height = "1px";
-	div.style.position = "fixed";
-	div.style.bottom = "0px";
-	div.style.right = "0px";
-	div.innerHTML = ".";
-	div.className = "hx__loadFont";
-	window.document.body.appendChild(div);
-};
-hx__registerFont("R_trueTypeFont_ttf","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iooD8f4TAWz+lAHt/p0FnP0yAs764nsBorF7/l+yAAAAAwBk//0FlAWcAAMADQAZAAApAQEhAREzETMRMxEjEQE1IREhNSE1ITUhNQG0/uwDqgEU/kmK4oGB+1EB7f4TAWz+lAFsBZz7jgGh/tQBLP0yAS0D93v9MnuydbEAAAAAAgBkAAAEPgWcAAkADQAAAREhESEVIREhPQERIREEPv0pAtf8JgLGARQEJ/4y/p32A0PkcwEC/v4AAAD//wBkAAAEPgaTACIAJAAAAAMAQwFdAAD//wBkAAAEPgaTACIAJAAAAAMAdAGTAAD//wBkAAAEPgaUACIAJAAAAAMAwQEUAAD//wBkAAAEPga2ACIAJAAAAAMAyADYAAD//wBkAAAEPgarACIAJAAAAAMAaQCiAAD//wBkAAAEPgafACIAJAAAAAMAxgFXAAAAAgBkAAAHDwWcAA8AEwAAASERIREhFSERIRUhESEVIRkBIREDNf5D/uwGq/06Asb9OgLG/Cb+QwJZ/acFnPb+ner+nfYDQwFj/p0A//8AZP7IBD4FnAAiACYAAAADAHgBewAA//8AZAAABD4GkwAiACgAAAADAEMBbwAA//8AZAAABD4GkwAiACgAAAADAHQBkwAA//8AZAAABD4GlAAiACgAAAADAMEBIAAA//8AZAAABD4GqwAiACgAAAADAGkAnAAA//8AZAAAAXgGkwAiACwAAAACAEMAAAAA//8AZAAAAX8GkwAiACwAAAACAHQeAAAA//8AZAAAAgkGlAAiACxCAAACAMEAAAAA//8AZAAAAxEGqwAjACwAxgAAAAIAaQAAAAIAZAAABMIFnAAHABEAAAERIREhETMVJREhFxEHIREjNQH8AcP+PYP+aQNyaGf8jYQCWf6dA7D+nerqAll++2B+AlnqAAAA//8AZAAABD4GtgAiADEAAAADAMgA6gAA//8AZAAABD4GkwAiADIAAAADAEMBPwAA//8AZAAABD4GkwAiADIAAAADAHQBhwAA//8AZAAABD4GlAAiADIAAAADAMEBGgAA//8AZAAABD4GtgAiADIAAAADAMgAzAAA//8AZAAABD4GqwAiADIAAAADAGkAkAAAAAEAZAHsAxMEjAALAAABFwcnByc3JzcXNxcCX7Sms7GlsJ2mnaClA0a0prSwpbGdpZ2hpgADAGT/QATI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");
 var ArrayBuffer = $global.ArrayBuffer || js_html_compat_ArrayBuffer;
 if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_html_compat_ArrayBuffer.sliceImpl;
@@ -59052,6 +60627,14 @@ if(ArrayBuffer.prototype.slice == null) {
 var DataView = $global.DataView || js_html_compat_DataView;
 var Float32Array = $global.Float32Array || js_html_compat_Float32Array._new;
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
+hxbit_Serializer.UID = 0;
+hxbit_Serializer.SEQ = 0;
+hxbit_Serializer.SEQ_BITS = 8;
+hxbit_Serializer.SEQ_MASK = 16777215;
+hxbit_Serializer.CLASSES = [];
+Cursor.__clid = hxbit_Serializer.registerClass(Cursor);
+Network.HOST = "127.0.0.1";
+Network.PORT = 6676;
 Xml.Element = 0;
 Xml.PCData = 1;
 Xml.CData = 2;
@@ -59080,11 +60663,6 @@ format_mp3_CEmphasis.EMs50_15 = 1;
 format_mp3_CEmphasis.EReserved = 2;
 format_mp3_CEmphasis.ECCIT_J17 = 3;
 h2d_Flow.tmpBounds = new h2d_col_Bounds();
-hxbit_Serializer.UID = 0;
-hxbit_Serializer.SEQ = 0;
-hxbit_Serializer.SEQ_BITS = 8;
-hxbit_Serializer.SEQ_MASK = 16777215;
-hxbit_Serializer.CLASSES = [];
 h3d_prim_Primitive.__clid = hxbit_Serializer.registerClass(h3d_prim_Primitive);
 h2d__$Graphics_GraphicsContent.__clid = hxbit_Serializer.registerClass(h2d__$Graphics_GraphicsContent);
 h2d_RenderContext.BUFFERING = false;
@@ -59269,10 +60847,11 @@ h3d_shader_VertexColorAlpha.SRC = "oy4:funsaoy4:argsahy4:exproy1:ejy13:hxsl.TExp
 h3d_shader_VolumeDecal.SRC = "oy4:funsaoy4:argsahy4:exproy1:ejy13:hxsl.TExprDef:4:1aoR3jR4:5:3jy16:haxe.macro.Binop:4:0oR3jR4:1:1oy4:kindjy12:hxsl.VarKind:4:0y4:namey17:transformedNormaly4:typejy9:hxsl.Type:5:2i3jy12:hxsl.VecType:1:0y2:idi-192gy1:poy4:filey81:%2Fhome%2Ftravis%2Fhaxe%2Flib%2Fheaps%2F1%2C1%2C0%2Fh3d%2Fshader%2FVolumeDecal.hxy3:maxi282y3:mini265gy1:tr12goR3jR4:1:1oR6jR7:2:0R8y6:normalR10jR11:5:2i3r11R13i-205gR14oR15R16R17i291R18i285gR19r18gR14oR15R16R17i291R18i265gR19r12ghR14oR15R16R17i297R18i259gR19jR11:0:0gR6jy17:hxsl.FunctionKind:0:0y3:refoR6jR7:6:0R8y6:vertexR10jR11:13:1aoR1ahy3:retr25ghR13i-207gR24r25goR1ahR2oR3jR4:4:1aoR3jR4:7:2oR6r10R8y6:matrixR10jR11:7:0R13i-209goR3jR4:5:3jR5:1:0oR3jR4:1:1oR6jR7:0:0R8y15:inverseViewProjR10r39y6:parentoR6r44R8y6:cameraR10jR11:12:1aoR6r44R8y4:viewR10r39R27r45R13i-167goR6r44R8y4:projR10r39R27r45R13i-168goR6r44R8y8:positionR10jR11:5:2i3r11R27r45R13i-169goR6r44R8y8:projDiagR10jR11:5:2i3r11R27r45R13i-170goR6r44R8y8:viewProjR10r39R27r45R13i-171gr43oR6r44R8y5:zNearR10jR11:3:0R27r45R13i-173goR6r44R8y4:zFarR10r55R27r45R13i-174goR6jR7:3:0R8y3:dirR10jR11:5:2i3r11R27r45R13i-175ghR13i-166gR13i-172gR14oR15R16R17i364R18i342gR19r39goR3jR4:1:1oR6r44R8y16:modelViewInverseR10r39R27oR6r44R8y6:globalR10jR11:12:1aoR6r44R8y4:timeR10r55R27r65R13i-177goR6r44R8y9:pixelSizeR10jR11:5:2i2r11R27r65R13i-178goR6r44R8y9:modelViewR10r39R27r65y10:qualifiersajy17:hxsl.VarQualifier:3:0hR13i-179gr64hR13i-176gR42ar72hR13i-180gR14oR15R16R17i390R18i367gR19r39gR14oR15R16R17i390R18i342gR19r39gR14oR15R16R17i391R18i329gR19r25goR3jR4:7:2oR6r10R8y9:screenPosR10jR11:5:2i2r11R13i-210goR3jR4:5:3jR5:2:0oR3jR4:9:2oR3jR4:1:1oR6r10R8y17:projectedPositionR10jR11:5:2i4r11R13i-193gR14oR15R16R17i429R18i412gR19r89gajy14:hxsl.Component:0:0jR46:1:0hR14oR15R16R17i432R18i412gR19r83goR3jR4:9:2oR3jR4:1:1r88R14oR15R16R17i452R18i435gR19r89gajR46:3:0hR14oR15R16R17i454R18i435gR19r55gR14oR15R16R17i454R18i412gR19r83gR14oR15R16R17i455R18i396gR19r25goR3jR4:7:2oR6r10R8y3:tuvR10jR11:5:2i2r11R13i-211goR3jR4:5:3jR5:0:0oR3jR4:5:3r41oR3jR4:1:1r82R14oR15R16R17i479R18i470gR19r83goR3jR4:8:2oR3jR4:2:1jy12:hxsl.TGlobal:38:0R14oR15R16R17i486R18i482gR19jR11:13:1ahgaoR3jR4:0:1jy10:hxsl.Const:3:1d0.5R14oR15R16R17i490R18i487gR19r55goR3jR4:0:1jR49:3:1d-0.5R14oR15R16R17i496R18i492gR19r55ghR14oR15R16R17i497R18i482gR19jR11:5:2i2r11gR14oR15R16R17i497R18i470gR19jR11:5:2i2r11goR3jR4:8:2oR3jR4:2:1r120R14oR15R16R17i504R18i500gR19r124gaoR3jR4:0:1jR49:3:1d0.5R14oR15R16R17i508R18i505gR19r55goR3jR4:0:1jR49:3:1d0.5R14oR15R16R17i513R18i510gR19r55ghR14oR15R16R17i514R18i500gR19jR11:5:2i2r11gR14oR15R16R17i514R18i470gR19r111gR14oR15R16R17i515R18i460gR19r25goR3jR4:7:2oR6r10R8y3:ruvR10jR11:5:2i4r11R13i-212goR3jR4:8:2oR3jR4:2:1jR48:40:0R14oR15R16R17i534R18i530gR19jR11:13:1ahgaoR3jR4:1:1r82R14oR15R16R17i550R18i541gR19r83goR3jR4:8:2oR3jR4:2:1jR48:53:0R14oR15R16R17i563R18i557gR19jR11:13:1aoR1aoR8y5:valueR10jR11:5:2i4r11ghR24r55ghgaoR3jR4:8:2oR3jR4:2:1jR48:33:0R14oR15R16R17i572R18i564gR19jR11:13:1aoR1aoR8y1:_R10jR11:10:0goR8y2:uvR10jR11:5:2i2r11ghR24jR11:5:2i4r11ghgaoR3jR4:1:1oR6r44R8y8:depthMapR10r195R13i-203gR14oR15R16R17i572R18i564gR19r195goR3jR4:1:1r110R14oR15R16R17i580R18i577gR19r111ghR14oR15R16R17i581R18i564gR19r198ghR14oR15R16R17i582R18i557gR19r55goR3jR4:0:1jR49:3:1i1R14oR15R16R17i590R18i589gR19r55ghR14oR15R16R17i596R18i530gR19r162gR14oR15R16R17i597R18i520gR19r25goR3jR4:7:2oR6r10R8y4:wposR10r198R13i-213goR3jR4:5:3r41oR3jR4:1:1r161R14oR15R16R17i616R18i613gR19r162goR3jR4:1:1r38R14oR15R16R17i625R18i619gR19r39gR14oR15R16R17i625R18i613gR19r198gR14oR15R16R17i626R18i602gR19r25goR3jR4:7:2oR6r10R8y4:pposR10r198R13i-214goR3jR4:5:3r41oR3jR4:1:1r161R14oR15R16R17i645R18i642gR19r162goR3jR4:1:1r43R14oR15R16R17i670R18i648gR19r39gR14oR15R16R17i670R18i642gR19r198gR14oR15R16R17i671R18i631gR19r25goR3jR4:5:3r7oR3jR4:1:1oR6r10R8y24:pixelTransformedPositionR10jR11:5:2i3r11R13i-191gR14oR15R16R17i700R18i676gR19r249goR3jR4:5:3r85oR3jR4:9:2oR3jR4:1:1r234R14oR15R16R17i707R18i703gR19r198gar93r94jR46:2:0hR14oR15R16R17i711R18i703gR19jR11:5:2i3r11goR3jR4:9:2oR3jR4:1:1r234R14oR15R16R17i718R18i714gR19r198gar102hR14oR15R16R17i720R18i714gR19r55gR14oR15R16R17i720R18i703gR19r261gR14oR15R16R17i720R18i676gR19r249goR3jR4:5:3r7oR3jR4:1:1oR6r10R8y12:calculatedUVR10jR11:5:2i2r11R13i-206gR14oR15R16R17i738R18i726gR19r276goR3jR4:5:3r113oR3jR4:5:3r41oR3jR4:1:1oR6r17R8y5:scaleR10jR11:5:2i2r11R13i-204gR14oR15R16R17i746R18i741gR19r283goR3jR4:3:1oR3jR4:5:3r85oR3jR4:9:2oR3jR4:1:1r221R14oR15R16R17i754R18i750gR19r198gar93r94hR14oR15R16R17i757R18i750gR19jR11:5:2i2r11goR3jR4:9:2oR3jR4:1:1r221R14oR15R16R17i764R18i760gR19r198gar102hR14oR15R16R17i766R18i760gR19r55gR14oR15R16R17i766R18i750gR19r295gR14oR15R16R17i767R18i749gR19r295gR14oR15R16R17i767R18i741gR19jR11:5:2i2r11goR3jR4:0:1jR49:3:1d0.5R14oR15R16R17i773R18i770gR19r55gR14oR15R16R17i773R18i741gR19r309gR14oR15R16R17i773R18i726gR19r276goR3jR4:10:3oR3jR4:5:3jR5:9:0oR3jR4:8:2oR3jR4:2:1jR48:21:0R14oR15R16R17i786R18i783gR19jR11:13:1aoR1aoR8y1:aR10r55goR8y1:bR10r55ghR24r55ghgaoR3jR4:8:2oR3jR4:2:1r323R14oR15R16R17i790R18i787gR19jR11:13:1ar327hgaoR3jR4:9:2oR3jR4:1:1r275R14oR15R16R17i803R18i791gR19r276gar93hR14oR15R16R17i805R18i791gR19r55goR3jR4:9:2oR3jR4:1:1r275R14oR15R16R17i819R18i807gR19r276gar94hR14oR15R16R17i821R18i807gR19r55ghR14oR15R16R17i822R18i787gR19r55goR3jR4:8:2oR3jR4:2:1r323R14oR15R16R17i827R18i824gR19jR11:13:1ar327hgaoR3jR4:5:3jR5:3:0oR3jR4:0:1jR49:3:1i1R14oR15R16R17i829R18i828gR19r55goR3jR4:9:2oR3jR4:1:1r275R14oR15R16R17i844R18i832gR19r276gar93hR14oR15R16R17i846R18i832gR19r55gR14oR15R16R17i846R18i828gR19r55goR3jR4:5:3r364oR3jR4:0:1jR49:3:1i1R14oR15R16R17i849R18i848gR19r55goR3jR4:9:2oR3jR4:1:1r275R14oR15R16R17i864R18i852gR19r276gar94hR14oR15R16R17i866R18i852gR19r55gR14oR15R16R17i866R18i848gR19r55ghR14oR15R16R17i867R18i824gR19r55ghR14oR15R16R17i868R18i783gR19r55goR3jR4:0:1jR49:3:1zR14oR15R16R17i872R18i871gR19r55gR14oR15R16R17i872R18i783gR19jR11:2:0goR3jR4:11:0R14oR15R16R17i882R18i875gR19r25gnR14oR15R16R17i882R18i779gR19r25ghR14oR15R16R17i888R18i323gR19r25gR6jR21:1:0R22oR6r28R8y8:fragmentR10jR11:13:1aoR1ahR24r25ghR13i-208gR24r25ghR8y22:h3d.shader.VolumeDecaly4:varsar45r65oR6jR7:1:0R8y5:inputR10jR11:12:1aoR6r418R8R31R10jR11:5:2i3r11R27r417R13i-182goR6r418R8R20R10jR11:5:2i3r11R27r417R13i-183ghR13i-181goR6r10R8y6:outputR10jR11:12:1aoR6r10R8R31R10jR11:5:2i4r11R27r425R13i-185goR6r10R8y5:colorR10jR11:5:2i4r11R27r425R13i-186goR6r10R8y5:depthR10r55R27r425R13i-187goR6r10R8R20R10jR11:5:2i3r11R27r425R13i-188ghR13i-184goR6r10R8y16:relativePositionR10jR11:5:2i3r11R13i-189goR6r10R8y19:transformedPositionR10jR11:5:2i3r11R13i-190gr248r9r88oR6r10R8y10:pixelColorR10jR11:5:2i4r11R13i-194goR6r10R8R68R10r55R13i-195goR6r10R8y8:screenUVR10jR11:5:2i2r11R13i-196goR6r10R8y9:specPowerR10r55R13i-197goR6r10R8y9:specColorR10jR11:5:2i3r11R13i-198gr202r282r16r275r27r411hg";
 haxe_EntryPoint.pending = [];
 haxe_EntryPoint.threadCount = 0;
+haxe_Serializer.USE_CACHE = false;
+haxe_Serializer.USE_ENUM_INDEX = false;
+haxe_Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
 haxe_Unserializer.DEFAULT_RESOLVER = new haxe__$Unserializer_DefaultResolver();
 haxe_Unserializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
-haxe_crypto_Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-haxe_crypto_Base64.BYTES = haxe_io_Bytes.ofString(haxe_crypto_Base64.CHARS);
 haxe_ds_ObjectMap.count = 0;
 haxe_io_FPHelper.i64tmp = (function($this) {
 	var $r;
@@ -59317,6 +60896,20 @@ haxe_zip_InflateImpl.DIST_EXTRA_BITS_TBL = [0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,
 haxe_zip_InflateImpl.DIST_BASE_VAL_TBL = [1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577];
 haxe_zip_InflateImpl.CODE_LENGTHS_POS = [16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];
 hxbit_Macros.IN_ENUM_SER = false;
+hxbit_NetworkHost.SYNC = 1;
+hxbit_NetworkHost.REG = 2;
+hxbit_NetworkHost.UNREG = 3;
+hxbit_NetworkHost.FULLSYNC = 4;
+hxbit_NetworkHost.RPC = 5;
+hxbit_NetworkHost.RPC_WITH_RESULT = 6;
+hxbit_NetworkHost.RPC_RESULT = 7;
+hxbit_NetworkHost.MSG = 8;
+hxbit_NetworkHost.BMSG = 9;
+hxbit_NetworkHost.CUSTOM = 10;
+hxbit_NetworkHost.BCUSTOM = 11;
+hxbit_NetworkHost.CANCEL_RPC = 12;
+hxbit_NetworkHost.EOM = 255;
+hxbit_NetworkHost.CLIENT_TIMEOUT = 3600.;
 hxbit_Schema.__clid = hxbit_Serializer.registerClass(hxbit_Schema);
 hxd_Charset.JP_KANA = "　あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわゐゑをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽゃゅょアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヰヱヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポヴャぇっッュョァィゥェォ・ー「」、。『』“”！：？％＆（）－０１２３４５６７８９";
 hxd_Charset.ASCII = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
@@ -59458,10 +61051,11 @@ hxd_fmt_hmd_Material.DEFAULT_FLAGS = (function($this) {
 hxd_fmt_hmd_Data.CURRENT_VERSION = 2;
 hxd_fmt_hmd_Reader.BLEND = h2d_BlendMode.__empty_constructs__;
 hxd_fmt_hmd_Reader.CULLING = h3d_mat_Face.__empty_constructs__;
-hxd_fs_EmbedFileSystem.invalidChars = new EReg("[^A-Za-z0-9_]","g");
 hxd_impl_Memory.stack = [];
 hxd_impl_Memory.inst = new hxd_impl_MemoryReader();
 hxd_impl_Tmp.bytes = [];
+hxd_net_Socket.openedSocks = [];
+hxd_net_Socket.ALLOW_BIND = false;
 hxd_poly2tri_Point.C_ID = 0;
 hxd_res_Resource.LIVE_UPDATE = false;
 hxd_res_FontBuilder.FONTS = new haxe_ds_StringMap();
@@ -59661,7 +61255,7 @@ hxsl_RuntimeShader.UID = 0;
 js_html_compat_Float32Array.BYTES_PER_ELEMENT = 4;
 js_html_compat_Uint8Array.BYTES_PER_ELEMENT = 1;
 {
-	Text.main();
+	Network.main();
 	haxe_EntryPoint.run();
 }
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

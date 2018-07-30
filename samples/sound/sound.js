@@ -497,6 +497,9 @@ Sound.prototype = $extend(hxd_App.prototype,{
 		}
 		if(this.music != null) {
 			this.slider.set_value(this.music.position / this.music.duration);
+			if(hxd_Key.isPressed(77)) {
+				this.music.mute = !this.music.mute;
+			}
 		}
 		if(hxd_Key.isPressed(32)) {
 			var c = new NoiseChannel();

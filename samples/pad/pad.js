@@ -1457,7 +1457,7 @@ var PadUI = function(p,parent) {
 	this.pad = p;
 	this.bg = new h2d_Graphics(this);
 	this.bg.lineStyle(1,16777215,0.5);
-	this.bg.drawRect(0,0,600,160);
+	this.bg.drawRect(0,0,660,160);
 	this.bg.lineStyle(1,16777215,1);
 	this.bg.drawRect(20,20,100,100);
 	this.bg.drawRect(140,20,100,100);
@@ -1506,7 +1506,7 @@ var PadUI = function(p,parent) {
 	this.buttons = new haxe_ds_StringMap();
 	var x = 0;
 	var _g3 = 0;
-	var _g12 = ["A","B","X","Y","LB","RB","back","start","dpadUp","dpadDown","dpadLeft","dpadRight"];
+	var _g12 = ["A","B","X","Y","LB","RB","LT","RT","back","start","dpadUp","dpadDown","dpadLeft","dpadRight"];
 	while(_g3 < _g12.length) {
 		var n = _g12[_g3];
 		++_g3;
@@ -1613,6 +1613,9 @@ PadUI.prototype = $extend(h2d_Sprite.prototype,{
 			this.pad.rumble(this.pad.values[conf.LT],this.pad.values[conf.RT] * 0.5);
 		}
 		this.wasPressed = this.pad.isDown(conf.A);
+		if(hxd_Key.isDown(27)) {
+			hxd_System.exit();
+		}
 	}
 	,__class__: PadUI
 });
