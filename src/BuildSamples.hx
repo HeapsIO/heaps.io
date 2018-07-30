@@ -30,9 +30,11 @@ class BuildSamples
 		Sys.setCwd("../../");
 		trace(sampleBuildDir, "assets/includes/samples/");
 		copyDirectory(sampleBuildDir, "assets/includes/samples/", true, function(srcPath, dstPath) {
+		File.copy(srcPath, dstPath);
+			
 			if (dstPath.indexOf(".js") != -1) {
 				trace("Minify " + dstPath);
-				File.copy(srcPath, dstPath);
+				
 				UglifyJS.compileFile(dstPath, dstPath);
 			}
 		});
