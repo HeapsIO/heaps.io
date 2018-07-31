@@ -14,7 +14,7 @@ matrix:
 install:
     # at some point all npm needs to be in package.json
   - npm install
-  - npm install -g uglifyjs
+  - npm install -g uglify-js
   - npm install -g less@2.7
   - npm install -g less-plugin-clean-css@1.5
   - haxelib install all --always
