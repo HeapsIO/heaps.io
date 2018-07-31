@@ -9,7 +9,7 @@ import sys.io.Process;
  */
 class BuildSamples
 {
-	static var GIT_TAG = "1.2.0"; // tag name
+	static var GIT_TAG = "1.3.0"; // tag name
 	static var GIT_REPO = "https://github.com/HeapsIO/heaps.git";
 	static var TEMPFILE = ".install-heaps.tmp";
 	static var FOLDER = ".temp/";
