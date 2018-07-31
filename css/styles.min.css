@@ -213,9 +213,8 @@ section.targets .logos {
 section.targets .logos img {
   max-height: 50px;
   margin-bottom: 20px;
-}
-section.targets .logos a + a img {
-  margin-left: 40px;
+  width: 150px;
+  padding-right: 50px;
 }
 .cmd {
   padding: 15px;
