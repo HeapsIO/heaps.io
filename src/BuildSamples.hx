@@ -3,7 +3,7 @@ package;
 import sys.FileSystem;
 import sys.io.File;
 import sys.io.Process;
-
+using StringTools;
 /**
  * @author Mark Knol
  */
@@ -30,11 +30,9 @@ class BuildSamples
 		Sys.setCwd("../../");
 		trace(sampleBuildDir, "assets/includes/samples/");
 		copyDirectory(sampleBuildDir, "assets/includes/samples/", true, function(srcPath, dstPath) {
-		File.copy(srcPath, dstPath);
-			
-			if (dstPath.indexOf(".js") != -1) {
+			File.copy(srcPath, dstPath);
+			if (dstPath.endsWith(".js")) {
 				trace("Minify " + dstPath);
-				
 				UglifyJS.compileFile(dstPath, dstPath);
 			}
 		});
