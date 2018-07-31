@@ -1,8 +1,9 @@
 -lib heaps
--cp ../..
 -swf network.swf
 -swf-header 1280:800:60:FFFFFF
 -swf-version 15.0
 -main Network
+-cp ../..
+-cp .
 -lib hxbit
 -lib hxbit

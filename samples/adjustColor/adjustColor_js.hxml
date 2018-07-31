@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js adjustColor.js
 -main AdjustColor
+-cp ../..
+-cp .
+-debug
 -lib hxbit

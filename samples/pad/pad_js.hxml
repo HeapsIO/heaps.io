@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js pad.js
 -main Pad
+-cp ../..
+-cp .
+-debug
 -lib hxbit

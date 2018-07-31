@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js bounds.js
 -main Bounds
+-cp ../..
+-cp .
+-debug
 -lib hxbit

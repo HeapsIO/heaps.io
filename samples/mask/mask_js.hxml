@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js mask.js
 -main Mask
+-cp ../..
+-cp .
+-debug
 -lib hxbit

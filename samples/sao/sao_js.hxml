@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js sao.js
 -main Sao
+-cp ../..
+-cp .
+-debug
 -lib hxbit

@@ -1,6 +1,8 @@
 -lib heaps
--cp ../..
 -js interactive.js
 -main Interactive
+-cp ../..
+-cp .
+-debug
 -lib hxbit
 -D resourcesPath=../../skin_res

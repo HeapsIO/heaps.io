@@ -1,6 +1,8 @@
 -lib heaps
--cp ../..
 -js pbr.js
 -main Pbr
+-cp ../..
+-cp .
+-debug
 -D resourcesPath=../../pbr_res
 -lib hxbit

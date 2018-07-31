@@ -1,7 +1,8 @@
 -lib heaps
--cp ../..
 -swf quaternion.swf
 -swf-header 1280:800:60:FFFFFF
 -swf-version 15.0
 -main Quaternion
+-cp ../..
+-cp .
 -lib hxbit

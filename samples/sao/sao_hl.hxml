@@ -1,6 +1,8 @@
 -lib heaps
--cp ../..
+-lib hlsdl
 -hl sao.hl
 -main Sao
 -D windowSize=1024x768
+-cp ../..
+-cp .
 -lib hxbit

@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js input.js
 -main Input
+-cp ../..
+-cp .
+-debug
 -lib hxbit

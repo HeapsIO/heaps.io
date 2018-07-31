@@ -1,7 +1,9 @@
 -lib heaps
--cp ../..
+-lib hlsdl
 -hl pbr.hl
 -main Pbr
 -D windowSize=1024x768
+-cp ../..
+-cp .
 -D resourcesPath=../../pbr_res
 -lib hxbit

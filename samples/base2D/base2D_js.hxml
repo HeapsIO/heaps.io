@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js base2D.js
 -main Base2D
+-cp ../..
+-cp .
+-debug
 -lib hxbit

@@ -1,7 +1,8 @@
 -lib heaps
--cp ../..
 -swf gpuParticles.swf
 -swf-header 1280:800:60:FFFFFF
 -swf-version 15.0
 -main GpuParticles
+-cp ../..
+-cp .
 -lib hxbit

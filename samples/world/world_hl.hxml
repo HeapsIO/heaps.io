@@ -1,7 +1,9 @@
 -lib heaps
--cp ../..
+-lib hlsdl
 -hl world.hl
 -main World
 -D windowSize=1024x768
+-cp ../..
+-cp .
 -D resourcesPath=../../world_res
 -lib hxbit

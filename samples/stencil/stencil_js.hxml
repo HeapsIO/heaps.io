@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js stencil.js
 -main Stencil
+-cp ../..
+-cp .
+-debug
 -lib hxbit

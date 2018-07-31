@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js cubeTexture.js
 -main CubeTexture
+-cp ../..
+-cp .
+-debug
 -lib hxbit

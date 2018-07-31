@@ -1,6 +1,8 @@
 -lib heaps
--cp ../..
+-lib hlsdl
 -hl cursor.hl
 -main Cursor
 -D windowSize=1024x768
+-cp ../..
+-cp .
 -lib hxbit

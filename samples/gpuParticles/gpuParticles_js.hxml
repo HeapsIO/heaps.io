@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js gpuParticles.js
 -main GpuParticles
+-cp ../..
+-cp .
+-debug
 -lib hxbit

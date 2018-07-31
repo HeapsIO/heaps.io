@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js video.js
 -main Video
+-cp ../..
+-cp .
+-debug
 -lib hxbit

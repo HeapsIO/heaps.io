@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js shadows.js
 -main Shadows
+-cp ../..
+-cp .
+-debug
 -lib hxbit

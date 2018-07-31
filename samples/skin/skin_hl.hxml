@@ -1,7 +1,9 @@
 -lib heaps
--cp ../..
+-lib hlsdl
 -hl skin.hl
 -main Skin
 -D windowSize=1024x768
+-cp ../..
+-cp .
 -D resourcesPath=../../skin_res
 -lib hxbit

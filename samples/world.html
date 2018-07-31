@@ -8,7 +8,7 @@
 <span class="mtk5">class</span><span class="mtk1"> </span><span class="mtk9">World</span><span class="mtk1"> </span><span class="mtk5">extends</span><span class="mtk1"> hxd.</span><span class="mtk9">App</span><span class="mtk1"> {</span>
 
 <span class="mtk1">  </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">world</span><span class="mtk1"> : h3d.scene.</span><span class="mtk9">World</span><span class="mtk1">;</span>
-<span class="mtk1">  </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">shadow</span><span class="mtk1"> :h3d.pass.</span><span class="mtk9">ShadowMap</span><span class="mtk1">;</span>
+<span class="mtk1">  </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">shadow</span><span class="mtk1"> :h3d.pass.</span><span class="mtk9">DefaultShadowMap</span><span class="mtk1">;</span>
 
 <span class="mtk1">  </span><span class="mtk5">override</span><span class="mtk1"> </span><span class="mtk5">function</span><span class="mtk1"> </span><span class="mtk10">init</span><span class="mtk1">() {</span>
 
@@ -28,10 +28,10 @@
 <span class="mtk1">    </span><span class="mtk17">s3d</span><span class="mtk1">.</span><span class="mtk17">camera</span><span class="mtk1">.</span><span class="mtk17">target</span><span class="mtk1">.</span><span class="mtk10">set</span><span class="mtk1">(</span><span class="mtk8">72</span><span class="mtk1">, </span><span class="mtk8">72</span><span class="mtk1">, </span><span class="mtk8">0</span><span class="mtk1">);</span>
 <span class="mtk1">    </span><span class="mtk17">s3d</span><span class="mtk1">.</span><span class="mtk17">camera</span><span class="mtk1">.</span><span class="mtk17">pos</span><span class="mtk1">.</span><span class="mtk10">set</span><span class="mtk1">(</span><span class="mtk8">120</span><span class="mtk1">, </span><span class="mtk8">120</span><span class="mtk1">, </span><span class="mtk8">40</span><span class="mtk1">);</span>
 
-<span class="mtk1">    </span><span class="mtk17">shadow</span><span class="mtk1"> = </span><span class="mtk17">s3d</span><span class="mtk1">.</span><span class="mtk17">renderer</span><span class="mtk1">.</span><span class="mtk10">getPass</span><span class="mtk1">(h3d.pass.</span><span class="mtk9">ShadowMap</span><span class="mtk1">);</span>
+<span class="mtk1">    </span><span class="mtk17">shadow</span><span class="mtk1"> = </span><span class="mtk17">s3d</span><span class="mtk1">.</span><span class="mtk17">renderer</span><span class="mtk1">.</span><span class="mtk10">getPass</span><span class="mtk1">(h3d.pass.</span><span class="mtk9">DefaultShadowMap</span><span class="mtk1">);</span>
 <span class="mtk1">    </span><span class="mtk17">shadow</span><span class="mtk1">.</span><span class="mtk17">size</span><span class="mtk1"> = </span><span class="mtk8">2048</span><span class="mtk1">;</span>
 <span class="mtk1">    </span><span class="mtk17">shadow</span><span class="mtk1">.</span><span class="mtk17">power</span><span class="mtk1"> = </span><span class="mtk8">200</span><span class="mtk1">;</span>
-<span class="mtk1">    </span><span class="mtk17">shadow</span><span class="mtk1">.</span><span class="mtk17">blur</span><span class="mtk1">.</span><span class="mtk17">passes</span><span class="mtk1"> = </span><span class="mtk8">0</span><span class="mtk1">;</span>
+<span class="mtk1">    </span><span class="mtk17">shadow</span><span class="mtk1">.</span><span class="mtk17">blur</span><span class="mtk1">.</span><span class="mtk17">radius</span><span class="mtk1">= </span><span class="mtk8">0</span><span class="mtk1">;</span>
 <span class="mtk1">    </span><span class="mtk17">shadow</span><span class="mtk1">.</span><span class="mtk17">bias</span><span class="mtk1"> *= </span><span class="mtk8">0.1</span><span class="mtk1">;</span>
 <span class="mtk1">    </span><span class="mtk17">shadow</span><span class="mtk1">.</span><span class="mtk17">color</span><span class="mtk1">.</span><span class="mtk10">set</span><span class="mtk1">(</span><span class="mtk8">0.7</span><span class="mtk1">, </span><span class="mtk8">0.7</span><span class="mtk1">, </span><span class="mtk8">0.7</span><span class="mtk1">);</span>
 

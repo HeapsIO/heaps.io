@@ -1,0 +1,7 @@
+-lib heaps
+-js blur.js
+-main Blur
+-cp ../..
+-cp .
+-debug
+-lib hxbit

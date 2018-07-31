@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js text.js
 -main Text
+-cp ../..
+-cp .
+-debug
 -lib hxbit

@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js collideCheck.js
 -main CollideCheck
+-cp ../..
+-cp .
+-debug
 -lib hxbit

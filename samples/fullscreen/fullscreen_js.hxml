@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js fullscreen.js
 -main Fullscreen
+-cp ../..
+-cp .
+-debug
 -lib hxbit

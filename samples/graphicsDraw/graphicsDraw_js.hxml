@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js graphicsDraw.js
 -main GraphicsDraw
+-cp ../..
+-cp .
+-debug
 -lib hxbit

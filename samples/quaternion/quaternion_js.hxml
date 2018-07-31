@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js quaternion.js
 -main Quaternion
+-cp ../..
+-cp .
+-debug
 -lib hxbit

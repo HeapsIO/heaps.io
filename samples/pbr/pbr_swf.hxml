@@ -1,8 +1,9 @@
 -lib heaps
--cp ../..
 -swf pbr.swf
 -swf-header 1280:800:60:FFFFFF
 -swf-version 15.0
 -main Pbr
+-cp ../..
+-cp .
 -D resourcesPath=../../pbr_res
 -lib hxbit

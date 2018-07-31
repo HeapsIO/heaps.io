@@ -1,5 +1,7 @@
 -lib heaps
--cp ../..
 -js lights.js
 -main Lights
+-cp ../..
+-cp .
+-debug
 -lib hxbit
