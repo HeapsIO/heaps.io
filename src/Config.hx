@@ -6,4 +6,5 @@ class Config {
     static public var branch   = env("GHP_BRANCH",   "gh-pages");
     static public var username = env("GHP_USERNAME", null);
     static public var email    = env("GHP_EMAIL",    null);
+    static public var cname    = env("GHP_CNAME",    null);
 }

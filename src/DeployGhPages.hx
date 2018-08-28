@@ -34,6 +34,8 @@ class DeployGhPages {
         if (commandOutput("git", ["ls-remote", "--heads", "remote", branch]).trim() != "") {
             runCommand("git", ["reset", "--soft", 'remote/${branch}']);
         }
+        if (cname != null)
+            sys.io.File.saveContent("CNAME", cname);
         runCommand("git", ["add", "--all"]);
         runCommand("git", ["commit", "--allow-empty", "--quiet", "-m", 'deploy for ${sha}']);
         runCommand("git", ["push", "local", branch]);
