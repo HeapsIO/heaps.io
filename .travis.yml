@@ -5,11 +5,8 @@ dist: trusty
 
 haxe:
   - "3.4.4"
+  - "3.4.7"
   - development
-
-matrix:
-  allow_failures:
-    - haxe: development
 
 install:
     # at some point all npm needs to be in package.json
@@ -32,5 +29,5 @@ deploy:
   script: haxe deploy.hxml
   on:
     branch: master
-    haxe: "3.4.4"
+    haxe: "3.4.7"
   skip_cleanup: true
