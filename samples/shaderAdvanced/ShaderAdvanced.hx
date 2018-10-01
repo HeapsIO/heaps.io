@@ -31,6 +31,26 @@ class TestTextureArray extends hxsl.Shader {
 
 }
 
+class InstancedOffsetShader extends hxsl.Shader {
+
+	static var SRC = {
+
+		@:import h3d.shader.BaseMesh;
+
+		@perInstance(2) @input var offset : Vec2;
+
+		function vertex() {
+			transformedPosition.xy += offset;
+			transformedPosition.xy += float(instanceID & 1) * vec2(0.2,0.1);
+			transformedPosition.z += float(instanceID) * 0.01;
+			pixelColor.r = float(instanceID) / 16.;
+			pixelColor.g = float(vertexID) / 8.;
+		}
+
+	};
+
+}
+
 class ShaderAdvanced extends hxd.App {
 
 	var updates : Array<Float -> Void> = [];
@@ -116,6 +136,44 @@ class ShaderAdvanced extends hxd.App {
 		tarr.textures.clear(0xFF4040,1,0);
 		tarr.textures.clear(0x40FF40,1,1);
 		tarr.textures.clear(0x4040FF,1,2);
+
+		// draw instanced
+		var cube = h3d.prim.Cube.defaultUnitCube();
+
+		var prim = new h3d.prim.Instanced();
+		var bytes = new haxe.io.BytesOutput();
+		var icount = cube.triCount() * 3;
+		bytes.writeInt32(icount);
+		bytes.writeInt32(16);
+		bytes.writeInt32(0);
+		bytes.writeInt32(0);
+		bytes.writeInt32(0);
+
+		prim.setMesh(cube);
+		prim.commands = new h3d.impl.InstanceBuffer(1, bytes.getBytes());
+
+		new h3d.scene.DirLight(new h3d.Vector(-1,-2,-5),s3d);
+		new h3d.scene.CameraController(s3d).loadFromCamera();
+
+		var buf = new hxd.FloatBuffer();
+		for( i in 0...16 ) {
+			buf.push(i * 0.4);
+			buf.push(i * 0.2);
+		}
+		var instanceBuffer = h3d.Buffer.ofFloats(buf,2);
+		prim.addBuffer("offset",instanceBuffer);
+
+		var m = new h3d.scene.Mesh(prim, s3d);
+		m.material.mainPass.addShader(new InstancedOffsetShader());
+		m.material.shadows = false;
+
+		// 32 bits indices
+		var bytes = haxe.io.Bytes.alloc(icount * 4);
+		for( i in 0...icount )
+			bytes.setInt32(i<<2,i);
+		var indexes = new h3d.Indexes(icount,true);
+		indexes.uploadBytes(bytes,0,icount);
+		prim.indexes = indexes;
 	}
 
 	override function update(dt:Float) {

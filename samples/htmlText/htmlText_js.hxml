@@ -1,0 +1,7 @@
+-lib heaps
+-js htmlText.js
+-main HtmlText
+-cp ../..
+-cp .
+-debug
+-lib hxbit
