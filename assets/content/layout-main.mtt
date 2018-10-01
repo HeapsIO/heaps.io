@@ -42,7 +42,7 @@
 		<a href="samples/" class="button ::if (currentPage.category != null && currentPage.category.isCategory("samples"))::disabled::end::">Samples</a>
 		<a href="documentation/getting-started/" class="button ::if isCategory("documentation")::disabled::end::">Documentation</a>
 		<a href="api/" class="button">API</a>
-		<a href="https://gitter.im/heapsio/Lobby" class="button" target="_blank">Community</a>
+		<a href="https://community.heaps.io/" class="button" target="_blank">Community</a>
 	</nav>
 	<div class="logo"><a href="./"><img src="img/logo.svg" /></a></div>
 </header>
@@ -62,7 +62,7 @@
 			<a href="api">API</a>
 			<a href="https://github.com/HeapsIO/">Contribute</a>
 			<a href="https://community.heaps.io/">Community</a>
-			
+			<a href="https://gitter.im/heapsio/Lobby">Chat</a>
 		</div>
 		<div class="col-1">&nbsp;</div>
 		<div class="col-3 links">
