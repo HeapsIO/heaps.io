@@ -7,6 +7,6 @@
 		<a href="::api.config.rootPath::../samples/" class="button">Samples</a>
 		<a href="::api.config.rootPath::../documentation/getting-started/" class="button">Documentation</a>
 		<a href="::api.config.rootPath::" class="button disabled">API</a>
-		<a href="https://gitter.im/heapsio/Lobby" class="button" target="_blank">Community</a>
+		<a href="https://community.heaps.io/" class="button" target="_blank">Community</a>
 	</nav>
 </header>
