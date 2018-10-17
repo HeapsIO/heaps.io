@@ -5,15 +5,14 @@ package;
 class Main {
 
 	public static function main() {
-		
-      var generator = new Generator();
-      generator.titlePostFix = " - Heaps.io Game Engine";
-      generator.basePath = "https://heaps.io/";
-      generator.websiteRepositoryUrl = "https://github.com/HeapsIO/heaps.io/";
-      generator.projectRepositoryUrl = "https://github.com/HeapsIO/heaps/";
-      generator.repositoryBranch = "master";
-    
-      generator.build();
-      generator.includeDirectory("assets/includes");
+		var generator = new Generator();
+		generator.titlePostFix = " - Heaps.io Game Engine";
+		generator.basePath = "https://heaps.io/";
+		generator.websiteRepositoryUrl = "https://github.com/HeapsIO/heaps.io/";
+		generator.projectRepositoryUrl = "https://github.com/HeapsIO/heaps/";
+		generator.repositoryBranch = "master";
+
+		generator.build();
+		generator.includeDirectory("assets/includes");
 	}
 }

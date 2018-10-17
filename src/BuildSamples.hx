@@ -11,8 +11,7 @@ class BuildSamples
 {
 	static var GIT_TAG = "1.4.0"; // tag name
 	static var GIT_REPO = "https://github.com/HeapsIO/heaps.git";
-	static var TEMPFILE = ".install-heaps.tmp";
-	static var FOLDER = ".temp/";
+	static var FOLDER = ".temp";
 	
 	static function main() 
 	{
@@ -51,7 +50,6 @@ class BuildSamples
 		var p = new Process(cmd, args);
 		var out:String = p.stdout.readAll().toString();
 		p.close();
-		//File.saveContent(TEMPFILE, out);
 		return out;
 	}
 	

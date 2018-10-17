@@ -34,13 +34,13 @@
 <a href="https://github.com/HeapsIO/" class="fork-button"><img src="img/fork-on-github.png" alt="Fork Heaps on GitHub"/></a>
 
 <main>
-<header class="header-page::if isPage('index.html'):: main::end::">
+<header class="header-page::if isSection('home'):: main::end::">
 	<a class="mobileMenu" href="#"><img src="img/menu.png" alt="Menu" /> </a>
 	<nav class="top-nav">
-		<a href="index.html" class="button ::if isPage("index.html")::disabled::end::">Home</a>
-		<a href="about.html" class="button ::if isPage("about.html")::disabled::end::">About</a>
-		<a href="samples/" class="button ::if (currentPage.category != null && currentPage.category.isCategory("samples"))::disabled::end::">Samples</a>
-		<a href="documentation/getting-started/" class="button ::if isCategory("documentation")::disabled::end::">Documentation</a>
+		<a href="index.html" class="button ::if currentPage.isSection("home")::disabled::end::">Home</a>
+		<a href="about.html" class="button ::if currentPage.isSection("about")::disabled::end::">About</a>
+		<a href="samples/" class="button ::if currentPage.isSection("samples")::disabled::end::">Samples</a>
+		<a href="documentation/" class="button ::if currentPage.isSection("documentation")::disabled::end::">Documentation</a>
 		<a href="api/" class="button">API</a>
 		<a href="https://community.heaps.io/" class="button" target="_blank">Community</a>
 	</nav>

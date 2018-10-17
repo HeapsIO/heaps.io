@@ -1,1 +1,0 @@
-<p class="lead">Shaders will be shady.</p>
