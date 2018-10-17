@@ -309,27 +309,36 @@ a.mobileMenu {
 
 .sidebar {
 	ul {
+		a {
+			text-decoration:none;
+			&:hover {
+				text-decoration:underline;
+			}
+		}
 		margin-bottom:4em;
-		margin-top: 2.5em;
+		margin-top: 2.5em; 
 
 		ul {
-			margin-top: 0.5em;
-			margin-bottom: 0.5em;
-			padding-left: 0.5em;
+			margin-top: 0.25em;
+			margin-bottom: 0.25em;
+			padding-left: 0.25em;
 		}
 
 		li {
 			padding-left:10px;
 			border-left:2px solid #eee;
-			padding-bottom: 5px;
+			padding-bottom: 1px;
 
 			&.active {
 				padding-left:10px;
 				border-color:#265669;
-				padding-bottom: 5px;
 			}
 			.current {
 				font-weight:bold;
+			}
+			
+			li {
+				font-size: 16px;
 			}
 		}
 	}
