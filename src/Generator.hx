@@ -146,7 +146,7 @@ class Generator {
 				var pageOutputPath = documentationPath.replace(documentationFolder, outputPathReplace);
 				
 				pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
-				if (file == "home.md") {
+				if (file.toLowerCase() == "home.md") {
 					pageOutputPath.replace("home.html", "index.html");
 				}
 				
