@@ -2,5 +2,5 @@
 
 # <http://heaps.io> website sources
 
-> Contribute to content here: [assets/content/documentation/](assets/content/documentation/)
+> Contribute to documentation here: <https://github.com/HeapsIO/heaps-doc>
 
