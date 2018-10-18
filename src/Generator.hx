@@ -177,6 +177,20 @@ class Generator {
 		
 		var sidebar = MarkdownListParser.parse(File.getContent(documentationPath + "_Sidebar.md"),  "documentation/");
 		
+		function findPageFromSidebar(sidebarItem:MDType):Page {
+			switch (sidebarItem) {
+				case MDCategory(name, path, _, _) | MDLink(name, path):
+					var path = MarkdownListParser.parsePath(path);
+					for (p in pages) {
+						if (path == p.outputPath.toString()) {
+							return p;
+						} 
+					}
+				case MDPlain(_):
+			}
+			return null;
+		}
+		
 		// render the markdown of the pages
 		for (page in pages) {
 			page.pageContent = parseMarkdownContent(page, page.contentPath.toString());
@@ -191,6 +205,36 @@ class Generator {
 			if (page.title == null) {
 				page.title = page.contentPath.file.replace("-", " ");
 			}
+		}
+		
+		// for toplevel categories, prepend listing of its subpages
+		switch (sidebar) {
+			case MDCategory(name, path, categories, _):
+				for (category in categories) {
+					switch (category) {
+						case MDCategory(name, path, subs, _):
+							var html = new StringBuf();
+							html.add('<ul class="page-list unstyled">');
+							for (sub in subs) {
+								var page = findPageFromSidebar(sub);
+								if (page != null && page.visible) {
+									html.add('<li class="page-list-item">');
+									html.add('	<h3><a href="${page.outputPath}" class="list-group-item"><span>${page.title}</span></a></h3>');
+									if (page.description != null) html.add('	<p><em>${page.description}</em>..</p>');
+									html.add('	<a href="${page.outputPath}" class="button small-button"title="${page.title}">Read more</a>');
+									html.add('</li>');
+								}
+							}
+							html.add('</ul>');
+							var categoryPage:Page = findPageFromSidebar(category);
+							if (categoryPage != null) categoryPage.pageContent += html.toString();
+						
+						case _:
+							// skip non categories
+					}
+				}
+				
+			case _:
 		}
 	}
 

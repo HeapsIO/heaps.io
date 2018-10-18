@@ -126,7 +126,7 @@ class MarkdownListParser {
 		return html;
 	}
 
-	static function parsePath(path:String) {
+	public static function parsePath(path:String) {
 		return path.toLowerCase().replace(' ', '-') + '.html';
 	}
 }
