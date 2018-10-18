@@ -117,7 +117,7 @@ class Generator {
 			Sys.println('Redirect: "$from" to "$to"');
 			var to = getBaseHref(new Path(to)) + "/" + to;
 			FileSystem.createDirectory(Path.directory(outputPath + from));
-			File.saveContent(outputPath + from, '<script>window.location.href="$to";</script><noscript><meta http-equiv="refresh" content="0; url=$to"></noscript>');
+			File.saveContent(outputPath + from, '<script>window.location.href="$to";</script><noscript><meta http-equiv="refresh" content="0; url=$to"/></noscript>');
 		}
 	}
 
@@ -394,8 +394,6 @@ class Generator {
 	}
 
 	public function includeDirectory(dir:String, ?path:String) {
-		if (dir.indexOf(".vscode") != -1) return;
-			
 		if (path == null) path = outputPath;
 		else FileSystem.createDirectory(path);
 		Sys.println("include directory: " + path);
