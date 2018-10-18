@@ -113,6 +113,7 @@ pre{padding:30px;background:#f9f9f9;border:1px solid #ddd;color:#222;overflow:au
 .sample select{width:100%;padding:16px;margin-left:5px;margin-right:5px;}
 iframe{width:100%;}
 iframe.sample-frame{height:700px;}
+canvas.sample-canvas{width:100%;height:700px;}
 .align-left{text-align:left;}
 .align-center{text-align:center;}
 .align-right{text-align:right;}
