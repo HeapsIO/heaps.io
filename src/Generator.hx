@@ -5,6 +5,7 @@ import data.Page;
 import haxe.EnumTools;
 import haxe.Http;
 import haxe.Json;
+import haxe.Timer;
 import haxe.ds.StringMap;
 import haxe.io.Path;
 import markdown.AST.ElementNode;
@@ -12,6 +13,7 @@ import sys.FileSystem;
 import sys.io.File;
 import templo.Template;
 import util.MarkdownListParser;
+import Utils.measure;
 
 using StringTools;
 
@@ -44,59 +46,78 @@ class Generator {
 		initTemplate();
 
 		// add pages
-		addDocumentationPages(documentationFolder);
-		addGeneralPages();
-		addSamplesPages(samplesFolder);
+		measure("Documentation pages", function() { 
+			addDocumentationPages(documentationFolder);
+		});
+		
+		measure("General pages", function() { 
+			addGeneralPages();
+		});
+		
+		measure("Documentation pages", function() { 
+			addSamplesPages(samplesFolder);
+		});
 
-		// generated pages
-		for (page in _pages) {
-			// set the data for the page
-			var data = {
-				title: '${page.title} $titlePostFix',
-				now: Date.now(),
-				pages: _pages,
-				currentPage: page,
-				basePath: basePath,
-				pageContent: null,
-				DateTools: DateTools,
-				websiteRepositoryUrl:websiteRepositoryUrl,
-				projectRepositoryUrl:projectRepositoryUrl,
-				isSection: page.isSection,
+		measure("Generating pages", function() {
+			// generated pages
+			for (page in _pages) {
+				// set the data for the page
+				var data = {
+					title: '${page.title} $titlePostFix',
+					now: Date.now(),
+					pages: _pages,
+					currentPage: page,
+					basePath: basePath,
+					pageContent: null,
+					DateTools: DateTools,
+					websiteRepositoryUrl:websiteRepositoryUrl,
+					projectRepositoryUrl:projectRepositoryUrl,
+					isSection: page.isSection,
+				}
+				if (page.contentPath != null) {
+					page.addLinkUrl = getAddLinkUrl(page);
+					data.pageContent = page.pageContent != null ? page.pageContent : getContent(contentPath + page.contentPath, data);
+				}
+
+				// execute the template
+				var templatePath = contentPath + page.templatePath;
+				if (!_templates.exists(templatePath)) {
+					_templates.set(templatePath, Template.fromFile(templatePath));
+				}
+				var template = _templates.get(templatePath);
+
+				var html = util.Minifier.removeComments(template.execute(data));
+
+				if (doMinify) {
+					// strip crap
+					var length = html.length;
+					html = util.Minifier.minify(html);
+					var newLength = html.length;
+					//trace("optimized " + (Std.int(100 / length * (length - newLength) * 100) / 100) + "%");
+				}
+
+				// make output directory if needed
+				var targetDirectory = Path.directory(outputPath + page.outputPath);
+				if (!FileSystem.exists(targetDirectory)) {
+					FileSystem.createDirectory(targetDirectory);
+				}
+
+				// write output to file
+				Sys.println("Created: " + outputPath + page.outputPath);
+				File.saveContent(outputPath + page.outputPath, html);
 			}
-			if (page.contentPath != null) {
-				page.addLinkUrl = getAddLinkUrl(page);
-				data.pageContent = page.pageContent != null ? page.pageContent : getContent(contentPath + page.contentPath, data);
-			}
-
-			// execute the template
-			var templatePath = contentPath + page.templatePath;
-			if (!_templates.exists(templatePath)) {
-				_templates.set(templatePath, Template.fromFile(templatePath));
-			}
-			var template = _templates.get(templatePath);
-
-			var html = util.Minifier.removeComments(template.execute(data));
-
-			if (doMinify) {
-				// strip crap
-				var length = html.length;
-				html = util.Minifier.minify(html);
-				var newLength = html.length;
-				//trace("optimized " + (Std.int(100 / length * (length - newLength) * 100) / 100) + "%");
-			}
-
-			// make output directory if needed
-			var targetDirectory = Path.directory(outputPath + page.outputPath);
-			if (!FileSystem.exists(targetDirectory)) {
-				FileSystem.createDirectory(targetDirectory);
-			}
-
-			// write output to file
-			trace("Created: " + outputPath + page.outputPath);
-			File.saveContent(outputPath + page.outputPath, html);
+		});
+		Sys.println(_pages.length + " pages done!");
+	}
+	
+	public function createRedirects(redirects:Map<String, String>) {
+		for(key in redirects.keys()) {
+			var from = key;
+			var to = redirects[key];
+			Sys.println('Redirect: "$from" to "$to"');
+			FileSystem.createDirectory(Path.directory(outputPath + from));
+			File.saveContent(outputPath + from, '<script>window.location.href="$to";</script><noscript><meta http-equiv="refresh" content="0; url=$to"></noscript>');
 		}
-
-		trace(_pages.length + " pages done!");
 	}
 
 	private function addPage(page:Page) {
@@ -146,17 +167,13 @@ class Generator {
 				var pageOutputPath = documentationPath.replace(documentationFolder, outputPathReplace);
 				
 				pageOutputPath = pageOutputPath.toLowerCase().replace(" ", "-") + getWithoutExtension(file).toLowerCase() + ".html";
-				if (file.toLowerCase() == "home.md") {
-					pageOutputPath.replace("home.html", "index.html");
-				}
-				
 				pages.push(new Page("documentation", "layout-page-documentation.mtt", documentationPath + file, pageOutputPath)
 					.setCustomData({
 						markdownPath: file,
 					}));
 			}
 		}
-
+		
 		var sidebar = MarkdownListParser.parse(File.getContent(documentationPath + "_Sidebar.md"),  "documentation/");
 		
 		// render the markdown of the pages
@@ -192,7 +209,8 @@ class Generator {
 				.setDescription('Heaps $sampleName example with source and live demo')
 				.setCustomData({
 					source: getContent(samplesPath + sampleName + ".hx", null).replace("\t", "  ").replace("<", "&lt;").replace(">","&gt;"),
-					file: '$outFolder' + sampleFolderName + "/",
+					samplePath: '$outFolder' + sampleFolderName + "/",
+					sampleName: sampleFolderName,
 					prev: prev,
 					samples: samples,
 				});
@@ -331,13 +349,16 @@ class Generator {
 	}
 
 	public function includeDirectory(dir:String, ?path:String) {
+		if (dir.indexOf(".vscode") != -1) return;
+			
 		if (path == null) path = outputPath;
 		else FileSystem.createDirectory(path);
-		trace("include directory: " + path);
+		Sys.println("include directory: " + path);
 
 		for (file in FileSystem.readDirectory(dir)) {
-			var srcPath = '$dir/$file';
-			var dstPath = '$path/$file';
+			var srcPath = Path.normalize('$dir/$file');
+			var dstPath = Path.normalize('$path/$file');
+			
 			if (FileSystem.isDirectory(srcPath)) {
 				FileSystem.createDirectory(dstPath);
 				includeDirectory(srcPath, dstPath);

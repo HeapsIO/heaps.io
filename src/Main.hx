@@ -1,4 +1,7 @@
 package;
+
+import Utils.measure;
+
 /**
  * @author Mark Knol
  */
@@ -13,6 +16,17 @@ class Main {
 		generator.repositoryBranch = "master";
 
 		generator.build();
-		generator.includeDirectory("assets/includes");
+		
+		
+		generator.createRedirects([
+			// add documentation landing redirect
+			"documentation/index.html" => "/documentation/home.html",
+			// overwrite readme to point to landing
+			"documentation/readme.html" => "/documentation/home.html",
+		]);
+		
+		measure("include assets", function() { 
+			generator.includeDirectory("assets/includes");
+		});
 	}
 }
