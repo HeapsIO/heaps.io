@@ -537,6 +537,10 @@ iframe {
 iframe.sample-frame {
   height: 700px;
 }
+canvas.sample-canvas {
+  width: 100%;
+  height: 700px;
+}
 .align-left {
   text-align: left;
 }
