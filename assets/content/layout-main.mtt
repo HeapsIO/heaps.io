@@ -40,7 +40,7 @@
 		<a href="index.html" class="button ::if currentPage.isSection("home")::disabled::end::">Home</a>
 		<a href="about.html" class="button ::if currentPage.isSection("about")::disabled::end::">About</a>
 		<a href="samples/" class="button ::if currentPage.isSection("samples")::disabled::end::">Samples</a>
-		<a href="documentation/" class="button ::if currentPage.isSection("documentation")::disabled::end::">Documentation</a>
+		<a href="documentation/home.html" class="button ::if currentPage.isSection("documentation")::disabled::end::">Documentation</a>
 		<a href="api/" class="button">API</a>
 		<a href="https://community.heaps.io/" class="button" target="_blank">Community</a>
 	</nav>
