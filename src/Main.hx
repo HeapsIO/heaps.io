@@ -20,9 +20,9 @@ class Main {
 		
 		generator.createRedirects([
 			// add documentation landing redirect
-			"documentation/index.html" => "/documentation/home.html",
+			"documentation/index.html" => "documentation/home.html",
 			// overwrite readme to point to landing
-			"documentation/readme.html" => "/documentation/home.html",
+			"documentation/readme.html" => "documentation/home.html",
 		]);
 		
 		measure("include assets", function() { 

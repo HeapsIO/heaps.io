@@ -115,6 +115,7 @@ class Generator {
 			var from = key;
 			var to = redirects[key];
 			Sys.println('Redirect: "$from" to "$to"');
+			var to = getBaseHref(new Path(to)) + "/" + to;
 			FileSystem.createDirectory(Path.directory(outputPath + from));
 			File.saveContent(outputPath + from, '<script>window.location.href="$to";</script><noscript><meta http-equiv="refresh" content="0; url=$to"></noscript>');
 		}
@@ -124,7 +125,7 @@ class Generator {
 		_pages.push(page);
 
 		page.absoluteUrl = getAbsoluteUrl(page);
-		page.baseHref = getBaseHref(page);
+		page.baseHref = getBaseHref(page.outputPath);
 
 		if (page.contentPath != null) {
 			page.contributionUrl = getContributionUrl(page);
@@ -256,12 +257,12 @@ class Generator {
 		//[youtube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 		return	~/(\[youtube\])(\()(.+?)(\))/g.replace(content, '<div class="flex-video widescreen"><iframe src="$3" frameborder="0" allowfullscreen=""></iframe></div>');
 	}
-
-	private function getBaseHref(page:Page) {
-		if (page.outputPath.file == "404.html") {
+	
+	private function getBaseHref(outputPath:Path) {
+		if (outputPath.file == "404.html") {
 			return basePath;
 		}
-		var href = [for (s in page.outputPath.toString().split("/")) ".."];
+		var href = [for (s in outputPath.toString().split("/")) ".."];
 		href[0] = ".";
 		return href.join("/");
 	}
