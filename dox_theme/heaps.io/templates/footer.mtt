@@ -7,7 +7,7 @@
 		<div class="col-3 links">
 			<h3>Heaps.io</h3>
 			<p>Heaps is an open source and multi-platform toolkit to create 2D and 3D games.</p>
-			<a href="https://github.com/HeapsIO/heaps/releases">Download</a>
+			<a href="https://lib.haxe.org/p/heaps">Download</a>
 			<a href="::api.config.rootPath::../about.html">About</a>
 			<a href="::api.config.rootPath::../api">API</a>
 			<a href="https://github.com/HeapsIO/">Contribute</a>
