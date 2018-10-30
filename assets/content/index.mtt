@@ -115,65 +115,6 @@
 
 		</div>
 	</div>
-
-	<div class="container row boxes" ::cond false::>
-		<div class="col-4">
-			<div class="box box-raised">
-				<h3>Why use Heaps?</h3>
-				<ul>
-					<li>2D and 3D game engine</li>
-					<li>Cross platform compilation using Haxe technology</li>
-					<li>Easy to get started, still entirely customizable for high end graphics</li>
-					<li>Fast compile-and-run cycle</li>
-					<li>GPU accelerated (both 2D and 3D)</li>
-					<li>Cross platform GPU Shader system</li>
-					<li>Mouse / Keyboard / GamePad support</li>
-					<li>Supports many file formats: PNG,JPG,FBX,OGG,etc.</li>
-				</ul>
-			</div>
-		</div>
-		<div class="col-4">
-			<div class="box box-raised">
-				<h3>Publish anywhere</h3>
-				<p><em>With Haxe, you can easily build cross-platform tools targeting all the mainstream platforms natively.</em></p>
-
-				<h5>Desktop</h5>
-				<p>Real native builds; Windows, OSX, Linux.</p>
-
-				<h5>Consoles</h5>
-				<p>Playstation 4, Nintendo Switch, XBox.</p>
-
-				<h5>Mobile</h5>
-				<p>iOS, Android.<br/>Using fast natively compiled code.</p>
-
-				<h5>Web</h5>
-				<p>The excellent JavaScript target is used to get the most out of HTML5/WebGL.</p>
-			</div>
-		</div>
-		<div class="col-4">
-			<div class="box box-raised">
-				<h3>Proven technology</h3>
-				<p>Heaps is used by several (indie) game studios with successful game titles. Unbeatable performance, intuitive API, globally used and battle tested. </p>
-				<p><a href="about.html" class="button">Learn more</a></p>
-			</div>
-		</div>
-		<script>::raw '
-		window.onresize = window.onload = function() {
-			if (!window.matchMedia || window.matchMedia("(min-width: 640px)").matches) {
-				 var boxes = document.querySelectorAll(".box-raised");
-				 for(var i=0;i<boxes.length;i++) {
-					boxes[i].style.height = null;
-				 }
-				 var maxHeight = 0;
-				 for(var i=0;i<boxes.length;i++) {
-					maxHeight = Math.max(maxHeight, boxes[i].offsetHeight);
-				 }
-				 for(var i=0;i<boxes.length;i++) {
-					boxes[i].style.height = maxHeight + "px";
-				 }
-			}
-		}'::</script>
-	</div>
 </section>
 
 <section class="light">
@@ -183,7 +124,7 @@
 				<h3>Getting started</h3>
 				<p>To use Heaps.io, you need to install <a href="https://haxe.org">Haxe</a> 3.4+</p>
 				<div class="cmd"><code>haxelib install heaps</code></div>
-				<br/><a href="documentation/getting-started/" class="button small-button">Learn more</a>
+				<br/><a href="documentation/" class="button small-button">Learn more</a>
 
 			</div>
 			<div class="col-2">&nbsp;</div>
