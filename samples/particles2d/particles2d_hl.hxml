@@ -1,0 +1,9 @@
+-lib heaps
+-lib hlsdl
+-hl particles2d.hl
+-main Particles2d
+-D windowSize=1024x768
+-cp ../..
+-cp .
+-D resourcesPath=../../particles2d_res
+-lib hxbit

@@ -1,0 +1,8 @@
+-lib heaps
+-js particles2d.js
+-main Particles2d
+-cp ../..
+-cp .
+-debug
+-D resourcesPath=../../particles2d_res
+-lib hxbit
