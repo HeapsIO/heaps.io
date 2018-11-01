@@ -36,10 +36,18 @@
 <p>In order to run our example, we need to embed it into a web page.
 Create a file named <code>index.html</code> with the following content:</p>
 <pre class="highlighted">
+<span class="mtk13">&lt;</span><span class="mtk1">!DOCTYPE&gt;</span>
 <span class="mtk11">&lt;html&gt;</span>
-<span class="mtk11">&lt;head&gt;&lt;meta</span><span class="mtk1"> </span><span class="mtk12">charset</span><span class="mtk1">=</span><span class="mtk5">"utf-8"</span><span class="mtk11">/&gt;&lt;title&gt;</span><span class="mtk1">Hello Heaps</span><span class="mtk11">&lt;/title&gt;&lt;/head&gt;</span>
-<span class="mtk11">&lt;body</span><span class="mtk1"> </span><span class="mtk12">style</span><span class="mtk1">=</span><span class="mtk5">"margin:0;padding:0;background-color:black"</span><span class="mtk11">&gt;</span>
-<span class="mtk1">    </span><span class="mtk11">&lt;canvas</span><span class="mtk1"> </span><span class="mtk12">id</span><span class="mtk1">=</span><span class="mtk5">"webgl"</span><span class="mtk1"> </span><span class="mtk12">style</span><span class="mtk1">=</span><span class="mtk5">"width:100%;height:100%"</span><span class="mtk11">&gt;&lt;/canvas&gt;</span>
+<span class="mtk11">&lt;head&gt;</span>
+<span class="mtk1">    </span><span class="mtk11">&lt;meta</span><span class="mtk1"> </span><span class="mtk12">charset</span><span class="mtk1">=</span><span class="mtk5">"utf-8"</span><span class="mtk11">/&gt;</span>
+<span class="mtk1">    </span><span class="mtk11">&lt;title&gt;</span><span class="mtk1">Hello Heaps</span><span class="mtk11">&lt;/title&gt;</span>
+<span class="mtk1">    </span><span class="mtk11">&lt;style&gt;</span>
+<span class="mtk18">        body { margin:0;padding:0;background-color:black; }</span>
+<span class="mtk18">        canvas#webgl { width:100%;height:100%; } </span>
+<span class="mtk18">    </span><span class="mtk11">&lt;/style&gt;</span>
+<span class="mtk11">&lt;/head&gt;</span>
+<span class="mtk11">&lt;body&gt;</span>
+<span class="mtk1">    </span><span class="mtk11">&lt;canvas</span><span class="mtk1"> </span><span class="mtk12">id</span><span class="mtk1">=</span><span class="mtk5">"webgl"</span><span class="mtk11">&gt;&lt;/canvas&gt;</span>
 <span class="mtk1">    </span><span class="mtk11">&lt;script</span><span class="mtk18"> </span><span class="mtk12">type</span><span class="mtk18">=</span><span class="mtk5">"text/javascript"</span><span class="mtk18"> </span><span class="mtk12">src</span><span class="mtk18">=</span><span class="mtk5">"hello.js"</span><span class="mtk11">&gt;&lt;/script&gt;</span>
 <span class="mtk11">&lt;/body&gt;</span>
 <span class="mtk11">&lt;/html&gt;</span>
