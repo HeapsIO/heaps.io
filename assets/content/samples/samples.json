@@ -11,7 +11,7 @@
 		{ "name":"GpuParticles", "description": "Example of 3d Particles" },
 		{ "name":"GraphicsDraw", "description": "The Graphics class contains methods used to draw primitive shapes such as lines, circles and rectangles" },
 		{ "name":"Blur", "description": "Demonstration of [`2d.filter.Blur`](/api/h2d/filter/Blur.html)" },
-		{ "name":"Helpers": "description": "Axes, Grid, Pointlight helpers" },
+		{ "name":"Helpers", "description": "Axes, Grid, Pointlight helpers" },
 		{ "name":"Input", "description": "Heaps includes a custom inputfield" },
 		{ "name":"Interactive", "description": "Heaps has support for [2d interaction events](/documentation/h2d/events-and-interactivity.html) and [3d interaction events](/documentation/h3d/events-and-interactivity.html)." },
 		{ "name":"Lights", "description": "3d Lights" },
