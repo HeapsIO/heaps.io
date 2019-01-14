@@ -145,7 +145,7 @@ class Generator {
 			.setCustomData({
 				games: json
 			})
-			.setTitle("About - Haxe game enine")
+			.setTitle("About - Haxe Game Engine")
 			.setDescription('Heaps.io delivers fast iterations, real development power and multi-platform compilation with native access and minimal overhead. The toolkit is versatile, open-source and completely free.');
 
 		var errorPage = new Page("error", "layout-page-main.mtt", "404.mtt", "404.html")
