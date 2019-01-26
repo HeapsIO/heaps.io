@@ -19,7 +19,7 @@
 If everything works fine you should get a <code>hello.hl</code> file compiled and ready to run.</p>
 <p><img src="https://user-images.githubusercontent.com/1022912/45916898-81037400-be6d-11e8-8d57-0e13778c4064.png" alt="image"/></p>
 <h2>Run and Debug</h2>
-<p>Press F5 or do <code>Debug &gt; Start Debugging</code>. This should give you the choice to Debug with <code>HashLink</code>. If not, make sure to install <code>HashLink Debugger</code> extension.</p>
+<p>Select in menu <code>Debug &gt; Add Configuration</code>. This should give you the choice to Debug with <code>HashLink</code>. If not, make sure to install <code>HashLink Debugger</code> extension.</p>
 <p>If you click on <code>HashLink</code> label, it will open you a <code>.vscode/launch.json</code>. Change its content to the following:</p>
 <pre><code class="prettyprint json">{
 	"version": "0.2.0",
@@ -37,7 +37,8 @@ If everything works fine you should get a <code>hello.hl</code> file compiled an
 		}
 	]
 }</code></pre>
-<p>Now <code>Run</code> again using <code>F5</code> and it should open a native window showing <code>Hello World</code>:</p>
+<p>Note in particular that you need to set the correct <code>hxml</code> file that contains your compilation parameters.</p>
+<p>Now <code>Run</code> using <code>F5</code> and it should open a native window showing <code>Hello World</code>:</p>
 <p><img src="https://user-images.githubusercontent.com/1022912/45916979-06d3ef00-be6f-11e8-9d5c-bc24023a7a66.png" alt="image"/></p>
 <p>You can customize the default window size by adding the following to your <code>compile.hxml</code>:</p>
 <pre><code>-D windowSize=1366x768</code></pre>
