@@ -23,6 +23,8 @@ class Main {
 			"documentation/index.html" => "documentation/home.html",
 			// overwrite readme to point to landing
 			"documentation/readme.html" => "documentation/home.html",
+			// overwrite old getting started page
+			"documentation/getting-started/index.html" => "documentation/getting-started.html",
 		]);
 		
 		measure("include assets", function() { 
