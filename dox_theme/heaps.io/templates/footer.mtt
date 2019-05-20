@@ -11,16 +11,16 @@
 			<a href="::api.config.rootPath::../about.html">About</a>
 			<a href="::api.config.rootPath::../api">API</a>
 			<a href="https://github.com/HeapsIO/">Contribute</a>
-			<a href="https://gitter.im/heapsio/Lobby">Community</a>
+			<a href="https://discordapp.com/channels/162395145352904705/501408700142059520">Community</a>
 		</div>
 		<div class="col-1">&nbsp;</div>
 		<div class="col-3 links">
 			<h3>Haxe</h3>
 			<p>Haxe is an open source and cross-platform language and toolkit.</p>
-			<a href="https://www.haxe.org">About</a>
-			<a href="https://www.haxe.org/use-cases">Use cases</a>
+			<a href="https://haxe.org">About</a>
+			<a href="https://haxe.org/use-cases">Use cases</a>
 			<a href="https://haxe.org/documentation/introduction/">Learn</a>
-			<a href="https://www.haxe.org/foundation">Haxe foundation</a>
+			<a href="https://haxe.org/foundation">Haxe Foundation</a>
 		</div>
 	</div>
 
