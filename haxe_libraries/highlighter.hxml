@@ -1,0 +1,5 @@
+# @install: lix --silent download "haxelib:/highlighter#0.6.1" into highlighter/0.6.1/haxelib
+-lib compiletime
+-lib hxnodejs
+-cp ${HAXE_LIBCACHE}/highlighter/0.6.1/haxelib/
+-D highlighter=0.6.1

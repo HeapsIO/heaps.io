@@ -1,0 +1,4 @@
+# @install: lix --silent download "haxelib:/hxtemplo#3.2.0" into hxtemplo/3.2.0/haxelib
+-lib hxparse
+-cp ${HAXE_LIBCACHE}/hxtemplo/3.2.0/haxelib/src
+-D hxtemplo=3.2.0

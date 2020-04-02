@@ -4,35 +4,29 @@ os: linux
 dist: trusty
 
 haxe:
-  - "3.4.4"
-  - "3.4.7"
+  - "4.0.5"
   - development
   
 matrix:	
-  allow_failures:	
+  allow_failures:
     - haxe: development
 
 install:
     # at some point all npm needs to be in package.json
   - npm install
-  - npm install -g uglify-js
-  - npm install -g less@2.7
-  - npm install -g less-plugin-clean-css@1.5
-  - haxelib install all --always
-  - haxelib list
-    # get hxnodejs from git, haxelib's is outdated
-  - haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs
 
 script:
-  - haxe build-run-dox.hxml
-  - haxe build-samples.hxml
-  - haxe get-wiki.hxml
-  - haxe heaps.io.hxml
+  - npm run css
+  - npm run dox:xml
+  - npm run dox
+  - npm run samples
+  - npm run wiki
+  - npm run build
 
 deploy:
   provider: script
-  script: haxe deploy.hxml
+  script: npm run deploy
   on:
     branch: master
-    haxe: "3.4.7"
+    haxe: "4.0.5"
   skip_cleanup: true

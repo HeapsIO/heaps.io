@@ -1,0 +1,7 @@
+# @install: lix --silent download "haxelib:/tink_template#0.4.0" into tink_template/0.4.0/haxelib
+-lib tink_syntaxhub
+-cp ${HAXE_LIBCACHE}/tink_template/0.4.0/haxelib/src
+-D tink_template=0.4.0
+--macro tink.Template.addFlavor('mtt', '::', '::', true)
+--macro tink.Template.addFlavor('tt', '(:', ':)', false)
+--macro tink.Template.use()

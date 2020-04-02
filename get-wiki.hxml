@@ -1,8 +1,3 @@
--lib hscript:2.1.1
--lib uglifyjs:0.0.8
--D uglifyjs_disabled
--lib hlsdl
--lib hlopenal
--lib hldx
 -cp src 
--x GetWiki
+-main GetWiki
+--interp

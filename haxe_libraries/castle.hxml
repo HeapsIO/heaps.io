@@ -1,0 +1,3 @@
+# @install: lix --silent download "haxelib:/castle#1.6.1" into castle/1.6.1/haxelib
+-cp ${HAXE_LIBCACHE}/castle/1.6.1/haxelib/
+-D castle=1.6.1

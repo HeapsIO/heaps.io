@@ -1,0 +1,4 @@
+# @install: lix --silent download "haxelib:/heaps#1.7.0" into heaps/1.7.0/haxelib
+-lib format
+-cp ${HAXE_LIBCACHE}/heaps/1.7.0/haxelib/
+-D heaps=1.7.0

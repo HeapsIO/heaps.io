@@ -1,1 +1,0 @@
--cmd haxelib run dox -i heaps.xml -o assets/includes/api --title "Heaps.io Game Engine" -theme dox_theme/heaps.io -D version "1.5.0" -in h2d -in h3d -in hxd -in hxs -D source-path "https://github.com/HeapsIO/heaps/blob/master/" 

@@ -1,8 +1,3 @@
-
--cmd lessc assets/includes/css/styles.less assets/includes/css/styles.min.css
-
---next
-
 -cp src
 -main JsTools
 -dce full
@@ -10,8 +5,8 @@
 
 --next
 
--lib markdown:1.0.0
--lib hxtemplo:3.2.0
+-lib markdown
+-lib hxtemplo
 -cp src
 --interp
 -main Main
@@ -24,6 +19,7 @@
  --macro keep("haxe.ds.IntMap")
 
  --next
+ 
 -main SyntaxHighlighter
 -lib markdown
 -lib highlighter
