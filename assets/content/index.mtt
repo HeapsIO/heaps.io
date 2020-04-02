@@ -36,20 +36,31 @@
 		<h3>2D and 3D accelerated graphics</h3>
 
 		<div class="screenshots row">
-
-			<div class="screenshot col-4"><div style="width:100%;height:0;padding-bottom:79%;position:relative;"><iframe src="https://giphy.com/embed/xULW8olwBI2qs8I6Z2" width="100%" height="100%" style="position:absolute" frameBorder="0"></iframe></div></div>
-
-			<div class="screenshot col-4"><div style="width:100%;height:0;padding-bottom:79%;position:relative;"><iframe src="https://giphy.com/embed/3ohc0Vr9fx0u4FyXPW" width="100%" height="100%" style="position:absolute" frameBorder="0"></iframe></div></div>
-
-			<div class="screenshot col-4"><div style="width:100%;height:0;padding-bottom:79%;position:relative;"><iframe src="https://giphy.com/embed/xULW8LyJQTBDqyFYhq" width="100%" height="100%" style="position:absolute" frameBorder="0"></iframe></div></div>
+			<picture class="screenshot col-6"> 
+				<source data-srcset="img/gif/Darksburg540x303.webp" width="100%" type="image/webp" /> 
+				<img src="img/gif/Darksburg540x303.gif" width="100%" loading="lazy" />
+			</picture>
+		
+			<picture class="screenshot col-6"> 
+				<source data-srcset="img/gif/Dead_Cells540x303.webp" width="100%" type="image/webp" /> 
+				<img src="img/gif/Dead_Cells540x303.gif" width="100%" loading="lazy" />
+			</picture>
 		</div>
+		
+		<div class="screenshots row">
+			<picture class="screenshot col-6"> 
+				<source data-srcset="img/gif/Northgard540x303.webp" width="100%" type="image/webp" /> 
+				<img src="img/gif/Northgard540x303.gif" width="100%" loading="lazy" />
+			</picture>
+			<img src="img/northgard/04.jpg" class="screenshot col-6" />
+		</div>
+		
 		<div class="screenshots row">
 			<img src="img/evoland2/03.jpg" class="screenshot col-6" />
-			<div class="screenshot col-6"><div style="width:100%;height:0;padding-bottom:56%;position:relative;"><iframe src="https://giphy.com/embed/xULW8IPP5A1dUW8leE" width="100%" height="100%" style="position:absolute" frameBorder="0"></iframe></div></div>
-		</div>
-		<div class="screenshots row">
-			<div class="screenshot col-6"><div style="width:100%;height:0;padding-bottom:56%;position:relative;"><iframe src="https://giphy.com/embed/l1IBhGtr7VkgJ4ydy" width="100%" height="100%" style="position:absolute" frameBorder="0"></iframe></div></div>
-			<img src="img/northgard/04.jpg" class="screenshot col-6" />
+			<picture class="screenshot col-6"> 
+				<source data-srcset="img/gif/Evoland540x303.webp" width="100%" type="image/webp" /> 
+				<img src="img/gif/Evoland540x303.gif" width="100%" loading="lazy" />
+			</picture>
 		</div>
 	</div>
 	<br/>
