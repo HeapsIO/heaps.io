@@ -1,20 +1,16 @@
-import js.jquery.JQuery;
-
 class JsTools {
 	public static function main() {
-		j("window").ready( function() {
-			new JsTools();
-		});
+		new JsTools();
 	}
 
-	static function j(q:String) : JQuery {
-		return new js.jquery.JQuery(q);
+	inline static function j(q:String) {
+		return js.Browser.document.querySelector(q);
 	}
 
 	public function new() {
-		j(".mobileMenu").click( function(e) {
-			j(".top-nav").toggleClass("open");
+		j(".mobileMenu").onclick = function(e) {
+			j(".top-nav").classList.toggle("open");
 			e.preventDefault();
-		});
+		}
 	}
 }
