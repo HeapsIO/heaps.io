@@ -1,4 +1,199 @@
 <!DOCTYPE html>
 <html lang="en"><!-- use theme color or fallback -->
 <!--use textcolor from settings, otherwise create a contrasting color to theme color-->
-<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="../../../css/styles.min.css" rel="stylesheet"/><link href="../../styles.css" rel="stylesheet"/><script type="text/javascript">var dox = {rootPath: "../../",platforms: ["heaps"]};</script><title>h3d.shader.NoiseLib - Heaps.io Game Engine</title><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><script type="text/javascript" src="../../nav.js"></script><script type="text/javascript" src="../../index.js"></script>   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/><link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed:300" rel="stylesheet"/></head><div class='api-documentation'><body><a href="https://github.com/HeapsIO/" class="fork-button"><img src="../../../img/fork-on-github.png" alt="Fork Heaps on GitHub"/></a><header class="header-documentation"><nav class="top-nav"><a href="../../../" class="button">Home</a><a href="../../../about.html" class="button">About</a><a href="../../../samples/" class="button">Samples</a><a href="../../../documentation/" class="button">Documentation</a><a href="../../" class="button disabled">API</a><a href="https://community.heaps.io/" class="button" target="_blank">Community</a></nav></header><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="icon-search"></i></span><input id="search" type="text" placeholder="Search" autocomplete="off"/></div></form></div><div class="well sidebar-nav"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/HeapsIO/heaps/blob/master/h3d/shader/NoiseLib.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> NoiseLib</h1><h4><small>package <a href="../../h3d/shader/index.html">h3d.shader</a></small></h4><h4><small>extends <a class="type" title="" href="../../hxsl/Shader.html">Shader</a></small></h4>    </div><div class="body"><div class="doc doc-main"><div class="indent"><p></p></div></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3><p><code><a href="#new"><span class="identifier">new</span></a> ()</code></p></h3><div class="doc"><p></p></div></div></div><h3 class="section">Methods</h3><div class="fields"></div>  <div class="inherited-fields well"><h3 class="section">Inherited Variables</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="" href="../../hxsl/Shader.html">Shader</a></h4><div style="display:none"><div class="field "><a name="priority"></a><h3><p><code><span class="label">read only</span><a href="../../hxsl/Shader.html#priority"><span class="identifier">priority</span></a>:<span class="type">Int</span></code></p></h3><div class="doc"><p></p></div></div></div></div><h3 class="section">Inherited Methods</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="" href="../../hxsl/Shader.html">Shader</a></h4><div style="display:none"><div class="field "><a name="clone"></a><h3><p><code><a href="#clone"><span class="identifier">clone</span></a> ():<a class="type" title="" href="../../hxsl/Shader.html">Shader</a></code></p></h3><div class="doc"><p></p></div></div><div class="field "><a name="setPriority"></a><h3><p><code><a href="#setPriority"><span class="identifier">setPriority</span></a> (<span style="white-space:nowrap">v:<span class="type">Int</span></span>):<span class="type">Void</span></code></p></h3><div class="doc"><p>Shader priority should only be changed <em>before</em> the shader is added to a material.</p></div></div><div class="field "><a name="toString"></a><h3><p><code><a href="#toString"><span class="identifier">toString</span></a> ():<span class="type">String</span></code></p></h3><div class="doc"><p></p></div></div></div></div></div></div></div></div></div><footer><div class="container row"><div class="col-5"><a href="../../../"><img src="../../../img/logo.svg"/></a></div><div class="col-3 links"><h3>Heaps.io</h3><p>Heaps is an open source and multi-platform toolkit to create 2D and 3D games.</p><a href="https://lib.haxe.org/p/heaps">Download</a><a href="../../../about.html">About</a><a href="../../../api">API</a><a href="https://github.com/HeapsIO/">Contribute</a><a href="https://discordapp.com/channels/162395145352904705/501408700142059520">Community</a></div><div class="col-1">&nbsp;</div><div class="col-3 links"><h3>Haxe</h3><p>Haxe is an open source and cross-platform language and toolkit.</p><a href="https://haxe.org">About</a><a href="https://haxe.org/use-cases">Use cases</a><a href="https://haxe.org/documentation/introduction/">Learn</a><a href="https://haxe.org/foundation">Haxe Foundation</a></div></div><div class="copyright">&copy; 2019 <a href="https://haxe.org/foundation/">Haxe Foundation</a>| <a href="https://github.com/HeapsIO/heaps/blob/master/h3d/shader/NoiseLib.hx">Contribute to this page</a>| <a href="https://feathericons.com/" rel="nofollow">Feather open source icons</a></div></footer></div><script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="../../../css/styles.min.css" rel="stylesheet"/><link href="../../styles.css" rel="stylesheet"/><script type="text/javascript">var dox = {rootPath: "../../",platforms: ["heaps"]};</script><title>h3d.shader.NoiseLib - Heaps.io Game Engine</title><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><script type="text/javascript" src="../../nav.js"></script><script type="text/javascript" src="../../index.js"></script>   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/><link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed:300" rel="stylesheet"/></head><div class='api-documentation'><body><a href="https://github.com/HeapsIO/" class="fork-button"><img src="../../../img/fork-on-github.png" alt="Fork Heaps on GitHub"/></a><header class="header-documentation"><nav class="top-nav"><a href="../../../" class="button">Home</a><a href="../../../about.html" class="button">About</a><a href="../../../samples/" class="button">Samples</a><a href="../../../documentation/" class="button">Documentation</a><a href="../../" class="button disabled">API</a><a href="https://community.heaps.io/" class="button" target="_blank">Community</a></nav></header><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="icon-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/HeapsIO/heaps/blob/master/h3d/shader/NoiseLib.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> NoiseLib</h1><h4><small>package <a href="../../h3d/shader/index.html">h3d.shader</a></small></h4><h4><small>extends <a class="type" title="" href="../../hxsl/Shader.html">Shader</a></small></h4>    <span class="label label-meta label-meta-src" title="@:src metadata">@:src({
+	function mod289(x:Float):Float {
+		return x - floor(x * (1.0 / 289.0)) * 289.0;
+	};
+	function mod289_3(x:Vec3):Vec3 {
+		return x - floor(x * (1.0 / 289.0)) * 289.0;
+	};
+	var noiseSeed:Int;
+	function permute(x:Float):Float {
+		x += noiseSeed * 67.;
+		return mod289(((x * 34.0) + 1.0) * x + noiseSeed * 89.);
+	};
+	function rgrad2(p:Vec2, rot:Float):Vec2 {
+		var u = permute(permute(p.x) + p.y) * 0.0243902439 + rot;
+		u = fract(u) * 6.28318530718;
+		return vec2(cos(u), sin(u));
+	};
+	function psrdnoise(pos:Vec2, per:Vec2, rot:Float):Vec3 {
+		pos.y += 0.01;
+		var uv = vec2(pos.x + pos.y * 0.5, pos.y);
+		var i0 = floor(uv);
+		var f0 = fract(uv);
+		var i1 = (f0.x &gt; f0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+		var p0 = vec2(i0.x - i0.y * 0.5, i0.y);
+		var p1 = vec2(p0.x + i1.x - i1.y * 0.5, p0.y + i1.y);
+		var p2 = vec2(p0.x + 0.5, p0.y + 1.0);
+		i1 = i0 + i1;
+		var i2 = i0 + vec2(1.0, 1.0);
+		var d0 = pos - p0;
+		var d1 = pos - p1;
+		var d2 = pos - p2;
+		var xw = mod(vec3(p0.x, p1.x, p2.x), per.x);
+		var yw = mod(vec3(p0.y, p1.y, p2.y), per.y);
+		var iuw = xw + 0.5 * yw;
+		var ivw = yw;
+		var g0 = rgrad2(vec2(iuw.x, ivw.x), rot);
+		var g1 = rgrad2(vec2(iuw.y, ivw.y), rot);
+		var g2 = rgrad2(vec2(iuw.z, ivw.z), rot);
+		var w = vec3(dot(g0, d0), dot(g1, d1), dot(g2, d2));
+		var t = 0.8 - vec3(dot(d0, d0), dot(d1, d1), dot(d2, d2));
+		var dtdx = -2.0 * vec3(d0.x, d1.x, d2.x);
+		var dtdy = -2.0 * vec3(d0.y, d1.y, d2.y);
+		if (t.x &lt; 0.0) {
+			dtdx.x = 0.0;
+			dtdy.x = 0.0;
+			t.x = 0.0;
+		};
+		if (t.y &lt; 0.0) {
+			dtdx.y = 0.0;
+			dtdy.y = 0.0;
+			t.y = 0.0;
+		};
+		if (t.z &lt; 0.0) {
+			dtdx.z = 0.0;
+			dtdy.z = 0.0;
+			t.z = 0.0;
+		};
+		var t2 = t * t;
+		var t4 = t2 * t2;
+		var t3 = t2 * t;
+		var n = dot(t4, w);
+		var dt0 = vec2(dtdx.x, dtdy.x) * 4.0 * t3.x;
+		var dn0 = t4.x * g0 + dt0 * w.x;
+		var dt1 = vec2(dtdx.y, dtdy.y) * 4.0 * t3.y;
+		var dn1 = t4.y * g1 + dt1 * w.y;
+		var dt2 = vec2(dtdx.z, dtdy.z) * 4.0 * t3.z;
+		var dn2 = t4.z * g2 + dt2 * w.z;
+		return 11.0 * vec3(n, dn0 + dn1 + dn2);
+	};
+	function psdnoise(pos:Vec2, per:Vec2):Vec3 {
+		return psrdnoise(pos, per, 0.0);
+	};
+	function psrnoise(pos:Vec2, per:Vec2, rot:Float):Float {
+		pos.y += 0.001;
+		var uv = vec2(pos.x + pos.y * 0.5, pos.y);
+		var i0 = floor(uv);
+		var f0 = fract(uv);
+		var i1 = (f0.x &gt; f0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+		var p0 = vec2(i0.x - i0.y * 0.5, i0.y);
+		var p1 = vec2(p0.x + i1.x - i1.y * 0.5, p0.y + i1.y);
+		var p2 = vec2(p0.x + 0.5, p0.y + 1.0);
+		i1 = i0 + i1;
+		var i2 = i0 + vec2(1.0, 1.0);
+		var d0 = pos - p0;
+		var d1 = pos - p1;
+		var d2 = pos - p2;
+		var xw = mod(vec3(p0.x, p1.x, p2.x), per.x);
+		var yw = mod(vec3(p0.y, p1.y, p2.y), per.y);
+		var iuw = xw + 0.5 * yw;
+		var ivw = yw;
+		var g0 = rgrad2(vec2(iuw.x, ivw.x), rot);
+		var g1 = rgrad2(vec2(iuw.y, ivw.y), rot);
+		var g2 = rgrad2(vec2(iuw.z, ivw.z), rot);
+		var w = vec3(dot(g0, d0), dot(g1, d1), dot(g2, d2));
+		var t = 0.8 - vec3(dot(d0, d0), dot(d1, d1), dot(d2, d2));
+		t = max(t, 0.0);
+		var t2 = t * t;
+		var t4 = t2 * t2;
+		var n = dot(t4, w);
+		return 11.0 * n;
+	};
+	function psnoise(pos:Vec2, per:Vec2):Float {
+		return psrnoise(pos, per, 0.0);
+	};
+	function srdnoise(pos:Vec2, rot:Float):Vec3 {
+		pos.y += 0.001;
+		var uv = vec2(pos.x + pos.y * 0.5, pos.y);
+		var i0 = floor(uv);
+		var f0 = fract(uv);
+		var i1 = (f0.x &gt; f0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+		var p0 = vec2(i0.x - i0.y * 0.5, i0.y);
+		var p1 = vec2(p0.x + i1.x - i1.y * 0.5, p0.y + i1.y);
+		var p2 = vec2(p0.x + 0.5, p0.y + 1.0);
+		i1 = i0 + i1;
+		var i2 = i0 + vec2(1.0, 1.0);
+		var d0 = pos - p0;
+		var d1 = pos - p1;
+		var d2 = pos - p2;
+		var x = vec3(p0.x, p1.x, p2.x);
+		var y = vec3(p0.y, p1.y, p2.y);
+		var iuw = x + 0.5 * y;
+		var ivw = y;
+		iuw = mod289_3(iuw);
+		ivw = mod289_3(ivw);
+		var g0 = rgrad2(vec2(iuw.x, ivw.x), rot);
+		var g1 = rgrad2(vec2(iuw.y, ivw.y), rot);
+		var g2 = rgrad2(vec2(iuw.z, ivw.z), rot);
+		var w = vec3(dot(g0, d0), dot(g1, d1), dot(g2, d2));
+		var t = 0.8 - vec3(dot(d0, d0), dot(d1, d1), dot(d2, d2));
+		var dtdx = -2.0 * vec3(d0.x, d1.x, d2.x);
+		var dtdy = -2.0 * vec3(d0.y, d1.y, d2.y);
+		if (t.x &lt; 0.0) {
+			dtdx.x = 0.0;
+			dtdy.x = 0.0;
+			t.x = 0.0;
+		};
+		if (t.y &lt; 0.0) {
+			dtdx.y = 0.0;
+			dtdy.y = 0.0;
+			t.y = 0.0;
+		};
+		if (t.z &lt; 0.0) {
+			dtdx.z = 0.0;
+			dtdy.z = 0.0;
+			t.z = 0.0;
+		};
+		var t2 = t * t;
+		var t4 = t2 * t2;
+		var t3 = t2 * t;
+		var n = dot(t4, w);
+		var dt0 = vec2(dtdx.x, dtdy.x) * 4.0 * t3.x;
+		var dn0 = t4.x * g0 + dt0 * w.x;
+		var dt1 = vec2(dtdx.y, dtdy.y) * 4.0 * t3.y;
+		var dn1 = t4.y * g1 + dt1 * w.y;
+		var dt2 = vec2(dtdx.z, dtdy.z) * 4.0 * t3.z;
+		var dn2 = t4.z * g2 + dt2 * w.z;
+		return 11.0 * vec3(n, dn0 + dn1 + dn2);
+	};
+	function sdnoise(pos:Vec2):Vec3 {
+		return srdnoise(pos, 0.0);
+	};
+	function srnoise(pos:Vec2, rot:Float):Float {
+		pos.y += 0.001;
+		var uv = vec2(pos.x + pos.y * 0.5, pos.y);
+		var i0 = floor(uv);
+		var f0 = fract(uv);
+		var i1 = (f0.x &gt; f0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+		var p0 = vec2(i0.x - i0.y * 0.5, i0.y);
+		var p1 = vec2(p0.x + i1.x - i1.y * 0.5, p0.y + i1.y);
+		var p2 = vec2(p0.x + 0.5, p0.y + 1.0);
+		i1 = i0 + i1;
+		var i2 = i0 + vec2(1.0, 1.0);
+		var d0 = pos - p0;
+		var d1 = pos - p1;
+		var d2 = pos - p2;
+		var x = vec3(p0.x, p1.x, p2.x);
+		var y = vec3(p0.y, p1.y, p2.y);
+		var iuw = x + 0.5 * y;
+		var ivw = y;
+		iuw = mod289_3(iuw);
+		ivw = mod289_3(ivw);
+		var g0 = rgrad2(vec2(iuw.x, ivw.x), rot);
+		var g1 = rgrad2(vec2(iuw.y, ivw.y), rot);
+		var g2 = rgrad2(vec2(iuw.z, ivw.z), rot);
+		var w = vec3(dot(g0, d0), dot(g1, d1), dot(g2, d2));
+		var t = 0.8 - vec3(dot(d0, d0), dot(d1, d1), dot(d2, d2));
+		t = max(t, 0.0);
+		var t2 = t * t;
+		var t4 = t2 * t2;
+		var n = dot(t4, w);
+		return 11.0 * n;
+	};
+	function snoise(pos:Vec2):Float {
+		return srnoise(pos, 0.0);
+	};
+})</span><span class="label label-meta label-meta-build" title="@:build metadata">@:build(hxsl.Macros.buildShader())</span><span class="label label-meta label-meta-autoBuild" title="@:autoBuild metadata">@:autoBuild(hxsl.Macros.buildShader())</span></div><div class="body"><div class="doc doc-main"><p></p></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><a href="#new"><span class="identifier">new</span></a>()</code></h3><div class="doc"><p></p></div></div></div><h3 class="section">Methods</h3><div class="fields"></div>  <div class="inherited-fields well"><h3 class="section">Inherited Variables</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="" href="../../hxsl/Shader.html">Shader</a></h4><div style="display:none"><div class="field "><a name="priority"></a><h3 class="anchor"><code><span class="label">read only</span><a href="../../hxsl/Shader.html#priority"><span class="identifier">priority</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p></p></div></div></div></div><h3 class="section">Inherited Methods</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="" href="../../hxsl/Shader.html">Shader</a></h4><div style="display:none"><div class="field "><a name="clone"></a><h3 class="anchor"><code><a href="#clone"><span class="identifier">clone</span></a>():<a class="type" title="" href="../../hxsl/Shader.html">Shader</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="setPriority"></a><h3 class="anchor"><code><a href="#setPriority"><span class="identifier">setPriority</span></a>(<span style="white-space:nowrap">v:<span class="type">Int</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Shader priority should only be changed <em>before</em> the shader is added to a material.</p></div></div><div class="field "><a name="toString"></a><h3 class="anchor"><code><a href="#toString"><span class="identifier">toString</span></a>():<span class="type">String</span></code></h3><div class="doc"><p></p></div></div></div></div></div></div></div></div></div><footer><div class="container row"><div class="col-5"><a href="../../../"><img src="../../../img/logo.svg"/></a></div><div class="col-3 links"><h3>Heaps.io</h3><p>Heaps is an open source and multi-platform toolkit to create 2D and 3D games.</p><a href="https://lib.haxe.org/p/heaps">Download</a><a href="../../../about.html">About</a><a href="../../../api">API</a><a href="https://github.com/HeapsIO/">Contribute</a><a href="https://discordapp.com/channels/162395145352904705/501408700142059520">Community</a></div><div class="col-1">&nbsp;</div><div class="col-3 links"><h3>Haxe</h3><p>Haxe is an open source and cross-platform language and toolkit.</p><a href="https://haxe.org">About</a><a href="https://haxe.org/use-cases">Use cases</a><a href="https://haxe.org/documentation/introduction/">Learn</a><a href="https://haxe.org/foundation">Haxe Foundation</a></div></div><div class="copyright">&copy; 2020 <a href="https://haxe.org/foundation/">Haxe Foundation</a>| <a href="https://github.com/HeapsIO/heaps/blob/master/h3d/shader/NoiseLib.hx">Contribute to this page</a>| <a href="https://feathericons.com/" rel="nofollow">Feather open source icons</a></div></footer></div><script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>
