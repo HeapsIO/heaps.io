@@ -12,12 +12,12 @@
 <span class="mtk5">class</span><span class="mtk1"> </span><span class="mtk9">SampleView</span><span class="mtk1"> </span><span class="mtk5">extends</span><span class="mtk1"> h2d.</span><span class="mtk9">Flow</span><span class="mtk1"> </span><span class="mtk5">implements</span><span class="mtk1"> h2d.domkit.</span><span class="mtk9">Object</span><span class="mtk1"> {</span>
 
 <span class="mtk1">    </span><span class="mtk5">static</span><span class="mtk1"> </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">SRC</span><span class="mtk1"> = </span>
-<span class="mtk1">        &lt;</span><span class="mtk17">flow</span><span class="mtk1"> </span><span class="mtk5">class</span><span class="mtk1">=</span><span class="mtk7">"box"</span><span class="mtk1"> </span><span class="mtk17">vertical</span><span class="mtk1">&gt; </span>
+<span class="mtk1">        &lt;</span><span class="mtk17">sample</span><span class="mtk1">-</span><span class="mtk17">view</span><span class="mtk1"> </span><span class="mtk17">layout</span><span class="mtk1">=</span><span class="mtk7">"vertical"</span><span class="mtk1">&gt; </span>
 <span class="mtk1">            </span><span class="mtk9">Hello</span><span class="mtk1"> </span><span class="mtk9">World</span><span class="mtk1">! </span>
 <span class="mtk1">            &lt;</span><span class="mtk17">bitmap</span><span class="mtk1"> </span><span class="mtk17">src</span><span class="mtk1">={</span><span class="mtk17">tile</span><span class="mtk1">} </span><span class="mtk5">public</span><span class="mtk1"> </span><span class="mtk17">id</span><span class="mtk1">=</span><span class="mtk7">"mybmp"</span><span class="mtk1">/&gt;</span>
-<span class="mtk1">        &lt;/</span><span class="mtk17">flow</span><span class="mtk1">&gt;</span>
+<span class="mtk1">        &lt;/</span><span class="mtk17">sample</span><span class="mtk1">-</span><span class="mtk17">view</span><span class="mtk1">&gt;</span>
 
-<span class="mtk1">    </span><span class="mtk5">public</span><span class="mtk1"> </span><span class="mtk5">function</span><span class="mtk1"> </span><span class="mtk5">new</span><span class="mtk1">(</span><span class="mtk17">tile</span><span class="mtk1">,?</span><span class="mtk17">parent</span><span class="mtk1">) {</span>
+<span class="mtk1">    </span><span class="mtk5">public</span><span class="mtk1"> </span><span class="mtk5">function</span><span class="mtk1"> </span><span class="mtk5">new</span><span class="mtk1">(</span><span class="mtk17">tile</span><span class="mtk1">:h2d.</span><span class="mtk9">Tile</span><span class="mtk1">,?</span><span class="mtk17">parent</span><span class="mtk1">) {</span>
 <span class="mtk1">        </span><span class="mtk5">super</span><span class="mtk1">(</span><span class="mtk17">parent</span><span class="mtk1">);</span>
 <span class="mtk1">        </span><span class="mtk10">initComponent</span><span class="mtk1">();</span>
 <span class="mtk1">    }</span>
@@ -62,11 +62,18 @@
 <span class="mtk17">mybmp</span><span class="mtk1">.</span><span class="mtk17">dom</span><span class="mtk1">.</span><span class="mtk17">hover</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
 </pre>
 <p>More code can be found in the Heaps Domkit sample.</p>
+<h1>Domkit Inspector</h1>
+<p>You can inspect your components by enabling the domkit inspector. This is done using</p>
+<pre class="highlighted">
+<span class="mtk17">style</span><span class="mtk1">.</span><span class="mtk17">allowInspect</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
+</pre>
+<p>You can then using middle mouse button click anytime to enable/disable domkit inspector. Move your mouse over any component to see its name, id, classes and properties. You can use the mouse wheel to browse the component hierarchy.</p>
+<p><img src="https://haxe.org/img/blog/2020-04-06-shirogames-stack/domkit.png" alt="image"/></p>
 <h1>Defining custom Components</h1>
 <p>In order to define custom components, you need to:
-<em> add <code>@:uiComp("name")</code> metadata
-</em> implements <code>h2d.domkit.Object</code> (if not already inherited from your superclass)
-* add <code>@:p</code> for each property you wish to expose to domkit markup/CSS</p>
+<em> implements <code>h2d.domkit.Object</code> (if not already inherited from your superclass)
+</em> add <code>@:p</code> for each property you wish to expose to domkit markup/CSS
+* you can add <code>@:uiComp("name")</code> metadata in order to customize the component name</p>
 <p>Here's a small example:</p>
 <pre class="highlighted">
 <span class="mtk4">// MyComp.hx</span>
