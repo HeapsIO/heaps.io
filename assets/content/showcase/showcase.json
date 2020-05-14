@@ -11,7 +11,7 @@
 			"image": "img/northgard/northgard.png",
 			"title": "Northgard",
 			"author":  "Shiro Games",
-			"platforms": ["win","mac","linux"],
+			"platforms": ["win","mac","linux","switch","xbox","ps4"],
 			"url": "http://store.steampowered.com/app/466560"
 		},
 		{
