@@ -1,4 +1,4 @@
--lib heaps:1.5.0
+-lib heaps
 -lib castle
 -lib hxbit
 -lib stb_ogg_sound
@@ -7,7 +7,7 @@
 --no-output
 -xml heaps.xml
 --macro include('h3d')
---macro include('h2d',true,['h2d.comp','h2d.css'])
+--macro include('h2d',true,['h2d.domkit'])
 --macro include('hxsl',true,['hxsl.Macros','hxsl.CacheFile','hxsl.CacheFileBuilder'])
 --macro include('hxd',true,['hxd.res.FileTree','hxd.Res','hxd.impl.BitsBuilder','hxd.impl.Air3File','hxd.fmt.pak.Build','hxd.impl.LimeStage','hxd.fs.LimeFileSystem','hxd.net.SteamHost','hxd.snd.efx','hxd.snd.openal','hxd.res.Config'])
 

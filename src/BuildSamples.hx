@@ -11,7 +11,7 @@ using StringTools;
  * @author Mark Knol
  */
 class BuildSamples {
-	static var GIT_TAG = "1.5.0"; // tag name
+	static var GIT_TAG = Sys.getEnv("HEAPS_VER"); // tag name
 	static var GIT_REPO = "https://github.com/HeapsIO/heaps.git";
 	static var FOLDER = ".temp/";
 
