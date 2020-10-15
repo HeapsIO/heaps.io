@@ -1,4 +1,4 @@
--lib heaps:%HEAPS_VER%
+-lib heaps
 -lib castle
 -lib hxbit
 -lib stb_ogg_sound
