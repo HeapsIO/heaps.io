@@ -1,0 +1,9 @@
+-lib heaps
+-js domkit.js
+-main Domkit
+-cp ../..
+-cp .
+-debug
+-D resourcesPath=../../domkit_res
+-lib hxbit
+-lib domkit

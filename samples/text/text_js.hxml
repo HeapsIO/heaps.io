@@ -4,4 +4,6 @@
 -cp ../..
 -cp .
 -debug
+-D resourcesPath=../../text_res
 -lib hxbit
+-D resourcesPath=../../text_res;../../res

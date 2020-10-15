@@ -8,7 +8,7 @@
 <span class="mtk5">class</span><span class="mtk1"> </span><span class="mtk9">Interactive</span><span class="mtk1"> </span><span class="mtk5">extends</span><span class="mtk1"> hxd.</span><span class="mtk9">App</span><span class="mtk1"> {</span>
 
 <span class="mtk1">  </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">rnd</span><span class="mtk1"> : hxd.</span><span class="mtk9">Rand</span><span class="mtk1">;</span>
-<span class="mtk1">  </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">light</span><span class="mtk1"> : h3d.scene.</span><span class="mtk9">DirLight</span><span class="mtk1">;</span>
+<span class="mtk1">  </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">light</span><span class="mtk1"> : h3d.scene.fwd.</span><span class="mtk9">DirLight</span><span class="mtk1">;</span>
 <span class="mtk1">  </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">obj</span><span class="mtk1"> : h3d.scene.</span><span class="mtk9">Object</span><span class="mtk1">;</span>
 <span class="mtk1">  </span><span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">b</span><span class="mtk1"> : h2d.</span><span class="mtk9">Interactive</span><span class="mtk1">;</span>
 
@@ -42,9 +42,10 @@
 <span class="mtk1">  }</span>
 
 <span class="mtk1">  </span><span class="mtk5">override</span><span class="mtk1"> </span><span class="mtk5">function</span><span class="mtk1"> </span><span class="mtk10">init</span><span class="mtk1">() {</span>
-<span class="mtk1">    </span><span class="mtk17">light</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk9">DirLight</span><span class="mtk1">(</span><span class="mtk5">new</span><span class="mtk1"> h3d.</span><span class="mtk9">Vector</span><span class="mtk1">( </span><span class="mtk8">0.3</span><span class="mtk1">, -</span><span class="mtk8">0.4</span><span class="mtk1">, -</span><span class="mtk8">0.9</span><span class="mtk1">), </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
+<span class="mtk1">    </span><span class="mtk17">light</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h3d.scene.fwd.</span><span class="mtk9">DirLight</span><span class="mtk1">(</span><span class="mtk5">new</span><span class="mtk1"> h3d.</span><span class="mtk9">Vector</span><span class="mtk1">( </span><span class="mtk8">0.3</span><span class="mtk1">, -</span><span class="mtk8">0.4</span><span class="mtk1">, -</span><span class="mtk8">0.9</span><span class="mtk1">), </span><span class="mtk17">s3d</span><span class="mtk1">);</span>
 <span class="mtk1">    </span><span class="mtk17">light</span><span class="mtk1">.</span><span class="mtk17">enableSpecular</span><span class="mtk1"> = </span><span class="mtk5">true</span><span class="mtk1">;</span>
 <span class="mtk1">    </span><span class="mtk17">light</span><span class="mtk1">.</span><span class="mtk17">color</span><span class="mtk1">.</span><span class="mtk10">set</span><span class="mtk1">(</span><span class="mtk8">0.28</span><span class="mtk1">, </span><span class="mtk8">0.28</span><span class="mtk1">, </span><span class="mtk8">0.28</span><span class="mtk1">);</span>
+
 <span class="mtk1">    </span><span class="mtk17">s3d</span><span class="mtk1">.</span><span class="mtk17">lightSystem</span><span class="mtk1">.</span><span class="mtk17">ambientLight</span><span class="mtk1">.</span><span class="mtk10">set</span><span class="mtk1">(</span><span class="mtk8">0.74</span><span class="mtk1">, </span><span class="mtk8">0.74</span><span class="mtk1">, </span><span class="mtk8">0.74</span><span class="mtk1">);</span>
 
 <span class="mtk1">    </span><span class="mtk17">rnd</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> hxd.</span><span class="mtk9">Rand</span><span class="mtk1">(</span><span class="mtk8">5</span><span class="mtk1">);</span>

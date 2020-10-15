@@ -1,0 +1,10 @@
+-lib heaps
+-swf domkit.swf
+-swf-header 1280:800:60:FFFFFF
+-swf-version 15.0
+-main Domkit
+-cp ../..
+-cp .
+-D resourcesPath=../../domkit_res
+-lib hxbit
+-lib domkit

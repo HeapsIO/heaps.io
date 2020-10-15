@@ -1,0 +1,7 @@
+-lib heaps
+-js pointLights.js
+-main PointLights
+-cp ../..
+-cp .
+-debug
+-lib hxbit

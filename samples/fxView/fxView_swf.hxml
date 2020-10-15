@@ -1,0 +1,9 @@
+-lib heaps
+-swf fxView.swf
+-swf-header 1280:800:60:FFFFFF
+-swf-version 15.0
+-main FxView
+-cp ../..
+-cp .
+-lib hxbit
+-lib hide

@@ -1,0 +1,8 @@
+-lib heaps
+-lib hlsdl
+-hl camera2D.hl
+-main Camera2D
+-D windowSize=1024x768
+-cp ../..
+-cp .
+-lib hxbit

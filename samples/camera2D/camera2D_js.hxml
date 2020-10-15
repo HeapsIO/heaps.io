@@ -1,0 +1,7 @@
+-lib heaps
+-js camera2D.js
+-main Camera2D
+-cp ../..
+-cp .
+-debug
+-lib hxbit

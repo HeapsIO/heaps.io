@@ -5,6 +5,8 @@ import h2d.Graphics;
 import h2d.Object;
 import h2d.Text.Align;
 
+// Use both text_res and res folders.
+//PARAM=-D resourcesPath=../../text_res;../../res
 class TextWidget extends Object
 {
 	public var align: Align;
@@ -55,6 +57,7 @@ class Text extends hxd.App {
 
 	var textWidgets:Array<TextWidget> = [];
 	var resizeWidgets: Array<TextWidget> = [];
+	var sdfText:h2d.Text;
 
 	override function init() {
 
@@ -154,7 +157,7 @@ class Text extends hxd.App {
 		flow.y = yoffset;
 		flow.horizontalAlign = FlowAlign.Middle;
 		flow.maxWidth = 150;
-		flow.isVertical = true;
+		flow.layout = Vertical;
 		createText(flow, singleText, Align.Left);
 		createText(flow, multilineText, Align.Right);
 
@@ -166,7 +169,6 @@ class Text extends hxd.App {
 			flow.horizontalAlign = FlowAlign.Left;
 			flow.maxWidth = 360;
 			flow.horizontalSpacing = 8;
-			flow.isVertical = false;
 			var f = createText(flow, "short text", Align.Right);
 			createText(flow, singleText, Align.Left);
 			yoffset += flow.getBounds().height + 10;
@@ -177,7 +179,7 @@ class Text extends hxd.App {
 		flow.y = yoffset;
 		flow.x = 100;
 		flow.horizontalAlign = FlowAlign.Middle;
-		flow.isVertical = true;
+		flow.layout = Vertical;
 		{
 			var f1 = createFlow(flow);
 			createText(f1, multilineText, Align.Left);
@@ -193,7 +195,7 @@ class Text extends hxd.App {
 		flow.y = yoffset;
 		flow.x = 10;
 		flow.horizontalAlign = FlowAlign.Left;
-		flow.isVertical = true;
+		flow.layout = Vertical;
 		{
 			var tf = createText(flow, "BMFont XML format (Littera export)", Align.Left, hxd.Res.littera_xml.toFont());
 			tf.maxWidth = 400;
@@ -207,6 +209,28 @@ class Text extends hxd.App {
 			tf.maxWidth = 400;
 			tf = createText(flow, "FontBuilder Divo format", Align.Left, hxd.Res.customFont.toFont());
 			tf.maxWidth = 400;
+
+			// Signed Distance Field textures can be another way to do scalable fonts apart from rasterizing every single size used.
+			// They also look nice when rotated.
+			// See here for details: https://github.com/libgdx/libgdx/wiki/Distance-field-fonts
+			sdfText = createText(flow, "Signed Distance Field texture", Align.Left, hxd.Res.sdf_font.toSdfFont(null, 3));
+			sdfText.smooth = true; // Smoothing is mandatory when scaling SDF textures.
+			sdfText.maxWidth = 400;
+		}
+
+		yoffset += flow.getBounds().height + 35;
+
+		{
+			var flow = createFlow(s2d);
+			flow.y = yoffset;
+			flow.horizontalAlign = FlowAlign.Left;
+			flow.horizontalSpacing = 15;
+			flow.layout = Horizontal;
+			createText(flow, "LEFT: It is a text with a new line added after THAT\nto test the alignment", Align.Left);
+			createText(flow, "CENTER: It is a text with a new line added after THAT\nto test the alignment", Align.Center);
+			createText(flow, "RIGHT: It is a text with a new line added after THAT\nto test the alignment", Align.Right);
+			createText(flow, "MULTICENTER: It is a text with a new line added after THAT\nto test the alignment", Align.MultilineCenter);
+			createText(flow, "MULTIRIGHT: It is a text with a new line added after THAT\nto test the alignment", Align.MultilineRight);
 		}
 
 		onResize();
@@ -217,6 +241,7 @@ class Text extends hxd.App {
 		for (w in resizeWidgets) {
 			w.setMaxWidth(Std.int(300 + Math.sin(haxe.Timer.stamp() * 0.5) * 100.0));
 		}
+		sdfText.setScale(0.5 + (Math.cos(haxe.Timer.stamp() * 0.5) + 1) * .5);
 	}
 
 	static function main() {

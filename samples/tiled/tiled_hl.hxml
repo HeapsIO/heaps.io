@@ -1,0 +1,9 @@
+-lib heaps
+-lib hlsdl
+-hl tiled.hl
+-main Tiled
+-D windowSize=1024x768
+-cp ../..
+-cp .
+-D resourcesPath=../../tiled_res
+-lib hxbit

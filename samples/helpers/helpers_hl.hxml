@@ -1,0 +1,8 @@
+-lib heaps
+-lib hlsdl
+-hl helpers.hl
+-main Helpers
+-D windowSize=1024x768
+-cp ../..
+-cp .
+-lib hxbit

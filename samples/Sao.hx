@@ -2,7 +2,7 @@ import hxd.Math;
 import h3d.pass.ScalableAO;
 import hxd.Key in K;
 
-class CustomRenderer extends h3d.scene.DefaultRenderer {
+class CustomRenderer extends h3d.scene.fwd.Renderer {
 
 	public var sao : h3d.pass.ScalableAO;
 	public var saoBlur : h3d.pass.Blur;
@@ -25,9 +25,9 @@ class CustomRenderer extends h3d.scene.DefaultRenderer {
 		allPasses.push(mrt);
 	}
 
-	override function renderPass(p:h3d.pass.Base, passes) {
+	override function renderPass(p:h3d.pass.Base, passes, ?sort) {
 		bench.measure(p.name);
-		return super.renderPass(p, passes);
+		return super.renderPass(p, passes, sort);
 	}
 
 	override function render() {
@@ -99,7 +99,7 @@ class Sao extends SampleApp {
 		s3d.camera.zFar = 150 * wscale;
 
 		s3d.lightSystem.ambientLight.set(0.5, 0.5, 0.5);
-		var dir = new h3d.scene.DirLight(new h3d.Vector( -0.3, -0.2, -1), s3d);
+		var dir = new h3d.scene.fwd.DirLight(new h3d.Vector( -0.3, -0.2, -1), s3d);
 		dir.color.set(0.5, 0.5, 0.5);
 
 		var time = Math.PI * 0.25;
@@ -135,7 +135,7 @@ class Sao extends SampleApp {
 		if(K.isPressed(K.BACKSPACE))
 			reset();
 
-		var r = Std.instance(s3d.renderer, CustomRenderer);
+		var r = hxd.impl.Api.downcast(s3d.renderer, CustomRenderer);
 		if(K.isPressed(K.NUMBER_1))
 			r.mode = 0;
 		if(K.isPressed(K.NUMBER_2))

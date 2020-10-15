@@ -1,0 +1,7 @@
+-lib heaps
+-js scaleMode2D.js
+-main ScaleMode2D
+-cp ../..
+-cp .
+-debug
+-lib hxbit

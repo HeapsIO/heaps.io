@@ -5,4 +5,6 @@
 -D windowSize=1024x768
 -cp ../..
 -cp .
+-D resourcesPath=../../text_res
 -lib hxbit
+-D resourcesPath=../../text_res;../../res

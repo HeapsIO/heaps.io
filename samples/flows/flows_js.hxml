@@ -1,0 +1,7 @@
+-lib heaps
+-js flows.js
+-main Flows
+-cp ../..
+-cp .
+-debug
+-lib hxbit

@@ -5,3 +5,4 @@
 -cp .
 -debug
 -lib hxbit
+-D resourcesPath=../../text_res;../../res

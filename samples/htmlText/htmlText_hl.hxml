@@ -6,3 +6,4 @@
 -cp ../..
 -cp .
 -lib hxbit
+-D resourcesPath=../../text_res;../../res

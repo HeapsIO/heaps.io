@@ -1,0 +1,7 @@
+-lib heaps
+-js meshBatch.js
+-main MeshBatch
+-cp ../..
+-cp .
+-debug
+-lib hxbit
