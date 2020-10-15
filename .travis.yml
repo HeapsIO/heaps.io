@@ -3,6 +3,9 @@ language: haxe
 os: linux
 dist: xenial
 
+env:
+  - HEAPS_VER=1.8.0   
+
 haxe:
   - "3.4.4"
   - "3.4.7"
