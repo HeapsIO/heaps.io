@@ -12,11 +12,11 @@
 │   └── Main.hx
 └── compile.hxml</code></pre>
 <h2>Create your project</h2><ul><li>Create a new directory named <code>helloHeaps</code></li><li>Create a new file called <code>compile.hxml</code></li><li>Add the following lines to your newly created file</li></ul>
-<pre><code>-cp src 			# Tells haxe where to search for your code files
--lib heaps			# Tells haxe to import the heaps library
--js hello.js		# Tells haxe to compile to javascript in the project directory
--main Main			# Tells haxe that Main.hx is your entry point
--debug				# Tells haxe to run in debug mode</code></pre>
+<pre><code>-cp src
+-lib heaps
+-js hello.js
+-main Main
+-debug</code></pre><ul><li><code>-cp src</code> Tells haxe where to search for your code files</li><li><code>-lib heaps</code> Tells haxe to import the heaps library</li><li><code>-js hello.js</code> Tells haxe to compile to javascript in the project directory</li><li><code>-main Main</code> Tells haxe that Main.hx is your entry point</li><li><code>-debug Tells</code> haxe to run in debug mode</li></ul>
 <p>This will tell the compiler that we are using the library Heaps, that we will compile to JavaScript <code>hello.js</code> output, and that our main class should be <code>Main.hx</code> file.</p>
 <p>The <code>-debug</code> file allows generation of source maps in order to be able to debug your JS application.</p>
 <h2>Open with VSCode</h2>
