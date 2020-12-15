@@ -39,8 +39,9 @@ They can be found in the <a href="https://heaps.io/api/h2d/filter/index.html">h2
 </pre>
 <p>Usage:</p>
 <pre class="highlighted">
-<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">customFilter</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h2d.filter.</span><span class="mtk9">Shader</span><span class="mtk1">(</span><span class="mtk5">new</span><span class="mtk1"> </span><span class="mtk9">MyFilterShader</span><span class="mtk1">());</span>
-<span class="mtk17">customFilter</span><span class="mtk1">.</span><span class="mtk17">red</span><span class="mtk1"> = </span><span class="mtk8">0.1</span><span class="mtk1">; </span><span class="mtk4">// use 0-1 range</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">myShader</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> </span><span class="mtk9">MyFilterShader</span><span class="mtk1">();</span>
+<span class="mtk17">myShader</span><span class="mtk1">.</span><span class="mtk17">red</span><span class="mtk1"> = </span><span class="mtk8">1</span><span class="mtk1">; </span><span class="mtk4">// use 0-1 range</span>
+<span class="mtk5">var</span><span class="mtk1"> </span><span class="mtk17">customFilter</span><span class="mtk1"> = </span><span class="mtk5">new</span><span class="mtk1"> h2d.filter.</span><span class="mtk9">Shader</span><span class="mtk1">(</span><span class="mtk17">myShader</span><span class="mtk1">);</span>
 <span class="mtk17">mySprite</span><span class="mtk1">.</span><span class="mtk17">filter</span><span class="mtk1"> = </span><span class="mtk17">customFilter</span><span class="mtk1">;</span>
 </pre>
 <h2>Multiple filters on one sprite</h2>

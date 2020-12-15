@@ -7,7 +7,9 @@ var JsTools = function() {
 	};
 };
 JsTools.main = function() {
-	new JsTools();
+	window.document.addEventListener("DOMContentLoaded",function() {
+		new JsTools();
+	},false);
 };
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
