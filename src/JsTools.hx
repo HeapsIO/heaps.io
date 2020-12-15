@@ -1,6 +1,6 @@
 class JsTools {
 	public static function main() {
-		new JsTools();
+		js.Browser.document.addEventListener('DOMContentLoaded', function() new JsTools(), false);
 	}
 
 	inline static function j(q:String) {
