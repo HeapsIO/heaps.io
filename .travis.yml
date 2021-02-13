@@ -4,7 +4,7 @@ os: linux
 dist: xenial
 
 env:
-  - HEAPS_VER=git  
+  - HEAPS_VER=master  
 
 haxe:
   - "4.1.4"
