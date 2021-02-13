@@ -4,7 +4,7 @@ os: linux
 dist: xenial
 
 env:
-  - HEAPS_VER=1.8.0   
+  - HEAPS_VER=git  
 
 haxe:
   - "4.1.4"
@@ -21,6 +21,7 @@ install:
   - npm install -g less@2.7
   - npm install -g less-plugin-clean-css@1.5
   - haxelib install all --always
+  - haxelib git heaps https://github.com/heapsio/heaps
   - haxelib list
 
 script:
