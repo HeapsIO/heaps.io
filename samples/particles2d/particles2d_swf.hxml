@@ -1,9 +1,0 @@
--lib heaps
--swf particles2d.swf
--swf-header 1280:800:60:FFFFFF
--swf-version 15.0
--main Particles2d
--cp ../..
--cp .
--D resourcesPath=../../particles2d_res
--lib hxbit

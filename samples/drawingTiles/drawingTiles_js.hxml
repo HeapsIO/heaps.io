@@ -1,0 +1,7 @@
+-lib heaps
+-js drawingTiles.js
+-main DrawingTiles
+-cp ../..
+-cp .
+-debug
+-lib hxbit

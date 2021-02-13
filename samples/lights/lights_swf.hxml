@@ -1,8 +1,0 @@
--lib heaps
--swf lights.swf
--swf-header 1280:800:60:FFFFFF
--swf-version 15.0
--main Lights
--cp ../..
--cp .
--lib hxbit

@@ -1,9 +1,0 @@
--lib heaps
--swf interactive.swf
--swf-header 1280:800:60:FFFFFF
--swf-version 15.0
--main Interactive
--cp ../..
--cp .
--lib hxbit
--D resourcesPath=../../skin_res
