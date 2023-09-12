@@ -1,6 +1,20 @@
 {
 	"steam": [
 		{
+			"image": "img/dune.jpg",
+			"title": "Dune: Spice Wars",
+			"author":  "Shiro Games",
+			"platforms": ["win"],
+			"url": "http://store.steampowered.com/app/1605220"
+		},
+		{
+			"image": "img/wartales.jpg",
+			"title": "Wartales",
+			"author":  "Shiro Games",
+			"platforms": ["win"],
+			"url": "http://store.steampowered.com/app/1527950"
+		},				
+		{
 			"image": "img/deadcells/deadcells.jpg",
 			"title": "Dead Cells",
 			"author":  "Motion Twin",
