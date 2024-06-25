@@ -46,3 +46,5 @@ jobs:
 
       - name: Deploy
         run: haxe deploy.hxml
+        env:
+          GHP_REMOTE: ${{ secrets.GHP_REMOTE }}
