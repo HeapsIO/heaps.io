@@ -1,9 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - master
+on: [push, pull_request]
 
 env:
   HEAPS_VER: master
@@ -36,7 +33,7 @@ jobs:
           haxelib install all --always
           haxelib git heaps https://github.com/heapsio/heaps
           haxelib list
-      
+
       - name: Script
         run: |
           haxe build-run-dox.hxml
@@ -45,6 +42,7 @@ jobs:
           haxe heaps.io.hxml
 
       - name: Deploy
+        if: github.repository_owner == 'HeapsIO' && github.ref == 'refs/heads/master'
         run: haxe deploy.hxml
         env:
           GHP_REMOTE: ${{ secrets.GHP_REMOTE }}
