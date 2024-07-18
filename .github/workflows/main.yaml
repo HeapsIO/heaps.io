@@ -45,4 +45,7 @@ jobs:
         if: github.repository_owner == 'HeapsIO' && github.ref == 'refs/heads/master'
         run: haxe deploy.hxml
         env:
+          GHP_EMAIL: haxe-ci@onthewings.net
+          GHP_USERNAME: Haxe CI Bot
+          GHP_CNAME: heaps.io
           GHP_REMOTE: ${{ secrets.GHP_REMOTE }}
