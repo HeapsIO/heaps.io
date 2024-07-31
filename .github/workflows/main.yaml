@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 env:
-  HEAPS_VER: master
+  HEAPS_VER: '2.0'
 
 permissions:
   contents: write
@@ -34,7 +34,7 @@ jobs:
           npm install -g less@2.7
           npm install -g less-plugin-clean-css@1.5
           haxelib install all --always
-          haxelib git heaps https://github.com/heapsio/heaps
+          haxelib git heaps https://github.com/heapsio/heaps $HEAPS_VER
           haxelib list
 
       - name: Script
