@@ -5,6 +5,9 @@ on: [push, pull_request]
 env:
   HEAPS_VER: master
 
+permissions:
+  contents: write
+
 jobs:
   deploy-website:
     runs-on: ubuntu-latest
@@ -42,10 +45,10 @@ jobs:
           haxe heaps.io.hxml
 
       - name: Deploy
-        if: github.repository_owner == 'HeapsIO' && github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: haxe deploy.hxml
         env:
-          GHP_EMAIL: haxe-ci@onthewings.net
-          GHP_USERNAME: Haxe CI Bot
+          GHP_EMAIL: "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          GHP_USERNAME: ${{ github.actor }}
           GHP_CNAME: heaps.io
-          GHP_REMOTE: ${{ secrets.GHP_REMOTE }}
+          GHP_REMOTE: https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git
