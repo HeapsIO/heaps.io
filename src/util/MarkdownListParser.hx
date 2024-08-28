@@ -54,7 +54,6 @@ class MarkdownListParser {
 							}
 						case _:
 					}
-					prevIndent = indent;
 				} else {
 					// TODO: support going back more than one indentation level
 					if (indent < prevIndent) {
@@ -73,9 +72,9 @@ class MarkdownListParser {
 							links.push(link);
 						case _:
 					}
-					prevIndent = indent;
-					prevLink = link;
 				}
+				prevIndent = indent;
+				prevLink = link;
 			}
 		}
 		return toplevel;
