@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 env:
-  HEAPS_VER: '2.0'
+  HEAPS_VER: master
 
 permissions:
   contents: write
