@@ -20,11 +20,6 @@
 			"label": "HeapsHL",
 			"type": "hxml",
 			"file": "blur_hl.hxml"
-		},
-		{
-			"label": "HeapsSWF",
-			"type": "hxml",
-			"file": "blur_swf.hxml"
 		}
 	]
 }

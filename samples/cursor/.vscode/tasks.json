@@ -20,11 +20,6 @@
 			"label": "HeapsHL",
 			"type": "hxml",
 			"file": "cursor_hl.hxml"
-		},
-		{
-			"label": "HeapsSWF",
-			"type": "hxml",
-			"file": "cursor_swf.hxml"
 		}
 	]
 }

@@ -5,4 +5,3 @@
 -cp .
 -debug
 -D resourcesPath=../../world_res
--lib hxbit

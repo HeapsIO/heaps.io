@@ -6,5 +6,4 @@
 -cp ../..
 -cp .
 -D resourcesPath=../../domkit_res
--lib hxbit
 -lib domkit

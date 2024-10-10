@@ -5,5 +5,4 @@
 -cp .
 -debug
 -D resourcesPath=../../domkit_res
--lib hxbit
 -lib domkit

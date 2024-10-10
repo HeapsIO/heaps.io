@@ -4,5 +4,4 @@
 -cp ../..
 -cp .
 -debug
--lib hxbit
 -lib hide

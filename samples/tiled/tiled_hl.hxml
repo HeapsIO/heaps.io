@@ -6,4 +6,3 @@
 -cp ../..
 -cp .
 -D resourcesPath=../../tiled_res
--lib hxbit

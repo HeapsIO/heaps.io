@@ -29,7 +29,7 @@ class Helpers extends hxd.App {
 
 		new AxesHelper( cube, 1 );
 
-		s3d.lightSystem.ambientLight.set( 0.3, 0.3, 0.3 );
+		cast(s3d.lightSystem,h3d.scene.fwd.LightSystem).ambientLight.set( 0.3, 0.3, 0.3 );
 
 		var dirLight = new DirLight( new Vector( 0.5, 0.5, -0.5 ), s3d );
 		dirLight.enableSpecular = true;
@@ -117,7 +117,7 @@ class PointLightHelper extends h3d.scene.Mesh {
 		prim.addNormals();
 		prim.addUVs();
 		super( prim, light );
-		material.color = light.color;
+		material.color = light.color.toVector4();
 		material.mainPass.wireframe = true;
 	}
 }

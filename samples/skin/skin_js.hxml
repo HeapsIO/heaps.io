@@ -5,4 +5,3 @@
 -cp .
 -debug
 -D resourcesPath=../../skin_res
--lib hxbit

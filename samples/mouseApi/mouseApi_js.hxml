@@ -1,0 +1,7 @@
+-lib heaps
+-js mouseApi.js
+-main MouseApi
+-cp ../..
+-cp .
+-debug
+
