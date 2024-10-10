@@ -2,11 +2,15 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
+  pull_request:
+  schedule:
+    - cron: '0 6 * * *'
 
 env:
   HEAPS_VER: master
+
+permissions:
+  contents: write
 
 jobs:
   deploy-website:
@@ -33,10 +37,10 @@ jobs:
           npm install -g uglify-js
           npm install -g less@2.7
           npm install -g less-plugin-clean-css@1.5
-          haxelib install all --always
-          haxelib git heaps https://github.com/heapsio/heaps
+          haxelib install all --always --quiet
+          haxelib git heaps https://github.com/heapsio/heaps $HEAPS_VER
           haxelib list
-      
+
       - name: Script
         run: |
           haxe build-run-dox.hxml
@@ -45,4 +49,10 @@ jobs:
           haxe heaps.io.hxml
 
       - name: Deploy
+        if: github.ref == 'refs/heads/master'
         run: haxe deploy.hxml
+        env:
+          GHP_EMAIL: "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          GHP_USERNAME: ${{ github.actor }}
+          GHP_CNAME: heaps.io
+          GHP_REMOTE: https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git

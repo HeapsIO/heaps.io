@@ -26,7 +26,7 @@
  --next
 -main SyntaxHighlighter
 -lib markdown
--lib highlighter
+-lib highlighter:0.6.1
 -lib tink_template
 -cp src
 --macro tink.Template.addFlavor('html', '::', '::', false)
