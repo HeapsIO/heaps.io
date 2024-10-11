@@ -10,7 +10,7 @@ using StringTools;
  * @author Mark Knol
  */
 class GetWiki {
-	static var GIT_REPO = "https://github.com/HeapsIO/heaps.wiki.git";
+	static var GIT_REPO = "https://github.com/HeapsIO/heaps-doc.git";
 	static var FOLDER = ".temp-docs/";
 
 	static function main() {
