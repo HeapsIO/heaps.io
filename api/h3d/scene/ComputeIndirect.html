@@ -5,9 +5,9 @@
 	@global var camera:{ var position : Vec3};
 	@const var ENABLE_COUNT_BUFFER:Bool;
 	@param var countBuffer:RWBuffer&lt;Int&gt;;
-	@param var instanceOffsets:RWBuffer&lt;Int&gt;;
+	@param var instanceOffsets:StorageBuffer&lt;Int&gt;;
 	@param var commandBuffer:RWBuffer&lt;Int&gt;;
-	@param var instanceData:RWPartialBuffer&lt;{ var modelView : Mat4}&gt;;
+	@param var instanceData:StoragePartialBuffer&lt;{ var modelView : Mat4}&gt;;
 	@param var radius:Float;
 	@const var USING_SUB_PART:Bool = false;
 	@const var MAX_SUB_PART_BUFFER_ELEMENT_COUNT:Int = 16;
@@ -49,15 +49,11 @@
 			radius = subPartInfo[packedID + 1];
 		};
 		scaledRadius *= radius;
-		var culled = false;
-		if (dot(scaledRadius, scaledRadius) &lt; 1e-6) culled = true;
+		var culled = dot(scaledRadius, scaledRadius) &lt; 1e-6;
 		if (ENABLE_CULLING) {
-			for (i  in  0 ... 6) {
+			@unroll for (i  in  0 ... 6) {
 				var plane = frustum[i];
-				if (plane.x * pos.x + plane.y * pos.y + plane.z * pos.z - plane.w &lt; -scaledRadius) {
-					culled = true;
-					break;
-				};
+				culled = culled || plane.x * pos.x + plane.y * pos.y + plane.z * pos.z - plane.w &lt; -scaledRadius;
 			};
 		};
 		if (ENABLE_DISTANCE_CLIPPING) {
