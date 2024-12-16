@@ -3,8 +3,7 @@
 	<div class="container">
 		<h1>Cross platform graphics<br/>for high performance games</h1>
 		<p class="lead">
-			Heaps.io is a mature cross platform graphics engine designed for high performance games.
-			It is designed to leverage modern GPUs that are commonly available on both desktop and mobile devices.
+			Heaps.io is a mature cross platform graphics engine designed for high performance games. It is designed to leverage modern GPUs that are commonly available on both desktop and mobile devices.
 		</p>
 	</div>
 </section>
@@ -141,8 +140,7 @@
 			<div class="col-2">&nbsp;</div>
 			<div class="col-5">
 				<h3>Open Source</h3>
-				<p>Heaps.io is free and open source, with a large and supportive community pushing its growth and evolution.
-				Feel free to contribute, test the latest build and don't forget to star us on Github!</p>
+				<p>Heaps.io is free and open source, with a large and supportive community pushing its growth and evolution. Feel free to contribute, test the latest build and don't forget to star us on Github!</p>
 
 				<p><a class="github-button" href="https://github.com/HeapsIO/heaps" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star HeapsIO/heaps on GitHub">Star</a></p>
 			</div>
