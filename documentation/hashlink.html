@@ -51,12 +51,12 @@
 <span class="mtk3">#-lib hlsdl</span>
 
 <span class="mtk3"># output</span>
-<span class="mtk4">-hl</span><span class="mtk1"> bin/hlcout/game.c</span>
+<span class="mtk4">-hl</span><span class="mtk1"> bin/hlout/game.c</span>
 </pre>
 <h3>GCC</h3>
 <p>If you're using GCC, you can build with:</p>
 <pre><code>cd bin
-gcc -O3 -o mygame -std=c11 -I hlcout hlcout/game.c -lhl -lheaps.hdll -lui.hdll -lfmt.hdll [-L/path/to/required/hdll]</code></pre>
+gcc -O3 -o mygame -std=c11 -I hlout hlout/game.c -lhl -lheaps.hdll -lui.hdll -lfmt.hdll [-L/path/to/required/hdll]</code></pre>
 <p>For template, see also <a href="https://github.com/HaxeFoundation/hashlink/pull/706">Hashlink#706</a>.</p>
 <h3>Visual Studio</h3>
 <p>If you're using Visual Studio, add the following line in your hxml file:</p>
