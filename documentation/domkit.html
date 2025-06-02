@@ -141,7 +141,28 @@ Here's an example:</p>
 </pre>
 <p>And it means you can now use values this way in attributes or CSS:</p>
 <pre><code>&lt;my values="1,2,3"/&gt;</code></pre>
-<h1>DomKit Markup Reference</h1>
+<h2>Rebuilding dynamic components</h2>
+<p>Is it possible to specify which function initializes the component (the one calling <code>initComponent()</code>, which by default is the constructor) with <code>@:uiInitFunction</code>. This makes it possible to rebuild the component at a later point.</p>
+<pre class="highlighted">
+<span class="mtk1">@</span><span class="mtk9">:uiInitFunction</span><span class="mtk1">(</span><span class="mtk9">init</span><span class="mtk1">)</span>
+<span class="mtk4">class</span><span class="mtk1"> </span><span class="mtk10">DynamicComponent</span><span class="mtk1"> </span><span class="mtk4">extends</span><span class="mtk1"> h2d.</span><span class="mtk10">Flow</span><span class="mtk1"> </span><span class="mtk4">implements</span><span class="mtk1"> h2d.domkit.</span><span class="mtk10">Object</span><span class="mtk1"> {</span>
+<span class="mtk1">    </span>
+<span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk4">new</span><span class="mtk1">(?</span><span class="mtk9">parent</span><span class="mtk1">) {</span>
+<span class="mtk1">        </span><span class="mtk4">super</span><span class="mtk1">(</span><span class="mtk9">parent</span><span class="mtk1">);</span>
+<span class="mtk1">        </span><span class="mtk11">rebuild</span><span class="mtk1">(); </span><span class="mtk3">// or init();</span>
+<span class="mtk1">    }</span>
+
+<span class="mtk1">    </span><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">init</span><span class="mtk1">() {</span>
+<span class="mtk1">        </span><span class="mtk11">initComponent</span><span class="mtk1">();</span>
+<span class="mtk1">    }</span>
+
+<span class="mtk1">    </span><span class="mtk4">public</span><span class="mtk1"> </span><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">rebuild</span><span class="mtk1">() {</span>
+<span class="mtk1">        </span><span class="mtk11">removeChildren</span><span class="mtk1">();</span>
+<span class="mtk1">        </span><span class="mtk11">init</span><span class="mtk1">();</span>
+<span class="mtk1">    }</span>
+<span class="mtk1">}</span>
+</pre>
+<h1>Domkit Markup Reference</h1>
 <p>DomKit markup allows the following syntaxes.</p>
 <pre><code class="prettyprint jsx">&lt;node attr="value"/&gt;</code></pre>
 <p>A component with a CSS attribute value. Please note that the value has to be valid CSS and is parsed then interpreted based on the components custom parsing rules in order to be translated to the actual runtime value for the corresponding node property.</p>

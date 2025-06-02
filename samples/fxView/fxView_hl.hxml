@@ -5,4 +5,5 @@
 -D windowSize=1024x768
 -cp ../..
 -cp .
+-D resourcesPath=../../fxView_res
 -lib hide

@@ -4,4 +4,5 @@
 -cp ../..
 -cp .
 -debug
+-D resourcesPath=../../fxView_res
 -lib hide
