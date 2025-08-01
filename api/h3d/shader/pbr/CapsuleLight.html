@@ -8,11 +8,6 @@
 	@param var invRange4:Float;
 	@param var halfLength:Float;
 	@param var left:Vec3;
-	function closestPointOnLine(a:Vec3, b:Vec3, c:Vec3):Vec3 {
-		var ab = b - a;
-		var t = dot(c - a, ab) / dot(ab, ab);
-		return a + t * ab;
-	};
 	function closestPointOnSegment(a:Vec3, b:Vec3, c:Vec3):Vec3 {
 		var ab = b - a;
 		var t = dot(c - a, ab) / dot(ab, ab);

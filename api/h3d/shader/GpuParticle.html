@@ -77,7 +77,10 @@
 			projectedPosition.xy += dist * screenRatio;
 		};
 		projectedPosition *= visibility;
-		if (normT &lt; fadeIn) pixelColor.a *= (normT / fadeIn).pow(fadePower) else if (normT &gt; fadeOut) pixelColor.a *= ((1 - normT) / (1 - fadeOut)).pow(fadePower);
+		if (normT &lt; fadeIn) pixelColor.a *= (normT / fadeIn).pow(fadePower) else if (normT &gt; fadeOut) {
+			pixelColor.a *= ((1 - normT) / (1 - fadeOut)).pow(fadePower);
+			pixelColor.a = saturate(pixelColor.a);
+		};
 		colorUV = vec2(normT, randProp);
 	};
 	function fragment() {
