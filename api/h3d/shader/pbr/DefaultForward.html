@@ -8,7 +8,7 @@
 	@const(16) var POINT_SHADOW_COUNT:Int;
 	@const(16) var SPOT_SHADOW_COUNT:Int;
 	@:import h3d.shader.pbr.Light.LightEvaluation;
-	@:import h3d.shader.pbr.BDRF;
+	@:import h3d.shader.pbr.BRDF;
 	var output:{ var color : Vec4; var metalness : Float; var roughness : Float; var occlusion : Float; var emissive : Float; var depth : Float};
 	@const(256) var BUFFER_SIZE:Int = 1;
 	@param var lightInfos:Buffer&lt;Vec4,BUFFER_SIZE&gt;;
