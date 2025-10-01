@@ -8,14 +8,12 @@
 	@param var commandBuffer:RWBuffer&lt;Int&gt;;
 	@param var instanceData:StoragePartialBuffer&lt;{ var modelView : Mat4}&gt;;
 	@param var instanceCount:Int;
-	@const var MAX_MATERIAL_COUNT:Int = 16;
-	@param var matInfos:Buffer&lt;Vec4,MAX_MATERIAL_COUNT&gt;;
+	@param var subPartsInfos:StorageBuffer&lt;Vec4&gt;;
 	@const var ENABLE_CULLING:Bool;
 	@param var frustum:Buffer&lt;Vec4,6&gt;;
 	@const var ENABLE_LOD:Bool;
 	@const var ENABLE_DISTANCE_CLIPPING:Bool;
 	@param var maxDistance:Float = -1;
-	var matID:Int = 0;
 	var modelView:Mat4;
 	var invocID:Int;
 	function __init__() {
@@ -24,6 +22,19 @@
 			invocID = computeVar.workGroup.x * 64 + computeVar.localInvocationIndex;
 		};
 		modelView = instanceData[invocID].modelView;
+	};
+	function init() { };
+	function getRadius():Float {
+		return 0.0;
+	};
+	function getLodCount():Int {
+		return 1;
+	};
+	function getSubPartsStart():Int {
+		return 0;
+	};
+	function getSubPartsCount():Int {
+		return 1;
 	};
 	function emitInstance(instanceID:Int, indexCount:Int, instanceCount:Int, startIndex:Int, startVertex:Int, baseInstance:Int) {
 		var instancePos = instanceID * 5;
@@ -50,22 +61,27 @@
 		var minScreenRatioCulling = getMinScreenRatio();
 		return screenRatio &lt; minScreenRatioCulling;
 	};
-	function getLodCount():Int {
-		return 0;
+	function getSubPartInfos(subPartIndex:Int, lod:Int):Vec4 {
+		var pos = getSubPartsStart() + subPartIndex * getLodCount() + lod;
+		return subPartsInfos[pos];
+	};
+	function getMaterialCommandStart(materialIndex:Int):Int {
+		return materialIndex * instanceCount;
 	};
 	function getLodScreenRatio(lod:Int):Float {
-		return matInfos[lod + matID].z;
+		return getSubPartInfos(0, lod).z;
 	};
 	function getMinScreenRatio():Float {
-		return ENABLE_LOD ? matInfos[matID].w : 0.0;
+		return ENABLE_LOD ? getSubPartInfos(0, getLodCount() - 1).z : 0.0;
 	};
 	function computeScreenRatio(distToCam:Float, radius:Float):Float {
 		var screenRatio = radius / distToCam;
 		return screenRatio * screenRatio;
 	};
-	function selectLod(screenRatio:Float, lodCount:Int):Int {
+	function selectLod(screenRatio:Float):Int {
 		var lod:Int = 0;
 		if (ENABLE_LOD) {
+			var lodCount = getLodCount();
 			for (i  in  0 ... lodCount) {
 				var minScreenRatio = getLodScreenRatio(i);
 				if (screenRatio &gt; minScreenRatio) break;
@@ -75,4 +91,42 @@
 		};
 		return lod;
 	};
-})</span><span class="label label-meta label-meta-build" title="Builds a class or enum from a macro.">@:build(hxsl.Macros.buildShader())</span><span class="label label-meta label-meta-autoBuild" title="Extends `@:build` metadata to all extending and implementing classes.">@:autoBuild(hxsl.Macros.buildShader())</span></div><div class="body"><div class="doc doc-main"><p></p></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><a href="#new"><span class="identifier">new</span></a>()</code></h3><div class="doc"><p></p></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="ENABLE_COUNT_BUFFER"></a><h3 class="anchor"><code><a href="#ENABLE_COUNT_BUFFER"><span class="identifier">ENABLE_COUNT_BUFFER</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="ENABLE_CULLING"></a><h3 class="anchor"><code><a href="#ENABLE_CULLING"><span class="identifier">ENABLE_CULLING</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="ENABLE_DISTANCE_CLIPPING"></a><h3 class="anchor"><code><a href="#ENABLE_DISTANCE_CLIPPING"><span class="identifier">ENABLE_DISTANCE_CLIPPING</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="ENABLE_LOD"></a><h3 class="anchor"><code><a href="#ENABLE_LOD"><span class="identifier">ENABLE_LOD</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="MAX_MATERIAL_COUNT"></a><h3 class="anchor"><code><a href="#MAX_MATERIAL_COUNT"><span class="identifier">MAX_MATERIAL_COUNT</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="commandBuffer"></a><h3 class="anchor"><code><a href="#commandBuffer"><span class="identifier">commandBuffer</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="countBuffer"></a><h3 class="anchor"><code><a href="#countBuffer"><span class="identifier">countBuffer</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="frustum"></a><h3 class="anchor"><code><a href="#frustum"><span class="identifier">frustum</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="instanceCount"></a><h3 class="anchor"><code><a href="#instanceCount"><span class="identifier">instanceCount</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="instanceData"></a><h3 class="anchor"><code><a href="#instanceData"><span class="identifier">instanceData</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="matInfos"></a><h3 class="anchor"><code><a href="#matInfos"><span class="identifier">matInfos</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="maxDistance"></a><h3 class="anchor"><code><a href="#maxDistance"><span class="identifier">maxDistance</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p></p></div></div></div><h3 class="section">Methods</h3><div class="fields"></div>  <div class="inherited-fields well"><h3 class="section">Inherited Variables</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="hxsl.Shader" href="../../hxsl/Shader.html">Shader</a></h4><div style="display:none"><div class="field "><a name="priority"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value(0)</span><span class="label">read only</span><a href="#priority"><span class="identifier">priority</span></a>:<span class="type">Int</span><span> = 0</span></code></h3><div class="doc"><p></p></div></div></div></div><h3 class="section">Inherited Methods</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="hxsl.Shader" href="../../hxsl/Shader.html">Shader</a></h4><div style="display:none"><div class="field "><a name="setPriority"></a><h3 class="anchor"><code><a href="#setPriority"><span class="identifier">setPriority</span></a>(<span style="white-space:nowrap">v:<span class="type">Int</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Shader priority should only be changed <em>before</em> the shader is added to a material.</p></div></div><div class="field "><a name="toString"></a><h3 class="anchor"><code><a href="#toString"><span class="identifier">toString</span></a>():<span class="type">String</span></code></h3><div class="doc"><p></p></div></div></div></div></div></div></div></div></div><footer><div class="container row"><div class="col-5"><a href="../../../"><img src="../../../img/logo.svg"/></a></div><div class="col-3 links"><h3>Heaps.io</h3><p>Heaps is an open source and multi-platform toolkit to create 2D and 3D games.</p><a href="https://lib.haxe.org/p/heaps">Download</a><a href="../../../about.html">About</a><a href="../../../api">API</a><a href="https://github.com/HeapsIO/">Contribute</a><a href="https://discordapp.com/channels/162395145352904705/501408700142059520">Community</a></div><div class="col-1">&nbsp;</div><div class="col-3 links"><h3>Haxe</h3><p>Haxe is an open source and cross-platform language and toolkit.</p><a href="https://haxe.org">About</a><a href="https://haxe.org/use-cases">Use cases</a><a href="https://haxe.org/documentation/introduction/">Learn</a><a href="https://haxe.org/foundation">Haxe Foundation</a></div></div><div class="copyright">&copy; 2025 <a href="https://haxe.org/foundation/">Haxe Foundation</a>| <a href="https://github.com/HeapsIO/heaps/blob/master/h3d/shader/InstanceIndirect.hx">Contribute to this page</a>| <a href="https://feathericons.com/" rel="nofollow">Feather open source icons</a></div></footer></div><script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>
+	function main() {
+		if (invocID &lt; instanceCount) {
+			init();
+			var pos = vec3(modelView[0].w, modelView[1].w, modelView[2].w);
+			var vScale = abs(vec3(1) * modelView.mat3x4() - pos);
+			var scaledRadius = max(max(vScale.x, vScale.y), vScale.z);
+			var toCam = camera.position - pos.xyz;
+			var distToCam = length(toCam);
+			scaledRadius *= getRadius();
+			var culled = dot(scaledRadius, scaledRadius) &lt; 1e-6;
+			culled = culled || frustumCulling(pos, scaledRadius);
+			culled = culled || distanceClipping(distToCam, scaledRadius);
+			var screenRatio = computeScreenRatio(distToCam, scaledRadius);
+			culled = culled || screenRatioCulling(screenRatio);
+			var subPartsCount = getSubPartsCount();
+			if (ENABLE_COUNT_BUFFER) {
+				if (!culled) {
+					var lod = selectLod(screenRatio);
+					for (subPartIndex  in  0 ... subPartsCount) {
+						var subPartInfo = getSubPartInfos(subPartIndex, lod);
+						var materialIndex = int(subPartInfo.w);
+						var id = atomicAdd(countBuffer, materialIndex, 1);
+						var materialCommandStart = getMaterialCommandStart(materialIndex);
+						emitInstance(materialCommandStart + id, int(subPartInfo.x), 1, int(subPartInfo.y), 0, invocID);
+					};
+				};
+			} else {
+				var lod = selectLod(screenRatio);
+				for (subPartIndex  in  0 ... subPartsCount) {
+					var subPartInfo = getSubPartInfos(subPartIndex, lod);
+					var materialIndex = int(subPartInfo.w);
+					var id = atomicAdd(countBuffer, materialIndex, 1);
+					var materialCommandStart = getMaterialCommandStart(materialIndex);
+					if (!culled) emitInstance(materialCommandStart + id, int(subPartInfo.x), 1, int(subPartInfo.y), 0, invocID) else emitInstance(materialCommandStart + id, 0, 0, 0, 0, 0);
+				};
+			};
+		};
+	};
+})</span><span class="label label-meta label-meta-build" title="Builds a class or enum from a macro.">@:build(hxsl.Macros.buildShader())</span><span class="label label-meta label-meta-autoBuild" title="Extends `@:build` metadata to all extending and implementing classes.">@:autoBuild(hxsl.Macros.buildShader())</span></div><div class="body"><div class="doc doc-main"><p></p></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><a href="#new"><span class="identifier">new</span></a>()</code></h3><div class="doc"><p></p></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="ENABLE_COUNT_BUFFER"></a><h3 class="anchor"><code><a href="#ENABLE_COUNT_BUFFER"><span class="identifier">ENABLE_COUNT_BUFFER</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="ENABLE_CULLING"></a><h3 class="anchor"><code><a href="#ENABLE_CULLING"><span class="identifier">ENABLE_CULLING</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="ENABLE_DISTANCE_CLIPPING"></a><h3 class="anchor"><code><a href="#ENABLE_DISTANCE_CLIPPING"><span class="identifier">ENABLE_DISTANCE_CLIPPING</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="ENABLE_LOD"></a><h3 class="anchor"><code><a href="#ENABLE_LOD"><span class="identifier">ENABLE_LOD</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="commandBuffer"></a><h3 class="anchor"><code><a href="#commandBuffer"><span class="identifier">commandBuffer</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="countBuffer"></a><h3 class="anchor"><code><a href="#countBuffer"><span class="identifier">countBuffer</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="frustum"></a><h3 class="anchor"><code><a href="#frustum"><span class="identifier">frustum</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="instanceCount"></a><h3 class="anchor"><code><a href="#instanceCount"><span class="identifier">instanceCount</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="instanceData"></a><h3 class="anchor"><code><a href="#instanceData"><span class="identifier">instanceData</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="maxDistance"></a><h3 class="anchor"><code><a href="#maxDistance"><span class="identifier">maxDistance</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="subPartsInfos"></a><h3 class="anchor"><code><a href="#subPartsInfos"><span class="identifier">subPartsInfos</span></a>:<a class="type" title="hxsl.Buffer" href="../../hxsl/Buffer.html">Buffer</a></code></h3><div class="doc"><p></p></div></div></div><h3 class="section">Methods</h3><div class="fields"></div>  <div class="inherited-fields well"><h3 class="section">Inherited Variables</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="hxsl.Shader" href="../../hxsl/Shader.html">Shader</a></h4><div style="display:none"><div class="field "><a name="priority"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value(0)</span><span class="label">read only</span><a href="#priority"><span class="identifier">priority</span></a>:<span class="type">Int</span><span> = 0</span></code></h3><div class="doc"><p></p></div></div></div></div><h3 class="section">Inherited Methods</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="hxsl.Shader" href="../../hxsl/Shader.html">Shader</a></h4><div style="display:none"><div class="field "><a name="setPriority"></a><h3 class="anchor"><code><a href="#setPriority"><span class="identifier">setPriority</span></a>(<span style="white-space:nowrap">v:<span class="type">Int</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Shader priority should only be changed <em>before</em> the shader is added to a material.</p></div></div><div class="field "><a name="toString"></a><h3 class="anchor"><code><a href="#toString"><span class="identifier">toString</span></a>():<span class="type">String</span></code></h3><div class="doc"><p></p></div></div></div></div></div></div></div></div></div><footer><div class="container row"><div class="col-5"><a href="../../../"><img src="../../../img/logo.svg"/></a></div><div class="col-3 links"><h3>Heaps.io</h3><p>Heaps is an open source and multi-platform toolkit to create 2D and 3D games.</p><a href="https://lib.haxe.org/p/heaps">Download</a><a href="../../../about.html">About</a><a href="../../../api">API</a><a href="https://github.com/HeapsIO/">Contribute</a><a href="https://discordapp.com/channels/162395145352904705/501408700142059520">Community</a></div><div class="col-1">&nbsp;</div><div class="col-3 links"><h3>Haxe</h3><p>Haxe is an open source and cross-platform language and toolkit.</p><a href="https://haxe.org">About</a><a href="https://haxe.org/use-cases">Use cases</a><a href="https://haxe.org/documentation/introduction/">Learn</a><a href="https://haxe.org/foundation">Haxe Foundation</a></div></div><div class="copyright">&copy; 2025 <a href="https://haxe.org/foundation/">Haxe Foundation</a>| <a href="https://github.com/HeapsIO/heaps/blob/master/h3d/shader/InstanceIndirect.hx">Contribute to this page</a>| <a href="https://feathericons.com/" rel="nofollow">Feather open source icons</a></div></footer></div><script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>
