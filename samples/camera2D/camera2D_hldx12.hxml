@@ -1,0 +1,10 @@
+-lib heaps
+-lib hldx
+-D dx12
+-D hl_ver=1.14.0
+-hl camera2D_dx12.hl
+-main Camera2D
+-D windowSize=1024x768
+-cp ../..
+-cp .
+-D resourcesPath=../../tiled_res

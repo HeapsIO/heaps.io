@@ -1,0 +1,11 @@
+-lib heaps
+-lib hldx
+-D dx12
+-D hl_ver=1.14.0
+-hl fxView_dx12.hl
+-main FxView
+-D windowSize=1024x768
+-cp ../..
+-cp .
+-D resourcesPath=../../fxView_res
+-lib hide

@@ -1,0 +1,10 @@
+-lib heaps
+-lib hldx
+-D dx12
+-D hl_ver=1.14.0
+-hl interactive2D_dx12.hl
+-main Interactive2D
+-D windowSize=1024x768
+-cp ../..
+-cp .
+

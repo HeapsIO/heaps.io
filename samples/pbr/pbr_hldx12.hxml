@@ -1,0 +1,10 @@
+-lib heaps
+-lib hldx
+-D dx12
+-D hl_ver=1.14.0
+-hl pbr_dx12.hl
+-main Pbr
+-D windowSize=1024x768
+-cp ../..
+-cp .
+-D resourcesPath=../../pbr_res

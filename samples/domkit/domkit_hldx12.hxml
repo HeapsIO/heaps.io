@@ -1,0 +1,11 @@
+-lib heaps
+-lib hldx
+-D dx12
+-D hl_ver=1.14.0
+-hl domkit_dx12.hl
+-main Domkit
+-D windowSize=1024x768
+-cp ../..
+-cp .
+-D resourcesPath=../../domkit_res
+-lib domkit
