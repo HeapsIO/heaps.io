@@ -1,0 +1,7 @@
+-lib heaps
+-js bindless.js
+-main Bindless
+-cp ../..
+-cp .
+-debug
+-D resourcesPath=../../bindless_res
