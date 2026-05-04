@@ -23,7 +23,7 @@
 <span class="mtk1">  </span><span class="mtk4">override</span><span class="mtk1"> </span><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">init</span><span class="mtk1">() {</span>
 <span class="mtk1">    </span><span class="mtk4">super</span><span class="mtk1">.</span><span class="mtk11">init</span><span class="mtk1">();</span>
 
-<span class="mtk1">    </span><span class="mtk4">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk10">CameraController</span><span class="mtk1">(</span><span class="mtk7">5.5</span><span class="mtk1">, </span><span class="mtk9">s3d</span><span class="mtk1">);</span>
+<span class="mtk1">    </span><span class="mtk4">new</span><span class="mtk1"> h3d.scene.</span><span class="mtk10">CameraController</span><span class="mtk1">.</span><span class="mtk10">OrbitCameraController</span><span class="mtk1">(</span><span class="mtk7">5.5</span><span class="mtk1">, </span><span class="mtk9">s3d</span><span class="mtk1">);</span>
 
 <span class="mtk1">    </span><span class="mtk13">#if js</span>
 <span class="mtk1">    </span><span class="mtk12">if</span><span class="mtk1">( !</span><span class="mtk9">engine</span><span class="mtk1">.</span><span class="mtk9">driver</span><span class="mtk1">.</span><span class="mtk11">hasFeature</span><span class="mtk1">(</span><span class="mtk10">ShaderModel3</span><span class="mtk1">) ) {</span>
