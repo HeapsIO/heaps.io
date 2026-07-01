@@ -20,8 +20,9 @@
 	var projectedPosition:Vec4;
 	var pixelColor:Vec4;
 	var fadeFactor:Float;
+	var modelView:Mat4;
 	function normalFade(worldNormal:Vec3) {
-		var z = normalize(vec3(0, 0, 1) * global.modelView.mat3());
+		var z = normalize(vec3(0, 0, 1) * modelView.mat3());
 		var angle = 1 - abs(acos(z.dot(worldNormal)) / PI);
 		var f = saturate((angle - normalFadeStart) / (normalFadeEnd - normalFadeStart));
 		fadeFactor *= f;

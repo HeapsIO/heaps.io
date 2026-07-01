@@ -8,9 +8,10 @@
 	@const var AUTO_ALPHA:Bool = true;
 	@param var emissive:Float;
 	@param var colorTexture:Sampler2D;
+	var modelViewInverse:Mat4;
 	function __init__fragment() {
 		{
-			var matrix = camera.inverseViewProj * global.modelViewInverse;
+			var matrix = camera.inverseViewProj * modelViewInverse;
 			var screenPos = projectedPosition.xy / projectedPosition.w;
 			var depth = depthMap.get(screenToUv(screenPos));
 			var ruv = vec4(screenPos, depth, 1);
