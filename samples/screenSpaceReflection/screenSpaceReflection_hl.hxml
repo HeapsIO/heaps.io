@@ -1,0 +1,8 @@
+-lib heaps
+-lib hlsdl
+-hl screenSpaceReflection.hl
+-main ScreenSpaceReflection
+-D windowSize=1024x768
+-cp ../..
+-cp .
+

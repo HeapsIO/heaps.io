@@ -1,0 +1,7 @@
+-lib heaps
+-js pbrLights.js
+-main PbrLights
+-cp ../..
+-cp .
+-debug
+

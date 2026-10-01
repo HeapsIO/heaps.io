@@ -1,0 +1,7 @@
+-lib heaps
+-js screenSpaceReflection.js
+-main ScreenSpaceReflection
+-cp ../..
+-cp .
+-debug
+
