@@ -20,7 +20,7 @@
 	@param var lightInfos:Buffer&lt;Vec4,4096&gt;;
 	var DIR_LIGHT_STRIDE:Int = 2;
 	var POINT_LIGHT_STRIDE:Int = 2;
-	var SPOT_LIGHT_STRIDE:Int = 3;
+	var SPOT_LIGHT_STRIDE:Int = 4;
 	var CAPSULE_LIGHT_STRIDE:Int = 3;
 	var RECT_LIGHT_STRIDE:Int = 6;
 	var DIR_SHADOW_STRIDE:Int = 5;
@@ -182,9 +182,10 @@
 		var size = lightInfos[i].b;
 		var lightPos = lightInfos[i + 1].rgb;
 		var invRange4 = lightInfos[i + 1].a;
+		var inverseSquareFalloff = lightInfos[i].a &gt; 0.0;
 		var delta = lightPos - transformedPosition;
 		var lightDir = delta.normalize();
-		return directLighting(pointLightIntensity(delta, size, invRange4) * lightColor, lightDir, lightDir);
+		return directLighting(pointLightIntensity(delta, size, invRange4, size * size, inverseSquareFalloff) * lightColor, lightDir, lightDir);
 	};
 	function evaluateSpotShadow(index:Int):Float {
 		var s = spotShadowOffset + index * SPOT_SHADOW_STRIDE;
@@ -211,8 +212,9 @@
 		var invRange4 = lightInfos[i + 1].a;
 		var lightDir = lightInfos[i + 2].rgb;
 		var range = lightInfos[i + 2].a;
+		var inverseSquareFalloff = lightInfos[i + 3].r &gt; 0.0;
 		var delta = lightPos - transformedPosition;
-		var fallOffInfo = spotLightIntensity(delta, lightDir, range, invRange4, fallOff, angle);
+		var fallOffInfo = spotLightIntensity(delta, lightDir, range, invRange4, fallOff, angle, inverseSquareFalloff);
 		var fallOff = fallOffInfo.x;
 		var fallOffInfoAngle = fallOffInfo.y;
 		var lightToPixel = delta.normalize();
@@ -246,7 +248,8 @@
 		var lightPos = lightInfos[i + 1].rgb;
 		var invRange4 = lightInfos[i + 1].a;
 		var left = lightInfos[i + 2].rgb;
-		var light = capsuleLightDiffuse(lightPos, left, halfLength, radius, invRange4, transformedPosition);
+		var inverseSquareFalloff = lightInfos[i + 2].a &gt; 0.0;
+		var light = capsuleLightDiffuse(lightPos, left, halfLength, radius, invRange4, transformedPosition, inverseSquareFalloff);
 		var specularDir = capsuleLightSpecularDir(lightPos, left, halfLength, radius, transformedPosition, reflect(-view, transformedNormal));
 		return directLighting(light.w * lightColor, light.xyz, specularDir);
 	};
@@ -277,7 +280,8 @@
 		var right = lightInfos[i + 3].rgb;
 		var up = lightInfos[i + 4].rgb;
 		var angles = vec4(lightInfos[i + 3].a, lightInfos[i + 4].a, lightInfos[i + 5].r, lightInfos[i + 5].g);
-		var light = rectangleLightDiffuse(lightPos, lightDir, right, up, halfSize, angles, range, invRange4, transformedPosition);
+		var inverseSquareFalloff = lightInfos[i + 5].b &gt; 0.0;
+		var light = rectangleLightDiffuse(lightPos, lightDir, right, up, halfSize, angles, range, invRange4, transformedPosition, inverseSquareFalloff);
 		var specularDir = rectangleLightSpecularDir(lightPos, lightDir, right, up, halfSize, transformedPosition, reflect(-view, transformedNormal));
 		return directLighting(light.w * lightColor, light.xyz, specularDir);
 	};

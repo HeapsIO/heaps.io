@@ -47,7 +47,7 @@ Uses &quot;Scalable Ambient Obscurance&quot; [McGuire12]"/>   <link rel="stylesh
 		return f * f * f * max(vn / (epsilon + vv), 0.0);
 	};
 	function getPosition(uv:Vec2):Vec3 {
-		var depth = depthTexture.get(uv);
+		var depth = depthTexture.getLod(uv, 0.0);
 		var uv2 = uvToScreen(uv);
 		var temp = vec4(uv2, depth, 1) * cameraInverseViewProj;
 		var originWS = temp.xyz / temp.w;
@@ -62,16 +62,20 @@ Uses &quot;Scalable Ambient Obscurance&quot; [McGuire12]"/>   <link rel="stylesh
 		if (useWorldUV) noiseUv = (origin.xy + origin.z) * noiseScale else noiseUv = vUV / screenRatio * noiseScale;
 		var sampleNoise = noiseTexture.get(noiseUv).x;
 		var randomPatternRotationAngle = 2.0 * PI * sampleNoise;
-		var radiusSS = 0.0;
-		if (ORTHO) radiusSS = sampleRadius * invOrthoHeight else radiusSS = (sampleRadius * fovTan) / (origin * cameraView).z;
-		for (i  in  0 ... numSamples) occlusion += sampleAO(vUV, origin, normal, radiusSS, i, randomPatternRotationAngle);
-		occlusion = 1.0 - occlusion / float(numSamples);
-		occlusion = pow(occlusion, 1.0 + intensity).saturate();
+		var fadeWeight = 1.0;
 		if (USE_START_FADE || USE_FADE) {
 			var dist = distance(origin, camera.position);
-			if (USE_START_FADE) occlusion = mix(1.0, occlusion, saturate((dist - startFadeStart) / (startFadeEnd - startFadeStart)));
-			if (USE_FADE) occlusion = mix(occlusion, 1.0, saturate((dist - fadeStart) / (fadeEnd - fadeStart)));
+			if (USE_START_FADE) fadeWeight *= saturate((dist - startFadeStart) / (startFadeEnd - startFadeStart));
+			if (USE_FADE) fadeWeight *= 1.0 - saturate((dist - fadeStart) / (fadeEnd - fadeStart));
 		};
+		if (fadeWeight &gt; 0.0) {
+			var radiusSS = 0.0;
+			if (ORTHO) radiusSS = sampleRadius * invOrthoHeight else radiusSS = (sampleRadius * fovTan) / (origin * cameraView).z;
+			for (i  in  0 ... numSamples) occlusion += sampleAO(vUV, origin, normal, radiusSS, i, randomPatternRotationAngle);
+			occlusion = 1.0 - occlusion / float(numSamples);
+			occlusion = pow(occlusion, 1.0 + intensity).saturate();
+			occlusion = mix(1.0, occlusion, fadeWeight);
+		} else occlusion = 1.0;
 		output.color = vec4(occlusion.xxx, 1.);
 	};
 })</span><span class="label label-meta label-meta-build" title="Builds a class or enum from a macro.">@:build(hxsl.Macros.buildShader())</span><span class="label label-meta label-meta-autoBuild" title="Extends `@:build` metadata to all extending and implementing classes.">@:autoBuild(hxsl.Macros.buildShader())</span></div><div class="body"><div class="doc doc-main"><p>Screen space ambient occlusion.

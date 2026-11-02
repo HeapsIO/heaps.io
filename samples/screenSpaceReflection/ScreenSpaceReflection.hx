@@ -35,7 +35,7 @@ class ScreenSpaceReflection extends BenchApp {
 		timingFrames = 32;
 		super.init();
 
-		#if js
+		#if (js && !dx12)
 		addText("SSR bench needs compute shaders, not available in WebGL");
 		return;
 		#end
@@ -202,9 +202,8 @@ class ScreenSpaceReflection extends BenchApp {
 	}
 
 	static function main() {
-		#if hlsdl
-		h3d.impl.GlDriver.enableComputeShaders();
-		#end
+		h3d.impl.Driver.requestFeature(ComputeShaders);
+		h3d.impl.Driver.requestFeature(Bindless);
 		h3d.mat.MaterialSetup.current = new h3d.mat.PbrMaterialSetup();
 		new ScreenSpaceReflection();
 	}

@@ -170,47 +170,15 @@ class PbrLights extends BenchApp {
 		cascadeShadows.maxDist = 100.0;
 		cascadeShadows.transitionFraction = 0.15;
 
-		var point = new h3d.scene.pbr.PointLight(s3d);
-		point.setPosition(0, 0, 15);
-		point.range = 40;
-		point.power = 4.5;
-		point.shadows.bias = 0.1;
-
-		var spot = new h3d.scene.pbr.SpotLight(s3d);
-		spot.setPosition(-30, -30, 30);
-		spot.setDirection(new h3d.Vector(1, 2, -5));
-		spot.range = 70;
-		spot.angle = 70;
-		spot.power = 3.2;
-		spot.shadows.bias = 0.001;
-
-		var capsule = new h3d.scene.pbr.CapsuleLight(s3d);
-		capsule.setPosition(10, -10, 8);
-		capsule.setDirection(new h3d.Vector(1, 1, 0));
-		capsule.length = 12;
-		capsule.radius = 0.5;
-		capsule.range = 30;
-		capsule.power = 4.5;
-		capsule.shadows.bias = 0.0001;
-
-		var rect = new h3d.scene.pbr.RectangleLight(s3d);
-		rect.setPosition(-25, 10, 12);
-		rect.setDirection(new h3d.Vector(1, -0.5, -0.6));
-		rect.width = 10;
-		rect.height = 5;
-		rect.horizontalAngle = 120;
-		rect.verticalAngle = 120;
-		rect.range = 50;
-		rect.power = 3.2;
-		rect.shadows.bias = 0.001;
-
+		var local = localLights(false);
 		addPreset("Dir", true, [dir]);
 		addPreset("Cascade", true, [cascade]);
-		addPreset("Point", true, [point]);
-		addPreset("Spot", true, [spot]);
-		addPreset("Capsule", true, [capsule]);
-		addPreset("Rectangle", true, [rect]);
-		addPreset("Mixed", true, [dir, point, spot, capsule, rect]);
+		addPreset("Point", true, [local[0]]);
+		addPreset("Spot", true, [local[1]]);
+		addPreset("Capsule", true, [local[2]]);
+		addPreset("Rectangle", true, [local[3]]);
+		addPreset("Mixed", true, [dir, local[0], local[1], local[2], local[3]]);
+		addPreset("Inverse square", true, localLights(true));
 
 		var rnd = new hxd.Rand(SEED + 1);
 		var many : Array<h3d.scene.pbr.Light> = [];
@@ -227,6 +195,49 @@ class PbrLights extends BenchApp {
 		addPreset("Many points", false, many);
 		addPreset("Perf 256", false, perfLights(256, 7, 11, SEED + 2), true);
 		addPreset("Perf 1024", false, perfLights(1024, 4, 7, SEED + 3), true);
+	}
+
+	// Point, spot, capsule and rectangle, Unitless with the legacy or the inverse square falloff.
+	// The spot and rectangle had no distance falloff inside their range, inverse square ones need more power
+	function localLights( inverseSquare : Bool ) : Array<h3d.scene.pbr.Light> {
+		var point = new h3d.scene.pbr.PointLight(s3d);
+		point.setPosition(0, 0, 15);
+		point.range = 40;
+		point.power = 4.5;
+		point.shadows.bias = 0.1;
+
+		var spot = new h3d.scene.pbr.SpotLight(s3d);
+		spot.setPosition(-30, -30, 30);
+		spot.setDirection(new h3d.Vector(1, 2, -5));
+		spot.range = 70;
+		spot.angle = 70;
+		spot.power = inverseSquare ? 160 : 3.2;
+		spot.shadows.bias = 0.001;
+
+		var capsule = new h3d.scene.pbr.CapsuleLight(s3d);
+		capsule.setPosition(10, -10, 8);
+		capsule.setDirection(new h3d.Vector(1, 1, 0));
+		capsule.length = 12;
+		capsule.radius = 0.5;
+		capsule.range = 30;
+		capsule.power = 4.5;
+		capsule.shadows.bias = 0.1;
+
+		var rect = new h3d.scene.pbr.RectangleLight(s3d);
+		rect.setPosition(-25, 10, 12);
+		rect.setDirection(new h3d.Vector(1, -0.5, -0.6));
+		rect.width = 10;
+		rect.height = 5;
+		rect.horizontalAngle = 120;
+		rect.verticalAngle = 120;
+		rect.range = 50;
+		rect.power = inverseSquare ? 80 : 3.2;
+		rect.shadows.bias = 0.001;
+
+		var lights : Array<h3d.scene.pbr.Light> = [point, spot, capsule, rect];
+		for( l in lights )
+			l.inverseSquareFalloff = inverseSquare;
+		return lights;
 	}
 
 	function perfLights( count : Int, minRange : Float, maxRange : Float, seed : Int ) {
@@ -417,9 +428,8 @@ class PbrLights extends BenchApp {
 	}
 
 	static function main() {
-		#if hlsdl
-		h3d.impl.GlDriver.enableComputeShaders();
-		#end
+		h3d.impl.Driver.requestFeature(ComputeShaders);
+		h3d.impl.Driver.requestFeature(Bindless);
 		h3d.mat.MaterialSetup.current = new h3d.mat.PbrMaterialSetup();
 		new PbrLights();
 	}

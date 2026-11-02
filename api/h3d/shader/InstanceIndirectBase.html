@@ -25,6 +25,9 @@
 		modelView = instanceData[invocID].modelView;
 	};
 	function init() { };
+	function getCenter():Vec3 {
+		return vec3(0.0);
+	};
 	function getRadius():Float {
 		return 0.0;
 	};
@@ -96,7 +99,8 @@
 	function main() {
 		if (invocID &lt; instanceCount) {
 			init();
-			var pos = vec3(modelView[0].w, modelView[1].w, modelView[2].w);
+			var localCenter = vec4(getCenter(), 1.0);
+			var pos = vec3(dot(modelView[0], localCenter), dot(modelView[1], localCenter), dot(modelView[2], localCenter));
 			var scale = vec3(length(vec3(modelView[0].x, modelView[1].x, modelView[2].x)), length(vec3(modelView[0].y, modelView[1].y, modelView[2].y)), length(vec3(modelView[0].z, modelView[1].z, modelView[2].z)));
 			var maxScale = max(max(scale.x, scale.y), scale.z);
 			var toCam = camera.position - pos.xyz;
